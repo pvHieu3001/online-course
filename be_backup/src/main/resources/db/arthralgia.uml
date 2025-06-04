@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.affected_areas</OriginalElement>
+  <nodes>
+    <node x="327.77614347075803" y="440.2693799741338">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.affected_areas</node>
+    <node x="-8.0" y="54.0">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.full_symptoms</node>
+    <node x="315.5449389153017" y="193.03466354866896">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.members</node>
+    <node x="1024.3663310179634" y="174.8992451030626">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.doctor_interviews</node>
+    <node x="319.4599293366881" y="726.012025286311">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patient_interviews</node>
+    <node x="696.2760328315255" y="763.6182026265465">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients</node>
+    <node x="1300.2054953629183" y="885.316334030613">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.haq_answers</node>
+    <node x="1295.1593079053462" y="463.73062821489304">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.footsteps</node>
+    <node x="679.1615629984742" y="183.3056164913596">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patient_images</node>
+    <node x="1293.9736462570506" y="706.8378087052274">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.barometric_pressures</node>
+    <node x="321.5110020453552" y="1012.9027721792753">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.verification_tokens</node>
+    <node x="1295.2530559952986" y="1185.9999999999998">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.questions</node>
+    <node x="1288.251686999881" y="174.76994340637933">caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.measurements</node>
+  </nodes>
+  <notes>
+    <note x="285.3627857305098" y="1228.0385623400698">
+      <node>caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients</node>
+      <value>- Toàn bộ patient đều có email và password riêng.\n- Phải active qua email(enabled = 1)\n- Các patient không có email, password, enabled = 0 được tạo ra tuơng ứng cho các member trong gia đình</value>
+      <edge>
+        <point x="0.0" y="0.0" />
+        <point x="0.0" y="0.0" />
+      </edge>
+    </note>
+    <note x="346.9999999999998" y="56.8511376445972">
+      <node>caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.members</node>
+      <value>- Mỗi member có 1 patients riêng, đại diện cho 1 thành viên trong gia đình\n- Các member trong gia đình dùng chung email của patient gốc để login \n- Member của patient gốc có uid=parent_uid</value>
+      <edge>
+        <point x="0.0" y="0.0" />
+        <point x="0.0" y="0.0" />
+      </edge>
+    </note>
+  </notes>
+  <edges>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.verification_tokens" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.haq_answers" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.barometric_pressures" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.affected_areas" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.measurements" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patient_images" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.footsteps" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.members" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients">
+      <point x="-1.4454657320308115" y="-4.786504864462643" />
+      <point x="-1.4454657320309252" y="-4.786504864462643" />
+    </edge>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.haq_answers" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.questions">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.doctor_interviews" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patient_interviews" target="caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.patients">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Circular" zoom="1.0" x="738.9999999999995" y="2518.5" />
+  <SelectedNodes>
+    <node>caae0d98-bba1-4d7b-b0a0-850e4a7b74f3.TABLE:arthralgia_fruit.affected_areas</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+
