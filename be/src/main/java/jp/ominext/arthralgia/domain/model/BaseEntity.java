@@ -2,8 +2,8 @@ package jp.ominext.arthralgia.domain.model;
 
 import lombok.Data;
 
-import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data

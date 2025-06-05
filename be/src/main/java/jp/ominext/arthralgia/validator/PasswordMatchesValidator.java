@@ -3,8 +3,8 @@ package jp.ominext.arthralgia.validator;
 import jp.ominext.arthralgia.request.NewPasswordRequest;
 import jp.ominext.arthralgia.request.RegistrationUserRequest;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> {
 
