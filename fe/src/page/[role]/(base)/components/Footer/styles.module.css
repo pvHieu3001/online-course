@@ -1,0 +1,38 @@
+.modules {
+  display: flex;
+  flex-direction: row;
+  padding: 32px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+}
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 25%;
+}
+
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 25%;
+}
+
+ul {
+  list-style-type: circle;
+}
+
+.menuHeading{
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.menuItem{
+  padding-left: 30px;
+}

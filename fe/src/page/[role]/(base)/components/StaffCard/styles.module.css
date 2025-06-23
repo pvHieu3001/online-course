@@ -1,0 +1,33 @@
+.modules {
+  display: flex;
+  flex-direction: row;
+  padding-top: 12px;
+  width: fit-content;
+  gap: 2px;
+}
+
+.imageBox {
+  width: fit-content;
+  border-radius: 5px;
+}
+
+.contents {
+  font-size: 13px;
+  color: #fff;
+}
+
+.moreInfo {
+  font-size: 13px;
+  color: red;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.forum {
+  color: #7c9292;
+  font-size: 13px;
+  text-decoration: underline;
+}

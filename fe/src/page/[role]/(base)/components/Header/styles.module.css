@@ -1,0 +1,22 @@
+.modules {
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  width: 100%;
+}
+
+.banner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.menu {
+  max-width: 1300px;
+}
+
+@media (width < 1200px) {
+  .menu {
+    max-width: 375px;
+  }
+}

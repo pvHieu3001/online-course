@@ -11,9 +11,8 @@ import PageHome from '../page/[role]/(base)/PageHome'
 import UserManagement from '../page/[role]/(manager)/user'
 import AddUser from '../page/[role]/(manager)/user/_components/add'
 import EditUser from '../page/[role]/(manager)/user/_components/edit'
-import ProductDetailPage from '../page/[role]/(base)/ProductDetailPage/ProductDetailPage'
-import CartPage from '../page/[role]/(base)/ProductDetailPage/CartPage'
-import PageCategory from '../page/[role]/(base)/CategoryPage/PageCategory'
+import ProductDetailPage from '../page/[role]/(base)/ProductDetailPage/index'
+import PageCategory from '../page/[role]/(base)/CategoryPage'
 import CheckoutPage from '../page/[role]/(base)/PageCheckout/CheckoutPage'
 import PageLogin from '../page/[role]/(base)/Auth/PageLogin'
 import PageSignUp from '../page/[role]/(base)/Auth/PageSignUp'
@@ -53,7 +52,6 @@ import ColorManagement from '@/page/[role]/(manager)/color'
 import OrderManagement from '@/page/[role]/(manager)/order'
 import AddBrand from '@/page/[role]/(manager)/brand/_components/add'
 import EditBrand from '@/page/[role]/(manager)/brand/_components/edit'
-import ProductDetailPage2 from '@/page/[role]/(base)/ProductDetailPage/ProductDetailPage2'
 import EditOrder from '@/page/[role]/(manager)/order/_components/edit'
 import CommonLayout from '@/page/[role]/(base)/AccountPage/CommonLayout'
 import DetailOrder from '@/page/[role]/(base)/AccountPage/DetailOrder'
@@ -63,7 +61,7 @@ import DetailManagement from '@/page/[role]/(manager)/details'
 import AttributeManagementV2 from '@/page/[role]/(manager)/attribute/indexV2'
 import AddDetail from '@/page/[role]/(manager)/details/_component/add'
 import EditDetail from '@/page/[role]/(manager)/details/_component/edit'
-import EditAttributeV2 from '@/page/[role]/(manager)/attribute/_components/attribute/editV2'
+import ProducDetailPage from '../page/[role]/(base)/ProductDetailPage/index'
 
 export default function Router() {
   return (
@@ -106,15 +104,12 @@ export default function Router() {
                 <Route path='detail/:id' element={<DetailOrder />} />
               </Route>
             </Route>
-
-            <Route path='cart' element={<CartPage />} />
-
+            <Route path='cart' element={<></>} />
             <Route path='checkout' element={<CheckoutPage />} />
-
             <Route path='page-search' element={<PageSearch />} />
             <Route path='category' element={<PageCategory />} />
             <Route path='category/:slug' element={<PageCategory />} />
-            <Route path='product-detail/:slug' element={<ProductDetailPage2 />} />
+            <Route path='product-detail/:slug' element={<ProducDetailPage/>} />
           </Route>
 
           <Route path='admin/login' element={<Login />} />
@@ -174,7 +169,6 @@ export default function Router() {
 
             <Route path='attributes' element={<AttributeManagementV2 />}>
               <Route path='add' element={<AddAttribute />} />
-              <Route path=':id' element={<EditAttributeV2 />} />
             </Route>
 
             <Route path='post-categories' element={<PostCategoryManagement />}>

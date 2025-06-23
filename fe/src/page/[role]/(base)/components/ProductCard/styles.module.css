@@ -1,0 +1,73 @@
+.modules {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  width: fit-content;
+}
+
+.imageBox {
+  width: fit-content;
+}
+
+.image {
+  width: 160px;
+  height: 200px;
+}
+
+.contents {
+  max-width: 160px;
+  font-size: 13px;
+  color: #ff0;
+}
+
+.forum {
+  color: #966904;
+  font-size: 13px;
+  text-decoration: underline;
+}
+
+.tagItem {
+  display: inline-block;
+  padding: 1px 0.35em;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 80%;
+  line-height: 1.26;
+  text-decoration: none;
+}
+
+.tagSkyBlue {
+  color: #fff;
+  background: #03a9f4;
+  border-color: #0286c2;
+}
+
+.tagBlue {
+  color: #000;
+  background: #2196f3;
+  border-color: #0c7cd5;
+}
+
+.tagRoyalBlue {
+  color: #fff;
+  background: #0d47a1;
+  border-color: #093272;
+}
+
+.tagYellow {
+  color: #000;
+  background: #ffeb3b;
+  border-color: #ffe608;
+}
+
+.tagOrange {
+  color: #000;
+  background: #ff9800;
+  border-color: #cc7a00;
+}
+
+.tagOlive {
+  color: #fff;
+  background: #689f38;
+  border-color: #4f792b;
+}

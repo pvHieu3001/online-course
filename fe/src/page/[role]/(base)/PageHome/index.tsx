@@ -1,60 +1,85 @@
-import SectionHowItWork from '../components/SectionHowItWork/SectionHowItWork'
-import BackgroundSection from '../components/BackgroundSection/BackgroundSection'
-import SectionHero2 from '../components/SectionHero/SectionHero2'
-import SectionSliderProductCard from '../components/SectionSliderProductCard'
-import SectionGridMoreExplore from '../components/SectionGridMoreExplore/SectionGridMoreExplore'
-import SectionGridFeatureItems from '../SectionGridFeatureItems'
-import SectionMagazine5 from '../BlogPage/SectionMagazine5'
-import Heading from '../components/Heading/Heading'
-import ButtonSecondary from '../shared/Button/ButtonSecondary'
+import ProductCard from '../components/ProductCard/index'
+import RightSection from '../components/RightSection'
+import styles from './styles.module.css'
+import { ExclamationOutlined, IdcardOutlined } from '@ant-design/icons'
 
 function PageHome() {
   return (
-    <div className='nc-PageHome relative overflow-hidden'>
-      {/* SECTION HERO */}
-      <SectionHero2 />
-
-      <div className='container relative space-y-24 my-24 lg:space-y-32 lg:my-32'>
-        {/* SECTION */}
-        <SectionGridFeatureItems />
-
-        <div className='py-24 lg:py-32 border-t border-b border-slate-200 dark:border-slate-700'>
-          <SectionHowItWork />
-        </div>
-
-        {/* SECTION */}
-        <div className='relative py-24 lg:py-32'>
-          <BackgroundSection />
-          <SectionGridMoreExplore />
-        </div>
-
-        {/*  */}
-        {/* <SectionPromo2 /> */}
-
-        {/* SECTION 3 */}
-        {/* <SectionSliderLargeProduct cardStyle='style2' /> */}
-
-        {/*  */}
-        {/* <SectionSliderCategories /> */}
-
-        {/* SECTION */}
-        {/* <SectionPromo3 /> */}
-
-        <SectionSliderProductCard heading='Sản Phẩm Bán Chạy' subHeading='' />
-
-        <div className='relative py-24 lg:py-32'>
-          <BackgroundSection />
-          <div>
-            <Heading rightDescText='Từ Đồ Gỗ Hiệp Hồng blog'>Bài viết mới nhất</Heading>
-            <SectionMagazine5 />
-            <div className='flex mt-16 justify-center'>
-              <ButtonSecondary>Xem thêm</ButtonSecondary>
-            </div>
+    <div className={styles.modules}>
+      <h1 className={styles.title}>CHUYÊN BÁN MÈO</h1>
+      <div className={styles.contentWrapper}>
+        <div className={styles.notice}>
+          <div className={styles.noticeIcon}>
+            <ExclamationOutlined />
+          </div>
+          <div className={styles.noticeContent}>
+            <p>Xác minh ảnh thật cho bánh|| Cách Upload ảnh||</p>
           </div>
         </div>
-
-        {/*  */}
-        {/* <SectionClientSay /> */}
+        <div className={styles.notice}>
+          <div className={styles.noticeIcon}>
+            <ExclamationOutlined />
+          </div>
+          <div className={styles.noticeContent}>
+            <p>
+              THÔNG BÁO: Cách truy cập Telegram,Nicegram không bị chặn, không mất phí{' '}
+              <a href='/threads/telegram-bi-chan-o-viet-nam.41120/' title='Chặn telegram'>
+                Tại đây
+              </a>
+            </p>
+          </div>
+        </div>
+        <div className={styles.contentItemList}>
+          <div className={styles.leftContent}>
+            <div className={styles.leftContentBox}>
+              <div className={styles.locationWrapper}>
+                <IdcardOutlined />
+                <h1 className={styles.location}>Hải Phòng</h1>
+              </div>
+              <div className={styles.cardWrapper}>
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+              </div>
+            </div>
+            <div className={styles.leftContentBox}>
+              <div className={styles.locationWrapper}>
+                <IdcardOutlined />
+                <h1 className={styles.location}>Đà Nẵng</h1>
+              </div>
+              <div className={styles.cardWrapper}>
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+                <ProductCard />
+              </div>
+            </div>
+          </div>
+          <RightSection></RightSection>
+        </div>
       </div>
     </div>
   )

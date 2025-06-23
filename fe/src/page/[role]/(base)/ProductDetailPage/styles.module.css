@@ -1,0 +1,302 @@
+.modules {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 16px 32px 16px;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notice {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.noticeIcon {
+  border: 1px solid aqua;
+  background-color: aqua;
+  color: red;
+}
+
+.noticeContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: 16px;
+  line-height: 1.5;
+  border: 1px solid aqua;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.searchBox {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  max-width: 1280px;
+}
+
+.linkfast {
+  border: solid 1px #555;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.linkfast li {
+  background: #8bc34a;
+  height: 25px;
+  line-height: 25px;
+  margin-left: 5px;
+  padding-left: 7px;
+  padding-right: 7px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-bottom: 7px;
+}
+
+.linkfast > li:nth-child(2n + 2) {
+  background: #ff9800;
+}
+
+.linkfast > li:nth-child(3n + 3) {
+  background: #03a9f4;
+}
+
+.linkfast > li:nth-child(4n + 4) {
+  background: #9c27b0;
+}
+
+.linkfast > li:nth-child(5n + 5) {
+  background: #607d8b;
+}
+
+.linkfast > li:nth-child(6n + 6) {
+  background: #2727fd;
+}
+
+.linkfast > li:nth-child(7n + 7) {
+  background: #000;
+}
+
+.contentItemList {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  max-width: 1280px;
+}
+
+.leftContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: calc(100% - 245px);
+  max-width: calc(100% - 245px);
+}
+
+.leftContentBox {
+  padding: 16px;
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 3px;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.14), 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: row;
+}
+
+.avatarContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 170px;
+  background: black;
+}
+
+.avatarBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 96px;
+  height: 96px;
+  background-color: #0097a7;
+  color: #84ffff;
+  border-radius: 5px;
+}
+
+.avatar {
+  font-size: 58px;
+  font-family: 'Arial', sans-serif;
+}
+
+.userDetail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 5px;
+}
+
+.role {
+  text-align: center;
+  font-size: 14px;
+  width: 80%;
+  background: #e65100;
+  border-radius: 5px;
+}
+
+.rank {
+  text-align: center;
+  font-size: 14px;
+  width: 80%;
+  background: #d80000;
+  border-radius: 5px;
+}
+
+.type {
+  text-align: center;
+  font-size: 14px;
+  width: 80%;
+  background: darkturquoise;
+  border-radius: 5px;
+}
+
+.userMoreInfo {
+  font-size: 14px;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.detail {
+  padding-left: 20px;
+  width: 100%;
+}
+
+.detailWrapper{
+  margin-top: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #000;
+  width: 100%;
+}
+
+.detailItem{
+  display: flex;
+  flex-direction: row;
+}
+
+.detailLabel{
+  width: 170px;
+  padding-right: 10px;
+}
+
+.userName{
+  color: #ff0;
+}
+
+.timeOnline{
+  font-size: 14px;
+  color: #7c9292;
+}
+
+.contents {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  color: #ff00ee !important;
+}
+
+.moreInfo {
+  font-size: 13px;
+  color: #7c9292;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  padding-bottom: 30px;
+}
+
+.searchTagWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.searchTag {
+  font-size: 13px;
+  color: #7c9292;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  display: inline-block;
+  max-width: 100%;
+  padding: 0 6px 1px;
+  margin: 0 0 2px;
+  border-radius: 3px;
+}
+
+.tagItem {
+  display: inline-block;
+  padding: 1px 0.35em;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  line-height: 1.26;
+  text-decoration: none;
+}
+
+.tagSkyBlue {
+  color: #fff;
+  background: #03a9f4;
+  border-color: #0286c2;
+}
+
+.tagBlue {
+  color: #000;
+  background: #2196f3;
+  border-color: #0c7cd5;
+}
+
+.tagRoyalBlue {
+  color: #fff;
+  background: #0d47a1;
+  border-color: #093272;
+}
+
+.tagYellow {
+  color: #000;
+  background: #ffeb3b;
+  border-color: #ffe608;
+}
+
+.tagOrange {
+  color: #000;
+  background: #ff9800;
+  border-color: #cc7a00;
+}
+
+.tagOlive {
+  color: #fff;
+  background: #689f38;
+  border-color: #4f792b;
+}
