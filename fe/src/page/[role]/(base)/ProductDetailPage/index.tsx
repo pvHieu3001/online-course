@@ -66,7 +66,7 @@ function ProducDetailPage() {
           <h1>Tìm nhanh theo khu vực</h1>
           <ul className={styles.linkfast}>
             <li>
-              <a href='/categories/an-choi-thu-do.126/' title=''>
+              <a href='/categories/126/' title=''>
                 Hà Nội
               </a>{' '}
             </li>
@@ -96,73 +96,73 @@ function ProducDetailPage() {
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-quang-ninh.89/' title=''>
+              <a href='/forums/89/' title=''>
                 Quảng Ninh
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-ninh-binh.150/' title=''>
+              <a href='/forums/ninh-binh.150/' title=''>
                 Ninh Bình
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-thanh-hoa.144/' title=''>
+              <a href='/forums/thanh-hoa.144/' title=''>
                 Thanh Hóa
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-nghe-an.152/' title=''>
+              <a href='/forums/nghe-an.152/' title=''>
                 Nghệ An
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-tp-vinh-yen-vinh-phuc.143/' title=''>
+              <a href='/forums/tp-vinh-yen-vinh-phuc.143/' title=''>
                 Vĩnh Yên-Vĩnh Phúc
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-hai-duong.91/' title=''>
+              <a href='/forums/hai-duong.91/' title=''>
                 Hải Dương
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-bac-ninh.107/' title=''>
+              <a href='/forums/bac-ninh.107/' title=''>
                 Bắc Ninh
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-thanh-pho-bac-giang.162/' title=''>
+              <a href='/forums/thanh-pho-bac-giang.162/' title=''>
                 Bắc Giang
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-ha-nam.149/' title=''>
+              <a href='/forums/ha-nam.149/' title=''>
                 Hà Nam
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-thai-nguyen.88/' title=''>
+              <a href='/forums/thai-nguyen.88/' title=''>
                 Thái Nguyên
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-lam-dong.167/' title=''>
+              <a href='/forums/lam-dong.167/' title=''>
                 Đà Lạt
               </a>
             </li>
             <li>
               {' '}
-              <a href='/forums/gai-goi-binh-duong.98/' title=''>
+              <a href='/forums/binh-duong.98/' title=''>
                 Bình Dương
               </a>
             </li>
