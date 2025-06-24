@@ -12,7 +12,7 @@ function Base() {
     <HelmetProvider>
       <div className={styles.modules}>
         <Helmet>
-          <title>Mèo Anh Lông dài</title>
+          <title>Chia Sẻ Khóa Học</title>
           <meta name='description' content='Mèo Anh Lông dài' />
           <meta name='google-site-verification' content='T9IaRbRYVAYLaOMteD3gLMso6FUu62Kkyu7ORBpDrqw' />
         </Helmet>

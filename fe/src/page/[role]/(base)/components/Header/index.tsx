@@ -9,51 +9,76 @@ type MenuItem = Required<MenuProps>['items'][number]
 
 const items: MenuItem[] = [
   {
-    label: <a href='/'>Khóa Học Free</a>,
+    label: <a href='/category'>Danh Mục Sản Phẩm</a>,
+    key: 'hanoi',
+    icon: <AppstoreOutlined />,
+    children: [
+      {
+        label: <a href='https://ant.design'>Tất Cả Khóa Học</a>,
+        key: 'setting:1'
+      },
+      {
+        label: <a href='https://ant.design'>Combo Giá Rẻ</a>,
+        key: 'setting:2'
+      },
+      {
+        label: <a href='https://ant.design'>Khóa Học Lập Trình</a>,
+        key: 'setting:3'
+      },
+      {
+        label: <a href='https://ant.design'>Thiết Kế Đồ Họa</a>,
+        key: 'setting:4'
+      },
+      {
+        label: <a href='https://ant.design'>Ngoại Ngữ</a>,
+        key: 'setting:5'
+      },
+      {
+        label: <a href='https://ant.design'>Tin Học Văn Phòng</a>,
+        key: 'setting:6'
+      },
+      {
+        label: <a href='https://ant.design'>Kỹ Năng Mềm</a>,
+        key: 'setting:7'
+      },
+      {
+        label: <a href='https://ant.design'>TickTock - FaceBook - YouTube</a>,
+        key: 'setting:8'
+      },
+      {
+        label: <a href='https://ant.design'>Đầu Tư Kinh Doanh</a>,
+        key: 'setting:9'
+      },
+      {
+        label: <a href='https://ant.design'>Âm Nhạc</a>,
+        key: 'setting:10'
+      },
+      {
+        label: <a href='https://ant.design'>Kiếm Tiền</a>,
+        key: 'setting:11'
+      },
+      {
+        label: <a href='https://ant.design'>Khóa Học Khác</a>,
+        key: 'setting:12'
+      },
+    ]
+  },
+  {
+    label: <a href='/'>Trang Chủ</a>,
     key: 'home',
     icon: <HomeOutlined />,
     className: `${styles.menuItem}`
   },
   {
-    label: 'Nâng Cấp Hội Viên',
+    label: 'Giới Thiệu',
     key: 'forum',
     icon: <MessageTwoTone />
   },
-  {
-    label: <a href='/category'>Combo</a>,
-    key: 'hanoi',
-    icon: <AppstoreOutlined />,
-    children: [
-      {
-        type: 'group',
-        label: 'Hoàn Kiếm',
-        children: [
-          {
-            label: <a href='https://ant.design'>Combo Vip</a>,
-            key: 'setting:1'
-          },
-          {
-            label: <a href='https://ant.design'>Combo Premium</a>,
-            key: 'setting:2'
-          }
-        ]
-      },
-    ]
-  },
+  
   {
     key: 'alipay',
     icon: <AppstoreOutlined />,
-    label: <a href='product-detail/slug'>Khóa Học Dưới 100kg</a>
-  },
-  {
-    key: 'alipay',
-    icon: <AppstoreOutlined />,
-    label: <a href='https://ant.design'>Khóa Học Dưới 150k</a>
-  },
-  {
-    key: 'alipay',
-    icon: <AppstoreOutlined />,
-    label: <a href='https://ant.design'>Khóa Học Dưới 500k</a>
+    label: <a href='product-detail/slug'>Combo Tiết Kiệm</a>
   },
   {
     key: 'alipay',
@@ -63,7 +88,12 @@ const items: MenuItem[] = [
   {
     key: 'alipay',
     icon: <AppstoreOutlined />,
-    label: <a href='https://ant.design'>Block</a>
+    label: <a href='https://ant.design'>Tài Khoản</a>
+  },
+  {
+    key: 'alipay',
+    icon: <AppstoreOutlined />,
+    label: <a href='https://ant.design'>Blog</a>
   }
 ]
 
@@ -110,7 +140,14 @@ const Header = () => {
         </form>
       </div>
       <div className={styles.menuWrapper}>
-        <Menu className={styles.menu} theme='light' onClick={onClick} selectedKeys={[current]} mode='horizontal' items={items} />
+        <Menu
+          className={styles.menu}
+          theme='light'
+          onClick={onClick}
+          selectedKeys={[current]}
+          mode='horizontal'
+          items={items}
+        />
       </div>
     </div>
   )

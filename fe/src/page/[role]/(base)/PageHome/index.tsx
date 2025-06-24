@@ -6,79 +6,80 @@ import { ExclamationOutlined, IdcardOutlined } from '@ant-design/icons'
 function PageHome() {
   return (
     <div className={styles.modules}>
-      <h1 className={styles.title}>CHUYÊN BÁN MÈO</h1>
-      <div className={styles.contentWrapper}>
-        <div className={styles.notice}>
-          <div className={styles.noticeIcon}>
-            <ExclamationOutlined />
-          </div>
-          <div className={styles.noticeContent}>
-            <p>Xác minh ảnh thật cho bánh|| Cách Upload ảnh||</p>
-          </div>
-        </div>
-        <div className={styles.notice}>
-          <div className={styles.noticeIcon}>
-            <ExclamationOutlined />
-          </div>
-          <div className={styles.noticeContent}>
-            <p>
-              THÔNG BÁO: Cách truy cập Telegram,Nicegram không bị chặn, không mất phí{' '}
-              <a href='/threads/telegram-bi-chan-o-viet-nam.41120/' title='Chặn telegram'>
-                Tại đây
-              </a>
-            </p>
+      <div className={styles.title}>
+        <h1>Chia Sẻ Khóa Học Drive</h1>
+        <p>
+          Khoá Học Sinh Viên là website hàng đầu về chia sẻ khoá học online được học qua Google Drive. Mọi khoá học mua
+          tại đây sẽ được học vĩnh viễn, luôn có đội ngũ hỗ trợ 24/7.
+        </p>
+      </div>
+      <div className={styles.feature}>
+        <div className={styles.featureWrapper}>
+          <img
+            className={styles.featureIcon}
+            data-bb-lazy='true'
+            loading='lazy'
+            src='https://khoahocgiasieure.com/storage/rt1.png'
+            alt='Uy tín chất lượng'
+          />
+          <div className={styles.featureContent}>
+            <h3 className={styles.featureTitle}>Uy tín chất lượng</h3>
+            <p>Hoàn tiền nếu như khoá học không như mô tả</p>
           </div>
         </div>
-        <div className={styles.contentItemList}>
-          <div className={styles.leftContent}>
-            <div className={styles.leftContentBox}>
-              <div className={styles.locationWrapper}>
-                <IdcardOutlined />
-                <h1 className={styles.location}>Hải Phòng</h1>
-              </div>
-              <div className={styles.cardWrapper}>
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-              </div>
+        <div className='col-xl-3 col-lg-6 col-md-6 col-sm-6'>
+          <div className='tp-feature-item d-flex align-items-center'>
+            <div className='tp-feature-icon mr-15'>
+              <span>
+                <img
+                  data-bb-lazy='true'
+                  loading='lazy'
+                  src='https://khoahocgiasieure.com/storage/time.png'
+                  alt='Kích hoạt nhanh chóng'
+                />
+              </span>
             </div>
-            <div className={styles.leftContentBox}>
-              <div className={styles.locationWrapper}>
-                <IdcardOutlined />
-                <h1 className={styles.location}>Đà Nẵng</h1>
-              </div>
-              <div className={styles.cardWrapper}>
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-              </div>
+            <div className='tp-feature-content'>
+              <h3 className='tp-feature-title'>Kích hoạt nhanh chóng</h3>
+              <p>Nhận khoá học qua email trong vòng 30s</p>
             </div>
           </div>
-          <RightSection></RightSection>
+        </div>
+        <div className='col-xl-3 col-lg-6 col-md-6 col-sm-6'>
+          <div className='tp-feature-item d-flex align-items-center'>
+            <div className='tp-feature-icon mr-15'>
+              <span>
+                <img
+                  data-bb-lazy='true'
+                  loading='lazy'
+                  src='https://khoahocgiasieure.com/storage/rt3.png'
+                  alt='Mua hàng tiết kiệm'
+                />
+              </span>
+            </div>
+            <div className='tp-feature-content'>
+              <h3 className='tp-feature-title'>Mua hàng tiết kiệm</h3>
+              <p>Khóa học với giá rẻ nhất thị trường hiện nay</p>
+            </div>
+          </div>
+        </div>
+        <div className='col-xl-3 col-lg-6 col-md-6 col-sm-6'>
+          <div className='tp-feature-item d-flex align-items-center'>
+            <div className='tp-feature-icon mr-15'>
+              <span>
+                <img
+                  data-bb-lazy='true'
+                  loading='lazy'
+                  src='https://khoahocgiasieure.com/storage/rt4.png'
+                  alt='Hỗ trợ trực tuyến'
+                />
+              </span>
+            </div>
+            <div className='tp-feature-content'>
+              <h3 className='tp-feature-title'>Hỗ trợ trực tuyến</h3>
+              <p>Liên hệ fanpage để được hỗ trợ ngay </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
