@@ -9,18 +9,18 @@ type MenuItem = Required<MenuProps>['items'][number]
 
 const items: MenuItem[] = [
   {
-    label: <a href='/'>Home</a>,
+    label: <a href='/'>Khóa Học Free</a>,
     key: 'home',
     icon: <HomeOutlined />,
     className: `${styles.menuItem}`
   },
   {
-    label: 'Forum',
+    label: 'Nâng Cấp Hội Viên',
     key: 'forum',
     icon: <MessageTwoTone />
   },
   {
-    label: <a href='/category'>Hà Nội</a>,
+    label: <a href='/category'>Combo</a>,
     key: 'hanoi',
     icon: <AppstoreOutlined />,
     children: [
@@ -29,50 +29,46 @@ const items: MenuItem[] = [
         label: 'Hoàn Kiếm',
         children: [
           {
-            label: <a href='https://ant.design'>Hai Bà Trung</a>,
+            label: <a href='https://ant.design'>Combo Vip</a>,
             key: 'setting:1'
           },
           {
-            label: <a href='https://ant.design'>Lê Quan Đạo</a>,
+            label: <a href='https://ant.design'>Combo Premium</a>,
             key: 'setting:2'
           }
         ]
       },
-      {
-        type: 'group',
-        label: 'Mỹ Đình',
-        children: [
-          {
-            label: <a href='https://ant.design'>Trinh Văn Bô</a>,
-            key: 'setting:3'
-          },
-          {
-            label: <a href='https://ant.design'>Xuân Hòa</a>,
-            key: 'setting:4'
-          }
-        ]
-      }
     ]
   },
   {
     key: 'alipay',
     icon: <AppstoreOutlined />,
-    label: <a href='product-detail/slug'>Hải Phòng</a>
+    label: <a href='product-detail/slug'>Khóa Học Dưới 100kg</a>
   },
   {
     key: 'alipay',
     icon: <AppstoreOutlined />,
-    label: <a href='https://ant.design'>Quản Ninh</a>
+    label: <a href='https://ant.design'>Khóa Học Dưới 150k</a>
   },
   {
     key: 'alipay',
     icon: <AppstoreOutlined />,
-    label: <a href='https://ant.design'>Ninh Bình</a>
+    label: <a href='https://ant.design'>Khóa Học Dưới 500k</a>
+  },
+  {
+    key: 'alipay',
+    icon: <AppstoreOutlined />,
+    label: <a href='https://ant.design'>Hướng Dẫn</a>
+  },
+  {
+    key: 'alipay',
+    icon: <AppstoreOutlined />,
+    label: <a href='https://ant.design'>Block</a>
   }
 ]
 
 const Header = () => {
-  const [current, setCurrent] = useState('mail')
+  const [current, setCurrent] = useState('home')
 
   const onClick: MenuProps['onClick'] = (e) => {
     console.log('click ', e)
@@ -113,8 +109,8 @@ const Header = () => {
           <input type='submit' hidden value='' />
         </form>
       </div>
-      <div className={styles.menu}>
-        <Menu theme='dark' onClick={onClick} selectedKeys={[current]} mode='horizontal' items={items} />
+      <div className={styles.menuWrapper}>
+        <Menu className={styles.menu} theme='light' onClick={onClick} selectedKeys={[current]} mode='horizontal' items={items} />
       </div>
     </div>
   )

@@ -1,9 +1,4 @@
 #root {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgb(24, 28, 31);
-  background-image: url("./assets/images/base/pagebg.png");
+  background: #fff;
   color: rgb(255, 255, 255)
 }

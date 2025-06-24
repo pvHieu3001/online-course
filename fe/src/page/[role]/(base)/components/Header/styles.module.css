@@ -11,12 +11,10 @@
   justify-content: space-between;
 }
 
-.menu {
+.menuWrapper ul {
+  background-image: linear-gradient(to right, #073954, #007e8c);
   max-width: 1300px;
+  color: azure !important;
 }
 
-@media (width < 1200px) {
-  .menu {
-    max-width: 375px;
-  }
-}
+
