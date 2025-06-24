@@ -5,24 +5,56 @@
   padding: 32px;
 }
 
-.title{
+.title {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.title h1{
+.title h1 {
   font-weight: 600;
   font-size: 33px;
   font-family: 'Play';
-  color:  #073954;
+  color: #073954;
   text-transform: uppercase;
 }
 
-.title p{
+.title p {
   font-weight: 300;
   font-size: 15px;
   font-family: 'Play';
-  color:  #55585b;
+  color: #55585b;
+}
+
+.feature {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.featureWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  height: fit-content;
+  background-color: #f6f7f9;
+}
+
+.featureIconRt1 {
+  width: 39px;
+  height: 45px;
+}
+
+.featureIconTime {
+  width: 45px;
+  height: 39px;
+}
+
+.featureContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
