@@ -1,133 +1,65 @@
-import Logo from '../../shared/Logo/Logo'
 import styles from './styles.module.css'
 
 const Footer = () => {
   return (
-    <div className={styles.modules}>
-      <div className={styles.banner}>
-        <Logo></Logo>
-        <span>Khóa học online</span>
-        <span>Tri thức là sức mạnh</span>
-      </div>
-      <div className={styles.menu}>
-        <h1 className={styles.menuHeading}>Miền Bắc</h1>
-        <ul className={styles.menuItem}>
-          <li>
-            <a href='/forums/ha-noi.85/' target='_blank'>
-              Hà Nội
-            </a>
-          </li>
-          <li>
-            <a href='/forums/hai-phong.86/' target='_blank'>
-              Hải Phòng
-            </a>
-          </li>
-          <li>
-            <a href='/forums/thai-nguyen.88/' target='_blank'>
-              Thái Nguyên
-            </a>
-          </li>
-          <li>
-            <a href='/forums/hung-yen.90/' target='_blank'>
-              Hưng Yên
-            </a>
-          </li>
-          <li>
-            <a href='/forums/hai-duong.91/' target='_blank'>
-              Hải Dương
-            </a>
-          </li>
-          <li>
-            <a href='/forums/nam-dinh.87/' target='_blank'>
-              Nam Định
-            </a>
-          </li>
-          <li>
-            <a href='/forums/quang-ninh.89/' target='_blank'>
-              Quảng Ninh
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div className={styles.menu}>
-        <h1 className={styles.menuHeading}>Miền Trung</h1>
-        <ul className={styles.menuItem}>
-          <li>
-            <a href='/forums/ha-noi.85/' target='_blank'>
-              Hà Nội
-            </a>
-          </li>
-          <li>
-            <a href='/forums/hai-phong.86/' target='_blank'>
-              Hải Phòng
-            </a>
-          </li>
-          <li>
-            <a href='/forums/thai-nguyen.88/' target='_blank'>
-              Thái Nguyên
-            </a>
-          </li>
-          <li>
-            <a href='/forums/hung-yen.90/' target='_blank'>
-              Hưng Yên
-            </a>
-          </li>
-          <li>
-            <a href='/forums/hai-duong.91/' target='_blank'>
-              Hải Dương
-            </a>
-          </li>
-          <li>
-            <a href='/forums/nam-dinh.87/' target='_blank'>
-              Nam Định
-            </a>
-          </li>
-          <li>
-            <a href='/forums/quang-ninh.89/' target='_blank'>
-              Quảng Ninh
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div className={styles.menu}>
-        <h1 className={styles.menuHeading}>Miền Nam</h1>
-        <ul className={styles.menuItem}>
-          <li>
-            <a href='/forums/ha-noi.85/' target='_blank'>
-              Hà Nội
-            </a>
-          </li>
-          <li>
-            <a href='/forums/hai-phong.86/' target='_blank'>
-              Hải Phòng
-            </a>
-          </li>
-          <li>
-            <a href='/forums/thai-nguyen.88/' target='_blank'>
-              Thái Nguyên
-            </a>
-          </li>
-          <li>
-            <a href='/forums/hung-yen.90/' target='_blank'>
-              Hưng Yên
-            </a>
-          </li>
-          <li>
-            <a href='/forums/hai-duong.91/' target='_blank'>
-              Hải Dương
-            </a>
-          </li>
-          <li>
-            <a href='/forums/nam-dinh.87/' target='_blank'>
-              Nam Định
-            </a>
-          </li>
-          <li>
-            <a href='/forums/quang-ninh.89/' target='_blank'>
-              Quảng Ninh
-            </a>
-          </li>
-        </ul>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        {/* Cam kết dịch vụ */}
+        <div className={styles.features}>
+          <div className={styles.featureCard}>
+            <img src='/footer/quality.jpg' alt='Uy tín chất lượng' />
+            <div>
+              <h4>Uy tín chất lượng</h4>
+              <p>Hoàn tiền nếu khóa học không như mô tả</p>
+            </div>
+          </div>
+          <div className={styles.featureCard}>
+            <img src='/footer/fast.png' alt='Kích hoạt nhanh' />
+            <div>
+              <h4>Kích hoạt nhanh</h4>
+              <p>Kích hoạt khóa học tự động</p>
+            </div>
+          </div>
+          <div className={styles.featureCard}>
+            <img src='/footer/update.png' alt='Update liên tục' />
+            <div>
+              <h4>Update liên tục</h4>
+              <p>Cập nhật 7 - 15 khóa học mỗi hàng tuần</p>
+            </div>
+          </div>
+          <div className={styles.featureCard}>
+            <img src='/footer/online.jpg' alt='Học online tiện lợi' />
+            <div>
+              <h4>Học online tiện lợi</h4>
+              <p>Học online bằng điện thoại hoặc máy tính</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer thông tin */}
+        <div className={styles.bottom}>
+          <div className={styles.left}>
+            <strong>khokhoahoc.org</strong>
+            <p>Copyright © 2025 - Chuyên mua bán khóa học giá rẻ</p>
+          </div>
+          <div className={styles.right}>
+            <p>
+              SDT (Zalo): <span className={styles.highlight}>0983456789</span>
+            </p>
+            <p>
+              Quy định:{' '}
+              <a href='#' className={styles.link}>
+                Sử dụng tài khoản
+              </a>
+            </p>
+            <p>
+              Email:{' '}
+              <a href='mailto:support@sharedocuments.org' className={styles.email}>
+                support@haredocuments.com
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   )
