@@ -179,6 +179,17 @@ function PageHome() {
           </div>
         </div>
       </div>
+
+      <div className={styles.cardtitle}>
+        <h1>Sản Phẩm Nổi Bật</h1>
+      </div>
+      <div className={styles.cardWrapper}>
+        <ProductCard></ProductCard>
+        <ProductCard></ProductCard>
+        <ProductCard></ProductCard>
+        <ProductCard></ProductCard>
+        <ProductCard></ProductCard>
+      </div>
     </div>
   )
 }
