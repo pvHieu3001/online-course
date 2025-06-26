@@ -1,7 +1,5 @@
 import ProductCard from '../components/ProductCard/index'
-import RightSection from '../components/RightSection'
 import styles from './styles.module.css'
-import { ExclamationOutlined, IdcardOutlined } from '@ant-design/icons'
 
 function PageHome() {
   return (

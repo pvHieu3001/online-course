@@ -1,4 +1,8 @@
 import styles from './styles.module.css'
+import qualityImage from '@/assets/images/base/quality.jpg'
+import fastImage from '@/assets/images/base/fast.png'
+import updateImage from '@/assets/images/base/update.png'
+import onlineImage from '@/assets/images/base/online.jpg'
 
 const Footer = () => {
   return (
@@ -7,28 +11,28 @@ const Footer = () => {
         {/* Cam kết dịch vụ */}
         <div className={styles.features}>
           <div className={styles.featureCard}>
-            <img src='/footer/quality.jpg' alt='Uy tín chất lượng' />
+            <img src={qualityImage} alt='Uy tín chất lượng' />
             <div>
               <h4>Uy tín chất lượng</h4>
               <p>Hoàn tiền nếu khóa học không như mô tả</p>
             </div>
           </div>
           <div className={styles.featureCard}>
-            <img src='/footer/fast.png' alt='Kích hoạt nhanh' />
+            <img src={fastImage} alt='Kích hoạt nhanh' />
             <div>
               <h4>Kích hoạt nhanh</h4>
               <p>Kích hoạt khóa học tự động</p>
             </div>
           </div>
           <div className={styles.featureCard}>
-            <img src='/footer/update.png' alt='Update liên tục' />
+            <img src={updateImage} alt='Update liên tục' />
             <div>
               <h4>Update liên tục</h4>
               <p>Cập nhật 7 - 15 khóa học mỗi hàng tuần</p>
             </div>
           </div>
           <div className={styles.featureCard}>
-            <img src='/footer/online.jpg' alt='Học online tiện lợi' />
+            <img src={onlineImage} alt='Học online tiện lợi' />
             <div>
               <h4>Học online tiện lợi</h4>
               <p>Học online bằng điện thoại hoặc máy tính</p>
