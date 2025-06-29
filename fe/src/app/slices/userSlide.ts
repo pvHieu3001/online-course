@@ -4,7 +4,7 @@ import { loadAuthState } from "./authSlide";
 import { setLoading, setOpenModalLogin } from "../webSlice";
 import { AxiosError } from "axios";
 import { ErrorResponse } from "react-router-dom";
-import { popupError } from "@/page/[role]/shared/Toast";
+import { popupError } from "@/page/shared/Toast";
 
 export const getUser = (payload: string) => async (dispatch: Dispatch) => {
     try{

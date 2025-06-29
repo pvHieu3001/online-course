@@ -1,29 +1,27 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import webReducer from './webSlice'
-import { usersApi } from '../page/[role]/(manager)/user/UsersEndpoints'
-import { categoryAttributesApi } from '../page/[role]/(manager)/attribute/_components/category_attribute/CategoryAttributeEndpoints'
-import { attributesApi } from '../page/[role]/(manager)/attribute/_components/attribute/AttributeEndpoints'
+import { categoryAttributesApi } from '../page/admin/attribute/_components/category_attribute/CategoryAttributeEndpoints'
+import { attributesApi } from '../page/admin/attribute/_components/attribute/AttributeEndpoints'
 import { addressApi } from '../utils/addressRTKQuery'
 
 import bannerSlice from './slices/bannerSlice'
-import categorySlice from './slices/categorySlice'
-import { valueAttributesApi } from '../page/[role]/(manager)/attribute/_components/value_attribute/ValueAttributeEndPoints'
+import { valueAttributesApi } from '../page/admin/attribute/_components/value_attribute/ValueAttributeEndPoints'
 import postCategorySlice from './slices/postCategorySlice'
-import { privilegeGroupApi } from '@/page/[role]/(manager)/privilege/_components/privilege_group/PrivilegeGroupEndpoint'
-import { privilegeApi } from '@/page/[role]/(manager)/privilege/_components/privilege/PrivilegeEndpoint'
-import { privilegeUsersApi } from '@/page/[role]/(manager)/user/PrivilegeUsersEndpoints'
+import { privilegeGroupApi } from '@/page/admin/privilege/_components/privilege_group/PrivilegeGroupEndpoint'
+import { privilegeApi } from '@/page/admin/privilege/_components/privilege/PrivilegeEndpoint'
+import { privilegeUsersApi } from '@/page/admin/user/PrivilegeUsersEndpoints'
 import postSlice from './slices/postSlice'
 import authSlice from './slices/authSlide'
-import { categoriesApi } from '@/page/[role]/(manager)/category/CategoryEndpoints'
+import { categoriesApi } from '@/page/admin/category/CategoryEndpoints'
 import { productsApi } from '@/services/ProductsEndpoints'
-import { brandsApi } from '@/page/[role]/(manager)/brand/BrandEndpoints'
-import { bannersApi } from '@/page/[role]/(manager)/banner/BannerEndpoints'
+import { brandsApi } from '@/page/admin/brand/BrandEndpoints'
+import { bannersApi } from '@/page/admin/banner/BannerEndpoints'
 import { CartsApi } from '@/services/CartEndPoinst'
 import { ordersApi } from '@/services/OrderEndPoints'
 import cartSlide from './slices/cartSlide'
-import { voucherApi } from '@/page/[role]/(manager)/voucher/VoucherEndpoint'
+import { voucherApi } from '@/page/admin/voucher/VoucherEndpoint'
 import { CommentsApi } from '@/services/CommentEndPoints'
-import { detailsApi } from '@/page/[role]/(manager)/details/_component/DetailsEndpoints'
+import { detailsApi } from '@/page/admin/details/_component/DetailsEndpoints'
 export const store = configureStore({
   reducer: {
     web: webReducer,
@@ -33,7 +31,6 @@ export const store = configureStore({
     post: postSlice,
     auth: authSlice,
     carts: cartSlide,
-    [usersApi.reducerPath]: usersApi.reducer,
     [addressApi.reducerPath]: addressApi.reducer,
     [attributesApi.reducerPath]: attributesApi.reducer,
     [categoryAttributesApi.reducerPath]: categoryAttributesApi.reducer,
@@ -56,7 +53,6 @@ export const store = configureStore({
     getDefaultMiddleware //attributesApi.middleware
   ) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(
-      usersApi.middleware,
       addressApi.middleware,
       attributesApi.middleware,
       categoryAttributesApi.middleware,

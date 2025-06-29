@@ -1,5 +1,5 @@
 import { Page } from '../routes/types'
-import { NavItemType } from '../page/[role]/(base)/shared/Navigation/NavigationItem'
+import { NavItemType } from '../page/user/shared/Navigation/NavigationItem'
 import ncNanoId from '../utils/ncNanoId'
 
 export const MEGAMENU_TEMPLATES: NavItemType[] = [
