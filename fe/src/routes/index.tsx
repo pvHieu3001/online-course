@@ -70,14 +70,6 @@ export default function Router() {
         <Route path='/' element={<Layout />}>
           <Route path='' element={<Base />}>
             <Route index element={<PageHome />} />
-            <Route path='' element={<ProductDetailPage />} />
-          </Route>
-          <Route path='home' element={<Base />}>
-            <Route index element={<PageHome />} />
-            <Route path='' element={<ProductDetailPage />} />
-          </Route>
-
-          <Route path='' element={<Base />}>
             <Route path='login' element={<PageLogin />} />
             <Route path='signup' element={<PageSignUp />} />
 

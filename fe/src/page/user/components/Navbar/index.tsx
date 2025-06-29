@@ -25,10 +25,7 @@ const Navbar = () => {
             </div>
             <div>
               <p className={styles.greating}>Xin chào, Quý khách</p>
-              <div>
-                <button className={styles.bnt}>Đăng Nhập </button>
-                <button className={styles.bnt}>&nbsp;/ Đăng Ký</button>
-              </div>
+              <a href='/login' className={styles.bnt}>Đăng Nhập / Đăng Ký</a>
             </div>
           </div>
           <button className={styles.cart}><ShoppingCartOutlined className={styles.icon}/></button>
