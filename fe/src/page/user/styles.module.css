@@ -7,8 +7,8 @@
 }
 
 .container {
-  max-width: 1280px; /* tăng khung layout */
-  margin: 80px auto 0; /* có khoảng top để tránh che bởi navbar fixed */
+  max-width: 1280px;
+  margin: 80px auto 0;
   padding: 0 16px;
 }
 

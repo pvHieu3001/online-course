@@ -4,6 +4,11 @@
   width: 100%;
 }
 
+.lockMenu{
+  position: fixed;
+  top: 0;
+}
+
 .banner {
   display: flex;
   flex-direction: row;
