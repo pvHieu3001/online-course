@@ -1,4 +1,4 @@
-import { popupError } from "@/page/[role]/shared/Toast";
+import { popupError } from "@/page/shared/Toast";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { Navigate } from "react-router-dom";
 

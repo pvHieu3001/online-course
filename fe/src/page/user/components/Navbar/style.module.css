@@ -1,0 +1,104 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  color: rgb(6, 84, 129);
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: 1280px;
+  width: 100%;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: orange;
+}
+
+.centerSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #073954;
+  border: 1px solid #073954;
+  border-radius: 5px;
+  line-height: 1.5;
+  width: 40%;
+}
+
+.searchInput {
+  width: 100%;
+}
+
+.searchButton {
+  color: #fff;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.links {
+  display: flex;
+  gap: 16px;
+}
+
+.links a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  gap: 30px;
+}
+
+.accountWrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.accountIcon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  border: 1px solid #2a5bd7;
+}
+
+.greating{
+  font-size: 12px;
+}
+
+.bnt{
+  font-size: 15px;
+  font-weight: 550;
+}
+
+.login,
+.cart {
+  background: white;
+  color: #2a5bd7;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 26px;
+}
