@@ -1,6 +1,6 @@
 
 import { useParams } from 'react-router-dom';
-import TabDetail from '../TabMenu';
+import TabDetail from './TabMenu';
 import styles from './styles.module.css'
 function ProductDetailPage() {
     const { slug } = useParams();

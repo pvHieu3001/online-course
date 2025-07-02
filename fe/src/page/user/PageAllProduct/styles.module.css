@@ -1,0 +1,96 @@
+.modules {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 32px;
+}
+
+.topModule{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.leftSection{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  gap: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-image: linear-gradient(to left, rgb(7, 57, 84), rgb(0, 126, 140));
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.menu{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: rgb(0, 126, 140);
+  border-radius: 8px;
+}
+
+.menuItem{
+  padding: 5px 0 5px 5px;
+  width: 43%;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 300;
+  border-bottom: 1px solid #fff;
+}
+
+.rightSection{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+}
+
+.cardtitle{
+  background: linear-gradient(to left, #073954, #007e8c);
+  margin-top: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0px 4px 10px rgba(1, 15, 28, 0.14);
+}
+
+.cardtitle h1{
+  font-size: 27px;
+  line-height: 27px;
+  color: white;
+  clip-path: polygon(0 0, 80% 0, 100% 100%, 0% 100%);
+  background: #007e8c;
+  padding: 10px;
+  margin-bottom: 0px;
+  text-shadow: 2px 1px 1px #ff0000;
+  text-transform: capitalize;
+  font-family: play;
+}
+
+.cardWrapper{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.contentStyle{
+  height: 160px;
+  color: #fff;
+  line-height: 160px;
+  text-align: center;
+  background: #364d79;
+}
