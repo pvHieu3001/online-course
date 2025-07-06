@@ -1,67 +1,78 @@
+import React, { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { Spin } from 'antd'
 import Manager from '../page/admin/index'
-import Dashboard from '../page/admin/dashboard/Dashboard'
 import Layout from '../page'
-import Billing from '../page/admin/billing'
 import NotPage from '../page/error/404'
-import Profile from '../page/admin/profile'
 import Base from '../page/user'
-import PageHome from '../page/user/PageHome'
-
-import UserManagement from '../page/admin/user'
-import AddUser from '../page/admin/user/_components/add'
-import EditUser from '../page/admin/user/_components/edit'
-import PageCategory from '../page/user/CategoryPage'
-import CheckoutPage from '../page/user/PageCheckout/CheckoutPage'
-import PageLogin from '../page/user/Auth'
-import PageSignUp from '../page/user/Auth/PageSignUp'
-import PageSearch from '../page/user/PageSearch/PageSearch'
-import AccountPage from '../page/user/AccountPage/AccountPage'
-import AccountSavelists from '../page/user/AccountPage/AccountSavelists'
-import AccountPass from '../page/user/AccountPage/AccountPass'
-import AccountBilling from '../page/user/AccountPage/AccountBilling'
-import AccountOrder from '../page/user/AccountPage/AccountOrder'
-import BlogPage from '../page/user/BlogPage/BlogPage'
-import BlogSingle from '../page/user/BlogPage/BlogSingle'
-import PageContact from '../page/user/PageContact/PageContact'
-import PageAbout from '../page/user/PageAbout/PageAbout'
-import Login from '../page/admin/auth/login'
-import AttributeManagement from '../page/admin/attribute'
-import PrivilegeManagement from '@/page/admin/privilege'
-
-import BrandManagement from '../page/admin/brand'
-import BannerManagement from '@/page/admin/banner'
-import AddBanner from '@/page/admin/banner/_components/add'
-import EditBanner from '@/page/admin/banner/_components/edit'
-import CategoryManagement from '@/page/admin/category'
-import AddCategory from '@/page/admin/category/_components/add'
-import EditCategory from '@/page/admin/category/_components/edit'
-import VoucherManagement from '../page/admin/voucher'
-import PostCategoryManagement from '@/page/admin/postCategory'
-import AddPostCategory from '@/page/admin/postCategory/_components/add'
-import EditPostCategory from '@/page/admin/postCategory/_components/edit'
-import PrivilegeUser from '@/page/admin/user/_components/privilege'
-import PostsManagement from '@/page/admin/posts'
-import AddPosts from '@/page/admin/posts/_components/add'
-import EditPosts from '@/page/admin/posts/_components/edit'
-import ProductManagement from '@/page/admin/products'
-import AddProduct from '@/page/admin/products/_components/add'
-import EditProduct from '@/page/admin/products/_components/edit'
-import ColorManagement from '@/page/admin/color'
-import OrderManagement from '@/page/admin/order'
-import AddBrand from '@/page/admin/brand/_components/add'
-import EditBrand from '@/page/admin/brand/_components/edit'
-import EditOrder from '@/page/admin/order/_components/edit'
-import CommonLayout from '@/page/user/AccountPage/CommonLayout'
-import DetailOrder from '@/page/user/AccountPage/DetailOrder'
 import GuardPage from '@/middleware/GuardPage'
-import AddAttribute from '@/page/admin/attribute/_components/attribute/add'
-import DetailManagement from '@/page/admin/details'
-import AttributeManagementV2 from '@/page/admin/attribute/indexV2'
-import AddDetail from '@/page/admin/details/_component/add'
-import EditDetail from '@/page/admin/details/_component/edit'
-import ProductDetailPage from '../page/user/ProductDetailPage/index'
-import PageAllProduct from '@/page/user/PageAllProduct'
+
+// Lazy load components for better performance
+const Dashboard = React.lazy(() => import('../page/admin/dashboard/Dashboard'))
+const Billing = React.lazy(() => import('../page/admin/billing'))
+const Profile = React.lazy(() => import('../page/admin/profile'))
+const PageHome = React.lazy(() => import('../page/user/PageHome'))
+
+const UserManagement = React.lazy(() => import('../page/admin/user'))
+const AddUser = React.lazy(() => import('../page/admin/user/_components/add'))
+const EditUser = React.lazy(() => import('../page/admin/user/_components/edit'))
+const PageCategory = React.lazy(() => import('../page/user/CategoryPage'))
+const CheckoutPage = React.lazy(() => import('../page/user/PageCheckout/CheckoutPage'))
+const PageLogin = React.lazy(() => import('../page/user/Auth'))
+const PageSignUp = React.lazy(() => import('../page/user/Auth/PageSignUp'))
+const PageSearch = React.lazy(() => import('../page/user/PageSearch/PageSearch'))
+const AccountPage = React.lazy(() => import('../page/user/AccountPage/AccountPage'))
+const AccountSavelists = React.lazy(() => import('../page/user/AccountPage/AccountSavelists'))
+const AccountPass = React.lazy(() => import('../page/user/AccountPage/AccountPass'))
+const AccountBilling = React.lazy(() => import('../page/user/AccountPage/AccountBilling'))
+const AccountOrder = React.lazy(() => import('../page/user/AccountPage/AccountOrder'))
+const BlogPage = React.lazy(() => import('../page/user/BlogPage/BlogPage'))
+const BlogSingle = React.lazy(() => import('../page/user/BlogPage/BlogSingle'))
+const PageContact = React.lazy(() => import('../page/user/PageContact/PageContact'))
+const PageAbout = React.lazy(() => import('../page/user/PageAbout/PageAbout'))
+const Login = React.lazy(() => import('../page/admin/auth/login'))
+const AttributeManagement = React.lazy(() => import('../page/admin/attribute'))
+const PrivilegeManagement = React.lazy(() => import('@/page/admin/privilege'))
+
+const BrandManagement = React.lazy(() => import('../page/admin/brand'))
+const BannerManagement = React.lazy(() => import('@/page/admin/banner'))
+const AddBanner = React.lazy(() => import('@/page/admin/banner/_components/add'))
+const EditBanner = React.lazy(() => import('@/page/admin/banner/_components/edit'))
+const CategoryManagement = React.lazy(() => import('@/page/admin/category'))
+const AddCategory = React.lazy(() => import('@/page/admin/category/_components/add'))
+const EditCategory = React.lazy(() => import('@/page/admin/category/_components/edit'))
+const VoucherManagement = React.lazy(() => import('../page/admin/voucher'))
+const PostCategoryManagement = React.lazy(() => import('@/page/admin/postCategory'))
+const AddPostCategory = React.lazy(() => import('@/page/admin/postCategory/_components/add'))
+const EditPostCategory = React.lazy(() => import('@/page/admin/postCategory/_components/edit'))
+const PrivilegeUser = React.lazy(() => import('@/page/admin/user/_components/privilege'))
+const PostsManagement = React.lazy(() => import('@/page/admin/posts'))
+const AddPosts = React.lazy(() => import('@/page/admin/posts/_components/add'))
+const EditPosts = React.lazy(() => import('@/page/admin/posts/_components/edit'))
+const ProductManagement = React.lazy(() => import('@/page/admin/products'))
+const AddProduct = React.lazy(() => import('@/page/admin/products/_components/add'))
+const EditProduct = React.lazy(() => import('@/page/admin/products/_components/edit'))
+const ColorManagement = React.lazy(() => import('@/page/admin/color'))
+const OrderManagement = React.lazy(() => import('@/page/admin/order'))
+const AddBrand = React.lazy(() => import('@/page/admin/brand/_components/add'))
+const EditBrand = React.lazy(() => import('@/page/admin/brand/_components/edit'))
+const EditOrder = React.lazy(() => import('@/page/admin/order/_components/edit'))
+const CommonLayout = React.lazy(() => import('@/page/user/AccountPage/CommonLayout'))
+const DetailOrder = React.lazy(() => import('@/page/user/AccountPage/DetailOrder'))
+const AddAttribute = React.lazy(() => import('@/page/admin/attribute/_components/attribute/add'))
+const DetailManagement = React.lazy(() => import('@/page/admin/details'))
+const AttributeManagementV2 = React.lazy(() => import('@/page/admin/attribute/indexV2'))
+const AddDetail = React.lazy(() => import('@/page/admin/details/_component/add'))
+const EditDetail = React.lazy(() => import('@/page/admin/details/_component/edit'))
+const ProductDetailPage = React.lazy(() => import('../page/user/ProductDetailPage/index'))
+const PageAllProduct = React.lazy(() => import('@/page/user/PageAllProduct'))
+
+// Loading component
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <Spin size="large" />
+  </div>
+)
 
 export default function Router() {
   return (
@@ -69,21 +80,51 @@ export default function Router() {
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route path='' element={<Base />}>
-            <Route index element={<PageHome />} />
-            <Route path='login' element={<PageLogin />} />
-            <Route path='signup' element={<PageSignUp />} />
+            <Route index element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageHome />
+              </Suspense>
+            } />
+            <Route path='login' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageLogin />
+              </Suspense>
+            } />
+            <Route path='signup' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageSignUp />
+              </Suspense>
+            } />
 
-            <Route path='contact' element={<PageContact />} />
-            <Route path='about' element={<PageAbout />} />
+            <Route path='contact' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageContact />
+              </Suspense>
+            } />
+            <Route path='about' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageAbout />
+              </Suspense>
+            } />
 
-            <Route path='blog' element={<BlogPage />} />
-            <Route path='blog/:slug' element={<BlogSingle />} />
+            <Route path='blog' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <BlogPage />
+              </Suspense>
+            } />
+            <Route path='blog/:slug' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <BlogSingle />
+              </Suspense>
+            } />
 
             <Route
               path='account'
               element={
                 <GuardPage>
-                  <CommonLayout />
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <CommonLayout />
+                  </Suspense>
                 </GuardPage>
               }
             >
@@ -97,15 +138,43 @@ export default function Router() {
               </Route>
             </Route>
             <Route path='cart' element={<></>} />
-            <Route path='checkout' element={<CheckoutPage />} />
-            <Route path='page-search' element={<PageSearch />} />
-            <Route path='category' element={<PageCategory />} />
-            <Route path='category/:slug' element={<PageCategory />} />
-            <Route path='product-detail/:slug' element={<ProductDetailPage />} />
-            <Route path='tat-ca-san-pham' element={<PageAllProduct />} />
+            <Route path='checkout' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <CheckoutPage />
+              </Suspense>
+            } />
+            <Route path='page-search' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageSearch />
+              </Suspense>
+            } />
+            <Route path='category' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageCategory />
+              </Suspense>
+            } />
+            <Route path='category/:slug' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageCategory />
+              </Suspense>
+            } />
+            <Route path='product-detail/:slug' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <ProductDetailPage />
+              </Suspense>
+            } />
+            <Route path='tat-ca-san-pham' element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <PageAllProduct />
+              </Suspense>
+            } />
           </Route>
 
-          <Route path='admin/login' element={<Login />} />
+          <Route path='admin/login' element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <Login />
+            </Suspense>
+          } />
 
           <Route path='admin' element={<Manager />}>
             <Route index element={<Navigate to='/admin/dashboard' />} />
@@ -134,11 +203,6 @@ export default function Router() {
               <Route path='add' element={<AddDetail />} />
               <Route path=':id' element={<EditDetail />} />
             </Route>
-
-            {/* <Route path="categories" element={<CategoryManagement />}>
-                  <Route path="add" element={<AddCategory />} />
-                  <Route path=":id" element={<EditCategory />} />
-               </Route> */}
 
             <Route path='voucher' element={<VoucherManagement />}></Route>
             <Route path='color' element={<ColorManagement />}></Route>

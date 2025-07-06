@@ -1,20 +1,69 @@
+import React, { memo, useMemo } from 'react';
 import styles from './styles.module.css'
+import NcImage from '../../shared/NcImage/NcImage';
 
-const ProductCard = () => {
+interface ProductCardProps {
+  product?: {
+    id?: string | number;
+    title?: string;
+    price?: number;
+    oldPrice?: number;
+    image?: string;
+    slug?: string;
+  };
+  className?: string;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ 
+  product = {
+    title: "FULL COMBO Khóa Học AI - Trí Tuệ Nhân Tạo",
+    price: 299000,
+    oldPrice: 50000000,
+    image: "https://khoahocgiasieure.com/storage/aaa123-600x600.jpg",
+    slug: "full-combo-khoa-hoc-ai-tri-tue-nhan-tao"
+  },
+  className = ""
+}) => {
+  // Memoize formatted prices
+  const formattedPrice = useMemo(() => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(product.price || 0);
+  }, [product.price]);
+
+  const formattedOldPrice = useMemo(() => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(product.oldPrice || 0);
+  }, [product.oldPrice]);
+
+  // Memoize product URL
+  const productUrl = useMemo(() => {
+    return `https://khoahocgiasieure.com/${product.slug}`;
+  }, [product.slug]);
+
   return (
-    <div className={styles.modules}>
+    <div className={`${styles.modules} ${className}`}>
       <div className={styles.imageBox}>
-        <img className={styles.image} data-bb-lazy="true" loading="lazy" src="https://khoahocgiasieure.com/storage/aaa123-600x600.jpg" alt="FULL COMBO Khóa Học AI - Trí Tuệ Nhân Tạo"/>
+        <NcImage 
+          className={styles.image} 
+          src={product.image}
+          alt={product.title}
+          lazy={true}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
       </div>
-      <a className={styles.contents}>
+      <a className={styles.contents} href={productUrl} title={product.title}>
         <h3 className={styles.productTitle}>
-            <a href="https://khoahocgiasieure.com/full-combo-khoa-hoc-ai-tri-tue-nhan-tao" title="FULL COMBO Khóa Học AI - Trí Tuệ Nhân Tạo">
-                FULL COMBO Khóa Học AI - Trí Tuệ Nhân Tạo
-            </a>
+          <a href={productUrl} title={product.title}>
+            {product.title}
+          </a>
         </h3>
         <div className={styles.productPriceWrapper}>
-          <span className={styles.productPrice}>299.000₫</span>
-          <span className={styles.productOldPrice}>50.000.000₫</span>
+          <span className={styles.productPrice}>{formattedPrice}</span>
+          <span className={styles.productOldPrice}>{formattedOldPrice}</span>
         </div>
       </a>
       <button type="button" className={styles.productBtn} data-url="https://khoahocgiasieure.com/gio-hang/add-to-cart" data-id="365" data-product-id="365" data-product-name="FULL COMBO Khóa Học AI - Trí Tuệ Nhân Tạo" data-product-price="50000000" data-product-category="Tất Cả Khóa Học" data-product-categories="Khóa Học Lập Trình,Combo Giá Rẻ,Tất Cả Khóa Học">
@@ -32,4 +81,4 @@ const ProductCard = () => {
   )
 }
 
-export default ProductCard
+export default memo(ProductCard)
