@@ -25,6 +25,7 @@ import { useAddToCartMutation } from '@/services/CartEndPoinst'
 import { ICart } from '@/common/types/cart.interface'
 import { Button, Col, List, Modal, Rate, Row, Skeleton } from 'antd'
 import Joi from 'joi'
+import SEOComponent from '../../../components/SEO/SEOComponent'
 interface CommentFormValues {
   content: string
   rate: number
@@ -57,6 +58,39 @@ export interface ProductDetailPage2Props {
 
 const ProductDetailPage2: FC<ProductDetailPage2Props> = ({ className = '' }) => {
   const [user] = useLocalStorage('user', null)
+  
+  // SEO structured data for product
+  const getProductStructuredData = () => {
+    if (!dataProduct) return null;
+    
+    return {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": dataProduct.name,
+      "description": dataProduct.content,
+      "image": dataProduct.thumbnail,
+      "url": `https://dogohiephong.com/product/${dataProduct.slug}`,
+      "brand": {
+        "@type": "Brand",
+        "name": "Đồ Gỗ Hiệp Hồng"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": dataProduct.price_sale || dataProduct.price,
+        "priceCurrency": "VND",
+        "availability": dataProduct.quantity > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "Đồ Gỗ Hiệp Hồng"
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": dataProduct.avg_stars || 0,
+        "reviewCount": dataProduct.total_review || 0
+      }
+    };
+  };
   const {
     register,
     handleSubmit,
@@ -462,7 +496,18 @@ const ProductDetailPage2: FC<ProductDetailPage2Props> = ({ className = '' }) => 
     return <></>
   }
   return (
-    <div className={`ListingDetailPage nc-ProductDetailPage2 ${className}`} data-nc-id='ProductDetailPage2'>
+    <>
+      <SEOComponent 
+        title={dataProduct ? `${dataProduct.name} - Đồ Gỗ Hiệp Hồng` : 'Sản Phẩm - Đồ Gỗ Hiệp Hồng'}
+        description={dataProduct ? dataProduct.content : 'Khám phá sản phẩm đồ gỗ chất lượng cao từ Đồ Gỗ Hiệp Hồng'}
+        keywords={`${dataProduct?.name || 'sản phẩm'}, đồ gỗ, nội thất, ${dataProduct?.category_id || ''}`}
+        image={dataProduct?.thumbnail}
+        url={`/product/${dataProduct?.slug}`}
+        type="product"
+        structuredData={getProductStructuredData()}
+      />
+      
+      <div className={`ListingDetailPage nc-ProductDetailPage2 ${className}`} data-nc-id='ProductDetailPage2'>
       {/* SINGLE HEADER */}
       <>
         <header className='container mt-8 sm:mt-10'>
@@ -698,6 +743,7 @@ const ProductDetailPage2: FC<ProductDetailPage2Props> = ({ className = '' }) => 
         onCloseModalViewAllReviews={() => setIsOpenModalViewAllReviews(false)}
       />
     </div>
+    </>
   )
 }
 

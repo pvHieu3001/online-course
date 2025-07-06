@@ -1,5 +1,5 @@
 import type { TableProps } from 'antd'
-import { Button, Flex, Input, Popconfirm, Space, Table, Tag, Typography, message } from 'antd'
+import { Button, Flex, Popconfirm, Space, Table, Tag, Typography } from 'antd'
 import { Link } from 'react-router-dom'
 
 import { IBanner } from '@/common/types/banner.interface'

@@ -1,7 +1,7 @@
 import { profileService } from "@/services/UserService";
 import { Dispatch } from "@reduxjs/toolkit";
 import { loadAuthState } from "./authSlide";
-import { setLoading, setOpenModalLogin } from "../webSlice";
+import { setOpenModalLogin } from "../webSlice";
 import { AxiosError } from "axios";
 import { ErrorResponse } from "react-router-dom";
 import { popupError } from "@/page/shared/Toast";

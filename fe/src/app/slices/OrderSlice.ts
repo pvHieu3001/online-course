@@ -1,6 +1,6 @@
 import { createSlice, Dispatch } from '@reduxjs/toolkit'
-import { AxiosError } from 'axios'
-import { ErrorResponse } from 'react-router-dom'
+// import { AxiosError } from 'axios'
+// import { ErrorResponse } from 'react-router-dom'
 import { AddOrderService, GetOrderService, UpdateOrderStatusService } from '@/services/OrderService'
 import { IOrder } from '@/common/types/Order.interface'
 
@@ -20,7 +20,7 @@ const cartSlice = createSlice({
   }
 })
 
-export const GetOrder = () => async (dispatch: Dispatch) => {
+export const GetOrder = () => async () => {
   try {
     const { data } = await GetOrderService()
 
@@ -35,7 +35,7 @@ export const GetOrder = () => async (dispatch: Dispatch) => {
   }
 }
 
-export const AddOrder = (payload: IOrder) => async (dispatch: Dispatch) => {
+export const AddOrder = (payload: IOrder) => async () => {
   try {
     const { data } = await AddOrderService(payload)    
     return data;
@@ -47,7 +47,7 @@ export const AddOrder = (payload: IOrder) => async (dispatch: Dispatch) => {
   }
 }
 
-export const UpdateOrderStatus = (payload: IOrder) => async (dispatch: Dispatch) => {
+export const UpdateOrderStatus = (payload: IOrder) => async () => {
   try {
     const { data } = await UpdateOrderStatusService(payload)
 
@@ -64,7 +64,7 @@ export const UpdateOrderStatus = (payload: IOrder) => async (dispatch: Dispatch)
   }
 }
 
-export const UpdateOrderPayment = (payload: IOrder) => async (dispatch: Dispatch) => {
+export const UpdateOrderPayment = (payload: IOrder) => async () => {
     try {
       const { data } = await UpdateOrderStatusService(payload)
   

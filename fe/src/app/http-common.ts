@@ -31,11 +31,11 @@ const onSuccessInterceptorResponse = (rs) => {
   return rs;
 };
 
-let cancel = null;
-const CancelToken = axios.CancelToken;
-axios.defaults.cancelToken = new CancelToken((c) => {
-  cancel = c;
-});
+// let cancel = null;
+// const CancelToken = axios.CancelToken;
+// axios.defaults.cancelToken = new CancelToken((c) => {
+//   cancel = c;
+// });
 
 const token = localStorage.getItem(LOCAL_STORAGE_TOKEN);
 axios.defaults.headers.common["Content-Type"] = "application/json";

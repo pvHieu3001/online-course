@@ -28,7 +28,7 @@ const cartSlice = createSlice({
   }
 })
 
-export const GetAllCart = (payload: string) => async (dispatch: Dispatch) => {
+export const GetAllCart = (payload: string) => async () => {
   try {
     const { data } = await GetAllCartService(payload)
 
@@ -43,7 +43,7 @@ export const GetAllCart = (payload: string) => async (dispatch: Dispatch) => {
   }
 }
 
-export const AddToCart = (payload: IAddCart) => async (dispatch: Dispatch) => {
+export const AddToCart = (payload: IAddCart) => async () => {
   try {
     const { data } = await addCartService(payload)
 
@@ -59,7 +59,7 @@ export const AddToCart = (payload: IAddCart) => async (dispatch: Dispatch) => {
   }
 }
 
-export const UpdateCart = (payload: { id: number; quantity: number; token: string }) => async (dispatch: Dispatch) => {
+export const UpdateCart = (payload: { id: number; quantity: number; token: string }) => async () => {
   try {
     const { data } = await updateCartService(payload)
 
@@ -82,7 +82,7 @@ export const UpdateCart = (payload: { id: number; quantity: number; token: strin
   }
 }
 
-export const DeleteCart = (payload: { id: number; token: string }) => async (dispatch: Dispatch) => {
+export const DeleteCart = (payload: { id: number; token: string }) => async () => {
   try {
     const { data } = await deleteCartService(payload)
 
