@@ -1,4 +1,3 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import type { TableProps } from 'antd'
 import { Button, Flex, Input, Popconfirm, Space, Table, Tag, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
@@ -9,13 +8,14 @@ import '../../styles/category.css'
 import { getAllPost, removePost, searchPosts } from '@/app/slices/postSlice'
 import { IPost } from '@/common/types/post.interface'
 import { getAllPostCategory } from '@/app/slices/postCategorySlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function ListPosts() {
-  const dispatch = useAppDispatch()
+  const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
   const debouncedValue = useDebounce(searchValue, 600)
 
-  const { posts, isLoading } = useAppSelector((state) => state.post)
+  const { posts, isLoading } = useSelector((state) => state.post)
 
   const handlerRemovePost = async (value: IPost) => {
     const res = await dispatch(removePost(value.id as string))

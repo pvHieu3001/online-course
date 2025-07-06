@@ -1,4 +1,4 @@
-import http from "../../http-common";
+import http from "../../src/app/http-common";
 import {
   LOCAL_STORAGE_USER,
   LOCAL_STORAGE_TOKEN,

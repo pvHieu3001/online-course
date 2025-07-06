@@ -1,7 +1,7 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { editPostCategory, getOnePostCategory } from '@/app/slices/postCategorySlice'
 import { Form, Input, Modal, message } from 'antd'
 import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import slugify from 'slugify'
 
@@ -10,8 +10,8 @@ export default function EditPostCategory() {
 
   const navigate = useNavigate()
   const [form] = Form.useForm()
-  const dispatch = useAppDispatch()
-  const { postCategory, isLoadingDetails } = useAppSelector((state) => state.postCategory)
+  const dispatch = useDispatch()
+  const { postCategory, isLoadingDetails } = useSelector((state) => state.postCategory)
 
   const handleCancel = () => {
     navigate('..')

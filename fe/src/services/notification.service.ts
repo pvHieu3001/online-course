@@ -1,4 +1,4 @@
-import http from "../../http-common";
+import http from "../../src/app/http-common";
 
 function getAll(body) {
   return http.post("/admin/getNoti",body);

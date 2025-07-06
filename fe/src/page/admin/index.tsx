@@ -5,16 +5,15 @@ import Footer from './components/Footer'
 import { Outlet } from 'react-router-dom'
 import './styles/main.css'
 import './styles/responsive.css'
-import { useAppSelector } from '../../app/hooks'
 import { setVisible } from '../../app/webSlice'
-import { useAppDispatch } from '../../app/hooks'
 import styles from './styles.module.css'
 import clsx from 'clsx'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Manager = () => {
   const { Header: AntHeader, Content, Sider } = Layout
-  const { fixedNavbar, miniSidenav } = useAppSelector((state) => state.web)
-  const dispatch = useAppDispatch()
+  const { fixedNavbar, miniSidenav } = useSelector((state) => state.web)
+  const dispatch = useDispatch()
 
   return (
     <Layout className={clsx(styles.modules, `layout-dashboard `)} style={{ padding: '0 30px' }} id='manager'>

@@ -1,4 +1,4 @@
-import http from "../../http-common";
+import http from "../../src/app/http-common";
 
 function get(id) {
   return http.get(`/admin/get/${id}`);

@@ -1,10 +1,4 @@
-import http from "../../http-common";
-import httpauth from "../../http-auth";
-import {
-  LOCAL_STORAGE_USER,
-  LOCAL_STORAGE_TOKEN,
-  ADMIN_BASE_API,
-} from "../../constants";
+import http from "../../src/app/http-common";
 
 const region = import.meta.env.AWS_REGION;
 const accessKeyId = import.meta.env.AWS_ACCESSKEYID;
