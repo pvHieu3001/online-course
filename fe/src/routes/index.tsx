@@ -11,7 +11,6 @@ import PageHome from '../page/user/PageHome'
 import UserManagement from '../page/admin/user'
 import AddUser from '../page/admin/user/_components/add'
 import EditUser from '../page/admin/user/_components/edit'
-import ProductDetailPage from '../page/user/ProductDetailPage/index'
 import PageCategory from '../page/user/CategoryPage'
 import CheckoutPage from '../page/user/PageCheckout/CheckoutPage'
 import PageLogin from '../page/user/Auth/PageLogin'
@@ -61,7 +60,7 @@ import DetailManagement from '@/page/admin/details'
 import AttributeManagementV2 from '@/page/admin/attribute/indexV2'
 import AddDetail from '@/page/admin/details/_component/add'
 import EditDetail from '@/page/admin/details/_component/edit'
-import ProducDetailPage from '../page/user/ProductDetailPage/index'
+import ProductDetailPage from '../page/user/ProductDetailPage/index'
 
 export default function Router() {
   return (
@@ -101,7 +100,7 @@ export default function Router() {
             <Route path='page-search' element={<PageSearch />} />
             <Route path='category' element={<PageCategory />} />
             <Route path='category/:slug' element={<PageCategory />} />
-            <Route path='product-detail/:slug' element={<ProducDetailPage />} />
+            <Route path='product-detail/:slug' element={<ProductDetailPage />} />
           </Route>
 
           <Route path='admin/login' element={<Login />} />
