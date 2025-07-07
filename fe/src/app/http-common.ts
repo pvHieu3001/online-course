@@ -1,8 +1,8 @@
 import axios from "axios";
 import reduxStore from "./store";
-import { errorActions } from "./src/actions";
 // import {LOCAL_STORAGE_TOKEN, BASE_API} from "./constants";
 import { LOCAL_STORAGE_TOKEN, EXTERNAL_BASE_API } from "./constants";
+import { errorActions } from "@/actions";
 
 const { dispatch } = reduxStore;
 const onSuccessInterceptorRequest = async (config) => {
