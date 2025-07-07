@@ -5,119 +5,27 @@
   padding: 32px;
 }
 
+.titleWrapper {
+  border-top: 3px solid rgb(19, 97, 107);
+}
+
 .title {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  line-height: 1;
+  padding: 5px;
+  width: fit-content;
+  font-size: 26px;
+  color: #fff;
+  background-color: rgb(19, 97, 107);
 }
 
-.title h1 {
-  font-weight: 600;
-  font-size: 33px;
-  font-family: 'Play';
-  color: #073954;
-  text-transform: uppercase;
-}
-
-.title p {
-  font-weight: 300;
-  font-size: 15px;
-  font-family: 'Play';
-  color: #55585b;
-}
-
-.feature {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding-top: 40px;
-  padding-bottom: 40px;
-}
-
-.featureWrapper {
-  border-radius: 8px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-  height: fit-content;
-  background-color: #f6f7f9;
-}
-
-.featureIconRt1 {
-  width: 39px;
-  height: 45px;
-}
-
-.featureIconTime {
-  width: 45px;
-  height: 39px;
-}
-
-.featureContent {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.featureTitle {
-  font-size: 18px;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.categories {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
-  flex-wrap: wrap;
-  padding-top: 30px;
-}
-
-.categoryBox {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-.categoryIconBox{
-border-radius: 50%;
-overflow: hidden;
-}
-
-.categoryIcon {
-  width: 180px;
-  height: 180px;
-}
-
-.categoryContent{
-  text-align: center;
-}
-
-.categoryTitle {
-  font-size: 18px;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.cardtitle{
+.cardtitle {
   background: linear-gradient(to left, #073954, #007e8c);
   margin-top: 30px;
   margin-bottom: 20px;
   box-shadow: 0px 4px 10px rgba(1, 15, 28, 0.14);
 }
 
-.cardtitle h1{
+.cardtitle h1 {
   font-size: 27px;
   line-height: 27px;
   color: white;
@@ -130,7 +38,7 @@ overflow: hidden;
   font-family: play;
 }
 
-.cardWrapper{
+.cardWrapper {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

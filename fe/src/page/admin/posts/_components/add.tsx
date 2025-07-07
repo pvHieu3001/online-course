@@ -1,8 +1,8 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { createNewPost } from '@/app/slices/postSlice'
 import { IPostCategory } from '@/common/types/category.interface'
 import { Button, Checkbox, Form, Input, Modal, Select, Upload, message } from 'antd'
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import slugify from 'slugify'
 
@@ -11,9 +11,9 @@ const { Dragger } = Upload
 export default function AddPosts() {
   const navigate = useNavigate()
   const [form] = Form.useForm()
-  const dispatch = useAppDispatch()
-  const { isLoading } = useAppSelector((state) => state.post)
-  const { postCategories } = useAppSelector((state) => state.postCategory)
+  const dispatch = useDispatch()
+  const { isLoading } = useSelector((state) => state.post)
+  const { postCategories } = useSelector((state) => state.postCategory)
 
   const handleCancel = () => {
     navigate('..')

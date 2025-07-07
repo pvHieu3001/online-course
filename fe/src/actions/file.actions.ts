@@ -1,6 +1,6 @@
 import { fileConstants} from "../constants";
 import { fileServices } from "../services";
-import { alertActions } from "./alert.actions";
+// import { alertActions } from "./alert.actions";
 
 export const getAll = (data) => async (dispatch) => {
   dispatch({ type: fileConstants.GETALL_REQUEST });

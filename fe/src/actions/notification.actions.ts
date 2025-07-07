@@ -1,6 +1,6 @@
 import { notificationConstants} from "../constants";
 import { notificationServices } from "../services";
-import { alertActions } from "./alert.actions";
+// import { alertActions } from "./alert.actions";
 
 export const getAll = (data) => async (dispatch) => {
   dispatch({ type: notificationConstants.GETALL_REQUEST });

@@ -1,4 +1,4 @@
-import { delay } from "framer-motion";
+// import { delay } from "framer-motion";
 import { userConstants } from "../constants";
 import { userService } from "../services";
 import { alertActions } from "./alert.actions";
@@ -155,7 +155,7 @@ export const deleteItem = (id) => async (dispatch) => {
   dispatch({ type: userConstants.DELETE_REQUEST });
 
   await userService.delete(id).then(
-    (res) => {
+    () => {
       dispatch({ type: userConstants.DELETE_SUCCESS });
       // dispatch(alertActions.success("Xóa dữ liệu thành công"));
     },
@@ -173,7 +173,7 @@ export const reject = (userId) => async (dispatch) => {
   dispatch({ type: userConstants.REJECT_REQUEST });
 
   await userService.reject(userId).then(
-    (res) => {
+    () => {
       dispatch({ type: userConstants.REJECT_SUCCESS });
       // Send email to user
       userService.get(userId).then(

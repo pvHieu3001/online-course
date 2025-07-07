@@ -1,5 +1,5 @@
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { ISignin, ISignup } from "@/common/types/Auth.interface";
+import { ISignin } from "@/common/types/Auth.interface";
 import { LogoutService, SigninService } from "@/services/AuthService";
 import { AxiosError } from "axios";
 import { ErrorResponse } from "react-router-dom";
@@ -38,7 +38,7 @@ const authSlice = createSlice({
     }
 })
 
-export const Signin = (payload: ISignin) => async (dispatch: Dispatch) => {
+export const Signin = (payload: ISignin) => async () => {
     try{
         const {data} = await SigninService(payload)
 
@@ -62,7 +62,7 @@ export const Signin = (payload: ISignin) => async (dispatch: Dispatch) => {
     }
 }
 
-export const Logout = (payload: string) => async (dispatch: Dispatch) => {
+export const Logout = (payload: string) => async () => {
     try{
         const {data} = await LogoutService(payload)
         console.log(data);

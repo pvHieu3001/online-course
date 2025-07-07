@@ -139,7 +139,7 @@ export const uploadFile = (data) => async (dispatch) => {
   dispatch({ type: supplierConstants.UPLOAD_REQUEST });
 
   await supplierService.uploadFile(data).then(
-    (res) => {
+    () => {
       dispatch({ type: supplierConstants.UPLOAD_SUCCESS, payload: res.data });
     },
     (error) => {

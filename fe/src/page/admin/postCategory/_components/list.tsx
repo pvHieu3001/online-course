@@ -1,4 +1,3 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import type { TableProps } from 'antd'
 import { Button, Flex, Input, Popconfirm, Space, Table, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
@@ -8,13 +7,14 @@ import useDebounce from '@/hooks/useDebounce'
 import '../../styles/category.css'
 import { getAllPostCategory, removePostCategory, searchPostCategories } from '@/app/slices/postCategorySlice'
 import { IPostCategory } from '@/common/types/category.interface'
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function ListPostCategory() {
-  const dispatch = useAppDispatch()
+  const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
   const debouncedValue = useDebounce(searchValue, 600)
 
-  const { postCategories, isLoading } = useAppSelector((state) => state.postCategory)
+  const { postCategories, isLoading } = useSelector((state) => state.postCategory)
 
   const handlerRemovePostCategory = async (value: IPostCategory) => {
     const res = await dispatch(removePostCategory(value.id as string))
@@ -74,7 +74,9 @@ export default function ListPostCategory() {
             okText='Đồng ý'
             cancelText='Hủy bỏ'
           >
-            <Button type='primary' danger>Delete</Button>
+            <Button type='primary' danger>
+              Delete
+            </Button>
           </Popconfirm>
         </Space>
       )

@@ -1,4 +1,4 @@
-import http from "../../http-common";
+import http from "../../src/app/http-common";
 
 function getAll() {
   return http.get("/admin/files");

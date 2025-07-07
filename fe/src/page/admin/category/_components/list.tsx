@@ -1,5 +1,3 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { changeStatus, getAllCategory, searchCategories } from '@/app/slices/categorySlice'
 import { ICategory } from '@/common/types/category.interface'
 import type { TableProps } from 'antd'
 import { Button, Flex, Input, Popconfirm, Space, Table, Tag, Typography, message } from 'antd'
@@ -7,32 +5,27 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import useDebounce from '@/hooks/useDebounce'
-import '../../styles/category.css';
+import '../../styles/category.css'
 import { useGetCategoriesQuery } from '../CategoryEndpoints'
 import { useDeleteCategoryMutation } from '../CategoryEndpoints'
-import axios from 'axios'
 import ErrorLoad from '../../components/util/ErrorLoad'
 export default function ListCategory() {
-  
   const [searchValue, setSearchValue] = useState('')
   const debouncedValue = useDebounce(searchValue, 600)
-  const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [current, setCurrent] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
 
-  const {data : categories , isLoading, isError} = useGetCategoriesQuery({});
-  const [deleteCategory, { isLoading: loadingDeleteCategory}] = useDeleteCategoryMutation();
+  const { data: categories, isLoading, isError } = useGetCategoriesQuery({})
+  const [deleteCategory, { isLoading: loadingDeleteCategory }] = useDeleteCategoryMutation()
 
   const handlerDistableCategory = async (value: ICategory) => {
-  
     try {
-     await deleteCategory(value?.id).unwrap();
-     
-      message.success( 'Vô hiệu hoá danh mục thành công!')
-    } catch (error : any) {
-      message.error( error.data ? error.data.message :'Vô hiệu hoá danh mục thất bại!')
+      await deleteCategory(value?.id).unwrap()
+
+      message.success('Vô hiệu hoá danh mục thành công!')
+    } catch (error: any) {
+      message.error(error.data ? error.data.message : 'Vô hiệu hoá danh mục thất bại!')
     }
-
-
   }
 
   const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,8 +34,6 @@ export default function ListCategory() {
       setSearchValue(searchValue)
     }
   }
-
-
 
   const columns: TableProps<ICategory>['columns'] = [
     {
@@ -66,7 +57,7 @@ export default function ListCategory() {
       key: 'image',
       align: 'center',
       width: 50,
-      render: (image) => <img src={image} alt="" className="w-[120px] object-cover" />
+      render: (image) => <img src={image} alt='' className='w-[120px] object-cover' />
     },
     {
       title: 'Danh mục cha',
@@ -96,9 +87,9 @@ export default function ListCategory() {
       align: 'center',
       render: (record) => (
         <Space size={'middle'}>
-           <Link to={"" + record.id}>
-              <Button type='primary'>Sửa </Button>
-            </Link>
+          <Link to={'' + record.id}>
+            <Button type='primary'>Sửa </Button>
+          </Link>
           <Popconfirm
             placement='topRight'
             title={record.active == 1 ? 'Are you sure distable this category?' : 'Are you sure enable this category?'}
@@ -108,19 +99,19 @@ export default function ListCategory() {
             cancelText='Hủy bỏ'
           >
             <Button type='primary' danger>
-               Xóa
+              Xóa
             </Button>
           </Popconfirm>
         </Space>
       )
-    },
+    }
   ]
 
   const newData = categories?.data?.map((category: ICategory, index: number) => ({
     ...category,
     key: index + 1
   }))
-  if(isError ){
+  if (isError) {
     return <ErrorLoad />
   }
   return (
@@ -146,7 +137,7 @@ export default function ListCategory() {
             size='small'
             placeholder={'Tìm kiếm'}
             style={{
-              borderRadius: '2rem',
+              borderRadius: '2rem'
             }}
           />
           <Link to='add'>
@@ -154,16 +145,18 @@ export default function ListCategory() {
           </Link>
         </Flex>
         <Table
-          style={{border: '2px', borderRadius: '10px', boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem', height: '100%'}}
+          style={{
+            border: '2px',
+            borderRadius: '10px',
+            boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem',
+            height: '100%'
+          }}
           columns={columns}
           sticky={{ offsetHeader: 0 }}
           dataSource={newData}
           loading={isLoading}
-         
         />
       </div>
     </>
-    
   )
 }
-

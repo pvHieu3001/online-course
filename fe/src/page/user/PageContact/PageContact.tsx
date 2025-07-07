@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Helmet } from 'react-helmet-async'
+import SEOComponent from '../../../components/SEO/SEOComponent'
 import SocialsList from '../shared/SocialsList/SocialsList'
 import Label from '../components/Label/Label'
 import Input from '../shared/Input/Input'
@@ -28,12 +28,34 @@ const info = [
 ]
 
 const PageContact: FC<PageContactProps> = ({ className = '' }) => {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Liên Hệ - Đồ Gỗ Hiệp Hồng",
+    "description": "Liên hệ với Đồ Gỗ Hiệp Hồng để được tư vấn và hỗ trợ mua sản phẩm đồ gỗ chất lượng cao.",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Đồ Gỗ Hiệp Hồng",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "telephone": "+84-xxx-xxx-xxxx",
+        "email": "contact@dogohiephong.com"
+      }
+    }
+  };
+
   return (
-    <div className={`nc-PageContact overflow-hidden ${className}`} data-nc-id='PageContact'>
-      <Helmet>
-        <title>Liên Hệ || Đồ Gỗ Hiệp Hồng</title>
-        <meta name='google-site-verification' content='T9IaRbRYVAYLaOMteD3gLMso6FUu62Kkyu7ORBpDrqw' />
-      </Helmet>
+    <>
+      <SEOComponent 
+        title="Liên Hệ - Đồ Gỗ Hiệp Hồng"
+        description="Liên hệ với Đồ Gỗ Hiệp Hồng để được tư vấn và hỗ trợ mua sản phẩm đồ gỗ chất lượng cao. Hotline: xxx-xxx-xxxx"
+        keywords="liên hệ, đồ gỗ hiệp hồng, tư vấn đồ gỗ, mua đồ gỗ, hotline đồ gỗ"
+        url="/contact"
+        structuredData={structuredData}
+      />
+      
+      <div className={`nc-PageContact overflow-hidden ${className}`} data-nc-id='PageContact'>
       <div className=''>
         <h2 className='my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center'>
           Contact
@@ -86,6 +108,7 @@ const PageContact: FC<PageContactProps> = ({ className = '' }) => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

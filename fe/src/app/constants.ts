@@ -1,5 +1,5 @@
-// import getLocalStorage dari helper/localStorage yang sudah dibuat
-import { getLocalStorage } from "./src/utils/helper/localStorage";
+// import getLocalStorage dari helper/localStorage yang đã được tạo
+import { getLocalStorage } from "../utils/helper/localStorage";
 
 // const BASE_API = "http://localhost:8080";
 // const ADMIN_BASE_API = "http://localhost:8080";

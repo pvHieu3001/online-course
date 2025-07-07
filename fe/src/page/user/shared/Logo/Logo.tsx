@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import logoImg from "../../../../assets/images/base/logo.png";
-import logoLightImg from "../../../../assets/images/base/logo-light.png";
+import React, { memo } from 'react';
+import { Link } from 'react-router-dom';
+import logoImg from '../../../../assets/images/base/logo.png';
+import logoLightImg from '../../../../assets/images/base/logo-light.png';
 
 export interface LogoProps {
   img?: string;
@@ -9,7 +9,7 @@ export interface LogoProps {
   className?: string;
 }
 
-const Logo: React.FC<LogoProps> = ({
+const Logo: React.FC<LogoProps> = memo(({
   img = logoImg,
   imgLight = logoLightImg,
   className = "flex-shrink-0",
@@ -18,6 +18,7 @@ const Logo: React.FC<LogoProps> = ({
     <Link
       to="/"
       className={`ttnc-logo inline-block text-slate-600 ${className}`}
+      aria-label="Đồ Gỗ Hiệp Hồng - Trang chủ"
     >
       {/* THIS USE FOR MY CLIENT */}
       {/* PLEASE UN COMMENT BELLOW CODE AND USE IT */}
@@ -27,7 +28,10 @@ const Logo: React.FC<LogoProps> = ({
             imgLight ? "dark:hidden" : ""
           }`}
           src={img}
-          alt="Logo"
+          alt="Đồ Gỗ Hiệp Hồng Logo"
+          loading="eager"
+          width="120"
+          height="40"
         />
       ) : (
         "Logo Here"
@@ -36,11 +40,16 @@ const Logo: React.FC<LogoProps> = ({
         <img
           className="hidden max-h-8 sm:max-h-10 dark:block"
           src={imgLight}
-          alt="Logo-Light"
+          alt="Đồ Gỗ Hiệp Hồng Logo - Dark Mode"
+          loading="eager"
+          width="120"
+          height="40"
         />
       )}
     </Link>
   );
-};
+});
+
+Logo.displayName = 'Logo';
 
 export default Logo;

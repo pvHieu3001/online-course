@@ -1,12 +1,10 @@
-import { Card, Col, Flex, Row, Select } from "antd";
-import { Button, Form, Input, message, Space } from 'antd';
-
-import { Typography } from 'antd';
-import {  Table, Tag } from 'antd';
-
-const { Column, ColumnGroup } = Table;
-
-import type { TableColumnsType } from 'antd';
+import { Col, Row } from "antd";
+// import { Card, Flex, Select } from "antd";
+// import { Button, Form, Input, message, Space } from 'antd';
+// import { Typography } from 'antd';
+// import { Table, Tag } from 'antd';
+// const { Column, ColumnGroup } = Table;
+// import type { TableColumnsType } from 'antd';
 import CategoryAttribute from "./category_attribute/List";
 import Attribute from "./attribute/list";
 import ValueAttribute from "./value_attribute/list";

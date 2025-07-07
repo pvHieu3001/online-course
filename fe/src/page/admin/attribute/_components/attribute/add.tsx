@@ -1,8 +1,8 @@
 import { IAttribute } from "@/common/types/attribute.interface";
-import { useCreateAttributeMutation, useGetAttributesQuery } from "./AttributeEndpoints";
+import { useCreateAttributeMutation } from "./AttributeEndpoints";
 import { useNavigate } from 'react-router-dom'
 import { popupError, popupSuccess } from "@/page/shared/Toast";
-import { Button, Form, Input, Modal, Select } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import ErrorLoad from "../../../components/util/ErrorLoad";
 import { useEffect, useState } from "react";
 import { FormInstance } from "antd/lib";
@@ -17,14 +17,14 @@ const layout = {
 
 export default function AddAttribute() {
     const [createAttribute, { isLoading: isLoadingCreateAttribute, isError }] = useCreateAttributeMutation();
-    const {data : details, isLoading } = useGetDetailsQuery([]);
+    const {data : details } = useGetDetailsQuery([]);
     const [optionDetails, setOptionDetails] = useState([]);
     const [formInstance, setFormInstance] = useState<FormInstance>();
 
     const [form] = Form.useForm();
     useEffect(() => {
         setFormInstance(form);
-    }, []);
+    }, [form]);
     useEffect(() => {
         if(details){
             const options = details?.map((item : {id : number, name : string}) => {
@@ -38,11 +38,11 @@ export default function AddAttribute() {
         
      }, [details])
 
-    const onFinish = async (values: IAttribute | any) => {
+    const onFinish = async (values: IAttribute) => {
         const formData = new FormData()
 
-        formData.append('name', values.name);
-        formData.append('detail_id', values.detail_id)
+        formData.append('name', values.name || '');
+        formData.append('detail_id', values.detail_id?.toString() || '')
 
         try {
             await createAttribute(formData).unwrap();

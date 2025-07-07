@@ -1,10 +1,10 @@
-import http from "../../http-common";
-import httpauth from "../../http-auth";
+import http from "../../src/app/http-common";
+import httpauth from "../../src/app/http-auth";
 import {
   LOCAL_STORAGE_USER,
   LOCAL_STORAGE_TOKEN,
   ADMIN_BASE_API,
-} from "../../constants";
+} from "../../src/app/constants";
 
 function getAll(data) {
   return http.post("/api/user/search", data);
@@ -66,7 +66,7 @@ function logout() {
 function sendOkEmail(user) {
   if (user.data[0]) {
     const email = user.data[0].email;
-    var body = {
+    const body = {
       to: email,
     };
     return http.post(`admin/send-ok-email`, body);
@@ -78,7 +78,7 @@ function sendOkEmail(user) {
 function sendRejectEmail(user) {
   if (user.data[0]) {
     const email = user.data[0].email;
-    var body = {
+    const body = {
       to: email,
     };
     return http.post(`admin/send-reject-email`, body);

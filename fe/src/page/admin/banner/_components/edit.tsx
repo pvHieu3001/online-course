@@ -1,4 +1,4 @@
-import { Button, Flex, Form, Image, Input, Modal, Switch, Upload, message } from 'antd'
+import { Button, Flex, Form, Image, Input, Modal, Switch, Upload } from 'antd'
 
 import { useNavigate, useParams } from 'react-router-dom'
 import { useUpdateBannerMutation, useGetBannerQuery } from '../BannerEndpoints'

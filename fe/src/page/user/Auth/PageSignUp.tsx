@@ -14,9 +14,9 @@ import { Input as INPUTANT } from 'antd'
 import type { GetProps } from 'antd'
 import { SignupService, VerifyToken } from '@/services/AuthService'
 import { popupError, popupSuccess } from '../../shared/Toast'
-import { useAppDispatch } from '@/app/hooks'
 import { login } from '@/app/slices/authSlide'
 import { Statistic } from 'antd'
+import { useDispatch } from 'react-redux'
 
 const { Countdown } = Statistic
 export interface PageSignUpProps {
@@ -77,7 +77,7 @@ const validationSchema = Joi.object({
 
 const PageSignUp: FC<PageSignUpProps> = ({ className = '' }) => {
   const navigate = useNavigate()
-  const dispatch = useAppDispatch()
+  const dispatch = useDispatch()
   const [isVerifyToken, setIsVerifyToken] = useState<boolean>(false)
   const [isLoadingSignUp, setLoadingSignUp] = useState<boolean>(false)
   const [otp, setOtp] = useState<string>('')

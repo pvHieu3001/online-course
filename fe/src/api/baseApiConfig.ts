@@ -3,7 +3,7 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query'
 export const baseApiConfig = {
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_APP_BASE_URL,
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers) => {
       // Use getState to access your redux store
       //const token = getState().auth.token;
 

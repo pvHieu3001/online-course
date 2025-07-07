@@ -1,4 +1,4 @@
-import http from "../../http-common";
+import http from "../app/http-common";
 
 function getBigCategory() {
   return http.get("/admin/big_category");

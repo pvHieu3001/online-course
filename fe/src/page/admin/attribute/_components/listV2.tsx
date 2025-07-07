@@ -37,7 +37,7 @@ export default function ListAttributeV2() {
       dataIndex: 'index',
       key: 'index',
       width: '5%',
-      render: (_: any, __: IAttribute, index: number) => {
+      render: (_: unknown, __: IAttribute, index: number) => {
         return index + 1;
       },
     },
@@ -45,7 +45,7 @@ export default function ListAttributeV2() {
       title: 'Tên thuộc tính',
       dataIndex: 'name',
       key: 'name',
-      render: (_: any, item: IAttribute) => {
+      render: (_: unknown, item: IAttribute) => {
         return item.name;
       },
     },
