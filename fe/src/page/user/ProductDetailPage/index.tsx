@@ -2,24 +2,25 @@
 import { useParams } from 'react-router-dom';
 import TabDetail from './TabMenu';
 import imageCourse from './assets/image.png'
+import courseFirst from './assets/courseFirst.jpg'
 import { ShareAltOutlined, FacebookOutlined, TwitterOutlined, GoogleOutlined, RedditOutlined, PlusOutlined, CommentOutlined } from '@ant-design/icons';
 import styles from './styles.module.css'
 function ProductDetailPage() {
     const { slug } = useParams();
     return (
         <div className={styles.detailtContainer}>
-            <TabDetail />
+
 
             <article className={styles.articleContainer}>
                 <div className={styles.developmentTag}>DEVELOPMENT</div>
                 <h1 className={styles.articleTitle}>Pre-Coding Bootcamp: Your First Step To Become A Programmer</h1>
                 <div className={styles.articleMeta}>
-                    <span className={styles.author}>By <b>FCS</b></span>      -
-                    <span className={styles.date}>        On <b>Apr 29, 2025</b> </span>
+                    <span className={styles.author}>By <b>FCS</b>-</span>
+                    <span className={styles.date}>  On <b>Apr 29, 2025</b> </span>
                 </div>
 
                 <div className={styles.socialShare}>
-                    <div className={styles.shareButton}>
+                    <div className={`${styles.socialIcon} ${styles.shareButton}`}>
                         <ShareAltOutlined /> Share
                     </div>
                     <div className={`${styles.socialIcon} ${styles.facebook}`}>
@@ -42,8 +43,11 @@ function ProductDetailPage() {
                     </div>
                 </div>
 
+                <div className={styles.btn}>
+                    <button className={styles.downloadButton}>DOWNLOAD HERE</button>
+                </div>
 
-                <button className={styles.downloadButton}>DOWNLOAD HERE</button>
+
 
 
                 <div className={styles.articleImageContainer}>
@@ -152,7 +156,7 @@ function ProductDetailPage() {
 
                     <div className={styles.buttonGroup}>
                         <button className={styles.bigRedButton}>WORKING GOOGLE DRIVE LINK</button>
-                        <button className={styles.bigRedButton}>HIGH SPEED TORRENT LINK</button>
+                        <button className={styles.bigRedButtonSecondary}>HIGH SPEED TORRENT LINK</button>
                     </div>
                 </div>
 
@@ -163,10 +167,9 @@ function ProductDetailPage() {
                     </div>
 
                     <div className={styles.cardsGrid}>
-                        {/* Card 1: Ultimate DevOps Project Implementation */}
                         <div className={styles.courseCard}>
                             <div className={styles.cardImageContainer}>
-                                <img src="./assets/devops_image.png" alt="Ultimate DevOps Project Implementation" className={styles.cardImage} />
+                                <img src={imageCourse} alt="Ultimate DevOps Project Implementation" className={styles.cardImage} />
                                 <span className={styles.cardTag}>IT & SOFTWARE</span>
                             </div>
                             <p className={styles.cardTitle}>Ultimate DevOps Project Implementation</p>
@@ -175,7 +178,7 @@ function ProductDetailPage() {
 
                         <div className={styles.courseCard}>
                             <div className={styles.cardImageContainer}>
-                                <img src="./assets/networking_image.png" alt="The Complete Networking Fundamentals Course" className={styles.cardImage} />
+                                <img src={courseFirst} alt="The Complete Networking Fundamentals Course" className={styles.cardImage} />
                                 <span className={styles.cardTag}>IT & SOFTWARE</span>
                             </div>
                             <p className={styles.cardTitle}>The Complete Networking Networking Fundamentals Course. Your CCNA start</p>
@@ -184,7 +187,7 @@ function ProductDetailPage() {
 
                         <div className={styles.courseCard}>
                             <div className={styles.cardImageContainer}>
-                                <img src="./assets/ruby_image.png" alt="The Complete Ruby on Rails Developer Course" className={styles.cardImage} />
+                                <img src={courseFirst} className={styles.cardImage} />
                                 <span className={styles.cardTag + ' ' + styles.tagDevelopment}>DEVELOPMENT</span> {/* Specific tag style */}
                             </div>
                             <p className={styles.cardTitle}>The Complete Ruby on Rails Developer Course</p>
@@ -201,7 +204,7 @@ function ProductDetailPage() {
 
             </article>
 
-
+            <TabDetail />
         </div>
     )
 }

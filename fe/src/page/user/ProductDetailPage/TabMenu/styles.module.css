@@ -1,0 +1,134 @@
+
+
+
+.page-container {
+    width: 100%;
+    max-width: 600px; 
+    margin: 0 auto; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f0f0; 
+}
+
+
+
+.top-section {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+
+.search-container {
+    display: flex;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+
+.search-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+
+.search-button {
+    background-color: #e74c3c; 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+
+.header-banner {
+    background-color: #e74c3c; /* Red color from image */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+/* 6. banner-title class */
+.banner-title {
+    font-size: 3em; /* Adjust as needed */
+    margin: 0;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* 7. banner-subtitle class */
+.banner-subtitle {
+    font-size: 1.2em;
+    margin: 5px 0 0;
+    font-style: italic;
+}
+
+/* 8. main-content class */
+.main-content {
+    background-color: white;
+    padding: 20px;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 9. section-divider class */
+.section-divider {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+/* 10. pages-heading class */
+.pages-heading {
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee; /* Light line below PAGES */
+    padding-bottom: 10px;
+}
+
+/* Additional styling for list items and icons */
+.page-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.page-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px 0;
+}
+
+.page-item:last-child {
+    margin-bottom: 0;
+}
+
+.page-icon {
+    margin-right: 10px;
+    color: #666;
+    font-size: 1.2em;
+}
+
+.page-link {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.page-link:hover {
+    text-decoration: underline;
+    color: #e74c3c;
+}
