@@ -1,32 +1,20 @@
 package online.course.market.entity.model;
 
-import java.util.Date;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@SuperBuilder
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
-public class UserModel {
+public class UserModel extends BaseEntity{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,14 +25,6 @@ public class UserModel {
 	private String password;	
 	private String email;
 	@Enumerated(EnumType.STRING)
-	@Builder.Default
 	protected Role role = Role.USER;
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "create_at")
-	private Date createAt;	
-	@PrePersist
-	private void prePersist() {
-		this.createAt = new Date();
-	}	
 }
 

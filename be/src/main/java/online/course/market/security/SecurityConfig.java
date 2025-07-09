@@ -41,12 +41,13 @@ public class SecurityConfig {
 		return httpSecurity.csrf(csrf -> {
 			csrf.disable();
 		}).authorizeHttpRequests(authResquest -> {
-			authResquest.requestMatchers(WHITE_LIST_URL).permitAll();
+			// authResquest.requestMatchers(WHITE_LIST_URL).permitAll();
 			// authResquest.requestMatchers("/api/v1/user/**").hasAnyRole(USER.name());
 			// authResquest.requestMatchers(GET,
 			// "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(),
 			// MANAGER_READ.name());
-			authResquest.anyRequest().authenticated();
+			// authResquest.anyRequest().authenticated();
+			authResquest.anyRequest().permitAll();
 		}).sessionManagement(
 				sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider)

@@ -13,10 +13,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Entity
-@SuperBuilder
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class SecurityUser extends UserModel implements UserDetails {

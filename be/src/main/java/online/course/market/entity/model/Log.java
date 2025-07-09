@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * HAQ Answer
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "logs")
 @NoArgsConstructor
 public class Log extends BaseEntity {

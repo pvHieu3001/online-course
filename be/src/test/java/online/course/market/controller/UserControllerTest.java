@@ -19,7 +19,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import online.course.market.config.ModelMapperConfig;
-import online.course.market.config.ValidationConfig;
+import online.course.market.config.WebConfig;
 import online.course.market.entity.model.UserModel;
 import online.course.market.security.JwtAuthenticationFilter;
 import online.course.market.service.UserService;
@@ -30,7 +30,7 @@ import online.course.market.utils.CustomCodeException;
 		excludeFilters = @ComponentScan.Filter(
 				type = FilterType.ASSIGNABLE_TYPE,
 				classes = JwtAuthenticationFilter.class))
-@Import({ ValidationConfig.class, ModelMapperConfig.class})
+@Import({ WebConfig.class, ModelMapperConfig.class})
 public class UserControllerTest {
 
 	private final String path = "/api/v1/user";

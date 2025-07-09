@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "courses")
 @NoArgsConstructor
 public class Course extends BaseEntity {
