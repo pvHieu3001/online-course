@@ -11,7 +11,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @Data
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "payments")
 @NoArgsConstructor
 public class Payment extends BaseEntity {

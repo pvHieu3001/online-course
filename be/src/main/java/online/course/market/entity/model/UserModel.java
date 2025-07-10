@@ -2,9 +2,10 @@ package online.course.market.entity.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
@@ -12,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Data
 @Entity
-@EntityListeners(AuditingEntityListener.class)
+@SuperBuilder
 @Table(name = "users")
 public class UserModel extends BaseEntity{
 	

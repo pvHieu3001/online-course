@@ -10,7 +10,6 @@ import java.util.Date;
 
 @Data
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "notifications")
 @NoArgsConstructor
 public class Notification {

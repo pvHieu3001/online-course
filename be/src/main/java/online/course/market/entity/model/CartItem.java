@@ -11,7 +11,6 @@ import java.sql.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "cart_items")
 @NoArgsConstructor
 public class CartItem extends BaseEntity {

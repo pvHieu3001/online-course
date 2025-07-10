@@ -32,7 +32,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("api/v1/Course")
+@RequestMapping("api/v1/course")
 @Tag(name = "Course",description = "Course controller")
 public class CourseController {
 

@@ -16,7 +16,6 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "coupons")
 @NoArgsConstructor
 public class Coupon extends BaseEntity {
