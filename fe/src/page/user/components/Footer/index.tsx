@@ -1,68 +1,21 @@
 import styles from './styles.module.css'
-import qualityImage from '@/assets/images/base/quality.jpg'
-import fastImage from '@/assets/images/base/fast.png'
-import updateImage from '@/assets/images/base/update.png'
-import onlineImage from '@/assets/images/base/online.jpg'
 
 const Footer = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        {/* Cam kết dịch vụ */}
-        <div className={styles.features}>
-          <div className={styles.featureCard}>
-            <img src={qualityImage} alt='Uy tín chất lượng' />
-            <div>
-              <h4>Uy tín chất lượng</h4>
-              <p>Hoàn tiền nếu khóa học không như mô tả</p>
-            </div>
-          </div>
-          <div className={styles.featureCard}>
-            <img src={fastImage} alt='Kích hoạt nhanh' />
-            <div>
-              <h4>Kích hoạt nhanh</h4>
-              <p>Kích hoạt khóa học tự động</p>
-            </div>
-          </div>
-          <div className={styles.featureCard}>
-            <img src={updateImage} alt='Update liên tục' />
-            <div>
-              <h4>Update liên tục</h4>
-              <p>Cập nhật 7 - 15 khóa học mỗi hàng tuần</p>
-            </div>
-          </div>
-          <div className={styles.featureCard}>
-            <img src={onlineImage} alt='Học online tiện lợi' />
-            <div>
-              <h4>Học online tiện lợi</h4>
-              <p>Học online bằng điện thoại hoặc máy tính</p>
-            </div>
-          </div>
-        </div>
-
         {/* Footer thông tin */}
-        <div className={styles.bottom}>
-          <div className={styles.left}>
-            <strong>khokhoahoc.org</strong>
-            <p>Copyright © 2025 - Chuyên mua bán khóa học giá rẻ</p>
-          </div>
-          <div className={styles.right}>
-            <p>
-              SDT (Zalo): <span className={styles.highlight}>0983456789</span>
-            </p>
-            <p>
-              Quy định:{' '}
-              <a href='#' className={styles.link}>
-                Sử dụng tài khoản
-              </a>
-            </p>
-            <p>
-              Email:{' '}
-              <a href='mailto:support@sharedocuments.org' className={styles.email}>
-                support@haredocuments.com
-              </a>
-            </p>
-          </div>
+        <div className={styles.copyrightBar}>
+          Copyright © 2025. Created by
+          <a
+            href='https://freecoursesites.com'
+            target='_blank'
+            rel='noopener noreferrer'
+            className={styles.copyrightLink}
+          >
+            Free Course Sites
+          </a>
+          .
         </div>
       </div>
     </div>

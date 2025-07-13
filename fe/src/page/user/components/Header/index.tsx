@@ -98,12 +98,11 @@ const items: MenuItem[] = [
 ]
 
 const Header = () => {
-  const [current, setCurrent] = useState('home')
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  });
 
-  const onClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e)
-    setCurrent(e.key)
-  }
   const [isLockMenu, setIsLockMenu] = useState(false)
   const handleScroll = () => {
     if (window.pageYOffset > 80) {
@@ -121,16 +120,7 @@ const Header = () => {
   }, [])
   return (
     <div className={clsx(styles.modules, isLockMenu? styles.lockMenu : "")}>
-      <div className={styles.menuWrapper}>
-        <Menu
-          className={styles.menu}
-          theme='light'
-          onClick={onClick}
-          selectedKeys={[current]}
-          mode='horizontal'
-          items={items}
-        />
-      </div>
+      
     </div>
   )
 }

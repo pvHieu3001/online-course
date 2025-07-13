@@ -20,7 +20,7 @@ function Base() {
 
         <Toaster />
         <ScrollToTop />
-        <Navbar />
+        {/* <Navbar /> */}
         <Header />
         <main className={styles.container}>
           <div className={styles.mainContent}></div>
