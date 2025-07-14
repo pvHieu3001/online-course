@@ -23,165 +23,24 @@ function Sidenav() {
       {
         label: (
           <>
-            <div>
-              <Flex justify='center' align='center'>
-                <div className={`icon `}>{<Dashboard color={darkColor} />}</div>
-                <span className={`label font-bold text-[#344767]`}>Bảng điều khiển</span>
-              </Flex>
-            </div>
-          </>
-        ),
-        link: '/admin/dashboard'
-      },
-      //dashboard
-
-      {
-        label: (
-          <>
-            <Flex align='center' justify='center'>
-              <span className={`icon `}>{<Tables color={darkColor} />}</span>
-              <span className={`label font-bold text-[#344767]`}>Tiếp thị</span>
+            <Flex align='center' gap={10} justify='center' className='children-menu'>
+              {<Tables color={darkColor} />}
+              <span className='label font-bold text-[#344767]'>Sản phẩm</span>
             </Flex>
           </>
         ),
-        children: [
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={'#9ca3af'} />}
-                  <span className='label font-bold text-gray-400'>Mã giảm giá</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/voucher'
-          }
-        ]
+        link: '/admin/products'
       },
-
       {
         label: (
           <>
-            <Flex align='center' justify='center'>
-              <span className={`icon `}>{<Tables color={darkColor} />}</span>
-              <span className={`label font-bold text-[#344767]`}>Mục lục</span>
+            <Flex align='center' gap={10} justify='center' className='children-menu'>
+              {<Tables color={darkColor} />}
+              <span className='label font-bold text-[#344767]'>Danh mục</span>
             </Flex>
           </>
         ),
-        children: [
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Sản phẩm</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/products'
-          },
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Danh mục</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/categories'
-          },
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Màu sắc</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/color'
-          },
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Thuộc tính sản phẩm</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/attributes-product'
-          },
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Thuộc tính</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/attributes'
-          },
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Chi tiết</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/details'
-          },
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Thương hiệu</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/brand'
-          }
-        ]
-      },
-
-      {
-        label: (
-          <>
-            <Flex align='center' justify='center'>
-              <span className={`icon `}>{<Tables color={darkColor} />}</span>
-              <span className={`label font-bold text-[#344767]`}>Bài viết</span>
-            </Flex>
-          </>
-        ),
-        children: [
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Danh mục bài viết</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/post-categories'
-          },
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Bài viết</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/posts'
-          }
-        ]
+        link: '/admin/categories'
       },
 
       {
@@ -221,69 +80,15 @@ function Sidenav() {
       {
         label: (
           <>
-            <Flex align='center' justify='center'>
-              <span className={`icon `}>{<Tables color={darkColor} />}</span>
-              <span className='label font-bold text-[#344767]'>Banner</span>
-            </Flex>
+            <div>
+              <Flex justify='center' align='center'>
+                <div className={`icon `}>{<Dashboard color={darkColor} />}</div>
+                <span className={`label font-bold text-[#344767]`}>Dashboard</span>
+              </Flex>
+            </div>
           </>
         ),
-        link: '/admin/banner'
-      },
-
-      {
-        label: (
-          <>
-            <Flex align='center' justify='center'>
-              <span className={`icon `}>{<Tables color={darkColor} />}</span>
-              <span className='label font-bold text-[#344767]'>Đơn hàng</span>
-            </Flex>
-          </>
-        ),
-        link: '/admin/order'
-      },
-
-      {
-        label: (
-          <>
-            <Flex align='center' justify='center'>
-              <span className={`icon `}>
-                <Billing color={darkColor} />
-              </span>
-              <span className='label font-bold text-[#344767]'>thanh toán</span>
-            </Flex>
-          </>
-        ),
-        link: '/admin/billing'
-      },
-      {
-        label: (
-          <Flex align='center' justify='center'>
-            <span className={`icon `}>
-              <Rtl color={darkColor} />
-            </span>
-            <span className='label font-bold text-[#344767]'>RTL</span>
-          </Flex>
-        ),
-        link: '/admin/rtl'
-      },
-      {
-        label: (
-          <>
-            <Text style={{ fontSize: '16px', fontWeight: '700' }} className={`text-[${bgIcon}]`}>
-              Trang tài khoản
-            </Text>
-          </>
-        ),
-        type: 'group'
-      },
-      {
-        label: (
-          <Flex align='center' justify='center'>
-            <span className={`icon  `}>{profile}</span>
-            <span className='label font-bold text-[#344767]'>Hồ sơ</span>
-          </Flex>
-        ),
-        link: '/admin/profile'
+        link: '/admin/dashboard'
       }
     ]
   })

@@ -22,11 +22,7 @@ const LazyLoad: React.FC<LazyLoadProps> = ({
 
 // Predefined lazy components for common use cases
 export const LazyHome = lazy(() => import('../../page/user/PageHome'));
-export const LazyAbout = lazy(() => import('../../page/user/PageAbout/PageAbout'));
-export const LazyContact = lazy(() => import('../../page/user/PageContact/PageContact'));
 export const LazyProductDetail = lazy(() => import('../../page/user/ProductDetailPage/ProductDetailPage2'));
-export const LazyBlog = lazy(() => import('../../page/user/BlogPage/BlogPage'));
-export const LazySearch = lazy(() => import('../../page/user/PageSearch/PageSearch'));
 
 // Admin lazy components
 export const LazyAdminDashboard = lazy(() => import('../../page/admin/dashboard/Dashboard'));

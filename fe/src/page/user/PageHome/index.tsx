@@ -1,29 +1,35 @@
 import React from 'react'
 import styles from './styles.module.css'
+import canvas from '../../../assets/images/base/canvas.png'
+import ai from '../../../assets/images/base/ai.jpg'
+import adobe from '../../../assets/images/base/adobe.jpg'
+import inteligent from '../../../assets/images/base/inteligent.jpg'
+import chatgpt from '../../../assets/images/base/chatgpt.jpg'
+import powerbi from '../../../assets/images/base/powerbi.png'
 
 const featuredCourses = [
   {
-    img: 'https://freecoursesites.com/introduction-to-microsoft-power-bi/',
+    img: powerbi,
     title: 'Introduction to Microsoft Power BI'
   },
   {
-    img: 'https://img-c.udemycdn.com/course/240x135/654321.jpg',
+    img: chatgpt,
     title: 'ChatGPT Prompt Engineering ( Free Course )'
   },
   {
-    img: 'https://img-c.udemycdn.com/course/240x135/111111.jpg',
+    img: inteligent,
     title: 'N8N – Build intelligent AI 2.0 Agent Systems Without Coding'
   },
   {
-    img: 'https://img-c.udemycdn.com/course/240x135/222222.jpg',
+    img: adobe,
     title: 'Adobe Premiere Pro CC Masterclass for Video Editing'
   },
   {
-    img: 'https://img-c.udemycdn.com/course/240x135/333333.jpg',
+    img: ai,
     title: 'Adobe Illustrator CC for Learning Graphics Design'
   },
   {
-    img: 'https://img-c.udemycdn.com/course/240x135/444444.jpg',
+    img: canvas,
     title: 'Canva for Social Media Graphic Design and Video Editing'
   }
 ]

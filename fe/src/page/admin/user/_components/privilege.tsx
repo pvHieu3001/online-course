@@ -3,7 +3,6 @@ import { Button, Form } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Checkbox, Col, Row } from 'antd'
 import { Typography } from 'antd'
-import { useGetPrivilegeGroupsQuery } from '../../privilege/_components/privilege_group/PrivilegeGroupEndpoint'
 import { popupError, popupSuccess } from "../../../shared/Toast";
 import LoadingUser from '../util/Loading'
 import { IPrivilegeGroup } from '@/common/types/privilegeGroup.interface'
@@ -78,8 +77,6 @@ export default function PrivilegeUser() {
             if(item) await createPrivilegeUser(payload);
           }))
           .then(async() => {
-           
-           
             await refetch();
             await refetchPrivilegeGroup();
             popupSuccess('Update privilege success')

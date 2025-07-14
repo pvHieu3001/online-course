@@ -1,6 +1,7 @@
 .bg {
   background: #f3f3f3;
   min-height: 100vh;
+  padding-bottom: 60px;
 }
 
 .topbar {
@@ -106,8 +107,8 @@
 }
 
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -138,9 +139,9 @@
 
 .sliderItem {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  min-width: 100px;
+  max-width: 200px;
   gap: 6px;
   flex-shrink: 0;
 }
