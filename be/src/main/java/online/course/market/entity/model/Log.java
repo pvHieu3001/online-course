@@ -20,6 +20,7 @@ public class Log extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer userId;
+    private Integer courseId;
     private Integer name;
     private Integer action;
     private Integer ipAddress;

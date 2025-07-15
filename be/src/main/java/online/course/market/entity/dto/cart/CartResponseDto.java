@@ -1,4 +1,4 @@
-package online.course.market.entity.dto.category;
+package online.course.market.entity.dto.cart;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,9 +7,8 @@ import lombok.AllArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetCategoryDto {
+public class CartResponseDto {
     private Integer id;
-    private Integer parentId;
-    private String name;
-    private String slug;
+    private Integer userId;
+    private Integer couponId;
 } 

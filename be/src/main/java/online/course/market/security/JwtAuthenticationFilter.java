@@ -21,6 +21,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 @Component
 @RequiredArgsConstructor
@@ -44,32 +46,49 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		final String jwt = getTokenFromRequest(request);
-		final String username;
+		HttpServletRequest processedRequest = request;
+		StandardServletMultipartResolver multipartResolver = new StandardServletMultipartResolver();
+		boolean isMultipart = false;
 
-		if (jwt == null) {
-			filterChain.doFilter(request, response);
-			return;
-		}
-
-		username = jwtService.extractUsernameFromToken(jwt);
-
-		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-			boolean isTokenValid = tokenRepository.findByToken(jwt)
-					.map(t -> !t.isExpired() && !t.isRevoked())
-					.orElse(false);
-
-			if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
-				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, null,
-						userDetails.getAuthorities());
-				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				SecurityContextHolder.getContext().setAuthentication(authToken);
+		if(request.getContentType() != null && request.getContentType().toLowerCase().startsWith("multipart/form-data")){
+			if(multipartResolver.isMultipart(request)){
+				processedRequest = multipartResolver.resolveMultipart(request);
+				isMultipart = true;
 			}
 		}
 
-		filterChain.doFilter(request, response);
+		try {
+			final String jwt = getTokenFromRequest(processedRequest);
+			final String username;
+
+			if (jwt == null) {
+				filterChain.doFilter(processedRequest, response);
+				return;
+			}
+
+			username = jwtService.extractUsernameFromToken(jwt);
+
+			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+				boolean isTokenValid = tokenRepository.findByToken(jwt)
+						.map(t -> !t.isExpired() && !t.isRevoked())
+						.orElse(false);
+
+				if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
+					UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, null,
+							userDetails.getAuthorities());
+					authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(processedRequest));
+					SecurityContextHolder.getContext().setAuthentication(authToken);
+				}
+			}
+
+			filterChain.doFilter(processedRequest, response);
+		}finally {
+			if(isMultipart){
+				multipartResolver.cleanupMultipart((MultipartHttpServletRequest) processedRequest);
+			}
+		}
 
 	}
 

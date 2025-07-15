@@ -1,35 +1,18 @@
 package online.course.market.config;
 
-import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.data.domain.AuditorAware;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-
-import online.course.market.utils.Constant;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableJpaAuditing(auditorAwareRef = "auditorProvider")
-public class WebConfig {
-	@Bean
-	MessageSource messageSource() {
-		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+public class WebConfig implements WebMvcConfigurer {
+	@Value("${application.upload.url}")
+	private String resourceFolder;
 
-		messageSource.setBasename("classpath:messages/messages_es");
-		messageSource.setDefaultEncoding(Constant.UTF_8);
-		return messageSource;
-	}
-
-	@Bean
-	LocalValidatorFactoryBean getValidator() {
-		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-		bean.setValidationMessageSource(messageSource());
-		return bean;
-	}
-	@Bean
-	public AuditorAware<Long> auditorProvider() {
-		return new SpringSecurityAuditorAware();
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry){
+		registry.addResourceHandler(resourceFolder+"/**")
+				.addResourceLocations("file:"+resourceFolder);
 	}
 }

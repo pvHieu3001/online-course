@@ -1,17 +1,44 @@
-# Core Java 21 Spring Boot 3 Spring Security 6 JWT
+# Online Course API
 
-This project that contains the core with the technologies of java 21, spring boot 3, spring security 6, JWT, Conection to PostgreSQL
+## Tổng quan
+Đây là project backend cho hệ thống khóa học online, xây dựng bằng Spring Boot.
 
-<p align="center">
-  <img src="https://github.com/gianValentin/core-java21-springboot3/assets/45782176/4ad67cd9-4be7-4bc7-8cce-ca458bcf1b85" title="Java 21" alt="Java 21" width="100px" height="100px"/>
-  <img src="https://github.com/gianValentin/core-java21-springboot3/assets/45782176/91f570e2-079b-40b7-a5fd-9af890d530b4" title="Spring Boot 3" alt="Spring Boot 3" width="110px" height="100px"/>  
-  <img src="https://github.com/gianValentin/core-java21-springboot3/assets/45782176/34cf5d7b-e325-45ec-948f-d799b2244559" title="JWT" alt="Json Web Token" width="100px" height="100px"/>
-  <img src="https://github.com/gianValentin/core-java21-springboot3/assets/45782176/91e795b5-cd19-4492-95bd-33f7465dfb31" title="PostgreSql" alt="PostgresSql" width="100px" height="100px"/>
-</p>
+## Tài liệu API (Swagger/OpenAPI)
 
-## Feature
+Project đã tích hợp sẵn Swagger UI để tự động sinh tài liệu API từ code.
 
-- Implements the new version of java 21 LTS, which is required to be used in spring boot 3
-- Implement the new version spring boot 3 and spring framework 6
-- Implement the new version spring security 6 using JWT
-- Implement token refresh architecture in security
+### Truy cập tài liệu API
+
+1. **Khởi động ứng dụng Spring Boot**
+2. Mở trình duyệt và truy cập:
+   - [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+   - hoặc [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+### Chức năng của Swagger UI
+- Xem mô tả chi tiết các endpoint (method, path, request/response, mã lỗi...)
+- Thử gọi API trực tiếp trên giao diện web (Try it out)
+- Xem mô tả các model (DTO, entity)
+- Hỗ trợ nhập JWT token để test các API bảo mật
+
+### Cấu hình bảo mật
+- Các endpoint `/swagger-ui/**`, `/v3/api-docs/**` mặc định được mở public (có thể cấu hình lại trong SecurityConfig nếu muốn giới hạn quyền truy cập).
+
+### Tùy chỉnh tài liệu
+- Có thể thêm mô tả chi tiết cho từng API bằng các annotation như `@Operation`, `@Parameter`, `@Schema` trong code controller/DTO.
+- Thông tin tổng quan (title, contact, version, server, security...) được cấu hình trong file [`OpenApiConfig.java`](src/main/java/online/course/market/config/OpenApiConfig.java).
+
+### Tham khảo thêm
+- [Springdoc OpenAPI Documentation](https://springdoc.org/)
+- [Swagger UI Usage](https://swagger.io/tools/swagger-ui/)
+
+---
+
+## Các endpoint chính
+- Quản lý user, course, category, cart, coupon, order, payment, notification, log...
+- Tất cả đều có tài liệu chi tiết trên Swagger UI.
+
+---
+
+## Liên hệ
+- Người phát triển: Giancarlo
+- Email: giancarlo@contact.com

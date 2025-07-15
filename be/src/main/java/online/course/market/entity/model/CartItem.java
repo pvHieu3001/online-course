@@ -17,7 +17,8 @@ public class CartItem extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer CourseId;
+    private Integer cartId;
+    private Integer courseId;
     private Double price;
     private Date addedAt;
 }

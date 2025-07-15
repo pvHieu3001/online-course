@@ -1,6 +1,9 @@
 package online.course.market.controller;
 
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import online.course.market.entity.dto.ApiResponse;
@@ -9,10 +12,13 @@ import online.course.market.entity.dto.course.GetCourseDto;
 import online.course.market.entity.dto.course.PostCourseDto;
 import online.course.market.entity.dto.course.PutCourseDto;
 import online.course.market.entity.model.Course;
+import online.course.market.utils.SlugUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import online.course.market.exception.CJNotFoundException;
@@ -22,15 +28,31 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import jakarta.annotation.PostConstruct;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("api/v1/course")
 @Tag(name = "Course", description = "Course controller")
 public class CourseController {
 
+    @Value("${application.upload.url}")
+    private String resourceFolder;
+
+    private Path uploadDir;
+
     private final CourseService courseService;
     private final ModelMapper modelMapper;
+
+    @PostConstruct
+    public void init() {
+        uploadDir = Paths.get(resourceFolder);
+    }
+
+    // Constructor chỉ inject các bean
+    public CourseController(CourseService courseService, ModelMapper modelMapper) {
+        this.courseService = courseService;
+        this.modelMapper = modelMapper;
+    }
 
     // Helper: map Course sang GetCourseDto
     private GetCourseDto toDto(Course course) {
@@ -63,11 +85,32 @@ public class CourseController {
     }
 
     @Operation(description = "Save endpoint for Course", summary = "This is a summary for Course save endpoint")
-    @PostMapping
-    public ResponseEntity<ApiResponse<GetCourseDto>> saveCourse(@Valid @RequestBody PostCourseDto dto) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<GetCourseDto>> saveCourse(@Valid @ModelAttribute PostCourseDto dto) {
+    try {
+
+        if(!Files.exists(uploadDir)){
+            Files.createDirectories(uploadDir);
+        }
+
+        String imageFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
+        Path imagePath = uploadDir.resolve(imageFilename);
+        Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+
+        String sourceFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
+        Path sourcePath = uploadDir.resolve(imageFilename);
+        Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
+
+        dto.setSlug(SlugUtils.toSlug(dto.getName()));
+        dto.setImageUrl("/upload/" + imageFilename);
+        dto.setSourceUrl("/upload/" + sourceFilename);
         Course course = modelMapper.map(dto, Course.class);
         Course courseDb = courseService.save(course);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(courseDb)));
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+
     }
 
     @Operation(description = "Update endpoint for Course", summary = "This is a summary for Course update endpoint")

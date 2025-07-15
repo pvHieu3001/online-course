@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PutCategoryDto {
+    private Integer parentId;
     @NotBlank(message = "Name is required")
     private String name;
     @NotBlank(message = "Slug is required")
