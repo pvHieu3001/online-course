@@ -1,14 +1,12 @@
 import { Flex, Modal, Switch, Upload } from 'antd'
 import { Button, Form, Input} from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useLazyGetDistrictsQuery, useGetProvincesQuery } from '../../../../utils/addressRTKQuery'
 import { Select } from 'antd';
 import type { SelectProps  } from 'antd';
 
 import LoadingUser from '../util/Loading';
 import ErrorLoad from '../../components/util/ErrorLoad';
 import { useEffect, useState } from 'react';
-import { Iuser } from '../../../../common/types/user.interface';
 import { useUpdateUserMutation } from '../UsersEndpoints';
 import { useGetUserQuery } from '../UsersEndpoints';
 import { popupSuccess, popupError } from '@/page/shared/Toast'

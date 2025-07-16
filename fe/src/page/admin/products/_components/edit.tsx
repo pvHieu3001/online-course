@@ -3,16 +3,9 @@ import { Col, Flex, Row, Button, Form, Input, Drawer, UploadProps, GetProp, Inpu
 import { useNavigate, useParams } from 'react-router-dom'
 import React, { useEffect, useRef, useState } from 'react'
 import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons'
-import Option from './Option/Option'
 import TextEditor from './TextEditor/TextEditor'
-import {
-  useCreateProductMutation,
-  useGetGalleriesQuery,
-  useGetProductQuery
-} from '../../../../services/ProductsEndpoints'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ReactQuill from 'react-quill'
-import { modules, formats } from '../../../../data/data'
 import pencil from '../../../../assets/images/manager/pencil.svg'
 
 interface gallery {

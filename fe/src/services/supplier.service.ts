@@ -1,10 +1,5 @@
 import http from "../../src/app/http-common";
 
-const region = import.meta.env.AWS_REGION;
-const accessKeyId = import.meta.env.AWS_ACCESSKEYID;
-const secretAccessKey = import.meta.env.AWS_SECRETACCESSKEY;
-const bucketName = import.meta.env.AWS_BUCKETNAME;
-
 function getAll(data) {
   return http.get("/admin/suppliers", data);
 }

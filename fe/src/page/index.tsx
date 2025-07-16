@@ -20,7 +20,7 @@ const Layout = () => {
     setState({ ...state, openSnackbar: false })
   }
 
-  const userLoggedIn = useSelector((state) => state.user.userLoggedIn)
+  const userLoggedIn = useSelector((state) => state.user.getUserLoggedIn)
   const alert = useSelector((state) => state.alert)
   const error = useSelector((state) => state.error)
 

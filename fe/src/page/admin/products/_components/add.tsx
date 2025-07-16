@@ -2,11 +2,8 @@ import { Col, Flex, Row, Button, Form, Input, Drawer, UploadProps, GetProp, Inpu
 import { useNavigate } from 'react-router-dom'
 import React, { useRef, useState } from 'react'
 import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons'
-import Option from './Option/Option'
-import { useCreateProductMutation } from '../../../../services/ProductsEndpoints'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ReactQuill from 'react-quill'
-import { modules, formats } from '../../../../data/data'
 
 interface gallery {
   image: File | string

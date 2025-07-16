@@ -26,7 +26,7 @@ const initialState: WebState = {
   openModalLogin: false
 }
 
-export const webSlice = createSlice({
+export const web = createSlice({
   name: 'web',
   initialState,
   reducers: {
@@ -64,6 +64,6 @@ export const {
   setNotification, 
   setLoading,
   setOpenModalLogin
-} = webSlice.actions
+} = web.actions
 
-export default webSlice.reducer
+export default web.reducer

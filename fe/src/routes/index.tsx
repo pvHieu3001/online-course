@@ -12,18 +12,10 @@ import EditUser from '../page/admin/user/_components/edit'
 import CategoryManagement from '@/page/admin/category'
 import AddCategory from '@/page/admin/category/_components/add'
 import EditCategory from '@/page/admin/category/_components/edit'
-import PostCategoryManagement from '@/page/admin/postCategory'
-import AddPostCategory from '@/page/admin/postCategory/_components/add'
-import EditPostCategory from '@/page/admin/postCategory/_components/edit'
 import PrivilegeUser from '@/page/admin/user/_components/privilege'
-import PostsManagement from '@/page/admin/posts'
-import AddPosts from '@/page/admin/posts/_components/add'
-import EditPosts from '@/page/admin/posts/_components/edit'
 import ProductManagement from '@/page/admin/products'
 import AddProduct from '@/page/admin/products/_components/add'
 import EditProduct from '@/page/admin/products/_components/edit'
-import OrderManagement from '@/page/admin/order'
-import EditOrder from '@/page/admin/order/_components/edit'
 import GuardPage from '@/middleware/GuardPage'
 import DetailManagement from '@/page/admin/details'
 import AddDetail from '@/page/admin/details/_component/add'
@@ -52,11 +44,6 @@ export default function Router() {
               <Route path=':id' element={<EditUser />} />
             </Route>
 
-            <Route path='order' element={<OrderManagement />}>
-              <Route path='add' element={<AddProduct />} />
-            </Route>
-            <Route path='order/:id' element={<EditOrder />} />
-
             <Route path='products' element={<ProductManagement />}>
               <Route path='add' element={<AddProduct />} />
               <Route path=':flug' element={<EditProduct />} />
@@ -70,16 +57,6 @@ export default function Router() {
             <Route path='categories' element={<CategoryManagement />}>
               <Route path='add' element={<AddCategory />} />
               <Route path=':id' element={<EditCategory />} />
-            </Route>
-
-            <Route path='post-categories' element={<PostCategoryManagement />}>
-              <Route path='add' element={<AddPostCategory />} />
-              <Route path=':id' element={<EditPostCategory />} />
-            </Route>
-
-            <Route path='posts' element={<PostsManagement />}>
-              <Route path='add' element={<AddPosts />} />
-              <Route path=':id' element={<EditPosts />} />
             </Route>
           </Route>
         </Route>

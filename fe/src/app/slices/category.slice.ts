@@ -1,23 +1,6 @@
-import { ICategory } from '@/common/types/category.interface'
-import {
-  changeStatusCategory,
-  createCategory,
-  deleteCategory,
-  getCategory,
-  getListCategory,
-  searchCategory,
-  updateCategory
-} from '@/services/categoryService'
 import { Dispatch, createSlice } from '@reduxjs/toolkit'
 
-interface IInitialState {
-  categories: ICategory[]
-  category: ICategory | null
-  isLoading: boolean
-  isLoadingDetails: boolean
-}
-
-const initialState: IInitialState = {
+const initialState = {
   categories: [],
   category: null,
   isLoading: false,
@@ -31,8 +14,8 @@ const categorySlice = createSlice({
     isFetching: (state) => {
       state.isLoading = true
     },
-    isFetchingDetails: (state) => {
-      state.isLoadingDetails = true
+    fetchedDone: (state) => {
+      state.isLoading = false
     },
     getAllSuccess: (state, { payload }) => {
       state.categories = payload
@@ -50,24 +33,18 @@ const categorySlice = createSlice({
       state.category = null
       state.isLoadingDetails = false
     },
-    fetchedDone: (state) => {
-      state.isLoading = false
-    },
-    fetchedDetailsDone: (state) => {
-      state.isLoadingDetails = false
-    },
     createSuccess: (state, { payload }) => {
       state.categories = [...state.categories, payload]
       state.isLoading = false
     },
     updateSuccess: (state, { payload }) => {
-      state.categories = state.categories?.map((category: ICategory) =>
+      state.categories = state.categories?.map((category) =>
         category.id === payload?.id ? payload : category
       )
       state.isLoading = false
     },
     deleteSuccess: (state, { payload }) => {
-      state.categories = state.categories?.filter((category: ICategory) => category?.id !== payload?.id)
+      state.categories = state.categories?.filter((category) => category?.id !== payload?.id)
       state.isLoading = false
     }
   }
@@ -89,22 +66,22 @@ export const getAllCategory = () => async (dispatch: Dispatch) => {
 }
 
 export const searchCategories = (q: string) => async (dispatch: Dispatch) => {
-  dispatch(isFetching());
+  dispatch(isFetching())
   try {
-    const { data } = await searchCategory(q);
+    const { data } = await searchCategory(q)
     if (data) {
-      dispatch(getAllSuccess(data));
+      dispatch(getAllSuccess(data))
     }
   } catch (error) {
-    console.log(error);
-    dispatch(getAllFailure());
+    console.log(error)
+    dispatch(getAllFailure())
   } finally {
-    dispatch(fetchedDone());
+    dispatch(fetchedDone())
   }
-};
+}
 
 export const getOneCategory = (id: string) => async (dispatch: Dispatch) => {
-  dispatch(isFetchingDetails())
+  dispatch(isFetching())
   try {
     const { data } = await getCategory(id)
     if (data) {
@@ -114,18 +91,18 @@ export const getOneCategory = (id: string) => async (dispatch: Dispatch) => {
     console.log(error)
     dispatch(getDetailsFailure())
   } finally {
-    dispatch(fetchedDetailsDone())
+    dispatch(fetchedDone())
   }
 }
 
 export const createNewCategory = (payload) => async (dispatch: Dispatch) => {
-  dispatch(isFetching())  
-  
+  dispatch(isFetching())
+
   try {
     const response = await createCategory(payload)
     if (response.data) {
-      console.log(response);
-      
+      console.log(response)
+
       // dispatch(createSuccess(response.data))
       return { success: true }
     }
@@ -134,7 +111,7 @@ export const createNewCategory = (payload) => async (dispatch: Dispatch) => {
     console.log(error)
     return { success: false, error }
   } finally {
-    // dispatch(fetchedDone())
+    dispatch(fetchedDone())
   }
 }
 
@@ -191,13 +168,11 @@ export const removeCategory = (id: string) => async (dispatch: Dispatch) => {
 
 export const {
   isFetching,
-  isFetchingDetails,
   getAllSuccess,
   getDetailsSuccess,
   getDetailsFailure,
   getAllFailure,
   fetchedDone,
-  fetchedDetailsDone,
   createSuccess,
   updateSuccess,
   deleteSuccess

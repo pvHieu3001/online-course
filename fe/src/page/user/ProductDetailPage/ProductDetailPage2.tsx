@@ -51,46 +51,46 @@ import { useGetCommentsQuery, usePostCommentMutation } from '@/services/CommentE
 import { popupError } from '../../shared/Toast'
 import { formatDate } from '@/utils/convertCreatedLaravel'
 import { useLocalStorage } from '@uidotdev/usehooks'
-import { IProduct } from '@/common/types/product.interface'
+import { IProduct } from '@/common/product.interface'
 export interface ProductDetailPage2Props {
   className?: string
 }
 
 const ProductDetailPage2: FC<ProductDetailPage2Props> = ({ className = '' }) => {
   const [user] = useLocalStorage('user', null)
-  
+
   // SEO structured data for product
   const getProductStructuredData = () => {
-    if (!dataProduct) return null;
-    
+    if (!dataProduct) return null
+
     return {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": dataProduct.name,
-      "description": dataProduct.content,
-      "image": dataProduct.thumbnail,
-      "url": `https://dogohiephong.com/product/${dataProduct.slug}`,
-      "brand": {
-        "@type": "Brand",
-        "name": "Đồ Gỗ Hiệp Hồng"
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: dataProduct.name,
+      description: dataProduct.content,
+      image: dataProduct.thumbnail,
+      url: `https://dogohiephong.com/product/${dataProduct.slug}`,
+      brand: {
+        '@type': 'Brand',
+        name: 'Đồ Gỗ Hiệp Hồng'
       },
-      "offers": {
-        "@type": "Offer",
-        "price": dataProduct.price_sale || dataProduct.price,
-        "priceCurrency": "VND",
-        "availability": dataProduct.quantity > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-        "seller": {
-          "@type": "Organization",
-          "name": "Đồ Gỗ Hiệp Hồng"
+      offers: {
+        '@type': 'Offer',
+        price: dataProduct.price_sale || dataProduct.price,
+        priceCurrency: 'VND',
+        availability: dataProduct.quantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        seller: {
+          '@type': 'Organization',
+          name: 'Đồ Gỗ Hiệp Hồng'
         }
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": dataProduct.avg_stars || 0,
-        "reviewCount": dataProduct.total_review || 0
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: dataProduct.avg_stars || 0,
+        reviewCount: dataProduct.total_review || 0
       }
-    };
-  };
+    }
+  }
   const {
     register,
     handleSubmit,
@@ -497,34 +497,101 @@ const ProductDetailPage2: FC<ProductDetailPage2Props> = ({ className = '' }) => 
   }
   return (
     <>
-      <SEOComponent 
+      <SEOComponent
         title={dataProduct ? `${dataProduct.name} - Đồ Gỗ Hiệp Hồng` : 'Sản Phẩm - Đồ Gỗ Hiệp Hồng'}
         description={dataProduct ? dataProduct.content : 'Khám phá sản phẩm đồ gỗ chất lượng cao từ Đồ Gỗ Hiệp Hồng'}
         keywords={`${dataProduct?.name || 'sản phẩm'}, đồ gỗ, nội thất, ${dataProduct?.category_id || ''}`}
         image={dataProduct?.thumbnail}
         url={`/product/${dataProduct?.slug}`}
-        type="product"
+        type='product'
         structuredData={getProductStructuredData()}
       />
-      
+
       <div className={`ListingDetailPage nc-ProductDetailPage2 ${className}`} data-nc-id='ProductDetailPage2'>
-      {/* SINGLE HEADER */}
-      <>
-        <header className='container mt-8 sm:mt-10'>
-          <div>
-            <h2 className='text-2xl md:text-3xl font-semibold'>{data?.data?.name}</h2>
+        {/* SINGLE HEADER */}
+        <>
+          <header className='container mt-8 sm:mt-10'>
+            <div>
+              <h2 className='text-2xl md:text-3xl font-semibold'>{data?.data?.name}</h2>
+            </div>
+          </header>
+        </>
+
+        {/* MAIn */}
+        <main className='container relative z-10 mt-9 sm:mt-11 flex '>
+          {/* CONTENT */}
+          <div className='w-full lg:w-3/5 xl:w-2/3 space-y-10 lg:pr-14 lg:space-y-14'>
+            {Gallery()}
+
+            <div>
+              <div className='block lg:hidden'>
+                <div className='listingSectionSidebar__wrap lg:shadow-lg'>
+                  <div className='space-y-7 lg:space-y-8'>
+                    {/* PRICE */}
+                    <div className=''>
+                      {/* ---------- 1 HEADING ----------  */}
+                      <div className='flex items-center justify-between space-x-5'>
+                        <div className='flex text-2xl font-semibold'>{VND(parseFloat(product?.price))}</div>
+
+                        <a href='#reviews' className='flex items-center text-sm font-medium'>
+                          <span className='ml-1.5 flex'>
+                            <span className='text-slate-700 dark:text-slate-400 underline'>
+                              {listComments?.length} đánh giá
+                            </span>
+                          </span>
+                        </a>
+                      </div>
+
+                      {/* ---------- 3 VARIANTS AND SIZE LIST ----------  */}
+                      <div className='mt-6 space-y-7 lg:space-y-8'>
+                        <div className=''>{renderVariants()}</div>
+                      </div>
+                    </div>
+                    {/*  ---------- 4  QTY AND ADD TO CART BUTTON */}
+                    <div className='flex space-x-3.5'>
+                      <div className='flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full'>
+                        <NcInputNumber defaultValue={qualitySelected} onChange={setQualitySelected} />
+                      </div>
+                      <ButtonPrimary className='flex-1 flex-shrink-0' onClick={notifyAddTocart}>
+                        <BagIcon className='hidden sm:inline-block w-5 h-5 mb-0.5' />
+                        <span className='ml-3'>Thêm vào giỏ</span>
+                      </ButtonPrimary>
+                    </div>
+
+                    {/* SUM */}
+                    <div className='hidden sm:flex flex-col space-y-4 '>
+                      <div className='space-y-2.5'>
+                        <div className='flex justify-between text-slate-600 dark:text-slate-300'>
+                          <span className='flex'>
+                            <span>{`${VND(parseFloat(product?.price))}  `}</span>
+                            <span className='mx-2'>x</span>
+                            <span>{`${qualitySelected} `}</span>
+                          </span>
+
+                          <span>{`${VND(product?.price * qualitySelected)}`}</span>
+                        </div>
+                        {/* <div className="flex justify-between text-slate-600 dark:text-slate-300">
+                  <span>Thuế giá trị gia tăng</span>
+                  <span>0</span>
+                </div> */}
+                      </div>
+                      <div className='border-b border-slate-200 dark:border-slate-700'></div>
+                      <div className='flex justify-between font-semibold text-[24px]'>
+                        <span>Tổng tiền</span>
+                        <span>{`${VND(product?.price * qualitySelected)}`}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {renderSection2()}
           </div>
-        </header>
-      </>
 
-      {/* MAIn */}
-      <main className='container relative z-10 mt-9 sm:mt-11 flex '>
-        {/* CONTENT */}
-        <div className='w-full lg:w-3/5 xl:w-2/3 space-y-10 lg:pr-14 lg:space-y-14'>
-          {Gallery()}
-
-          <div>
-            <div className='block lg:hidden'>
+          {/* SIDEBAR */}
+          <div className='flex-grow'>
+            <div className='hidden lg:block sticky top-28'>
               <div className='listingSectionSidebar__wrap lg:shadow-lg'>
                 <div className='space-y-7 lg:space-y-8'>
                   {/* PRICE */}
@@ -585,164 +652,97 @@ const ProductDetailPage2: FC<ProductDetailPage2Props> = ({ className = '' }) => 
               </div>
             </div>
           </div>
+        </main>
 
-          {renderSection2()}
-        </div>
+        {/* OTHER SECTION */}
+        <div className='container pt-14 space-y-14'>
+          <hr className='border-slate-200 dark:border-slate-700' />
 
-        {/* SIDEBAR */}
-        <div className='flex-grow'>
-          <div className='hidden lg:block sticky top-28'>
-            <div className='listingSectionSidebar__wrap lg:shadow-lg'>
-              <div className='space-y-7 lg:space-y-8'>
-                {/* PRICE */}
-                <div className=''>
-                  {/* ---------- 1 HEADING ----------  */}
-                  <div className='flex items-center justify-between space-x-5'>
-                    <div className='flex text-2xl font-semibold'>{VND(parseFloat(product?.price))}</div>
-
-                    <a href='#reviews' className='flex items-center text-sm font-medium'>
-                      <span className='ml-1.5 flex'>
-                        <span className='text-slate-700 dark:text-slate-400 underline'>
-                          {listComments?.length} đánh giá
-                        </span>
-                      </span>
-                    </a>
-                  </div>
-
-                  {/* ---------- 3 VARIANTS AND SIZE LIST ----------  */}
-                  <div className='mt-6 space-y-7 lg:space-y-8'>
-                    <div className=''>{renderVariants()}</div>
-                  </div>
-                </div>
-                {/*  ---------- 4  QTY AND ADD TO CART BUTTON */}
-                <div className='flex space-x-3.5'>
-                  <div className='flex items-center justify-center bg-slate-100/70 dark:bg-slate-800/70 px-2 py-3 sm:p-3.5 rounded-full'>
-                    <NcInputNumber defaultValue={qualitySelected} onChange={setQualitySelected} />
-                  </div>
-                  <ButtonPrimary className='flex-1 flex-shrink-0' onClick={notifyAddTocart}>
-                    <BagIcon className='hidden sm:inline-block w-5 h-5 mb-0.5' />
-                    <span className='ml-3'>Thêm vào giỏ</span>
-                  </ButtonPrimary>
-                </div>
-
-                {/* SUM */}
-                <div className='hidden sm:flex flex-col space-y-4 '>
-                  <div className='space-y-2.5'>
-                    <div className='flex justify-between text-slate-600 dark:text-slate-300'>
-                      <span className='flex'>
-                        <span>{`${VND(parseFloat(product?.price))}  `}</span>
-                        <span className='mx-2'>x</span>
-                        <span>{`${qualitySelected} `}</span>
-                      </span>
-
-                      <span>{`${VND(product?.price * qualitySelected)}`}</span>
-                    </div>
-                    {/* <div className="flex justify-between text-slate-600 dark:text-slate-300">
-                  <span>Thuế giá trị gia tăng</span>
-                  <span>0</span>
-                </div> */}
-                  </div>
-                  <div className='border-b border-slate-200 dark:border-slate-700'></div>
-                  <div className='flex justify-between font-semibold text-[24px]'>
-                    <span>Tổng tiền</span>
-                    <span>{`${VND(product?.price * qualitySelected)}`}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      {/* OTHER SECTION */}
-      <div className='container pt-14 space-y-14'>
-        <hr className='border-slate-200 dark:border-slate-700' />
-
-        <Row gutter={[32, 24]}>
-          <Col className='gutter-row ' span={24}>
-            <div className='py-5 border-2 rounded-md relative max-h-[200px] lg:shadow-lg p-4 overflow-hidden'>
-              <div dangerouslySetInnerHTML={{ __html: data?.data?.content }} />
-              <div
-                style={{
-                  background: 'linear-gradient(180deg, hsla(0, 0%, 100%, 0), hsla(0, 0%, 100%, .91) 50%, #fff 55%)'
-                }}
-                className=' absolute bottom-0 left-0 p-2 flex justify-center items-center w-full'
-              >
-                <Button onClick={() => setOpenContent(true)}>Xem thêm</Button>
-              </div>
-            </div>
-            <Modal
-              title={
-                <div>
-                  <div className='text-[24px] font-bold mb-2'>Thông tin sản phẩm</div>
-                  <hr className='border-slate-200 dark:border-slate-700' />
-                </div>
-              }
-              footer={''}
-              open={openContent}
-              onCancel={() => setOpenContent(false)}
-              width={1240}
-            >
-              <div className='rounded-md relative min-h-[32rem] p-4 overflow-hidden'>
+          <Row gutter={[32, 24]}>
+            <Col className='gutter-row ' span={24}>
+              <div className='py-5 border-2 rounded-md relative max-h-[200px] lg:shadow-lg p-4 overflow-hidden'>
                 <div dangerouslySetInnerHTML={{ __html: data?.data?.content }} />
-              </div>
-            </Modal>
-          </Col>
-          <Col className='gutter-row ' span={24}>
-            <div className='py-5 border-2 rounded-md relative max-h-[500px] lg:shadow-lg p-4 overflow-hidden'>
-              <div dangerouslySetInnerHTML={{ __html: data?.data?.detail }} />
-              <div
-                style={{
-                  background: 'linear-gradient(180deg, hsla(0, 0%, 100%, 0), hsla(0, 0%, 100%, .91) 50%, #fff 55%)'
-                }}
-                className=' absolute bottom-0 left-0 p-2 flex justify-center items-center w-full'
-              >
-                <Button onClick={() => setOpenContent(true)}>Xem thêm</Button>
-              </div>
-            </div>
-            <Modal
-              title={
-                <div>
-                  <div className='text-[24px] font-bold mb-2'>Thông tin sản phẩm</div>
-                  <hr className='border-slate-200 dark:border-slate-700' />
+                <div
+                  style={{
+                    background: 'linear-gradient(180deg, hsla(0, 0%, 100%, 0), hsla(0, 0%, 100%, .91) 50%, #fff 55%)'
+                  }}
+                  className=' absolute bottom-0 left-0 p-2 flex justify-center items-center w-full'
+                >
+                  <Button onClick={() => setOpenContent(true)}>Xem thêm</Button>
                 </div>
-              }
-              footer={''}
-              open={openContent}
-              onCancel={() => setOpenContent(false)}
-              width={1240}
-            >
-              <div className='rounded-md relative min-h-[32rem] p-4 overflow-hidden'>
-                <div dangerouslySetInnerHTML={{ __html: data?.data?.detail }} />
               </div>
-            </Modal>
-          </Col>
-        </Row>
-      </div>
+              <Modal
+                title={
+                  <div>
+                    <div className='text-[24px] font-bold mb-2'>Thông tin sản phẩm</div>
+                    <hr className='border-slate-200 dark:border-slate-700' />
+                  </div>
+                }
+                footer={''}
+                open={openContent}
+                onCancel={() => setOpenContent(false)}
+                width={1240}
+              >
+                <div className='rounded-md relative min-h-[32rem] p-4 overflow-hidden'>
+                  <div dangerouslySetInnerHTML={{ __html: data?.data?.content }} />
+                </div>
+              </Modal>
+            </Col>
+            <Col className='gutter-row ' span={24}>
+              <div className='py-5 border-2 rounded-md relative max-h-[500px] lg:shadow-lg p-4 overflow-hidden'>
+                <div dangerouslySetInnerHTML={{ __html: data?.data?.detail }} />
+                <div
+                  style={{
+                    background: 'linear-gradient(180deg, hsla(0, 0%, 100%, 0), hsla(0, 0%, 100%, .91) 50%, #fff 55%)'
+                  }}
+                  className=' absolute bottom-0 left-0 p-2 flex justify-center items-center w-full'
+                >
+                  <Button onClick={() => setOpenContent(true)}>Xem thêm</Button>
+                </div>
+              </div>
+              <Modal
+                title={
+                  <div>
+                    <div className='text-[24px] font-bold mb-2'>Thông tin sản phẩm</div>
+                    <hr className='border-slate-200 dark:border-slate-700' />
+                  </div>
+                }
+                footer={''}
+                open={openContent}
+                onCancel={() => setOpenContent(false)}
+                width={1240}
+              >
+                <div className='rounded-md relative min-h-[32rem] p-4 overflow-hidden'>
+                  <div dangerouslySetInnerHTML={{ __html: data?.data?.detail }} />
+                </div>
+              </Modal>
+            </Col>
+          </Row>
+        </div>
 
-      {/* OTHER SECTION */}
-      <div className='container pb-24 lg:pb-28 pt-14 space-y-14'>
-        <hr className='border-slate-200 dark:border-slate-700' />
+        {/* OTHER SECTION */}
+        <div className='container pb-24 lg:pb-28 pt-14 space-y-14'>
+          <hr className='border-slate-200 dark:border-slate-700' />
 
-        {renderReviews()}
-        {renderStatus()}
+          {renderReviews()}
+          {renderStatus()}
 
-        <hr className='border-slate-200 dark:border-slate-700' />
+          <hr className='border-slate-200 dark:border-slate-700' />
 
-        <SectionSliderProductCard
-          heading='SẢN PHẨM TƯƠNG TỰ'
-          subHeading=''
-          headingFontClassName='text-2xl font-semibold'
-          headingClassName='mb-10 text-neutral-900 dark:text-neutral-50'
+          <SectionSliderProductCard
+            heading='SẢN PHẨM TƯƠNG TỰ'
+            subHeading=''
+            headingFontClassName='text-2xl font-semibold'
+            headingClassName='mb-10 text-neutral-900 dark:text-neutral-50'
+          />
+        </div>
+
+        {/* MODAL VIEW ALL REVIEW */}
+        <ModalViewAllReviews
+          show={isOpenModalViewAllReviews}
+          onCloseModalViewAllReviews={() => setIsOpenModalViewAllReviews(false)}
         />
       </div>
-
-      {/* MODAL VIEW ALL REVIEW */}
-      <ModalViewAllReviews
-        show={isOpenModalViewAllReviews}
-        onCloseModalViewAllReviews={() => setIsOpenModalViewAllReviews(false)}
-      />
-    </div>
     </>
   )
 }

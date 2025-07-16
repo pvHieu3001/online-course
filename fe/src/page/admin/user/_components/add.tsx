@@ -1,21 +1,17 @@
 import { Modal, Switch, Upload } from 'antd'
 import { Button, Form, Input } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { useLazyGetDistrictsQuery, useGetProvincesQuery } from '../../../../utils/addressRTKQuery'
 import { Select } from 'antd'
 import type { SelectProps } from 'antd'
 
 import LoadingUser from '../util/Loading'
 import ErrorLoad from '../../components/util/ErrorLoad'
 import { useEffect, useState } from 'react'
-import { Iuser } from '../../../../common/types/user.interface'
 import { useCreateUserMutation } from '../UsersEndpoints'
 
 import { popupSuccess, popupError } from '@/page/shared/Toast'
 //
 import { UploadOutlined } from '@ant-design/icons'
-import axios from 'axios'
-import { min } from 'lodash'
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 }
