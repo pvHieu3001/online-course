@@ -32,6 +32,10 @@ import io.swagger.v3.oas.annotations.servers.Server;
 						url = "http://localhost:8080"
 				),
 				@Server(
+						description = "Dev ENV",
+						url = "http://103.27.237.41:8080"
+				),
+				@Server(
 						description = "PROD ENV",
 						url = "https://porduction-url.com"
 				)
