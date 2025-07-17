@@ -1,10 +1,7 @@
 import axios from 'axios'
 // import {LOCAL_STORAGE_TOKEN, BASE_API} from "./constants";
 import { LOCAL_STORAGE_TOKEN, EXTERNAL_BASE_API } from './constants'
-import { errorActions } from '@/app/actions'
-import { useDispatch } from 'react-redux'
 
-const dispatch = useDispatch
 const onSuccessInterceptorRequest = async (config) => {
   return config
 }
@@ -14,10 +11,10 @@ const onErrorInterceptorResponse = (error) => {
   if (error) {
     if (!error.response.ok) {
       if (error.response.status === 401) {
-        dispatch(errorActions.unauthorized())
+        console.log('error 401')
       }
       if (error.response.status === 403) {
-        window.location = '/'
+        console.log('error 403')
       }
     }
   } else if (error.request) {
@@ -31,12 +28,6 @@ const onSuccessInterceptorResponse = (rs) => {
   return rs
 }
 
-// let cancel = null;
-// const CancelToken = axios.CancelToken;
-// axios.defaults.cancelToken = new CancelToken((c) => {
-//   cancel = c;
-// });
-
 const token = localStorage.getItem(LOCAL_STORAGE_TOKEN)
 axios.defaults.headers.common['Content-Type'] = 'application/json'
 
@@ -47,10 +38,8 @@ axios.defaults.headers.post.Accept = 'application/json'
 axios.defaults.headers.Accept = 'application/json'
 
 const axs = axios.create({
-  // baseURL: BASE_API,
   baseURL: EXTERNAL_BASE_API,
   timeout: 120 * 1000
-  // withCredentials: true
 })
 
 axs.interceptors.request.use(onSuccessInterceptorRequest, onErrorInterceptorRequest)
