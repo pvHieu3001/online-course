@@ -1,6 +1,6 @@
-import http from '../app/http-common'
+import http from '../http-common'
 
-function getCategories() {
+function getCategories(data) {
   return http.get('/admin/big_category')
 }
 

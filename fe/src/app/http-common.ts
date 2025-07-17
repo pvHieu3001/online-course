@@ -1,7 +1,7 @@
 import axios from 'axios'
 // import {LOCAL_STORAGE_TOKEN, BASE_API} from "./constants";
 import { LOCAL_STORAGE_TOKEN, EXTERNAL_BASE_API } from './constants'
-import { errorActions } from '@/actions'
+import { errorActions } from '@/app/actions'
 import { useDispatch } from 'react-redux'
 
 const dispatch = useDispatch

@@ -5,7 +5,7 @@ import { Badge, Button, List, Avatar, Input, Drawer, Space, Flex } from 'antd'
 import { SearchOutlined, StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons'
 import bell from './icon/Bell'
 import toggler from './icon/Togge'
-import { setMiniSidenav, setNotification } from '../../../app/slices/web.slice'
+import { setMiniSidenav, setNotification } from '../../../app/slices/web.reducer'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { useDispatch, useSelector } from 'react-redux'
 

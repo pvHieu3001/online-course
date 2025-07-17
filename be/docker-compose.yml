@@ -7,18 +7,3 @@ services:
     build: .
     ports:
       - 8080:8080
-    environment:
-      - DATABASE_URL=jdbc:postgresql://db:5432/online_course
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=1234
-    depends_on:
-      - db
-  db:
-    container_name: online_course_db
-    image: postgres:12
-    ports:
-      - 5433:5432
-    environment:
-      POTGRES_USER: posrtgres
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: online_course

@@ -1,12 +1,11 @@
 import { Outlet } from 'react-router-dom'
 import { Snackbar, Alert } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { userActions } from '@/actions'
-import { LOCAL_STORAGE_TOKEN, LOCAL_STORAGE_USER } from '../app/constants'
 
 const Layout = () => {
-  const dispatch = useDispatch()
+  const alert = useSelector((state) => state.alert)
+
   const [state, setState] = useState({
     openSnackbar: false
   })
@@ -19,22 +18,6 @@ const Layout = () => {
   const handleSnackbarClose = () => {
     setState({ ...state, openSnackbar: false })
   }
-
-  const userLoggedIn = useSelector((state) => state.user.getUserLoggedIn)
-  const alert = useSelector((state) => state.alert)
-  const error = useSelector((state) => state.error)
-
-  useEffect(() => {
-    dispatch(userActions.getUserLoggedIn())
-  }, [])
-
-  useEffect(() => {
-    if (userLoggedIn && userLoggedIn.error && location.pathname != '/reissue-password') {
-      localStorage.removeItem(LOCAL_STORAGE_USER)
-      localStorage.removeItem(LOCAL_STORAGE_TOKEN)
-    }
-    error
-  }, [userLoggedIn])
 
   useEffect(() => {
     if (alert.message) {

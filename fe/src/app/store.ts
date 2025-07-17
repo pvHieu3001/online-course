@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import webReducer from './slices/web.slice'
-import categoryReducer from './slices/category.slice'
+import webReducer from './slices/web.reducer'
+import categoryReducer from './slices/category.reducer'
+import userReducer from './slices/user.reducer'
+import alertReducer from './slices/alert.reducer'
 export const store = configureStore({
   reducer: {
     category: categoryReducer,
-    web: webReducer
+    user: userReducer,
+    web: webReducer,
+    alert: alertReducer
   }
 })

@@ -1,6 +1,4 @@
-import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { ISignin } from "@/common/types/Auth.interface";
-import { LogoutService, SigninService } from "@/services/AuthService";
+import { createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { ErrorResponse } from "react-router-dom";
 
