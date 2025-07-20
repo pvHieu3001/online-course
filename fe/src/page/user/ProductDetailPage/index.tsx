@@ -1,5 +1,5 @@
 
-import { useParams, useLocation } from 'react-router-dom';
+import {  useLocation } from 'react-router-dom';
 import TabDetail from './TabMenu';
 import imageCourse from './assets/image.png'
 import courseFirst from './assets/courseFirst.jpg'
