@@ -1,5 +1,6 @@
 import { alertConstants } from "./alert.constants";
 import { userConstants } from "./user.constants";
+import { courseConstants} from "./course.constants";
 import { errorConstants } from "./error.constants";
 import { supplierConstants } from "./supplier.constants";
 import { mapConstants } from "./map.constants";
@@ -17,5 +18,6 @@ export {
     adminConstants,
     fileConstants,
     categoryConstants,
-    notificationConstants
+    notificationConstants,
+    courseConstants
 };

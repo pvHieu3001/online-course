@@ -1,0 +1,4 @@
+export const courseConstants = {
+  GET_COURSES_SUCCESS: 'GET_COURSES_SUCCESS',
+  GET_COURSES_FAILURE: 'GET_COURSES_FAILURE'
+}

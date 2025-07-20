@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './styles.module.css'
 import canvas from '../../../assets/images/base/canvas.png'
 import ai from '../../../assets/images/base/ai.jpg'
@@ -6,6 +6,9 @@ import adobe from '../../../assets/images/base/adobe.jpg'
 import inteligent from '../../../assets/images/base/inteligent.jpg'
 import chatgpt from '../../../assets/images/base/chatgpt.jpg'
 import powerbi from '../../../assets/images/base/powerbi.png'
+import { useDispatch, useSelector } from 'react-redux'
+import { AnyAction } from '@reduxjs/toolkit'
+import { courseActions } from '@/app/actions/course.actions'
 
 const featuredCourses = [
   {
@@ -43,40 +46,14 @@ const categories = [
   { name: 'Adobe After Affects', count: 14 }
 ]
 
-const courses = [
-  {
-    img: 'https://img-c.udemycdn.com/course/480x270/123456.jpg',
-    title: 'Introduction to Microsoft Power BI',
-    category: 'FREE UDEMY COURSES'
-  },
-  {
-    img: 'https://img-c.udemycdn.com/course/480x270/654321.jpg',
-    title: 'ChatGPT Prompt Engineering ( Free Course )',
-    category: 'FREE UDEMY COURSES'
-  },
-  {
-    img: 'https://img-c.udemycdn.com/course/480x270/111111.jpg',
-    title: 'N8N – Build intelligent AI 2.0 Agent Systems Without Coding',
-    category: 'FREE UDEMY COURSES'
-  },
-  {
-    img: 'https://img-c.udemycdn.com/course/480x270/222222.jpg',
-    title: 'Adobe Premiere Pro CC Masterclass for Video Editing',
-    category: 'FREE UDEMY COURSES'
-  },
-  {
-    img: 'https://img-c.udemycdn.com/course/480x270/333333.jpg',
-    title: 'Adobe Illustrator CC for Learning Graphics Design',
-    category: 'FREE UDEMY COURSES'
-  },
-  {
-    img: 'https://img-c.udemycdn.com/course/480x270/444444.jpg',
-    title: 'Canva for Social Media Graphic Design and Video Editing',
-    category: 'FREE UDEMY COURSES'
-  }
-]
-
 function PageHome() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(courseActions.getCourses() as unknown as AnyAction)
+  }, [dispatch])
+
+  const courses = useSelector((state: any) => state.course?.data?.getCourseDto || [])
   const today = new Date()
   const dateStr = today.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -87,25 +64,21 @@ function PageHome() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // Add search functionality here
     console.log('Search submitted')
   }
 
   const handleCategoryClick = (categoryName: string) => {
-    // Add category filter functionality here
     console.log('Category clicked:', categoryName)
   }
 
   return (
     <div className={styles.bg}>
-      {/* Header ngày tháng */}
       <div className={styles.topbar} role='banner'>
         <span className={styles.date} aria-label='Current date'>
           {dateStr}
         </span>
       </div>
 
-      {/* Banner/logo */}
       <div className={styles.bannerWrapper}>
         <header className={styles.banner} role='banner'>
           <img src='/logo.png' alt='FCS Logo' className={styles.logo} />
@@ -115,31 +88,18 @@ function PageHome() {
         </header>
       </div>
 
-      {/* Menu ngang */}
       <div className={styles.menuWrapper}>
         <nav className={styles.menu} role='navigation' aria-label='Main navigation'>
           <a className={styles.active} href='#' aria-current='page'>
             HOME
           </a>
-          <a href='#' aria-label='100% off Udemy coupon courses'>
-            100% OFF UDEMY COUPON
-          </a>
-          <a href='#' aria-label='Browse all courses'>
-            ALL COURSES
-          </a>
-          <a href='#' aria-label='Games section'>
-            GAMES
-          </a>
-          <a href='#' aria-label='Terms of use'>
-            TERMS OF USE
-          </a>
-          <a href='#' aria-label='Privacy policy'>
-            PRIVACY POLICY
-          </a>
-          <a href='#' aria-label='DMCA copyrights'>
-            DMCA COPYRIGHTS
-          </a>
-          <a href='#' aria-label='Search courses'>
+          <a href='#'>100% OFF UDEMY COUPON</a>
+          <a href='#'>ALL COURSES</a>
+          <a href='#'>GAMES</a>
+          <a href='#'>TERMS OF USE</a>
+          <a href='#'>PRIVACY POLICY</a>
+          <a href='#'>DMCA COPYRIGHTS</a>
+          <a href='#'>
             <span className={styles.searchIcon} role='img' aria-label='Search'>
               🔍
             </span>
@@ -147,7 +107,6 @@ function PageHome() {
         </nav>
       </div>
 
-      {/* Slider khóa học nổi bật */}
       <div className={styles.sliderWrapper}>
         <section className={styles.slider} role='region' aria-label='Featured courses'>
           {featuredCourses.map((course, i) => (
@@ -159,20 +118,17 @@ function PageHome() {
         </section>
       </div>
 
-      {/* Main content */}
       <main className={styles.mainContent} role='main'>
-        {/* Danh sách khóa học */}
         <section className={styles.courses} aria-label='Course listings'>
-          {courses.map((course, i) => (
+          {courses.map((course: any, i: number) => (
             <article className={styles.courseCard} key={i} role='article'>
-              <img src={course.img} alt={`${course.title} course image`} />
-              <div className={styles.courseCat}>{course.category}</div>
-              <h3 className={styles.courseTitle}>{course.title}</h3>
+              <img src={course.imageUrl} alt={`${course.name} course image`} />
+              <div className={styles.courseCat}>{course.categoryId}</div>
+              <h3 className={styles.courseTitle}>{course.name}</h3>
             </article>
           ))}
         </section>
 
-        {/* Sidebar */}
         <aside className={styles.sidebar} role='complementary'>
           <div className={styles.searchBox}>
             <h2 className={styles.searchLabel}>Search Course</h2>
