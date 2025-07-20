@@ -1,19 +1,21 @@
 
-import { useParams } from 'react-router-dom';
+import {  useLocation } from 'react-router-dom';
 import TabDetail from './TabMenu';
 import imageCourse from './assets/image.png'
 import courseFirst from './assets/courseFirst.jpg'
 import { ShareAltOutlined, FacebookOutlined, TwitterOutlined, GoogleOutlined, RedditOutlined, PlusOutlined, CommentOutlined } from '@ant-design/icons';
 import styles from './styles.module.css'
+
 function ProductDetailPage() {
-    const { slug } = useParams();
+    const location = useLocation()
+    const course = location.state
     return (
         <div className={styles.detailtContainer}>
 
 
             <article className={styles.articleContainer}>
                 <div className={styles.developmentTag}>DEVELOPMENT</div>
-                <h1 className={styles.articleTitle}>Pre-Coding Bootcamp: Your First Step To Become A Programmer</h1>
+                <h1 className={styles.articleTitle}>{course.name}</h1>
                 <div className={styles.articleMeta}>
                     <span className={styles.author}>By <b>FCS</b>-</span>
                     <span className={styles.date}>  On <b>Apr 29, 2025</b> </span>
@@ -54,7 +56,7 @@ function ProductDetailPage() {
                     <img src={imageCourse} alt="Pre-Coding Bootcamp Image" className={styles.articleImage} />
                 </div>
 
-                <h2 className={styles.introductionText}>Pre-Coding Bootcamp: Your First Step to Become a Programmer Feeling lost in coding courses? This course fills the gaps beginners face—tools, concepts, and how programming works.</h2>
+                <h2 className={styles.introductionText}>{course.name}</h2>
 
 
                 <div className={styles.learnBox}>
@@ -83,18 +85,9 @@ function ProductDetailPage() {
 
                     <h2 className={styles.sectionHeading}>Description</h2>
                     <p className={styles.descriptionPara}>
-                        Are you learning to code but still feel confused and stuck?
+                        {course.description}
                     </p>
-                    <p className={styles.descriptionPara}>
-                        Most programming courses throw you straight into code assuming you already understand things like the
-                        terminal, file paths, Git, JSON files, and APIs. If you've ever paused a tutorial to look up confusing terms or
-                        felt lost before the code even started — this course is made for you.
-                    </p>
-                    <p className={styles.descriptionPara}>
-                        This is <strong className={styles.highlightText}>not a coding course</strong>. It's a <strong className={styles.highlightText}>pre-programming course</strong> — designed to give you the foundation every
-                        future programmer needs, but few ever get. This is the best investment you will make because it will pay
-                        off by avoiding knowledge gaps in your path to becoming a programmer.
-                    </p>
+                    
                 </div>
 
                 <div className={styles.learnSection}>

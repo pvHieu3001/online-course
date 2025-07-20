@@ -9,51 +9,36 @@ import powerbi from '../../../assets/images/base/powerbi.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 import { courseActions } from '@/app/actions/course.actions'
+import { categoryActions } from '@/app/actions'
+import { selectCourseData, selectCategoryData } from '@/app/selectors/course.selectors'
+import { useNavigate } from 'react-router-dom'
 
 const featuredCourses = [
-  {
-    img: powerbi,
-    title: 'Introduction to Microsoft Power BI'
-  },
-  {
-    img: chatgpt,
-    title: 'ChatGPT Prompt Engineering ( Free Course )'
-  },
-  {
-    img: inteligent,
-    title: 'N8N – Build intelligent AI 2.0 Agent Systems Without Coding'
-  },
-  {
-    img: adobe,
-    title: 'Adobe Premiere Pro CC Masterclass for Video Editing'
-  },
-  {
-    img: ai,
-    title: 'Adobe Illustrator CC for Learning Graphics Design'
-  },
-  {
-    img: canvas,
-    title: 'Canva for Social Media Graphic Design and Video Editing'
-  }
-]
-
-const categories = [
-  { name: '.NET Tutorials', count: 12 },
-  { name: '100% Off Udemy Coupon', count: 20 },
-  { name: '2d Tutorials', count: 17 },
-  { name: '3D Max Tutorials', count: 3 },
-  { name: '3D Tutorials', count: 15 },
-  { name: 'Adobe After Affects', count: 14 }
+  { img: powerbi, title: 'Introduction to Microsoft Power BI' },
+  { img: chatgpt, title: 'ChatGPT Prompt Engineering ( Free Course )' },
+  { img: inteligent, title: 'N8N – Build intelligent AI 2.0 Agent Systems Without Coding' },
+  { img: adobe, title: 'Adobe Premiere Pro CC Masterclass for Video Editing' },
+  { img: ai, title: 'Adobe Illustrator CC for Learning Graphics Design' },
+  { img: canvas, title: 'Canva for Social Media Graphic Design and Video Editing' },
 ]
 
 function PageHome() {
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   useEffect(() => {
     dispatch(courseActions.getCourses() as unknown as AnyAction)
+    dispatch(categoryActions.getCategories() as unknown as AnyAction)
   }, [dispatch])
 
-  const courses = useSelector((state: any) => state.course?.data?.getCourseDto || [])
+  const courses = useSelector(selectCourseData)
+  const categories = useSelector((state) => state.category)
+
+  const handleDetail = (id: any) => {
+    const course = courses.find((c: any) => c.id === id)
+    if (!course) return
+    navigate(`/product-detail/${id}`, { state: course })
+  }
+
   const today = new Date()
   const dateStr = today.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -90,9 +75,7 @@ function PageHome() {
 
       <div className={styles.menuWrapper}>
         <nav className={styles.menu} role='navigation' aria-label='Main navigation'>
-          <a className={styles.active} href='#' aria-current='page'>
-            HOME
-          </a>
+          <a className={styles.active} href='#' aria-current='page'>HOME</a>
           <a href='#'>100% OFF UDEMY COUPON</a>
           <a href='#'>ALL COURSES</a>
           <a href='#'>GAMES</a>
@@ -100,9 +83,7 @@ function PageHome() {
           <a href='#'>PRIVACY POLICY</a>
           <a href='#'>DMCA COPYRIGHTS</a>
           <a href='#'>
-            <span className={styles.searchIcon} role='img' aria-label='Search'>
-              🔍
-            </span>
+            <span className={styles.searchIcon} role='img' aria-label='Search'>🔍</span>
           </a>
         </nav>
       </div>
@@ -121,8 +102,8 @@ function PageHome() {
       <main className={styles.mainContent} role='main'>
         <section className={styles.courses} aria-label='Course listings'>
           {courses.map((course: any, i: number) => (
-            <article className={styles.courseCard} key={i} role='article'>
-              <img src={course.imageUrl} alt={`${course.name} course image`} />
+            <article className={styles.courseCard} key={i} role='article' onClick={() => handleDetail(course.id)}>
+              <img src={`https://dogohiephong.vn/${course.imageUrl}`} alt={`${course.name} course image`} />
               <div className={styles.courseCat}>{course.categoryId}</div>
               <h3 className={styles.courseTitle}>{course.name}</h3>
             </article>
@@ -135,9 +116,7 @@ function PageHome() {
             <form onSubmit={handleSearch} className={styles.searchInputWrap}>
               <input type='text' placeholder='Type here to search...' aria-label='Search for courses' />
               <button type='submit' aria-label='Submit search'>
-                <span className={styles.searchIcon} role='img' aria-label='Search'>
-                  🔍
-                </span>
+                <span className={styles.searchIcon} role='img' aria-label='Search'>🔍</span>
               </button>
             </form>
           </div>
@@ -145,7 +124,7 @@ function PageHome() {
           <div className={styles.categoriesBox}>
             <h2 className={styles.categoriesLabel}>Categories</h2>
             <ul className={styles.categoriesList} role='list'>
-              {categories.map((category, i) => (
+              {categories?.data?.map((category: any, i: number) => (
                 <li
                   key={i}
                   role='button'
@@ -158,7 +137,7 @@ function PageHome() {
                     }
                   }}
                 >
-                  <span className={styles.catCount}>{category.count}</span>
+                  <span className={styles.catCount}>{category.id}</span>
                   {category.name}
                 </li>
               ))}
