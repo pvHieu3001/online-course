@@ -3,11 +3,11 @@ import { categoryConstants } from '../../constants'
 import { categoryServices } from '../services'
 import { fetchedDone, getCategoriesSuccessFully, isFetching } from '../slices/category.reducer'
 
-export const getCategories = (data) => async (dispatch: Dispatch) => {
+export const getCategories = () => async (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   await categoryServices
-    .getCategories(data)
+    .getCategories()
     .then((res) => dispatch(getCategoriesSuccessFully(res.data)))
     .catch((error) =>
       dispatch({
