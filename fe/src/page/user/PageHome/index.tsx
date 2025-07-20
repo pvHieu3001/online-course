@@ -31,7 +31,7 @@ function PageHome() {
   }, [dispatch])
 
   const courses = useSelector(selectCourseData)
-  const categories = useSelector(selectCategoryData)
+  const categories = useSelector((state) => state.category)
 
   const handleDetail = (id: any) => {
     const course = courses.find((c: any) => c.id === id)
@@ -124,7 +124,7 @@ function PageHome() {
           <div className={styles.categoriesBox}>
             <h2 className={styles.categoriesLabel}>Categories</h2>
             <ul className={styles.categoriesList} role='list'>
-              {categories.map((category: any, i: number) => (
+              {categories?.data?.map((category: any, i: number) => (
                 <li
                   key={i}
                   role='button'

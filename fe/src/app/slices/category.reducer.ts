@@ -18,7 +18,7 @@ const categorySlice = createSlice({
       state.isLoading = false
     },
     getCategoriesSuccessFully: (state, { payload }) => {
-      state.data = payload
+      state.data = payload.data
       state.isLoading = false
     },
     getCategoriesSuccessFailure: (state, { payload }) => {
