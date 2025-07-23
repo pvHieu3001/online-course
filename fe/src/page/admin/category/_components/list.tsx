@@ -1,27 +1,27 @@
-import { ICategory } from '@/common/types/category.interface'
 import type { TableProps } from 'antd'
 import { Button, Flex, Input, Popconfirm, Space, Table, Tag, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
-import useDebounce from '@/hooks/useDebounce'
 import '../../styles/category.css'
-import { useGetCategoriesQuery } from '../CategoryEndpoints'
-import { useDeleteCategoryMutation } from '../CategoryEndpoints'
 import ErrorLoad from '../../components/util/ErrorLoad'
+import { categoryActions } from '@/app/actions'
+import { AnyAction } from '@reduxjs/toolkit'
+import { useDispatch, useSelector } from 'react-redux'
+import { ICategory } from '@/common/types.interface'
+
 export default function ListCategory() {
+  const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
-  const debouncedValue = useDebounce(searchValue, 600)
-  const [current, setCurrent] = useState(1)
-  const [pageSize, setPageSize] = useState(5)
+  const categories = useSelector((state) => state.category)
 
-  const { data: categories, isLoading, isError } = useGetCategoriesQuery({})
-  const [deleteCategory, { isLoading: loadingDeleteCategory }] = useDeleteCategoryMutation()
+  useEffect(() => {
+    dispatch(categoryActions.getCategories() as unknown as AnyAction)
+  }, [])
 
-  const handlerDistableCategory = async (value: ICategory) => {
+  const handlerDistableCategory = async (id: string) => {
     try {
-      await deleteCategory(value?.id).unwrap()
-
+      dispatch(categoryActions.deleteCategory(id))
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error: any) {
       message.error(error.data ? error.data.message : 'Vô hiệu hoá danh mục thất bại!')
@@ -50,14 +50,6 @@ export default function ListCategory() {
       align: 'center',
       width: 140,
       render: (text) => <a>{text}</a>
-    },
-    {
-      title: 'Ảnh',
-      dataIndex: 'image',
-      key: 'image',
-      align: 'center',
-      width: 50,
-      render: (image) => <img src={image} alt='' className='w-[120px] object-cover' />
     },
     {
       title: 'Danh mục cha',
@@ -107,13 +99,10 @@ export default function ListCategory() {
     }
   ]
 
-  const newData = categories?.data?.map((category: ICategory, index: number) => ({
-    ...category,
-    key: index + 1
-  }))
-  if (isError) {
+  if (categories.error_message) {
     return <ErrorLoad />
   }
+
   return (
     <>
       <div className='flex items-center justify-between my-2'>
@@ -153,8 +142,11 @@ export default function ListCategory() {
           }}
           columns={columns}
           sticky={{ offsetHeader: 0 }}
-          dataSource={newData}
-          loading={isLoading}
+          dataSource={categories?.dataList?.map((category: ICategory, index: number) => ({
+            ...category,
+            key: index + 1
+          }))}
+          loading={categories.isLoading}
         />
       </div>
     </>

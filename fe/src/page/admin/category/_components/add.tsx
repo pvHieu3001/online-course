@@ -4,12 +4,8 @@ import { CloudUploadOutlined, DeleteOutlined  } from '@ant-design/icons';
 import { Flex, Form, Input, Modal, Button, Switch, Select, Drawer } from 'antd';
 import { useState } from 'react';
 import { popupError, popupSuccess } from '@/page/shared/Toast';
-import { useCreateCategoryMutation, useGetCategoriesQuery } from '../CategoryEndpoints';
-import { ICategory } from '@/common/types/category.interface';
 export default function AddCategory() {
-  const {data :listCategory, isLoading : isLoadingCategories} = useGetCategoriesQuery({});
   
-  const [createCategory, {isLoading : isLoadingCreateCategory}] = useCreateCategoryMutation();
   const navigate = useNavigate()
   const [form] = Form.useForm()
   const dataCategories = listCategory?.data?.map((item : ICategory) => {

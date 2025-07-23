@@ -1,5 +1,3 @@
-// import { ICategory } from './category.interface'
-
 export interface IProduct {
   id: number | string
   thumbnail: string
@@ -20,8 +18,10 @@ export interface IProduct {
   public_id: string
   slug: string
 }
-export interface IGallery {
-  id?: number | string
-  productId: number
-  image: string
+
+export interface ICategory {
+  id: number
+  parentId: number
+  name: string
+  slug: string
 }
