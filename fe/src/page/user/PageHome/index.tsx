@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions'
-import { selectCourseData, selectCategoryData } from '@/app/selectors/course.selectors'
+import { selectCourseData } from '@/app/selectors/course.selectors'
 import { useNavigate } from 'react-router-dom'
 
 const featuredCourses = [

@@ -25,6 +25,28 @@ export const getCourses = () => async (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
+
+export const postCourses = (data) => async (dispatch: Dispatch) => {
+  dispatch(isFetching());
+
+  try {
+    const res = await courseServices.postCourses(data);
+    dispatch(getCoursesSuccessFully(res.data));
+  } catch (error) {
+    dispatch({
+      type: courseConstants.GET_COURSES_FAILURE,
+      payload: {
+        code: 'ERROR',
+        message: error.toString()
+      }
+    });
+  } finally {
+    dispatch(fetchedDone());
+  }
+};
+
+
 export const courseActions = {
-  getCourses
+  getCourses,
+  postCourses
 }
