@@ -3,8 +3,10 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   isLoading: false,
   code: '',
-  message: null,
-  data: null
+  message: '',
+  error_message: '',
+  data: null,
+  dataList: null
 }
 
 const categorySlice = createSlice({
@@ -18,15 +20,62 @@ const categorySlice = createSlice({
       state.isLoading = false
     },
     getCategoriesSuccessFully: (state, { payload }) => {
-      state.data = payload.data
+      state.dataList = payload.data
       state.isLoading = false
     },
     getCategoriesSuccessFailure: (state, { payload }) => {
-      state.message = payload.message
+      state.message = payload
+      state.isLoading = false
+    },
+    getByIdSuccessFully: (state, { payload }) => {
+      state.data = payload.data
+      state.isLoading = false
+    },
+    getByIdSuccessFailure: (state, { payload }) => {
+      state.message = payload
+      state.isLoading = false
+    },
+    createSuccessfully: (state, { payload }) => {
+      state.data = payload.data
+      state.message = 'Tạo Loai Khóa Học Thành Công'
+      state.isLoading = false
+    },
+    createFailure: (state) => {
+      state.error_message = 'Tạo Loai Khóa Học Thất Bại'
+      state.isLoading = false
+    },
+    updateSuccessfully: (state, { payload }) => {
+      state.data = payload.data
+      state.message = 'Cập Nhật Loai Khóa Học Thành Công'
+      state.isLoading = false
+    },
+    updateFailure: (state) => {
+      state.error_message = 'Cập Nhật Loai Khóa Học Thất Bại'
+      state.isLoading = false
+    },
+    deleteSuccessfully: (state) => {
+      state.message = 'Xóa Loai Khóa Học Thành Công'
+      state.isLoading = false
+    },
+    deleteFailure: (state) => {
+      state.error_message = 'Xóa Loai Khóa Học Thất Bại'
       state.isLoading = false
     }
   }
 })
 
-export const { isFetching, fetchedDone, getCategoriesSuccessFully } = categorySlice.actions
+export const {
+  isFetching,
+  fetchedDone,
+  getCategoriesSuccessFully,
+  getCategoriesSuccessFailure,
+  getByIdSuccessFailure,
+  getByIdSuccessFully,
+  createFailure,
+  createSuccessfully,
+  updateFailure,
+  updateSuccessfully,
+  deleteFailure,
+  deleteSuccessfully
+} = categorySlice.actions
 export default categorySlice.reducer

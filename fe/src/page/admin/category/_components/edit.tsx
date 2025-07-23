@@ -3,24 +3,26 @@ import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Flex, Form, Input, Button, Switch, Select, Drawer } from 'antd'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
-import { useGetCategoriesQuery, useUpdateCategoryMutation } from '../CategoryEndpoints'
-import { ICategory } from '@/common/types/category.interface'
-import { useGetCategoryQuery } from '../CategoryEndpoints'
 import ErrorLoad from '../../components/util/ErrorLoad'
+import { useDispatch, useSelector } from 'react-redux'
+import { categoryActions } from '@/app/actions'
+import { AnyAction } from '@reduxjs/toolkit'
+import { ICategory } from '@/common/types.interface'
+import { convertToSlug } from '@/utils/convertToSlug'
 export default function EditCategory() {
   const params = useParams()
-  const {
-    data: dataItem,
-    isLoading: isLoadingGetCategory,
-    isError: isErrorGetCategory
-  } = useGetCategoryQuery(params.id)
-  const { data: listCategory, isLoading: isLoadingCategories } = useGetCategoriesQuery({})
-  const [updateCategory, { isLoading: loadingUpdateCategory }] = useUpdateCategoryMutation()
+  const dispatch = useDispatch()
+  const categoryStore = useSelector((state) => state.category)
+  useEffect(() => {
+    dispatch(categoryActions.getCategoryById(params.id ?? '0') as unknown as AnyAction)
+    dispatch(categoryActions.getCategories() as unknown as AnyAction)
+  }, [])
 
   const navigate = useNavigate()
   const [form] = Form.useForm()
-  const dataCategories = listCategory
-    ? listCategory.data.map((item: ICategory) => {
+
+  const dataCategories = categoryStore.dataList
+    ? categoryStore.dataList.map((item: ICategory) => {
         return {
           label: item.name,
           value: item.id
@@ -32,16 +34,16 @@ export default function EditCategory() {
   const [DisplayPic, setDisplayPic] = useState<string>()
 
   useEffect(() => {
-    if (dataItem) {
-      setDisplayPic(dataItem.data.image)
+    if (categoryStore.data) {
+      setDisplayPic(categoryStore.data.image)
     }
-  }, [dataItem])
+  }, [categoryStore])
 
   const handleCancel = () => {
     navigate('..')
   }
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: any) => {
     const name = form.getFieldValue('name')
     const active = form.getFieldValue('active') ? 1 : 0
     const parent_id = form.getFieldValue('parent_id')
@@ -57,12 +59,13 @@ export default function EditCategory() {
 
     try {
       const payload = {
+        ...values,
         id: params.id,
-        payload: formData
+        slug: convertToSlug(name)
       }
-      await updateCategory(payload).unwrap()
+      dispatch(categoryActions.updateCategory(params.id, payload) as unknown as AnyAction)
       popupSuccess('Update category success')
-      navigate('..')
+      navigate('/admin/categories?refresh=true')
     } catch (error) {
       popupError('Update category error')
     }
@@ -83,19 +86,19 @@ export default function EditCategory() {
       e.target.value = ''
     }
   }
-  if (isErrorGetCategory) {
+  if (categoryStore.error_message) {
     return <ErrorLoad />
   }
   return (
     <>
       <Drawer
         width={'70%'}
-        loading={isLoadingGetCategory || isLoadingCategories}
+        loading={categoryStore.isLoading}
         title='Tạo danh mục mới'
         onClose={() => handleCancel()}
         open={true}
       >
-        {dataItem && (
+        {categoryStore.data && (
           <Form
             form={form}
             name='category'
@@ -103,17 +106,17 @@ export default function EditCategory() {
             className='w-full p-6'
             onFinish={handleSubmit}
             initialValues={{
-              parent_id: dataItem?.data?.parent_id ? dataItem?.data?.parent_id : '',
-              is_active: dataItem?.data?.is_active == 1 ? true : false,
-              name: dataItem?.data?.name
+              parent_id: categoryStore?.data?.parent_id ? categoryStore?.data?.parent_id : '',
+              is_active: categoryStore?.data?.is_active == 1 ? true : false,
+              name: categoryStore?.data?.name
             }}
           >
             <Form.Item>
               <Flex justify='space-between' className='pb-4' align='center'>
-                <h2 className=' font-bold text-[24px]'>Cập nhật danh mục "{dataItem?.data?.name}"</h2>
+                <h2 className=' font-bold text-[24px]'>Cập nhật danh mục "{categoryStore?.data?.name}"</h2>
                 <Button
-                  loading={loadingUpdateCategory}
-                  disabled={loadingUpdateCategory}
+                  loading={categoryStore.isLoading}
+                  disabled={categoryStore.isLoading}
                   type='primary'
                   htmlType='submit'
                   className=' w-[100px] p-5'
@@ -234,7 +237,7 @@ export default function EditCategory() {
                       </Form.Item>
                       <Form.Item name='parent_id' label='parent_id'>
                         <Select
-                          loading={isLoadingCategories}
+                          loading={categoryStore.isLoading}
                           style={{ width: '200px', height: 40 }}
                           onChange={(v) => {
                             console.log(v)

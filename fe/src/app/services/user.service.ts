@@ -23,8 +23,29 @@ function logout() {
   window.location.href = url
 }
 
+function getUserById(id: string) {
+  return http.get(`/api/v1/user/${id}`)
+}
+function updateUser(id, data) {
+  return http.put(`/api/v1/user/${id}`, data)
+}
+function createUser(data) {
+  return http.post(`/api/v1/user`, data)
+}
+function deleteUser(id: string) {
+  return http.delete(`/api/v1/user/${id}`)
+}
+function getPageUser(page: string, size: string, sort: string) {
+  return http.get(`/api/v1/user/pageable/?page=${page}&size=${size}&sort=${sort}`)
+}
+
 export const userService = {
   getUsers,
   login,
-  logout
+  logout,
+  getUserById,
+  updateUser,
+  createUser,
+  deleteUser,
+  getPageUser
 }

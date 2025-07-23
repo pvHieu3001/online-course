@@ -1,10 +1,18 @@
 import { Dispatch } from '@reduxjs/toolkit'
-import { courseConstants } from '../../constants'
 import { courseServices } from '../services/course.service'
 import {
   isFetching,
   fetchedDone,
   getCoursesSuccessFully,
+  getCoursesFailure,
+  deleteSuccessfully,
+  deleteFailure,
+  updateSuccessfully,
+  updateFailure,
+  createFailure,
+  createSuccessfully,
+  getByIdFailure,
+  getByIdSuccessFully
 } from '../slices/course.reducer'
 
 export const getCourses = () => async (dispatch: Dispatch) => {
@@ -13,40 +21,54 @@ export const getCourses = () => async (dispatch: Dispatch) => {
   await courseServices
     .getCourses()
     .then((res) => dispatch(getCoursesSuccessFully(res.data)))
-    .catch((error) =>
-      dispatch({
-        type: courseConstants.GET_COURSES_FAILURE,
-        payload: {
-          code: 'ERROR',
-          message: error.toString()
-        }
-      })
-    )
+    .catch((error) => dispatch(getCoursesFailure(error)))
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const getCourseById = (id: string) => async (dispatch: Dispatch) => {
+  dispatch(isFetching())
 
-export const postCourses = (data) => async (dispatch: Dispatch) => {
-  dispatch(isFetching());
+  await courseServices
+    .getCourseById(id)
+    .then((res) => dispatch(getByIdSuccessFully(res.data)))
+    .catch((error) => dispatch(getByIdFailure(error)))
+    .finally(() => dispatch(fetchedDone()))
+}
 
-  try {
-    const res = await courseServices.postCourses(data);
-    dispatch(getCoursesSuccessFully(res.data));
-  } catch (error) {
-    dispatch({
-      type: courseConstants.GET_COURSES_FAILURE,
-      payload: {
-        code: 'ERROR',
-        message: error.toString()
-      }
-    });
-  } finally {
-    dispatch(fetchedDone());
-  }
-};
+export const createCourse = (data) => async (dispatch: Dispatch) => {
+  dispatch(isFetching())
 
+  await courseServices
+    .createCourse(data)
+    .then((res) => dispatch(createSuccessfully(res.data)))
+    .catch(() => dispatch(createFailure()))
+    .finally(() => dispatch(fetchedDone()))
+}
+
+export const updateCourse = (id, data) => async (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  await courseServices
+    .updateCourse(id, data)
+    .then((res) => dispatch(updateSuccessfully(res.data)))
+    .catch(() => dispatch(updateFailure()))
+    .finally(() => dispatch(fetchedDone()))
+}
+
+export const deleteCourse = (id: string) => async (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  await courseServices
+    .deleteCourse(id)
+    .then(() => dispatch(deleteSuccessfully()))
+    .catch(() => dispatch(deleteFailure()))
+    .finally(() => dispatch(fetchedDone()))
+}
 
 export const courseActions = {
   getCourses,
-  postCourses
+  getCourseById,
+  createCourse,
+  updateCourse,
+  deleteCourse
 }

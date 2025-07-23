@@ -1,4 +1,4 @@
-# Hướng Dẫn Tối Ưu Performance - Đồ Gỗ Hiệp Hồng
+# Hướng Dẫn Tối Ưu Performance - Chia Sẻ Khóa Học
 
 ## Đã Thực Hiện
 

@@ -12,6 +12,7 @@ public class PutCategoryDto {
     private Integer parentId;
     @NotBlank(message = "Name is required")
     private String name;
-    @NotBlank(message = "Slug is required")
     private String slug;
+    private boolean status;
+    private String image;
 } 

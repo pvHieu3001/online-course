@@ -16,10 +16,9 @@ import PrivilegeUser from '@/page/admin/user/_components/privilege'
 import ProductManagement from '@/page/admin/products'
 import AddProduct from '@/page/admin/products/_components/add'
 import EditProduct from '@/page/admin/products/_components/edit'
-import DetailManagement from '@/page/admin/details'
-import AddDetail from '@/page/admin/details/_component/add'
-import EditDetail from '@/page/admin/details/_component/edit'
+import GuardPage from '@/middleware/GuardPage'
 import ProductDetailPage from '../page/user/ProductDetailPage/index'
+import ListCategory from '@/page/admin/category/_components/list'
 
 export default function Router() {
   return (
@@ -46,11 +45,6 @@ export default function Router() {
             <Route path='products' element={<ProductManagement />}>
               <Route path='add' element={<AddProduct />} />
               <Route path=':flug' element={<EditProduct />} />
-            </Route>
-
-            <Route path='details' element={<DetailManagement />}>
-              <Route path='add' element={<AddDetail />} />
-              <Route path=':id' element={<EditDetail />} />
             </Route>
 
             <Route path='categories' element={<CategoryManagement />}>

@@ -3,8 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   isLoading: false,
   code: '',
-  message: null,
-  data: [] as any
+  message: '',
+  error_message: '',
+  data: null
 }
 
 const userSlice = createSlice({
@@ -26,7 +27,15 @@ const userSlice = createSlice({
       state.isLoading = false
     },
     getUsersFailure: (state, { payload }) => {
-      state.message = payload.message
+      state.error_message = payload.message
+      state.isLoading = false
+    },
+    getByIdSuccess: (state, { payload }) => {
+      state.data = payload
+      state.isLoading = false
+    },
+    getByIdFailure: (state, { payload }) => {
+      state.error_message = payload.message
       state.isLoading = false
     },
     loginSuccess: (state, { payload }) => {
@@ -34,7 +43,33 @@ const userSlice = createSlice({
       state.isLoading = false
     },
     loginFailure: (state, { payload }) => {
-      state.message = payload.message
+      state.error_message = payload.message
+      state.isLoading = false
+    },
+    createSuccessfully: (state, { payload }) => {
+      state.data = payload.data
+      state.message = 'Tạo Người Dùng Thành Công'
+      state.isLoading = false
+    },
+    createFailure: (state) => {
+      state.error_message = 'Tạo Người Dùng Thất Bại'
+      state.isLoading = false
+    },
+    updateSuccessfully: (state, { payload }) => {
+      state.data = payload.data
+      state.message = 'Cập Nhật Người Dùng Thành Công'
+      state.isLoading = false
+    },
+    updateFailure: (state) => {
+      state.error_message = 'Cập Nhật Người Dùng Thất Bại'
+      state.isLoading = false
+    },
+    deleteSuccessfully: (state) => {
+      state.message = 'Xóa Người Dùng Thành Công'
+      state.isLoading = false
+    },
+    deleteFailure: (state) => {
+      state.error_message = 'Xóa Người Dùng Thất Bại'
       state.isLoading = false
     }
   }
@@ -45,9 +80,15 @@ export const {
   fetchedDone,
   getUsersSuccess,
   getUsersFailure,
-  postCourseSuccess,
+  getByIdFailure,
+  getByIdSuccess,
   loginSuccess,
-  loginFailure
+  loginFailure,
+  createFailure,
+  createSuccessfully,
+  updateFailure,
+  updateSuccessfully,
+  deleteFailure,
+  deleteSuccessfully
 } = userSlice.actions
-
 export default userSlice.reducer
