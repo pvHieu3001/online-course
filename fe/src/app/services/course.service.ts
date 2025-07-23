@@ -26,5 +26,4 @@ export const courseServices = {
   createCourse,
   deleteCourse,
   getPageCourse,
-  postCourses
 }
