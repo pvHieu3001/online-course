@@ -7,10 +7,18 @@ function getCourseById(id: string) {
   return http.get(`/api/v1/course/${id}`)
 }
 function updateCourse(id, data) {
-  return http.put(`/api/v1/course/${id}`, data)
+  return http.put(`/api/v1/course/${id}`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }
 function createCourse(data) {
-  return http.post(`/api/v1/course`,data)
+  return http.post(`/api/v1/course`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }
 function deleteCourse(id: string) {
   return http.delete(`/api/v1/course/${id}`)

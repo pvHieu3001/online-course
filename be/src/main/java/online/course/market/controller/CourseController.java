@@ -93,13 +93,19 @@ public class CourseController {
             Files.createDirectories(uploadDir);
         }
 
-        String imageFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
-        Path imagePath = uploadDir.resolve(imageFilename);
-        Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+        String imageFilename="";
+        if(dto.getImageFile() != null){
+            imageFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
+            Path imagePath = uploadDir.resolve(imageFilename);
+            Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+        }
 
-        String sourceFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
-        Path sourcePath = uploadDir.resolve(imageFilename);
-        Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
+        String sourceFilename="";
+        if(dto.getSourceFile() != null){
+            sourceFilename = UUID.randomUUID()+"_"+dto.getSourceFile().getOriginalFilename();
+            Path sourcePath = uploadDir.resolve(sourceFilename);
+            Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
+        }
 
         dto.setSlug(SlugUtils.toSlug(dto.getName()));
         dto.setImageUrl("/upload/" + imageFilename);
