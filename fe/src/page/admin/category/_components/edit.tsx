@@ -9,6 +9,8 @@ import { categoryActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { ICategory } from '@/common/types.interface'
 import { convertToSlug } from '@/utils/convertToSlug'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { Modal, Spin } from 'antd'
 export default function EditCategory() {
   const params = useParams()
   const dispatch = useDispatch()
@@ -20,6 +22,7 @@ export default function EditCategory() {
 
   const navigate = useNavigate()
   const [form] = Form.useForm()
+  const [isDirty, setIsDirty] = useState(false)
 
   const dataCategories = categoryStore.dataList
     ? categoryStore.dataList.map((item: ICategory) => {
@@ -36,11 +39,37 @@ export default function EditCategory() {
   useEffect(() => {
     if (categoryStore.data) {
       setDisplayPic(categoryStore.data.image)
+      form.setFieldsValue({
+        parent_id: categoryStore?.data?.parent_id ? categoryStore?.data?.parent_id : '',
+        is_active: categoryStore?.data?.is_active == 1 ? true : false,
+        name: categoryStore?.data?.name
+      })
     }
   }, [categoryStore])
 
+  // Xác nhận khi rời nếu có thay đổi
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isDirty])
+
   const handleCancel = () => {
-    navigate('..')
+    if (isDirty) {
+      Modal.confirm({
+        title: 'Bạn có chắc muốn rời khỏi trang?'
+        , icon: <ExclamationCircleOutlined />
+        , content: 'Các thay đổi chưa được lưu sẽ bị mất.'
+        , onOk: () => navigate('..')
+      })
+    } else {
+      navigate('..')
+    }
   }
 
   const handleSubmit = async (values: any) => {
@@ -69,7 +98,11 @@ export default function EditCategory() {
     } catch (error) {
       popupError('Update category error')
     }
+    setIsDirty(false)
   }
+
+  // Đánh dấu form đã thay đổi
+  const onValuesChange = () => setIsDirty(true)
 
   const selectedImg = (e) => {
     const types = ['jpeg', 'png', 'jpg', 'gif']
@@ -90,170 +123,119 @@ export default function EditCategory() {
     return <ErrorLoad />
   }
   return (
-    <>
-      <Drawer
-        width={'70%'}
-        loading={categoryStore.isLoading}
-        title='Tạo danh mục mới'
-        onClose={() => handleCancel()}
-        open={true}
-      >
+    <Drawer
+      width={'70%'}
+      title={<span className='font-bold text-xl'>Chỉnh sửa danh mục</span>}
+      onClose={handleCancel}
+      open={true}
+      footer={
+        <div style={{ textAlign: 'right' }}>
+          <Button onClick={handleCancel} style={{ marginRight: 8 }}>Hủy</Button>
+          <Button type='primary' htmlType='submit' form='category-form' loading={categoryStore.isLoading}>
+            Cập nhật
+          </Button>
+        </div>
+      }
+    >
+      <Spin spinning={categoryStore.isLoading} tip='Đang tải...'>
         {categoryStore.data && (
           <Form
+            id='category-form'
             form={form}
             name='category'
             layout='vertical'
             className='w-full p-6'
             onFinish={handleSubmit}
-            initialValues={{
-              parent_id: categoryStore?.data?.parent_id ? categoryStore?.data?.parent_id : '',
-              is_active: categoryStore?.data?.is_active == 1 ? true : false,
-              name: categoryStore?.data?.name
-            }}
+            onValuesChange={onValuesChange}
+            initialValues={{}}
           >
-            <Form.Item>
-              <Flex justify='space-between' className='pb-4' align='center'>
-                <h2 className=' font-bold text-[24px]'>Cập nhật danh mục "{categoryStore?.data?.name}"</h2>
-                <Button
-                  loading={categoryStore.isLoading}
-                  disabled={categoryStore.isLoading}
-                  type='primary'
-                  htmlType='submit'
-                  className=' w-[100px] p-5'
+            <Flex gap={32} wrap='wrap'>
+              <Flex className='flex-[2] min-w-[300px]' vertical gap={16}>
+                <Form.Item
+                  label={<span className='font-semibold'>Ảnh đại diện</span>}
+                  className='border-[1px] p-[24px] rounded-md border-[#F1F1F4] bg-[#fafbfc]'
+                  style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
                 >
-                  cập nhật
-                </Button>
-              </Flex>
-            </Form.Item>
-            <Flex gap={100}>
-              <Flex className='flex-[2] ' vertical gap={10}>
-                <Flex vertical>
-                  <Form.Item
-                    name='upload'
-                    className='border-[1px] p-[50px] rounded-md border-[#F1F1F4]'
-                    style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
-                  >
-                    <div>
-                      <h2 className='font-bold mb-2 text-[16px]'>Ảnh nhỏ</h2>
-                      <div
-                        style={{
-                          flex: 5,
-                          height: '200px',
-                          overflow: 'hidden',
-                          boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem'
-                        }}
-                        className='border-none rounded-[12px]  '
-                      >
-                        {DisplayPic ? (
-                          <div style={{ height: '100%', maxWidth: '100%' }} className='relative group'>
-                            <img
-                              src={DisplayPic}
-                              alt=''
-                              className='object-cover h-[100%] object-center'
-                              style={{ width: '100%' }}
-                            />
-                            <div
-                              className=' absolute inset-0 z-1 opacity-0 group-hover:opacity-100 duration-1000'
-                              style={{ backgroundColor: 'rgb(0, 0, 0, 0.5)' }}
-                            ></div>
-                            <button
-                              style={{ zIndex: 999, fontSize: '20px', color: 'white' }}
-                              onClick={() => setDisplayPic('')}
-                            >
-                              <DeleteOutlined className=' duration-1000 opacity-0 group-hover:opacity-100 absolute top-10 right-10' />
-                            </button>
-                          </div>
-                        ) : (
-                          <Flex
-                            className='border-dashed border-2 relative hover:bg-gray-100 hover:border-solid hover:border'
-                            vertical
-                            gap={10}
-                            justify='center'
-                            align='center'
-                            style={{ maxWidth: '100%', height: '100%', borderRadius: '12px' }}
-                          >
-                            <Flex vertical gap={10} style={{ width: '100%' }}>
-                              <Flex vertical align='center' justify='center'>
-                                <CloudUploadOutlined style={{ fontSize: '50px', color: 'gray' }} className='' />
-                              </Flex>
-                            </Flex>
-                            <Flex style={{ width: '100%', color: 'gray' }} vertical justify='center' align='center'>
-                              <span style={{ fontSize: '11px' }}>Kích thước tối đa: 50MB</span>
-                              <span style={{ fontSize: '11px' }}>JPG, PNG, GIF, SVG</span>
-                            </Flex>
-                            <input
-                              type='file'
-                              accept='image/*'
-                              name='image'
-                              id='image'
-                              multiple
-                              className='opacity-0 absolute inset-0'
-                              onChange={selectedImg}
-                            />
-                          </Flex>
-                        )}
+                  <div className='flex flex-col items-center'>
+                    {DisplayPic ? (
+                      <div className='relative group w-[180px] h-[180px] mb-2'>
+                        <img
+                          src={DisplayPic}
+                          alt='Ảnh danh mục'
+                          className='object-cover w-full h-full rounded-lg border shadow'
+                        />
+                        <Button
+                          type='text'
+                          danger
+                          icon={<DeleteOutlined />}
+                          className='absolute top-2 right-2 opacity-80 hover:opacity-100 bg-white/80'
+                          onClick={() => { setDisplayPic(''); setImageUrl(undefined); setIsDirty(true) }}
+                        >Xóa</Button>
                       </div>
-                    </div>
-                  </Form.Item>
-                </Flex>
-                <div
-                  className='border border-1 rounded-md overflow-hidden flex-1 '
-                  style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem' }}
-                >
-                  <div className='p-2'>
-                    <h2>Setting</h2>
+                    ) : (
+                      <label htmlFor='image-upload' className='flex flex-col items-center justify-center w-[180px] h-[180px] border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-100'>
+                        <CloudUploadOutlined style={{ fontSize: 40, color: '#aaa' }} />
+                        <span className='text-xs text-gray-500 mt-2'>Chọn ảnh (JPG, PNG, GIF, SVG, tối đa 1MB)</span>
+                        <input
+                          id='image-upload'
+                          type='file'
+                          accept='image/*'
+                          name='image'
+                          className='hidden'
+                          onChange={selectedImg}
+                        />
+                      </label>
+                    )}
                   </div>
+                </Form.Item>
+                <div className='border rounded-md overflow-hidden flex-1 bg-[#fafbfc]' style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem' }}>
+                  <div className='p-2'><h2 className='font-semibold'>Cài đặt</h2></div>
                   <hr />
                   <div className='flex justify-between items-center p-2'>
-                    <h2>active</h2>
+                    <span>Kích hoạt hiển thị</span>
                     <Form.Item className='m-0' label='' name='is_active' valuePropName='checked'>
                       <Switch />
                     </Form.Item>
                   </div>
+                  <div className='text-xs text-gray-400 px-2 pb-2'>Bật để danh mục này hiển thị trên website.</div>
                 </div>
               </Flex>
-              <Flex vertical className='flex-[6]'>
-                <div
-                  className='  border-[1px] p-[50px] rounded-md'
-                  style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
-                >
+              <Flex vertical className='flex-[6] min-w-[300px]'>
+                <div className='border-[1px] p-[24px] rounded-md bg-[#fafbfc]' style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}>
                   <h2 className='mb-5 font-bold text-[16px]'>Tổng quan</h2>
                   <Flex vertical gap={20}>
-                    <Flex gap={30}>
+                    <Flex gap={30} wrap='wrap'>
                       <Form.Item
                         name='name'
-                        label='Name'
-                        className='w-full'
+                        label='Tên danh mục'
+                        className='w-full max-w-[350px]'
                         rules={[
                           { required: true, message: 'Vui lòng nhập tên danh mục!' },
                           { max: 120, message: 'Tên không vượt quá 120 ký tự' },
-                          {
-                            whitespace: true,
-                            message: 'Tên danh mục không được để trống!'
-                          }
+                          { whitespace: true, message: 'Tên danh mục không được để trống!' }
                         ]}
                       >
-                        <Input size='large' placeholder='Nhập tên danh mục' />
+                        <Input size='large' placeholder='Nhập tên danh mục...' />
                       </Form.Item>
-                      <Form.Item name='parent_id' label='parent_id'>
+                      <Form.Item name='parent_id' label='Danh mục cha' className='w-full max-w-[250px]'>
                         <Select
+                          showSearch
                           loading={categoryStore.isLoading}
-                          style={{ width: '200px', height: 40 }}
-                          onChange={(v) => {
-                            console.log(v)
-                          }}
-                          options={[{ value: '', label: 'none' }, ...dataCategories]}
+                          style={{ width: '100%', height: 40 }}
+                          placeholder='Chọn danh mục cha (nếu có)'
+                          optionFilterProp='label'
+                          filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+                          options={[{ value: '', label: 'Không có' }, ...dataCategories]}
                         />
                       </Form.Item>
                     </Flex>
-                    <div></div>
                   </Flex>
                 </div>
               </Flex>
             </Flex>
           </Form>
         )}
-      </Drawer>
-    </>
+      </Spin>
+    </Drawer>
   )
 }

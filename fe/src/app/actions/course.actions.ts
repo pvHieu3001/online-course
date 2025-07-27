@@ -15,50 +15,50 @@ import {
   getByIdSuccessFully
 } from '../slices/course.reducer'
 
-export const getCourses = () => async (dispatch: Dispatch) => {
+export const getCourses = () => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await courseServices
+  courseServices
     .getCourses()
     .then((res) => dispatch(getCoursesSuccessFully(res.data)))
     .catch((error) => dispatch(getCoursesFailure(error)))
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const getCourseById = (id: string) => async (dispatch: Dispatch) => {
+export const getCourseById = (id: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await courseServices
+  courseServices
     .getCourseById(id)
     .then((res) => dispatch(getByIdSuccessFully(res.data)))
     .catch((error) => dispatch(getByIdFailure(error)))
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const createCourse = (data) => async (dispatch: Dispatch) => {
+export const createCourse = (data) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await courseServices
+  courseServices
     .createCourse(data)
     .then((res) => dispatch(createSuccessfully(res.data)))
     .catch(() => dispatch(createFailure()))
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const updateCourse = (id, data) => async (dispatch: Dispatch) => {
+export const updateCourse = (id, data) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await courseServices
+  courseServices
     .updateCourse(id, data)
     .then((res) => dispatch(updateSuccessfully(res.data)))
     .catch(() => dispatch(updateFailure()))
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const deleteCourse = (id: string) => async (dispatch: Dispatch) => {
+export const deleteCourse = (id: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await courseServices
+  courseServices
     .deleteCourse(id)
     .then(() => dispatch(deleteSuccessfully()))
     .catch(() => dispatch(deleteFailure()))
