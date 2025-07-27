@@ -24,13 +24,11 @@ export default function EditCategory() {
   const [form] = Form.useForm()
   const [isDirty, setIsDirty] = useState(false)
 
-  const dataCategories = categoryStore.dataList
-    ? categoryStore.dataList.map((item: ICategory) => {
-        return {
-          label: item.name,
-          value: item.id
-        }
-      })
+  const dataCategories = Array.isArray(categoryStore.dataList)
+    ? (categoryStore.dataList as ICategory[]).map((item) => ({
+        label: item.name,
+        value: item.id
+      }))
     : []
 
   const [imageUrl, setImageUrl] = useState<File>()
@@ -38,14 +36,15 @@ export default function EditCategory() {
 
   useEffect(() => {
     if (categoryStore.data) {
-      setDisplayPic(categoryStore.data.image)
+      const data = categoryStore.data as ICategory & { image?: string; status?: number };
+      if (data.image) setDisplayPic(data.image);
       form.setFieldsValue({
-        parent_id: categoryStore?.data?.parent_id ? categoryStore?.data?.parent_id : '',
-        is_active: categoryStore?.data?.is_active == 1 ? true : false,
-        name: categoryStore?.data?.name
-      })
+        parent_id: data.parentId ? data.parentId : '',
+        status: data.status === 1 ? true : false,
+        name: data.name
+      });
     }
-  }, [categoryStore])
+  }, [categoryStore]);
 
   // Xác nhận khi rời nếu có thay đổi
   useEffect(() => {
@@ -79,7 +78,7 @@ export default function EditCategory() {
     const formData = new FormData()
 
     formData.append('name', name)
-    formData.append('is_active', active as any)
+    formData.append('status', active as any)
     formData.append('parent_id', parent_id)
 
     if (imageUrl) {
@@ -104,14 +103,12 @@ export default function EditCategory() {
   // Đánh dấu form đã thay đổi
   const onValuesChange = () => setIsDirty(true)
 
-  const selectedImg = (e) => {
+  const selectedImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     const types = ['jpeg', 'png', 'jpg', 'gif']
-
+    if (!e.target.files || e.target.files.length === 0) return;
     const fileSelected = e.target.files[0]
-
     const size = fileSelected.size
     const type = types.includes(fileSelected.type.replace('image/', ''))
-
     if (size <= 1048576 && type) {
       setImageUrl(fileSelected)
       setDisplayPic(URL.createObjectURL(fileSelected))
@@ -182,6 +179,7 @@ export default function EditCategory() {
                           accept='image/*'
                           name='image'
                           className='hidden'
+                          style={{ display: 'none' }}
                           onChange={selectedImg}
                         />
                       </label>
@@ -193,7 +191,7 @@ export default function EditCategory() {
                   <hr />
                   <div className='flex justify-between items-center p-2'>
                     <span>Kích hoạt hiển thị</span>
-                    <Form.Item className='m-0' label='' name='is_active' valuePropName='checked'>
+                    <Form.Item className='m-0' label='' name='status' valuePropName='checked'>
                       <Switch />
                     </Form.Item>
                   </div>

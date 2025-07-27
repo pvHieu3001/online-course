@@ -3,45 +3,45 @@ import {   Popconfirm,  Table, Tag, Typography } from 'antd';
 import type {    TableProps } from 'antd';
 import { Button, Flex } from 'antd';
 import { Link } from 'react-router-dom';
-import { Iuser } from '../../../../../common/types/user.interface';
-import { useGetUsersQuery } from '../UsersEndpoints';
 import HandleLoading from '../../components/util/HandleLoading';
-import { useDeleteUserMutation } from '../UsersEndpoints';
-import {  useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import useQuerySearch from '../../hooks/useQuerySearch';
-import { getColumnSearchProps } from '../../components/util/SortHandle';
 import { popupSuccess } from '@/page/shared/Toast'
+import { userActions } from '@/app/actions';
+
+type User = {
+  id: number | string;
+  username: string;
+  email: string;
+  image?: string;
+  role_id: string;
+  is_active: number;
+};
+
 export default function ListUser(){
-
-
-  const {searchText,setSearchText,setSearchedColumn, searchedColumn, searchInput, handleSearch, handleReset } = useQuerySearch();
-  
-
   const [id, setId] = useState<number | string>();
-  const [deleteUser, {isLoading : isDeleting}, ] = useDeleteUserMutation();
- 
-  const confirm = async (id : number | string) => {
-    setId(id)
-    await deleteUser(id);
-     popupSuccess('Delete user success');
+  const dispatch = useDispatch();
+  const userStore = useSelector((state: any) => state.user);
+  const { dataList, isLoading, error_message } = userStore;
+  const isError = !!error_message;
+  const isDeleting = isLoading; // hoặc tạo biến riêng nếu cần
+
+  useEffect(() => {
+    dispatch(userActions.getUsers() as any);
+  }, [dispatch]);
+
+  const confirm = async (id: number | string) => {
+    setId(id);
+    await dispatch(userActions.deleteUser(String(id)) as any);
+    popupSuccess('Delete user success');
   };
 
-
-    const {
-      data ,
-      isLoading,
-      isError
-    } = useGetUsersQuery({});
-
-    const dataItem = data?.data?.map((item : Iuser, key : number) => {
-      return {
-        ...item,
-        key : key
-      }
-    })
+  const dataItem = Array.isArray(dataList) && dataList.every(i => typeof i === 'object' && i !== null)
+    ? (dataList as User[]).map((item, key) => ({ ...item, key }))
+    : [];
     
-    const columns: TableProps<Iuser>['columns'] = [
+    const columns: TableProps<User>['columns'] = [
         {
           title: 'Tên người dùng',
           dataIndex: 'username',
@@ -50,32 +50,12 @@ export default function ListUser(){
           render: (text) => <a>{text}</a>,
           onFilter: (value : any, record : any) => record.username.indexOf(value as string) === 0,
           sorter: (a : any, b : any) => a.username.length - b.username.length,
-          sortDirections: ['descend'],
-          ...getColumnSearchProps(
-            'username',
-             handleSearch,
-             handleReset,
-             searchText,
-             setSearchText,
-             searchedColumn,
-             setSearchedColumn,
-             searchInput
-            ),
+          sortDirections: ['descend']
         },
         {
           title: 'Ảnh',
           dataIndex: 'email',
-          key: 'email',
-          ...getColumnSearchProps(
-            'email',
-             handleSearch,
-             handleReset,
-             searchText,
-             setSearchText,
-             searchedColumn,
-             setSearchedColumn,
-             searchInput
-            ),
+          key: 'email'
         },
         {
           title: 'Image',
@@ -123,7 +103,7 @@ export default function ListUser(){
         {
           title: 'Hành động ',
           key: 'action',
-          render: (data: Iuser) => (
+          render: (data: User) => (
             <Flex wrap="wrap" gap="small">
                <Link to={"privilege/" + String(data?.id)}>   <Button danger  >
                   Privilege
@@ -148,21 +128,18 @@ export default function ListUser(){
 
 
     return <>
-   
-    <HandleLoading isLoading={isLoading} isError={isError}>
-          <Typography.Title editable level={2} style={{ margin: 0 }}>
-                Danh sách người dùng
-            </Typography.Title>
-            <Table columns={columns} dataSource={dataItem} />
-
-            <Flex wrap="wrap" gap="small">
-          <Link to="add">    <Button type="primary" danger>
-            Thêm người dùng
-          </Button> </Link>
-          
-
+      <HandleLoading isLoading={isLoading} isError={isError}>
+        <Typography.Title editable level={2} style={{ margin: 0 }}>
+          Danh sách người dùng
+        </Typography.Title>
+        <Table columns={columns} dataSource={dataItem} />
+        <Flex wrap="wrap" gap="small">
+          <Link to="add">
+            <Button type="primary" danger>
+              Thêm người dùng
+            </Button>
+          </Link>
         </Flex>
-    </HandleLoading>
-     
+      </HandleLoading>
     </>
 }

@@ -3,14 +3,10 @@ import { Button, Form, Input } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { Select } from 'antd'
 import type { SelectProps } from 'antd'
-
 import LoadingUser from '../util/Loading'
 import ErrorLoad from '../../components/util/ErrorLoad'
 import { useEffect, useState } from 'react'
-import { useCreateUserMutation } from '../UsersEndpoints'
-
 import { popupSuccess, popupError } from '@/page/shared/Toast'
-//
 import { UploadOutlined } from '@ant-design/icons'
 const layout = {
   labelCol: { span: 8 },
