@@ -3,12 +3,12 @@ import { Button, Modal, Input } from 'antd';
 import { AnyAction } from '@reduxjs/toolkit'
 import { useDispatch,useSelector} from 'react-redux';
 import { courseActions } from '@/app/actions/course.actions';
-import { selectCourseData } from '@/app/selectors/course.selectors'
+
 
 const ModalAddProduct = ({ isModalOpen, handleCancel, setIsModalOpen }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const courses = useSelector(selectCourseData)
+ const courses = useSelector((state) => state.course)
   console.log("course", courses)
   const dispatch = useDispatch();
 
