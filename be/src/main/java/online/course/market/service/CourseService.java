@@ -13,4 +13,5 @@ public interface CourseService {
 	Course update(final Course course, final Long id);
 	void deleteById(final Long id);
 	Page<Course> finadAll(Pageable pageable);
+	Course getById(Long id);
 }

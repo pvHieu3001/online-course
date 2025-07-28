@@ -81,6 +81,16 @@ public class CourseController {
         return ResponseEntity.ok(ApiResponse.success(toDto(courseDb)));
     }
 
+    @Operation(description = "Get by id endpoint for Course", summary = "This is a summary for Course get by id endpoint")
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<GetCourseDto>> getById(@PathVariable Long id) {
+        Course course = courseService.getById(id);
+        if (course == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Course not found"));
+        }
+        return ResponseEntity.ok(ApiResponse.success(toDto(course)));
+    }
+
     @Operation(description = "Save endpoint for Course", summary = "This is a summary for Course save endpoint")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<GetCourseDto>> saveCourse(@Valid @ModelAttribute PostCourseDto dto) {

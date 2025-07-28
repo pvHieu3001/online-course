@@ -80,4 +80,9 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.findAll(pageable);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Course getById(Long id) {
+        return courseRepository.findById(id).orElse(null);
+    }
 }
