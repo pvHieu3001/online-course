@@ -46,36 +46,13 @@ function Sidenav() {
       {
         label: (
           <>
-            <Flex align='center' justify='center'>
-              <span className={`icon `}>{<Tables color={darkColor} />}</span>
-              <span className={`label font-bold text-[#344767]`}>Người dùng</span>
+            <Flex align='center' gap={10} justify='center' className='children-menu'>
+              {<Tables color={darkColor} />}
+              <span className='label font-bold text-[#344767]'>Người dùng</span>
             </Flex>
           </>
         ),
-        children: [
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Người dùng</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/users'
-          },
-          {
-            label: (
-              <>
-                <Flex align='center' gap={10} justify='center' className='children-menu'>
-                  {<Tables color={darkColor} />}
-                  <span className='label font-bold text-gray-400'>Quyền hạn</span>
-                </Flex>
-              </>
-            ),
-            link: '/admin/privilege'
-          }
-        ]
+        link: '/admin/users'
       },
       {
         label: (

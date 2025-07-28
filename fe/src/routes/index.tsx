@@ -12,13 +12,11 @@ import EditUser from '../page/admin/user/_components/edit'
 import CategoryManagement from '@/page/admin/category'
 import AddCategory from '@/page/admin/category/_components/add'
 import EditCategory from '@/page/admin/category/_components/edit'
-import PrivilegeUser from '@/page/admin/user/_components/privilege'
 import ProductManagement from '@/page/admin/products'
 import AddProduct from '@/page/admin/products/_components/add'
 import EditProduct from '@/page/admin/products/_components/edit'
 import GuardPage from '@/middleware/GuardPage'
 import ProductDetailPage from '../page/user/ProductDetailPage/index'
-import ListCategory from '@/page/admin/category/_components/list'
 
 export default function Router() {
   return (
@@ -38,7 +36,6 @@ export default function Router() {
 
             <Route path='users' element={<UserManagement />}>
               <Route path='add' element={<AddUser />} />
-              <Route path='privilege/:id' element={<PrivilegeUser />} />
               <Route path=':id' element={<EditUser />} />
             </Route>
 

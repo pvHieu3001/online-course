@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import online.course.market.entity.dto.ApiResponse;
-import online.course.market.entity.dto.course.GetAllCourseDto;
 import online.course.market.entity.dto.course.GetCourseDto;
 import online.course.market.entity.dto.course.PostCourseDto;
 import online.course.market.entity.dto.course.PutCourseDto;
@@ -27,7 +26,6 @@ import online.course.market.utils.CustomCodeException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import jakarta.annotation.PostConstruct;
 
 @RestController
@@ -69,10 +67,9 @@ public class CourseController {
 
     @Operation(description = "Get all endpoint for Course", summary = "This is a summary for Course get all endpoint")
     @GetMapping
-    public ResponseEntity<ApiResponse<GetAllCourseDto>> getAll() {
+    public ResponseEntity<ApiResponse<List<GetCourseDto>>> getAll() {
         List<GetCourseDto> getCourseDtos = courseService.getAll().stream().map(this::toDto).collect(Collectors.toList());
-        GetAllCourseDto getAllCourseDto = new GetAllCourseDto(getCourseDtos, getCourseDtos.size());
-        return ResponseEntity.ok(ApiResponse.success(getAllCourseDto));
+        return ResponseEntity.ok(ApiResponse.success(getCourseDtos));
     }
 
     @Operation(description = "Get by name endpoint for Course", summary = "This is a summary for Course get by name endpoint")
@@ -93,13 +90,19 @@ public class CourseController {
             Files.createDirectories(uploadDir);
         }
 
-        String imageFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
-        Path imagePath = uploadDir.resolve(imageFilename);
-        Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+        String imageFilename="";
+        if(dto.getImageFile() != null){
+            imageFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
+            Path imagePath = uploadDir.resolve(imageFilename);
+            Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+        }
 
-        String sourceFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
-        Path sourcePath = uploadDir.resolve(imageFilename);
-        Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
+        String sourceFilename="";
+        if(dto.getSourceFile() != null){
+            sourceFilename = UUID.randomUUID()+"_"+dto.getSourceFile().getOriginalFilename();
+            Path sourcePath = uploadDir.resolve(sourceFilename);
+            Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
+        }
 
         dto.setSlug(SlugUtils.toSlug(dto.getName()));
         dto.setImageUrl("/upload/" + imageFilename);

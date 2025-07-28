@@ -3,12 +3,9 @@ import { Button, Form, Input} from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Select } from 'antd';
 import type { SelectProps  } from 'antd';
-
 import LoadingUser from '../util/Loading';
 import ErrorLoad from '../../components/util/ErrorLoad';
 import { useEffect, useState } from 'react';
-import { useUpdateUserMutation } from '../UsersEndpoints';
-import { useGetUserQuery } from '../UsersEndpoints';
 import { popupSuccess, popupError } from '@/page/shared/Toast'
 import { UploadOutlined } from '@ant-design/icons'
 import { Image } from 'antd';
@@ -28,11 +25,6 @@ const validateMessages = {
   },
   
 }
-/* eslint-enable no-template-curly-in-string */
-
-
-
-
 
 
 export default function EditUser() {

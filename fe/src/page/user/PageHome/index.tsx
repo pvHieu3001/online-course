@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions'
-import { selectCourseData } from '@/app/selectors/course.selectors'
+import { selectCourseData, selectCategoryData } from '@/app/selectors/course.selectors'
 import { useNavigate } from 'react-router-dom'
 
 const featuredCourses = [
@@ -19,7 +19,7 @@ const featuredCourses = [
   { img: inteligent, title: 'N8N – Build intelligent AI 2.0 Agent Systems Without Coding' },
   { img: adobe, title: 'Adobe Premiere Pro CC Masterclass for Video Editing' },
   { img: ai, title: 'Adobe Illustrator CC for Learning Graphics Design' },
-  { img: canvas, title: 'Canva for Social Media Graphic Design and Video Editing' },
+  { img: canvas, title: 'Canva for Social Media Graphic Design and Video Editing' }
 ]
 
 function PageHome() {
@@ -30,7 +30,7 @@ function PageHome() {
     dispatch(categoryActions.getCategories() as unknown as AnyAction)
   }, [dispatch])
 
-  const courses = useSelector(selectCourseData)
+  const courses = useSelector((state) => state.course)
   const categories = useSelector((state) => state.category)
 
   const handleDetail = (id: any) => {
@@ -75,7 +75,9 @@ function PageHome() {
 
       <div className={styles.menuWrapper}>
         <nav className={styles.menu} role='navigation' aria-label='Main navigation'>
-          <a className={styles.active} href='#' aria-current='page'>HOME</a>
+          <a className={styles.active} href='#' aria-current='page'>
+            HOME
+          </a>
           <a href='#'>100% OFF UDEMY COUPON</a>
           <a href='#'>ALL COURSES</a>
           <a href='#'>GAMES</a>
@@ -83,7 +85,9 @@ function PageHome() {
           <a href='#'>PRIVACY POLICY</a>
           <a href='#'>DMCA COPYRIGHTS</a>
           <a href='#'>
-            <span className={styles.searchIcon} role='img' aria-label='Search'>🔍</span>
+            <span className={styles.searchIcon} role='img' aria-label='Search'>
+              🔍
+            </span>
           </a>
         </nav>
       </div>
@@ -101,7 +105,7 @@ function PageHome() {
 
       <main className={styles.mainContent} role='main'>
         <section className={styles.courses} aria-label='Course listings'>
-          {courses.map((course: any, i: number) => (
+          {courses?.data?.map((course: any, i: number) => (
             <article className={styles.courseCard} key={i} role='article' onClick={() => handleDetail(course.id)}>
               <img src={`https://dogohiephong.vn/${course.imageUrl}`} alt={`${course.name} course image`} />
               <div className={styles.courseCat}>{course.categoryId}</div>
@@ -116,7 +120,9 @@ function PageHome() {
             <form onSubmit={handleSearch} className={styles.searchInputWrap}>
               <input type='text' placeholder='Type here to search...' aria-label='Search for courses' />
               <button type='submit' aria-label='Submit search'>
-                <span className={styles.searchIcon} role='img' aria-label='Search'>🔍</span>
+                <span className={styles.searchIcon} role='img' aria-label='Search'>
+                  🔍
+                </span>
               </button>
             </form>
           </div>
@@ -124,7 +130,7 @@ function PageHome() {
           <div className={styles.categoriesBox}>
             <h2 className={styles.categoriesLabel}>Categories</h2>
             <ul className={styles.categoriesList} role='list'>
-              {categories?.data?.map((category: any, i: number) => (
+              {categories?.dataList?.map((category: any, i: number) => (
                 <li
                   key={i}
                   role='button'
