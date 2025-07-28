@@ -1,22 +1,22 @@
 export interface IProduct {
   id: number | string
-  thumbnail: string
+  created_at: string
+  created_by: string
+  updated_at: string
+  updated_by: string
+  category_id: number | string
+  description: string
+  image_url: string
+  language: string
+  level: string
   name: string
-  content: string
-  category_id: number
-  is_active: number
-  is_hot_deal: number
-  is_new: number
   price: number
-  price_sale: number
-  quantity: number
-  sku: string
-  type_discount: null | 0 | 1
-  discount: number
-  total_review: number
-  avg_stars: number
-  public_id: string
+  rating: number
   slug: string
+  source_url: string
+  status: string
+  total_rating: number
+  total_students: number
 }
 
 export interface ICategory {
