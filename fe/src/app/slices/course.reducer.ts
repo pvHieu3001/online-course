@@ -5,7 +5,8 @@ const initialState = {
   code: '',
   message: '',
   error_message: '',
-  data: null // sẽ chứa { getCourseDto: [...], size: number }
+  data: null,
+  dataList: null 
 }
 
 const courseSlice = createSlice({
@@ -19,7 +20,7 @@ const courseSlice = createSlice({
       state.isLoading = false
     },
     getCoursesSuccessFully: (state, { payload }) => {
-      state.data = payload.data
+      state.dataList = payload.data
       state.code = payload.code
       state.message = payload.message
       state.isLoading = false

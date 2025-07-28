@@ -113,7 +113,7 @@ export default function ListProduct() {
         }}
         columns={columns}
         sticky={{ offsetHeader: 0 }}
-        dataSource={courses?.data?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
+        dataSource={courses?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
         loading={courses.isLoading}
       />
     </>
