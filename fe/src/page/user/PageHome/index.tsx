@@ -38,13 +38,18 @@ function PageHome() {
     navigate(`/product-detail/${id}`, { state: course })
   }
 
+  const handleCategoryDetail = (id: any) => {
+    const category = courses.category.find((c: any) => c.id === id)
+    if (!category) return
+    navigate(`/category-detail/${id}`, { state: category })
+  }
+
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
   }
 
-  const handleCategoryClick = (categoryName: string) => {
-    console.log('Category clicked:', categoryName)
-  }
+
 
   return (
     <div className={styles.bg}>
@@ -91,11 +96,11 @@ function PageHome() {
                   key={i}
                   role='button'
                   tabIndex={0}
-                  onClick={() => handleCategoryClick(category.name)}
+                  onClick={() => handleCategoryDetail(category.id)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault()
-                      handleCategoryClick(category.name)
+                      handleCategoryDetail(category.id)
                     }
                   }}
                 >

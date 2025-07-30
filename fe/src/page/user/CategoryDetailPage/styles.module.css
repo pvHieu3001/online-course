@@ -1,0 +1,162 @@
+.bg {
+  background: #f3f3f3;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.sliderWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(68, 61, 61);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(68, 61, 61);
+}
+
+.slider {
+  max-width: 1260px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 20px;
+  overflow-x: auto;
+}
+
+.sliderItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 200px;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.sliderItem img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px #bbb;
+}
+
+.sliderItem span {
+  font-size: 12px;
+  color: #222;
+  text-align: center;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
+/* styles.module.css */
+
+.categoryLabel {
+  display: inline-block;
+  background-color: #333;
+  color: #fff;
+  padding: 6px 12px;
+  font-weight: bold;
+  border-radius: 4px 4px 0 0;
+  border-top: 2px solid #000;
+  border-right: 2px solid #000;
+  border-left: 2px solid #000;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 20px 0 10px 0;
+  line-height: 1.2;
+  color: #222;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.topics {
+  margin-top: 20px;
+}
+
+.topicsTitle {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.topicList {
+  list-style: disc inside;
+  padding-left: 16px;
+  color: #333;
+}
+
+/* styles.module.css */
+
+.courseList {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.courseItem {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.thumbnail {
+  width: 240px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.courseContent {
+  flex: 1;
+}
+
+.courseCategory {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: #1e88e5;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.courseTitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+.courseDescription {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+
