@@ -1,28 +1,100 @@
-.modules {
-  display: flex;
-  flex-direction: column;
+.bg {
+  background: #f3f3f3;
   width: 100%;
 }
 
-.lockMenu{
-  position: fixed;
-  top: 0;
+.topbar {
+  background: #181818;
+  color: #fff;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 20px;
+  font-size: 14px;
+}
+
+.date {
+  opacity: 0.8;
+  font-size: 14px;
+}
+
+.bannerWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0683d7;
 }
 
 .banner {
+  max-width: 1300px;
+  width: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  flex-wrap: wrap;
 }
 
-.menuWrapper ul {
-  background-image: linear-gradient(to right, #073954, #007e8c);
+.logo {
+  height: 60px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+.slogan {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.smart {
+  color: #ff7b00;
+}
+
+.menuWrapper {
+  width: 100%;
+  background: #1793e6;
+  display: flex;
   justify-content: center;
 }
 
-.menuWrapper ul li a, .menuWrapper ul li span{
-  color: #fff !important;
-  text-transform: uppercase;
-  font-weight: 600;
+.menu {
+  max-width: 1300px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  height: 48px;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
+.menu a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 0 10px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: 3px solid transparent;
+  transition: border 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.menu a.active,
+.menu a:hover {
+  border-bottom: 3px solid #fff;
+  color: #181818;
+}
+
+.searchIcon {
+  font-size: 16px;
+}
