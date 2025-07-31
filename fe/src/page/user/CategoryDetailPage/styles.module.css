@@ -83,7 +83,7 @@
 }
 
 .title {
-  font-size: 2rem;
+  font-size: clamp(10px, 5vw, 16px);
   font-weight: 700;
   margin: 20px 0 10px 0;
   line-height: 1.2;
@@ -91,7 +91,7 @@
 }
 
 .subtitle {
-  font-size: 1rem;
+  font-size: clamp(10px, 5vw, 16px);
   color: #444;
   line-height: 1.6;
   margin-bottom: 16px;
@@ -111,6 +111,10 @@
   list-style: disc inside;
   padding-left: 16px;
   color: #333;
+}
+
+.topicList li {
+  font-size: clamp(10px, 5vw, 16px);
 }
 
 /* styles.module.css */
@@ -147,16 +151,41 @@
 }
 
 .courseTitle {
-  font-size: 1.25rem;
+  font-size: clamp(10px, 5vw, 14px);
   font-weight: bold;
   margin-bottom: 8px;
   color: #222;
 }
 
 .courseDescription {
-  font-size: 1rem;
+  font-size: clamp(10px, 5vw, 13px);
   color: #444;
   line-height: 1.5;
 }
 
+.categoryDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.categoryDetailPage {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+  .categoryDetailPage {
+    flex-direction: column;
+    padding : 20px;
+  }
+
+  .courseItem {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
 
