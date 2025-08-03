@@ -72,31 +72,31 @@ export default function ListOrders() {
       width: 250,
       render: (text: string) => <span>{text}</span>,
     },
-    {
-      title: 'Hành động',
-      key: 'action',
-      width: 150,
-      align: 'center',
-      render: (record: any) => (
-        <Space size={'middle'}>
-          <Link to={'' + record.id}>
-            <Button type='primary'>Sửa</Button>
-          </Link>
-          <Popconfirm
-            placement='topRight'
-            title={'Bạn có chắc muốn xoá sản phẩm này?'}
-            onConfirm={() => handlerDeleteProduct(record.id)}
-            onCancel={() => {}}
-            okText='Đồng ý'
-            cancelText='Huỷ bỏ'
-          >
-            <Button type='primary' danger>
-              Xoá
-            </Button>
-          </Popconfirm>
-        </Space>
-      ),
-    },
+    // {
+    //   title: 'Hành động',
+    //   key: 'action',
+    //   width: 150,
+    //   align: 'center',
+    //   render: (record: any) => (
+    //     <Space size={'middle'}>
+    //       <Link to={'' + record.id}>
+    //         <Button type='primary'>Sửa</Button>
+    //       </Link>
+    //       <Popconfirm
+    //         placement='topRight'
+    //         title={'Bạn có chắc muốn xoá sản phẩm này?'}
+    //         onConfirm={() => handlerDeleteProduct(record.id)}
+    //         onCancel={() => {}}
+    //         okText='Đồng ý'
+    //         cancelText='Huỷ bỏ'
+    //       >
+    //         <Button type='primary' danger>
+    //           Xoá
+    //         </Button>
+    //       </Popconfirm>
+    //     </Space>
+    //   ),
+    // },
   ]
 
   return (
@@ -117,9 +117,9 @@ export default function ListOrders() {
           placeholder={'Tìm kiếm'}
           style={{ borderRadius: '2rem' }}
         />
-        <Link to='add'>
+        {/* <Link to='add'>
           <Button type='primary'>Thêm sản phẩm</Button>
-        </Link>
+        </Link> */}
       </Flex>
       <Table
         style={{
