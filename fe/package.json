@@ -44,7 +44,7 @@
     "@types/xlsx": "^0.0.36",
     "@uidotdev/usehooks": "^2.4.1",
     "antd": "^5.19.2",
-    "apexcharts": "^3.48.0",
+    "apexcharts": "^4.0.0",
     "axios": "^1.6.8",
     "chart.js": "^4.4.2",
     "class-variance-authority": "^0.7.0",
