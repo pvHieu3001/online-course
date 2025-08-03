@@ -30,7 +30,7 @@ jobs:
       - checkout
       - run:
           name: Build FE
-          command: cd fe && npx vite build
+          command: cd fe && npm build
   test-fe:
     executor: node-executor
     steps:
