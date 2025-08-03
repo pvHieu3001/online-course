@@ -4,12 +4,14 @@ import categoryReducer from './slices/category.reducer'
 import userReducer from './slices/user.reducer'
 import courseReducer from './slices/course.reducer'
 import alertReducer from './slices/alert.reducer'
+import orderSlice from './slices/order.reducer'
 export const store = configureStore({
   reducer: {
     category: categoryReducer,
     user: userReducer,
     web: webReducer,
     alert: alertReducer,
-    course: courseReducer
+    course: courseReducer,
+    order: orderSlice
   }
 })

@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react'
 import { Button, Flex, Input, Popconfirm, Space, Table, Typography, message } from 'antd'
 import { Link } from 'react-router-dom'
 import { AnyAction } from '@reduxjs/toolkit'
-import { courseActions } from '@/app/actions/course.actions'
 import { useDispatch, useSelector } from 'react-redux'
+import { OrderActions } from '@/app/actions/orders.action'
 
 export default function ListOrders() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
-  const courses = useSelector((state) => state.course)
+  const orders = useSelector((state) => state.course)
+
+  console.log('orders', orders)
 
   useEffect(() => {
-    dispatch(courseActions.getCourses() as unknown as AnyAction)
+    dispatch(OrderActions.getOrder() as unknown as AnyAction)
   }, [dispatch])
 
   const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,8 +115,8 @@ export default function ListOrders() {
         }}
         columns={columns}
         sticky={{ offsetHeader: 0 }}
-        dataSource={courses?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
-        loading={courses.isLoading}
+        dataSource={orders?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
+        loading={orders.isLoading}
       />
     </>
   )
