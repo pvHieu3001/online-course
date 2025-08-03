@@ -54,6 +54,17 @@ function Sidenav() {
         ),
         link: '/admin/users'
       },
+         {
+        label: (
+          <>
+            <Flex align='center' gap={10} justify='center' className='children-menu'>
+              {<Tables color={darkColor} />}
+              <span className='label font-bold text-[#344767]'>Order</span>
+            </Flex>
+          </>
+        ),
+        link: '/admin/orders'
+      },
       {
         label: (
           <>
