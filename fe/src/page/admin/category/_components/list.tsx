@@ -21,7 +21,8 @@ export default function ListCategory() {
 
   const handlerDistableCategory = async (id: string) => {
     try {
-      dispatch(categoryActions.deleteCategory(id))
+      dispatch(categoryActions.deleteCategory(id) as unknown as AnyAction)
+      dispatch(categoryActions.getCategories() as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error: any) {
       message.error(error.data ? error.data.message : 'Vô hiệu hoá danh mục thất bại!')
@@ -85,7 +86,7 @@ export default function ListCategory() {
           <Popconfirm
             placement='topRight'
             title={record.active == 1 ? 'Are you sure distable this category?' : 'Are you sure enable this category?'}
-            onConfirm={() => handlerDistableCategory(record)}
+            onConfirm={() => handlerDistableCategory(record.id)}
             onCancel={() => {}}
             okText='Đồng ý'
             cancelText='Hủy bỏ'

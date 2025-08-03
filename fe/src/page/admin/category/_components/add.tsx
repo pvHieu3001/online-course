@@ -55,20 +55,24 @@ export default function AddCategory() {
     }
   }
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async () => {
     const name = form.getFieldValue('name')
     const active = form.getFieldValue('status')
     const parent_id = form.getFieldValue('parent_id')
     const formData = new FormData()
+
     formData.append('name', name)
-    formData.append('status', active)
-    formData.append('parent_id', parent_id)
+    formData.append('status', active.toString())
+    if (parent_id) {
+      formData.append('parentId', parent_id.toString())
+    }
     if (imageUrl) {
-      formData.append('image', imageUrl)
+      formData.append('imageFile', imageUrl)
     }
     try {
       setIsLoading(true)
       await dispatch(categoryActions.createCategory(formData) as any)
+      await dispatch(categoryActions.getCategories() as any)
       popupSuccess('Thêm danh mục thành công')
       setIsDirty(false)
       navigate('..')

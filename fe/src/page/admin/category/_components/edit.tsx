@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { categoryActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { ICategory } from '@/common/types.interface'
-import { convertToSlug } from '@/utils/convertToSlug'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal, Spin } from 'antd'
 export default function EditCategory() {
@@ -37,14 +36,14 @@ export default function EditCategory() {
   useEffect(() => {
     if (categoryStore.data) {
       const data = categoryStore.data as ICategory & { image?: string; status?: number };
-      if (data.image) setDisplayPic(data.image);
+      if (data.image) setDisplayPic(`${import.meta.env.VITE_DOMAIN_URL}${data.image}`);
       form.setFieldsValue({
         parent_id: data.parentId ? data.parentId : '',
         status: data.status === 1 ? true : false,
         name: data.name
-      });
+      })
     }
-  }, [categoryStore]);
+  }, [categoryStore])
 
   // Xác nhận khi rời nếu có thay đổi
   useEffect(() => {
@@ -61,43 +60,47 @@ export default function EditCategory() {
   const handleCancel = () => {
     if (isDirty) {
       Modal.confirm({
-        title: 'Bạn có chắc muốn rời khỏi trang?'
-        , icon: <ExclamationCircleOutlined />
-        , content: 'Các thay đổi chưa được lưu sẽ bị mất.'
-        , onOk: () => navigate('..')
+        title: 'Bạn có chắc muốn rời khỏi trang?',
+        icon: <ExclamationCircleOutlined />,
+        content: 'Các thay đổi chưa được lưu sẽ bị mất.',
+        onOk: () => navigate('..')
       })
     } else {
       navigate('..')
     }
   }
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async () => {
     const name = form.getFieldValue('name')
-    const active = form.getFieldValue('active') ? 1 : 0
+    const active = form.getFieldValue('status')
     const parent_id = form.getFieldValue('parent_id')
     const formData = new FormData()
 
     formData.append('name', name)
-    formData.append('status', active as any)
-    formData.append('parent_id', parent_id)
+    formData.append('status', active.toString())
+    if (parent_id) {
+      formData.append('parentId', parent_id.toString())
+    }
 
     if (imageUrl) {
-      formData.append('image', imageUrl)
+      formData.append('imageFile', imageUrl)
+    }
+
+    console.log('FormData contents:')
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value)
     }
 
     try {
-      const payload = {
-        ...values,
-        id: params.id,
-        slug: convertToSlug(name)
-      }
-      dispatch(categoryActions.updateCategory(params.id, payload) as unknown as AnyAction)
-      popupSuccess('Update category success')
-      navigate('/admin/categories?refresh=true')
+      await dispatch(categoryActions.updateCategory(params.id, formData) as unknown as AnyAction)
+      await dispatch(categoryActions.getCategories() as unknown as AnyAction)
+      popupSuccess('Cập nhật danh mục thành công')
+      setIsDirty(false)
+      navigate('..')
     } catch (error) {
-      popupError('Update category error')
+      console.error('Error updating category:', error)
+      popupError('Cập nhật danh mục thất bại')
     }
-    setIsDirty(false)
   }
 
   // Đánh dấu form đã thay đổi
@@ -105,7 +108,7 @@ export default function EditCategory() {
 
   const selectedImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     const types = ['jpeg', 'png', 'jpg', 'gif']
-    if (!e.target.files || e.target.files.length === 0) return;
+    if (!e.target.files || e.target.files.length === 0) return
     const fileSelected = e.target.files[0]
     const size = fileSelected.size
     const type = types.includes(fileSelected.type.replace('image/', ''))
@@ -127,7 +130,9 @@ export default function EditCategory() {
       open={true}
       footer={
         <div style={{ textAlign: 'right' }}>
-          <Button onClick={handleCancel} style={{ marginRight: 8 }}>Hủy</Button>
+          <Button onClick={handleCancel} style={{ marginRight: 8 }}>
+            Hủy
+          </Button>
           <Button type='primary' htmlType='submit' form='category-form' loading={categoryStore.isLoading}>
             Cập nhật
           </Button>
@@ -166,11 +171,20 @@ export default function EditCategory() {
                           danger
                           icon={<DeleteOutlined />}
                           className='absolute top-2 right-2 opacity-80 hover:opacity-100 bg-white/80'
-                          onClick={() => { setDisplayPic(''); setImageUrl(undefined); setIsDirty(true) }}
-                        >Xóa</Button>
+                          onClick={() => {
+                            setDisplayPic('')
+                            setImageUrl(undefined)
+                            setIsDirty(true)
+                          }}
+                        >
+                          Xóa
+                        </Button>
                       </div>
                     ) : (
-                      <label htmlFor='image-upload' className='flex flex-col items-center justify-center w-[180px] h-[180px] border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-100'>
+                      <label
+                        htmlFor='image-upload'
+                        className='flex flex-col items-center justify-center w-[180px] h-[180px] border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-100'
+                      >
                         <CloudUploadOutlined style={{ fontSize: 40, color: '#aaa' }} />
                         <span className='text-xs text-gray-500 mt-2'>Chọn ảnh (JPG, PNG, GIF, SVG, tối đa 1MB)</span>
                         <input
@@ -186,8 +200,13 @@ export default function EditCategory() {
                     )}
                   </div>
                 </Form.Item>
-                <div className='border rounded-md overflow-hidden flex-1 bg-[#fafbfc]' style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem' }}>
-                  <div className='p-2'><h2 className='font-semibold'>Cài đặt</h2></div>
+                <div
+                  className='border rounded-md overflow-hidden flex-1 bg-[#fafbfc]'
+                  style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem' }}
+                >
+                  <div className='p-2'>
+                    <h2 className='font-semibold'>Cài đặt</h2>
+                  </div>
                   <hr />
                   <div className='flex justify-between items-center p-2'>
                     <span>Kích hoạt hiển thị</span>
@@ -199,7 +218,10 @@ export default function EditCategory() {
                 </div>
               </Flex>
               <Flex vertical className='flex-[6] min-w-[300px]'>
-                <div className='border-[1px] p-[24px] rounded-md bg-[#fafbfc]' style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}>
+                <div
+                  className='border-[1px] p-[24px] rounded-md bg-[#fafbfc]'
+                  style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
+                >
                   <h2 className='mb-5 font-bold text-[16px]'>Tổng quan</h2>
                   <Flex vertical gap={20}>
                     <Flex gap={30} wrap='wrap'>
@@ -222,7 +244,9 @@ export default function EditCategory() {
                           style={{ width: '100%', height: 40 }}
                           placeholder='Chọn danh mục cha (nếu có)'
                           optionFilterProp='label'
-                          filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+                          filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                          }
                           options={[{ value: '', label: 'Không có' }, ...dataCategories]}
                         />
                       </Form.Item>
