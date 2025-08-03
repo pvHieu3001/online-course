@@ -253,10 +253,10 @@ workflows:
             - build-fe
           filters:
             branches:
-              only: main
+              only: master
       - deploy-be:
           requires:
             - build-be
           filters:
             branches:
-              only: main
+              only: master
