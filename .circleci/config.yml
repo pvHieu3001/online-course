@@ -11,30 +11,38 @@ executors:
     working_directory: ~/project
 
 jobs:
-  install-fe:
-    executor: node-executor
-    steps:
-      - checkout
-      - run:
-          name: Clean npm cache & lock
-          command: cd fe && rm -rf node_modules package-lock.json && npm cache clean --force
-      - run:
-          name: Cài dependencies bằng npm ci
-          command: cd fe && npm ci || npm install --legacy-peer-deps
-      - run:
-          name: Đảm bảo vite@7.0.6 đã cài
-          command: cd fe && npm install vite@7.0.6 --save-dev
   build-fe:
     executor: node-executor
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-fe-{{ checksum "fe/package.json" }}
+            - v1-dependencies-fe-
+      - run:
+          name: Install dependencies
+          command: cd fe && npm ci || npm install --legacy-peer-deps
+      - save_cache:
+          paths:
+            - fe/node_modules
+          key: v1-dependencies-fe-{{ checksum "fe/package.json" }}
+      - run:
+          name: Verify Vite installation
+          command: cd fe && npx vite --version
       - run:
           name: Build FE
-          command: cd fe && npx vite --version && npx vite build
+          command: cd fe && npx vite build
   test-fe:
     executor: node-executor
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-fe-{{ checksum "fe/package.json" }}
+            - v1-dependencies-fe-
+      - run:
+          name: Install dependencies (if cache miss)
+          command: cd fe && npm ci || npm install --legacy-peer-deps
       - run:
           name: Test FE
           command: cd fe && npm test || true
@@ -63,10 +71,7 @@ workflows:
   version: 2
   build-and-test:
     jobs:
-      - install-fe
-      - build-fe:
-          requires:
-            - install-fe
+      - build-fe
       - test-fe:
           requires:
             - build-fe
