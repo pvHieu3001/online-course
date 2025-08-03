@@ -37,12 +37,18 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Grant execute permission for mvnw
+          command: cd be && chmod +x mvnw
+      - run:
           name: Build BE
           command: cd be && ./mvnw clean package -DskipTests
   test-be:
     executor: java-executor
     steps:
       - checkout
+      - run:
+          name: Grant execute permission for mvnw
+          command: cd be && chmod +x mvnw
       - run:
           name: Test BE
           command: cd be && ./mvnw test
