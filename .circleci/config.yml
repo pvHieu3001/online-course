@@ -41,7 +41,7 @@ jobs:
           command: cd be && chmod +x mvnw
       - run:
           name: Build BE
-          command: cd be && ./mvnw clean package -DskipTests
+          command: cd be && ./mvnw clean install -DskipTests
   test-be:
     executor: java-executor
     steps:
