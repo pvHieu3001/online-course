@@ -22,8 +22,8 @@ jobs:
           name: Cài dependencies bằng npm ci
           command: cd fe && npm ci || npm install --legacy-peer-deps
       - run:
-          name: Đảm bảo vite đã cài
-          command: cd fe && npm install vite --save-dev
+          name: Đảm bảo vite@7.0.6 đã cài
+          command: cd fe && npm install vite@7.0.6 --save-dev
       - run:
           name: Kiểm tra Vite đã cài
           command: cd fe && npx vite --version
