@@ -101,7 +101,7 @@ jobs:
           name: Deploy Frontend to Server
           command: |
             # Create deployment script
-            cat > deploy-fe.sh << 'EOF'
+            cat > deploy-fe.sh \<< 'EOF'
             #!/bin/bash
             set -e
 
@@ -159,7 +159,7 @@ jobs:
           name: Deploy Backend to VPS
           command: |
             # Create deployment script
-            cat > deploy-be.sh << 'EOF'
+            cat > deploy-be.sh \<< 'EOF'
             #!/bin/bash
             set -e
 
