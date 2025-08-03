@@ -8,9 +8,9 @@ import { OrderActions } from '@/app/actions/orders.action'
 export default function ListOrders() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
-  const orders = useSelector((state) => state.course)
+  const orders = useSelector((state) => state.order)
 
-  console.log('orders', orders)
+  console.log('orders', orders.data)
 
   useEffect(() => {
     dispatch(OrderActions.getOrder() as unknown as AnyAction)
@@ -25,8 +25,6 @@ export default function ListOrders() {
 
   const handlerDeleteProduct = async (id: string) => {
     try {
-      // TODO: Thay bằng action xoá sản phẩm thực tế
-      // dispatch(courseActions.deleteCourse(id))
       message.success('Xoá sản phẩm thành công!')
     } catch (error: any) {
       message.error(error.data ? error.data.message : 'Xoá sản phẩm thất bại!')
@@ -36,23 +34,39 @@ export default function ListOrders() {
   const columns = [
     {
       title: '#',
-      dataIndex: 'key',
-      key: 'key',
+      dataIndex: 'id',
+      key: 'id',
       width: 40,
       align: 'center',
     },
     {
-      title: 'Tên sản phẩm',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Tổng số lượng',
+      dataIndex: 'subTotal',
+      key: 'subTotal',
       align: 'center',
       width: 180,
       render: (text: string) => <span>{text}</span>,
     },
     {
-      title: 'Mô tả',
-      dataIndex: 'description',
-      key: 'description',
+      title: 'Mã giảm giá ',
+      dataIndex: 'discountAmount',
+      key: 'discountAmount',
+      align: 'center',
+      width: 250,
+      render: (text: string) => <span>{text}</span>,
+    },
+     {
+      title: 'Tổng số lượng',
+      dataIndex: 'totalAmount',
+      key: 'totalAmount',
+      align: 'center',
+      width: 250,
+      render: (text: string) => <span>{text}</span>,
+    },
+    {
+      title: 'ID phiếu giảm giá',
+      dataIndex: 'couponId',
+      key: 'couponId',
       align: 'center',
       width: 250,
       render: (text: string) => <span>{text}</span>,
@@ -115,7 +129,7 @@ export default function ListOrders() {
         }}
         columns={columns}
         sticky={{ offsetHeader: 0 }}
-        dataSource={orders?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
+        dataSource={orders?.data?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
         loading={orders.isLoading}
       />
     </>
