@@ -20,7 +20,7 @@ jobs:
           command: cd fe && rm -rf node_modules package-lock.json && npm cache clean --force
       - run:
           name: Install FE dependencies
-          command: cd fe && npm install
+          command: cd fe && npm install --legacy-peer-deps
       - run:
           name: Kiểm tra Vite đã cài
           command: cd fe && ls node_modules/vite
