@@ -21,6 +21,9 @@ jobs:
       - run:
           name: Install FE dependencies
           command: cd fe && npm install
+      - run:
+          name: Kiểm tra Vite đã cài
+          command: cd fe && ls node_modules/vite
   build-fe:
     executor: node-executor
     steps:
