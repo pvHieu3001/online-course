@@ -229,8 +229,8 @@ jobs:
             echo "✅ Backend deployment completed successfully!"
             EOF
 
-            chmod +x deploy-be-remote.sh
-            ./deploy-be-remote.sh
+            chmod +x deploy-be.sh
+            ./deploy-be.sh
 
 workflows:
   version: 2
