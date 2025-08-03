@@ -1,4 +1,18 @@
-import { Col, Flex, Row, Button, Form, Input, Drawer, UploadProps, GetProp, InputNumber, Card, Divider, Select } from 'antd'
+import {
+  Col,
+  Flex,
+  Row,
+  Button,
+  Form,
+  Input,
+  Drawer,
+  UploadProps,
+  GetProp,
+  InputNumber,
+  Card,
+  Divider,
+  Select
+} from 'antd'
 import { useNavigate } from 'react-router-dom'
 import React, { useRef, useState } from 'react'
 import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons'
@@ -7,6 +21,7 @@ import ReactQuill from 'react-quill'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
 import { AnyAction } from '@reduxjs/toolkit'
+import TextEditor from './TextEditor/TextEditor'
 
 interface gallery {
   image: File | string
@@ -25,6 +40,8 @@ function AddProduct() {
   const fileInputRef = useRef<any>(null)
   const numberFile = useRef<number>(0)
   const [typeDiscount, setTypeDiscount] = useState<string>('')
+  // Add detail state for TextEditor
+  const [detail, setDetail] = useState<string>('')
 
   const onFinish = async () => {
     const name = form.getFieldValue('name')
@@ -40,11 +57,14 @@ function AddProduct() {
     const status = form.getFieldValue('status')
     const total_rating = form.getFieldValue('total_rating')
     const total_students = form.getFieldValue('total_students')
+    // Get detail from state
+    const detailValue = detail
 
     const formdata = new FormData()
     formdata.append('name', name)
     formdata.append('category_id', category_id)
     formdata.append('description', description)
+    formdata.append('detail', detailValue)
     formdata.append('image_url', image_url)
     formdata.append('language', language)
     formdata.append('level', level)
@@ -90,18 +110,7 @@ function AddProduct() {
       ['clean']
     ]
   }
-  const formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'image'
-  ]
+  const formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'link', 'image']
 
   const selectGallery = async (e: any) => {
     if (gallery.length > 6) return
@@ -157,7 +166,11 @@ function AddProduct() {
           <Card title='Thông tin khoá học' size='small' style={{ marginBottom: 24 }}>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name='name' label='Tên khoá học' rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}> 
+                <Form.Item
+                  name='name'
+                  label='Tên khoá học'
+                  rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}
+                >
                   <Input placeholder='Nhập tên khoá học' />
                 </Form.Item>
                 <Form.Item name='slug' label='Slug'>
@@ -215,11 +228,8 @@ function AddProduct() {
           </Card>
           <Divider orientation='left'>Nội dung chi tiết</Divider>
           <Card size='small' style={{ marginBottom: 24 }}>
-            <Form.Item name='content' label='Nội dung'>
-              <ReactQuill modules={modules} formats={formats} theme='snow' className='h-[200px]' />
-            </Form.Item>
-            <Form.Item name='detail' label='Mô tả chi tiết'>
-              <ReactQuill modules={modules} formats={formats} theme='snow' className='h-[200px]' />
+            <Form.Item label='Mô tả chi tiết' required>
+              <TextEditor content={detail} onHandleChange={(val) => setDetail(val)} />
             </Form.Item>
           </Card>
           <Divider orientation='left'>Ảnh & Gallery</Divider>
@@ -257,7 +267,9 @@ function AddProduct() {
                         <Flex style={{ width: '100%', color: 'gray' }} vertical justify='center' align='center'>
                           <span style={{ fontSize: '11px' }}>
                             Kích thước tối đa: 50MB{' '}
-                            <span className={`${gallery.length != 5 ? 'text-red-400' : 'text-blue-400'}`}>{gallery.length}/5</span>
+                            <span className={`${gallery.length != 5 ? 'text-red-400' : 'text-blue-400'}`}>
+                              {gallery.length}/5
+                            </span>
                           </span>
                           <span style={{ fontSize: '11px' }}>JPG, PNG, GIF, SVG</span>
                         </Flex>

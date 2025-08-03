@@ -1,34 +1,21 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Col, Flex, Row, Button, Form, Input, Drawer, UploadProps, GetProp, InputNumber, Image, Card, Divider, Select } from 'antd'
+import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Divider, Select } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
-import React, { useEffect, useRef, useState } from 'react'
-import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons'
+import { useEffect, useState } from 'react'
+import { CloudUploadOutlined } from '@ant-design/icons'
 import TextEditor from './TextEditor/TextEditor'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
-import ReactQuill from 'react-quill'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
 import { AnyAction } from '@reduxjs/toolkit'
-
-interface gallery {
-  image: File | string
-  displayPic: File | string
-}
-
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 function EditProduct() {
   const { flug } = useParams()
   const dispatch = useDispatch()
   const courseStore = useSelector((state: any) => state.course)
   const [form] = Form.useForm()
-  const [gallery, setGallery] = useState<Array<gallery>>([])
   const [imageUrl, setImageUrl] = useState<Blob>()
-  const [typeDiscount, setTypeDiscount] = useState<string>('')
-  const [editDetail, setEditDetail] = useState(false)
   const navigate = useNavigate()
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const numberFile = useRef<number>(0)
 
   useEffect(() => {
     if (flug) {
@@ -36,21 +23,16 @@ function EditProduct() {
     }
   }, [dispatch, flug])
 
+  const [description, setDescription] = useState<string>('')
+
   useEffect(() => {
-    if (courseStore.data && courseStore.data.gallery) {
-      const initDataGalleries = courseStore.data.gallery.map((item: any) => ({
-        image: '',
-        displayPic: item.image
-      }))
-      setGallery(initDataGalleries)
-    }
-  }, [courseStore.data])
+    setDescription(courseStore.data?.description ?? '')
+  }, [courseStore.data?.description])
 
   const onFinish = async () => {
     const id = courseStore.data?.id
     const name = form.getFieldValue('name')
     const category_id = form.getFieldValue('category_id')
-    const description = form.getFieldValue('description')
     const image_url = form.getFieldValue('image_url')
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
@@ -77,10 +59,6 @@ function EditProduct() {
     formdata.append('status', status)
     formdata.append('total_rating', String(total_rating))
     formdata.append('total_students', String(total_students))
-    // Nếu muốn giữ gallery thì giữ lại phần này
-    formdata.append('gallery', gallery ? JSON.stringify(gallery) : '')
-    // Nếu muốn giữ image upload thì giữ lại phần này
-    formdata.append('thumbnail', imageUrl ? imageUrl : '')
 
     try {
       await dispatch(courseActions.updateCourse(id, formdata) as unknown as AnyAction)
@@ -93,52 +71,6 @@ function EditProduct() {
 
   const handleCancel = () => {
     navigate('..')
-  }
-
-  const getBase64 = (file: FileType): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result as string)
-      reader.onerror = (error) => reject(error)
-    })
-
-  const selectGallery = async (e: any) => {
-    if (gallery.length > 6) return
-
-    const types = ['jpeg', 'png', 'jpg', 'gif']
-
-    const fileSelected = e.target.files
-
-    for (const key in fileSelected) {
-      if (numberFile.current == 5) break
-      if (typeof fileSelected[key] == 'number') break
-
-      const file = await fileSelected[key]
-      if (!(file instanceof File)) continue
-
-      const size = file.size
-      const type = types.includes(file.type.replace('image/', ''))
-
-      const newFile = await getBase64(fileSelected[key])
-
-      if (size <= 1048576 && type) {
-        numberFile.current++
-        setGallery((pveImages) => [
-          ...pveImages,
-          {
-            image: newFile,
-            displayPic: URL.createObjectURL(file)
-          }
-        ])
-      }
-    }
-    e.target.value = null
-  }
-
-  const handleDeleteGallery = (id: number) => {
-    numberFile.current--
-    setGallery([...gallery.filter((item, key) => key != id)])
   }
 
   return (
@@ -216,25 +148,48 @@ function EditProduct() {
                     <Input disabled />
                   </Form.Item>
                 </Col>
+                <Col span={8}>
+                  <Form.Item name='total_students' label='Tổng số học viên'>
+                    <InputNumber disabled className='w-full' min={0} placeholder='Nhập tổng số học viên' />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name='total_rating' label='Tổng số đánh giá'>
+                    <InputNumber disabled className='w-full' min={0} placeholder='Nhập tổng số đánh giá' />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name='rating' label='Đánh giá'>
+                    <InputNumber
+                      disabled
+                      className='w-full'
+                      min={0}
+                      max={5}
+                      step={0.1}
+                      placeholder='Nhập điểm đánh giá'
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name='slug' label='Slug'>
+                    <Input disabled placeholder='Nhập slug' />
+                  </Form.Item>
+                </Col>
               </Row>
             </Card>
             <Card title='Thông tin khoá học' size='small' style={{ marginBottom: 24 }}>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item name='name' label='Tên khoá học' rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}>
+                  <Form.Item
+                    name='name'
+                    label='Tên khoá học'
+                    rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}
+                  >
                     <Input placeholder='Nhập tên khoá học' />
                   </Form.Item>
-                  <Form.Item name='slug' label='Slug'>
-                    <Input placeholder='Nhập slug' />
-                  </Form.Item>
+
                   <Form.Item name='category_id' label='Danh mục'>
                     <Input placeholder='Nhập ID danh mục' />
-                  </Form.Item>
-                  <Form.Item name='description' label='Mô tả'>
-                    <Input.TextArea rows={3} placeholder='Nhập mô tả' />
-                  </Form.Item>
-                  <Form.Item name='image_url' label='Ảnh đại diện'>
-                    <Input placeholder='Nhập URL ảnh' />
                   </Form.Item>
                   <Form.Item name='source_url' label='Nguồn video'>
                     <Input placeholder='Nhập URL nguồn video' />
@@ -258,15 +213,6 @@ function EditProduct() {
                   <Form.Item name='price' label='Giá'>
                     <InputNumber className='w-full' min={0} placeholder='Nhập giá' />
                   </Form.Item>
-                  <Form.Item name='rating' label='Đánh giá'>
-                    <InputNumber className='w-full' min={0} max={5} step={0.1} placeholder='Nhập điểm đánh giá' />
-                  </Form.Item>
-                  <Form.Item name='total_rating' label='Tổng số đánh giá'>
-                    <InputNumber className='w-full' min={0} placeholder='Nhập tổng số đánh giá' />
-                  </Form.Item>
-                  <Form.Item name='total_students' label='Tổng số học viên'>
-                    <InputNumber className='w-full' min={0} placeholder='Nhập tổng số học viên' />
-                  </Form.Item>
                   <Form.Item name='status' label='Trạng thái'>
                     <Select placeholder='Chọn trạng thái'>
                       <Select.Option value='active'>Hoạt động</Select.Option>
@@ -277,23 +223,19 @@ function EditProduct() {
                 </Col>
               </Row>
             </Card>
-            <Divider orientation='left'>Nội dung chi tiết</Divider>
             <Card size='small' style={{ marginBottom: 24 }}>
-              <Form.Item name='content' label='Nội dung'>
-                <TextEditor data={courseStore.data?.content} />
-              </Form.Item>
-              <Form.Item name='detail' label='Mô tả chi tiết'>
-                <ReactQuill
-                  modules={modules}
-                  formats={formats}
-                  theme='snow'
-                  className='h-[200px]'
+              <Form.Item name='description' className='m-0' label={'Mô tả chi tiết'}>
+                <TextEditor
+                  content={description}
+                  onHandleChange={(value) => {
+                    console.log(value)
+                    setDescription(value)
+                  }}
                 />
               </Form.Item>
             </Card>
-            <Divider orientation='left'>Ảnh & Gallery</Divider>
+            <Divider orientation='left'>Ảnh Đại diện</Divider>
             <Card size='small' style={{ marginBottom: 24 }}>
-              {/* Gallery giữ nguyên như cũ */}
               <Form.Item
                 name='gallery'
                 className='p-[30px] sm:rounded-lg border-[#F1F1F4] m-0'
@@ -310,71 +252,56 @@ function EditProduct() {
                     className='border-none rounded-[12px] relative'
                   >
                     <Flex
-                      className='border-dashed border-2 p-5 relative hover:bg-gray-100 hover:border-solid  '
+                      className='border-dashed border-2 p-5 relative hover:bg-gray-100 hover:border-solid'
                       vertical
                       gap={10}
                       justify='center'
                       align='center'
-                      style={{ width: '100%', height: '7.5vw', borderRadius: '12px' }}
+                      style={{ width: '100%', minHeight: '120px', borderRadius: '12px' }}
                     >
-                      {gallery.length < 1 ? (
-                        <>
-                          <Flex vertical gap={10} style={{ width: '100%' }}>
-                            <Flex vertical align='center' justify='center'>
-                              <CloudUploadOutlined style={{ fontSize: '50px', color: 'gray' }} className='' />
-                            </Flex>
-                          </Flex>
-                          <Flex style={{ width: '100%', color: 'gray' }} vertical justify='center' align='center'>
-                            <span style={{ fontSize: '11px' }}>
-                              Kích thước tối đa: 50MB{' '}
-                              <span className={`${gallery.length != 5 ? 'text-red-400' : 'text-blue-400'}`}>
-                                {gallery.length}/5
-                              </span>
-                            </span>
-                            <span style={{ fontSize: '11px' }}>JPG, PNG, GIF, SVG</span>
-                          </Flex>
-                        </>
+                      {imageUrl ? (
+                        <div className='h-[100px] w-[120px] rounded-lg overflow-hidden relative'>
+                          <img
+                            src={URL.createObjectURL(imageUrl as Blob)}
+                            alt='Preview'
+                            className='object-cover h-full w-full object-center rounded-lg border border-gray-300 bg-white'
+                          />
+                          <Button
+                            type='text'
+                            danger
+                            size='small'
+                            style={{ position: 'absolute', top: 4, right: 4, zIndex: 2 }}
+                            onClick={() => setImageUrl(undefined)}
+                          >
+                            Xóa
+                          </Button>
+                        </div>
                       ) : (
-                        ''
+                        <label
+                          htmlFor='image-upload'
+                          className='flex flex-col items-center justify-center w-[120px] h-[100px] border rounded-md cursor-pointer bg-white hover:bg-gray-100'
+                        >
+                          <CloudUploadOutlined style={{ fontSize: 24, color: '#aaa' }} />
+                          <span className='text-xs text-gray-400'>Chọn ảnh</span>
+                          <input
+                            id='image-upload'
+                            type='file'
+                            accept='image/*'
+                            name='imageFile'
+                            className='hidden'
+                            style={{ display: 'none' }}
+                            onChange={(e) => {
+                              if (!e.target.files || e.target.files.length === 0) return
+                              const file = e.target.files[0]
+                              if (file.size > 2 * 1024 * 1024) {
+                                popupError('Ảnh phải nhỏ hơn 2MB')
+                                return
+                              }
+                              setImageUrl(file)
+                            }}
+                          />
+                        </label>
                       )}
-                      <input
-                        type='file'
-                        accept='image/*'
-                        name='image'
-                        id='image'
-                        multiple
-                        className='opacity-0 absolute inset-0'
-                        onChange={selectGallery}
-                        ref={fileInputRef}
-                      />
-                      <Flex justify='center' align='center' gap={20} wrap className='w-full h-[100%]'>
-                        {gallery.map((item, index) => (
-                          <div className='h-[100px] w-[15%] rounded-lg overflow-hidden' key={index}>
-                            <div style={{ height: '100%', width: '100%' }} className='relative group' key={index}>
-                              <img
-                                src={item.displayPic}
-                                alt=''
-                                className='object-cover h-full object-center'
-                                style={{ width: '100%' }}
-                              />
-                              <div
-                                className=' absolute inset-0 z-1 opacity-0 group-hover:opacity-100 duration-1000'
-                                style={{ backgroundColor: 'rgb(0, 0, 0, 0.5)' }}
-                              ></div>
-                              <div
-                                style={{ zIndex: 999, fontSize: '20px', color: 'white' }}
-                                className=' cursor-pointer'
-                                onClick={() => handleDeleteGallery(index)}
-                              >
-                                <DeleteOutlined
-                                  className=' duration-1000 opacity-0 group-hover:opacity-100 absolute top-[50%] left-[50%]'
-                                  style={{ transform: 'translate(-50%, -50%)' }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </Flex>
                     </Flex>
                   </div>
                 </Flex>
@@ -409,16 +336,5 @@ const modules = {
     ['clean']
   ]
 }
-const formats = [
-  'header',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'link',
-  'image'
-]
+const formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'link', 'image']
 export default EditProduct
