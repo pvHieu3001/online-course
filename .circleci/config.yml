@@ -262,10 +262,6 @@ workflows:
       - test-be:
           requires:
             - build-be
-  deploy:
-    jobs:
-      - build-fe
-      - build-be
       - deploy-fe:
           requires:
             - build-fe
