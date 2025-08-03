@@ -135,7 +135,7 @@ jobs:
 
             # Upload new frontend build
             echo "📤 Uploading new frontend build..."
-            scp -o StrictHostKeyChecking=no -r dist/* ${SERVER_USER}@${SERVER_HOST}:${FRONTEND_PATH}/
+            scp -o StrictHostKeyChecking=no -r fe/dist/* ${SERVER_USER}@${SERVER_HOST}:${FRONTEND_PATH}/
 
             # Set proper permissions
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "chmod -R 755 ${FRONTEND_PATH}"
@@ -226,7 +226,7 @@ jobs:
 
             # Upload entire backend directory with existing Docker files
             echo "📤 Uploading backend files..."
-            scp -o StrictHostKeyChecking=no -r be/target ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/
+            scp -o StrictHostKeyChecking=no -r be/target/online-course-0.0.1-SNAPSHOT.jar ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/target/
             scp -o StrictHostKeyChecking=no -r be/docker-compose.yml ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/
             scp -o StrictHostKeyChecking=no -r be/dockerfile ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/
 
