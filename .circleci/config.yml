@@ -24,16 +24,13 @@ jobs:
       - run:
           name: Đảm bảo vite@7.0.6 đã cài
           command: cd fe && npm install vite@7.0.6 --save-dev
-      - run:
-          name: Kiểm tra Vite đã cài
-          command: cd fe && npx vite --version
   build-fe:
     executor: node-executor
     steps:
       - checkout
       - run:
           name: Build FE
-          command: cd fe && npm run build
+          command: cd fe && npx vite --version && npx vite build
   test-fe:
     executor: node-executor
     steps:
