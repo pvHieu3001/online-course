@@ -10,7 +10,8 @@ export default function ListOrders() {
   const [searchValue, setSearchValue] = useState('')
   const orders = useSelector((state) => state.order)
 
-  console.log('orders', orders.data)
+  console.log('orders', orders
+  )
 
   useEffect(() => {
     dispatch(OrderActions.getOrder() as unknown as AnyAction)
@@ -129,7 +130,7 @@ export default function ListOrders() {
         }}
         columns={columns}
         sticky={{ offsetHeader: 0 }}
-        dataSource={orders?.data?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
+        dataSource={orders?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
         loading={orders.isLoading}
       />
     </>
