@@ -20,8 +20,12 @@ jobs:
             - v1-dependencies-fe-{{ checksum "fe/package.json" }}
             - v1-dependencies-fe-
       - run:
-          name: Install dependencies
-          command: cd fe && npm ci || npm install --legacy-peer-deps
+          name: Clean and install dependencies
+          command: |
+            cd fe
+            rm -rf node_modules package-lock.json
+            npm cache clean --force
+            npm install --legacy-peer-deps
       - save_cache:
           paths:
             - fe/node_modules
@@ -42,7 +46,13 @@ jobs:
             - v1-dependencies-fe-
       - run:
           name: Install dependencies (if cache miss)
-          command: cd fe && npm ci || npm install --legacy-peer-deps
+          command: |
+            cd fe
+            if [ ! -d "node_modules" ]; then
+              rm -rf node_modules package-lock.json
+              npm cache clean --force
+              npm install --legacy-peer-deps
+            fi
       - run:
           name: Test FE
           command: cd fe && npm test || true
