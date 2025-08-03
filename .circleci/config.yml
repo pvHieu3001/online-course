@@ -9,6 +9,10 @@ executors:
     docker:
       - image: cimg/openjdk:17.0
     working_directory: ~/project
+  docker-executor:
+    docker:
+      - image: docker:24.0.2
+    working_directory: ~/project
 
 jobs:
   build-fe:
@@ -36,6 +40,10 @@ jobs:
       - run:
           name: Build FE
           command: cd fe && npx vite build
+      - persist_to_workspace:
+          root: fe
+          paths:
+            - dist
   test-fe:
     executor: node-executor
     steps:
@@ -66,6 +74,10 @@ jobs:
       - run:
           name: Build BE
           command: cd be && ./mvnw clean install -DskipTests
+      - persist_to_workspace:
+          root: be
+          paths:
+            - target
   test-be:
     executor: java-executor
     steps:
@@ -76,6 +88,149 @@ jobs:
       - run:
           name: Test BE
           command: cd be && ./mvnw test
+  deploy-fe:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: fe
+      - add_ssh_keys:
+          fingerprints:
+            - "${fingerprints}"
+      - run:
+          name: Deploy Frontend to Server
+          command: |
+            # Create deployment script
+            cat > deploy-fe.sh << 'EOF'
+            #!/bin/bash
+            set -e
+
+            # Server configuration from environment variables
+            SERVER_HOST="${SERVER_HOST:-your-server.com}"
+            SERVER_USER="${SERVER_USER:-deploy}"
+            FRONTEND_PATH="${FRONTEND_PATH:-/var/www/frontend}"
+            BACKUP_PATH="${BACKUP_PATH:-/var/www/backups}"
+
+            echo "🚀 Starting frontend deployment to ${SERVER_HOST}..."
+
+            # Create backup directory if it doesn't exist
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p ${BACKUP_PATH}"
+
+            # Create timestamp for backup
+            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+            # Backup current frontend if it exists
+            if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "[ -d ${FRONTEND_PATH} ]"; then
+              echo "📦 Creating backup of current frontend..."
+              ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "tar -czf ${BACKUP_PATH}/frontend_backup_${TIMESTAMP}.tar.gz -C ${FRONTEND_PATH} ."
+            fi
+
+            # Create frontend directory if it doesn't exist
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p ${FRONTEND_PATH}"
+
+            # Upload new frontend build
+            echo "📤 Uploading new frontend build..."
+            scp -o StrictHostKeyChecking=no -r dist/* ${SERVER_USER}@${SERVER_HOST}:${FRONTEND_PATH}/
+
+            # Set proper permissions
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "chmod -R 755 ${FRONTEND_PATH}"
+
+            # Restart nginx if it exists
+            if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "systemctl is-active --quiet nginx"; then
+              echo "🔄 Restarting nginx..."
+              ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "sudo systemctl reload nginx"
+            fi
+
+            echo "✅ Frontend deployment completed successfully!"
+            EOF
+
+            chmod +x deploy-fe.sh
+            ./deploy-fe.sh
+  deploy-be:
+    executor: java-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: be
+      - add_ssh_keys:
+          fingerprints:
+            - "${fingerprints}"
+      - run:
+          name: Deploy Backend to VPS
+          command: |
+            # Create deployment script
+            cat > deploy-be.sh << 'EOF'
+            #!/bin/bash
+            set -e
+
+            # Server configuration from environment variables
+            SERVER_HOST="${SERVER_HOST:-your-server.com}"
+            SERVER_USER="${SERVER_USER:-deploy}"
+            BACKEND_PATH="${BACKEND_PATH:-/home/deploy/online-course/be}"
+            BACKUP_PATH="${BACKUP_PATH:-/var/www/backups}"
+            DOCKER_IMAGE_NAME="${DOCKER_IMAGE_NAME:-online-course-backend}"
+            DOCKER_CONTAINER_NAME="${DOCKER_CONTAINER_NAME:-online-course-backend}"
+
+            echo "🚀 Starting backend deployment to ${SERVER_HOST}..."
+
+            # Create backup directory if it doesn't exist
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p ${BACKUP_PATH}"
+
+            # Create timestamp for backup
+            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+            # Find the JAR file
+            JAR_FILE=$(find target -name "*.jar" -not -name "*sources.jar" -not -name "*javadoc.jar" | head -1)
+
+            if [ -z "$JAR_FILE" ]; then
+              echo "❌ No JAR file found in target directory"
+              exit 1
+            fi
+
+            echo "📦 Found JAR file: $JAR_FILE"
+
+            # Create backend directory if it doesn't exist
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p ${BACKEND_PATH}"
+
+            # Backup current Docker image if it exists
+            if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker images | grep -q ${DOCKER_IMAGE_NAME}"; then
+              echo "📦 Creating backup of current Docker image..."
+              ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker save ${DOCKER_IMAGE_NAME}:latest | gzip > ${BACKUP_PATH}/backend_docker_backup_${TIMESTAMP}.tar.gz"
+            fi
+
+            # Stop and remove current container if it exists
+            if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker ps -a | grep -q ${DOCKER_CONTAINER_NAME}"; then
+              echo "🛑 Stopping and removing current container..."
+              ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker stop ${DOCKER_CONTAINER_NAME} || true"
+              ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker rm ${DOCKER_CONTAINER_NAME} || true"
+            fi
+
+            # Remove old Docker image
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker rmi ${DOCKER_IMAGE_NAME}:latest || true"
+
+            # Upload entire backend directory with existing Docker files
+            echo "📤 Uploading backend files..."
+            scp -o StrictHostKeyChecking=no -r . ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/
+
+            # Create uploads directory on server
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p /var/www/uploads"
+
+            # Build new Docker image using existing dockerfile
+            echo "🔨 Building new Docker image..."
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "cd ${BACKEND_PATH} && docker build -t ${DOCKER_IMAGE_NAME}:latest ."
+
+            # Run new container with docker-compose
+            echo "🚀 Starting new container with docker-compose..."
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "cd ${BACKEND_PATH} && docker-compose up -d --build"
+
+            # Clean up old images (keep last 2)
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker images ${DOCKER_IMAGE_NAME} -q | tail -n +3 | xargs -r docker rmi || true"
+
+            echo "✅ Backend deployment completed successfully!"
+            EOF
+
+            chmod +x deploy-be-remote.sh
+            ./deploy-be-remote.sh
 
 workflows:
   version: 2
@@ -89,3 +244,19 @@ workflows:
       - test-be:
           requires:
             - build-be
+  deploy:
+    jobs:
+      - build-fe
+      - build-be
+      - deploy-fe:
+          requires:
+            - build-fe
+          filters:
+            branches:
+              only: main
+      - deploy-be:
+          requires:
+            - build-be
+          filters:
+            branches:
+              only: main
