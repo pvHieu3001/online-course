@@ -78,6 +78,10 @@ jobs:
           root: be
           paths:
             - target
+            - dockerfile
+            - docker-compose.yml
+            - pom.xml
+            - src
   test-be:
     executor: java-executor
     steps:
@@ -96,7 +100,7 @@ jobs:
           at: fe
       - add_ssh_keys:
           fingerprints:
-            - "${fingerprints}"
+            - "SHA256:2ddCb9OOC47UzX27NS3G1bHd5FeEFd7MD4++MtqCBQY"
       - run:
           name: Deploy Frontend to Server
           command: |
@@ -155,7 +159,15 @@ jobs:
           at: be
       - add_ssh_keys:
           fingerprints:
-            - "${fingerprints}"
+            - "SHA256:2ddCb9OOC47UzX27NS3G1bHd5FeEFd7MD4++MtqCBQY"
+      - run:
+          name: Verify workspace contents
+          command: |
+            echo "Current directory: $(pwd)"
+            echo "Directory contents:"
+            ls -la
+            echo "Target directory contents:"
+            ls -la target/ || echo "Target directory not found"
       - run:
           name: Deploy Backend to VPS
           command: |
@@ -181,11 +193,13 @@ jobs:
             # Create timestamp for backup
             TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-            # Find the JAR file
-            JAR_FILE=$(find target -name "*.jar" -not -name "*sources.jar" -not -name "*javadoc.jar" | head -1)
+            # Find the JAR file (fix path)
+            JAR_FILE=$(find be/target -name "*.jar" -not -name "*sources.jar" -not -name "*javadoc.jar" | head -1)
 
             if [ -z "$JAR_FILE" ]; then
-              echo "❌ No JAR file found in target directory"
+              echo "❌ No JAR file found in be/target directory"
+              echo "be/target directory contents:"
+              ls -la be/target/ || echo "be/target directory not found"
               exit 1
             fi
 
@@ -212,7 +226,9 @@ jobs:
 
             # Upload entire backend directory with existing Docker files
             echo "📤 Uploading backend files..."
-            scp -o StrictHostKeyChecking=no -r . ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/
+            scp -o StrictHostKeyChecking=no -r be/target ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/
+            scp -o StrictHostKeyChecking=no -r be/docker-compose.yml ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/
+            scp -o StrictHostKeyChecking=no -r be/dockerfile ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/
 
             # Create uploads directory on server
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p /var/www/uploads"
@@ -223,7 +239,7 @@ jobs:
 
             # Run new container with docker-compose
             echo "🚀 Starting new container with docker-compose..."
-            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "cd ${BACKEND_PATH} && docker-compose up -d --build"
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "cd ${BACKEND_PATH} && docker compose up -d --build"
 
             # Clean up old images (keep last 2)
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker images ${DOCKER_IMAGE_NAME} -q | tail -n +3 | xargs -r docker rmi || true"
