@@ -1267,7 +1267,6 @@ img {
 }
 
 .gradent {
-  background: url("../images/info-card-2.jpg") no-repeat center top;
   background-size: cover;
   padding: 15px;
   border-radius: 15px;
@@ -1808,7 +1807,6 @@ body {
   background-size: cover;
   background-position: 50%;
   text-align: center;
-  background: url("../images/bg-signup.jpg") no-repeat center top;
 }
 .header-col.header-brand {
   white-space: nowrap;
@@ -2262,7 +2260,6 @@ section.ant-layout.layout-content .ant-layout-content.content-ant {
 }
 
 .card-credit {
-  background-image: linear-gradient(310deg, rgba(20, 23, 39, 0.8), rgba(58, 65, 111, 0.8)), url("../../../../assets/images/manager/card-credit.jpg");
   background-position: 50%;
   background-size: cover;
   border: none;
@@ -2559,7 +2556,6 @@ section.ant-layout.layout-content .ant-layout-content.content-ant {
 }
 .profile-nav-bg {
   height: 300px;
-  background-image: linear-gradient(310deg, rgba(33, 82, 255, 0.6), rgba(33, 212, 253, 0.6)), url(../../../../assets/images/manager/curved0.d146ec6e9401aa9d52c5.jpg);
   margin-top: -137.8px;
   border-radius: 12px;
   box-shadow: 0 20px 27px rgb(0 0 0 / 5%);
