@@ -21,6 +21,7 @@ import CategoryDetailPage from '../page/user/CategoryDetailPage/index'
 import PagePolicy from '../page/user/PagePolicy'
 import PageTermOfUse from '../page/user/PageTermOfUse'
 import PageCopyright from '../page/user/PageCopyright'
+import ProductOrdersManagement from '@/page/admin/orders'
 
 export default function Router() {
   return (
@@ -48,6 +49,11 @@ export default function Router() {
             </Route>
 
             <Route path='products' element={<ProductManagement />}>
+              <Route path='add' element={<AddProduct />} />
+              <Route path=':flug' element={<EditProduct />} />
+            </Route>
+
+            <Route path='orders' element={<ProductOrdersManagement />}>
               <Route path='add' element={<AddProduct />} />
               <Route path=':flug' element={<EditProduct />} />
             </Route>
