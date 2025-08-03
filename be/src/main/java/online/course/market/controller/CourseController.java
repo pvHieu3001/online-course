@@ -94,45 +94,70 @@ public class CourseController {
     @Operation(description = "Save endpoint for Course", summary = "This is a summary for Course save endpoint")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<GetCourseDto>> saveCourse(@Valid @ModelAttribute PostCourseDto dto) {
-    try {
+        try {
 
-        if(!Files.exists(uploadDir)){
-            Files.createDirectories(uploadDir);
+            if(!Files.exists(uploadDir)){
+                Files.createDirectories(uploadDir);
+            }
+
+            String imageFilename="";
+            if(dto.getImageFile() != null){
+                imageFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
+                Path imagePath = uploadDir.resolve(imageFilename);
+                Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            String sourceFilename="";
+            if(dto.getSourceFile() != null){
+                sourceFilename = UUID.randomUUID()+"_"+dto.getSourceFile().getOriginalFilename();
+                Path sourcePath = uploadDir.resolve(sourceFilename);
+                Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            dto.setSlug(SlugUtils.toSlug(dto.getName()));
+            dto.setImageUrl("/upload/" + imageFilename);
+            dto.setSourceUrl("/upload/" + sourceFilename);
+            Course course = modelMapper.map(dto, Course.class);
+            Course courseDb = courseService.save(course);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(courseDb)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
-        String imageFilename="";
-        if(dto.getImageFile() != null){
-            imageFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
-            Path imagePath = uploadDir.resolve(imageFilename);
-            Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-        }
-
-        String sourceFilename="";
-        if(dto.getSourceFile() != null){
-            sourceFilename = UUID.randomUUID()+"_"+dto.getSourceFile().getOriginalFilename();
-            Path sourcePath = uploadDir.resolve(sourceFilename);
-            Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
-        }
-
-        dto.setSlug(SlugUtils.toSlug(dto.getName()));
-        dto.setImageUrl("/upload/" + imageFilename);
-        dto.setSourceUrl("/upload/" + sourceFilename);
-        Course course = modelMapper.map(dto, Course.class);
-        Course courseDb = courseService.save(course);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(courseDb)));
-    } catch (IOException e) {
-        throw new RuntimeException(e);
-    }
-
     }
 
     @Operation(description = "Update endpoint for Course", summary = "This is a summary for Course update endpoint")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<GetCourseDto>> updateCourse(@Valid @RequestBody PutCourseDto dto,
+    public ResponseEntity<ApiResponse<GetCourseDto>> updateCourse(@Valid @ModelAttribute PutCourseDto dto,
                                                                  @PathVariable Long id) {
-        Course course = modelMapper.map(dto, Course.class);
-        Course courseDb = courseService.update(course, id);
-        return ResponseEntity.ok(ApiResponse.success("Updated", toDto(courseDb)));
+        try {
+            if(!Files.exists(uploadDir)){
+                Files.createDirectories(uploadDir);
+            }
+
+            String imageFilename="";
+            if(dto.getImageFile() != null){
+                imageFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
+                Path imagePath = uploadDir.resolve(imageFilename);
+                Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            String sourceFilename="";
+            if(dto.getSourceFile() != null){
+                sourceFilename = UUID.randomUUID()+"_"+dto.getSourceFile().getOriginalFilename();
+                Path sourcePath = uploadDir.resolve(sourceFilename);
+                Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            dto.setSlug(SlugUtils.toSlug(dto.getName()));
+            dto.setImageUrl("/upload/" + imageFilename);
+            dto.setSourceUrl("/upload/" + sourceFilename);
+
+            Course course = modelMapper.map(dto, Course.class);
+            Course courseDb = courseService.update(course, id);
+            return ResponseEntity.ok(ApiResponse.success("Updated", toDto(courseDb)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Operation(description = "Delete endpoint for Course", summary = "This is a summary for Course delete endpoint")

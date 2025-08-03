@@ -16,8 +16,11 @@ import ProductManagement from '@/page/admin/products'
 import AddProduct from '@/page/admin/products/_components/add'
 import EditProduct from '@/page/admin/products/_components/edit'
 import GuardPage from '@/middleware/GuardPage'
-import ProductDetailPage from '../page/user/ProductDetailPage/index';
-import CategoryDetailPage from '../page/user/CategoryDetailPage/index';
+import ProductDetailPage from '../page/user/ProductDetailPage/index'
+import CategoryDetailPage from '../page/user/CategoryDetailPage/index'
+import PagePolicy from '../page/user/PagePolicy'
+import PageTermOfUse from '../page/user/PageTermOfUse'
+import PageCopyright from '../page/user/PageCopyright'
 
 export default function Router() {
   return (
@@ -28,7 +31,10 @@ export default function Router() {
             <Route index element={<PageHome />} />
             <Route path='cart' element={<></>} />
             <Route path='product-detail/:slug' element={<ProductDetailPage />} />
-            <Route path='category-detail/:slug' element={<CategoryDetailPage/>} />
+            <Route path='category-detail/:slug' element={<CategoryDetailPage />} />
+            <Route path='privacy-policy' element={<PagePolicy />} />
+            <Route path='term-of-use' element={<PageTermOfUse />} />
+            <Route path='copyright' element={<PageCopyright />} />
           </Route>
 
           <Route path='admin' element={<Manager />}>
@@ -49,7 +55,6 @@ export default function Router() {
             <Route path='categories' element={<CategoryManagement />}>
               <Route path='add' element={<AddCategory />} />
               <Route path=':id' element={<EditCategory />} />
-              
             </Route>
           </Route>
         </Route>

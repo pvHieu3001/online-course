@@ -1,0 +1,41 @@
+.bg {
+  background: #f8f9fa;
+  min-height: 100vh;
+  padding: 32px 0;
+}
+
+.description {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+  padding: 32px;
+}
+
+.description_title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.description_title h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.herald_txt {
+  font-size: 1.1rem;
+  color: #444;
+  line-height: 1.7;
+}
+
+.herald_txt h2 {
+  font-size: 1.2rem;
+  color: #e53e3e;
+  margin-top: 24px;
+}
+
+.herald_txt p {
+  margin-bottom: 16px;
+}

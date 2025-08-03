@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
@@ -14,5 +15,6 @@ public class PostCategoryDto {
     private String name;
     private String slug;
     private boolean status;
+    private MultipartFile imageFile;
     private String image;
 } 

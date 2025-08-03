@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import { CloudUploadOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { Flex, Form, Input, Modal, Button, Switch, Select, Drawer, Spin } from 'antd';
@@ -135,24 +134,23 @@ export default function AddCategory() {
               >
                 <div className='flex flex-col items-center'>
                   {DisplayPic ? (
-                    <div className='relative group w-[180px] h-[180px] mb-2'>
+                    <div className='relative group w-[56px] h-[56px] mb-2'>
                       <img
                         src={DisplayPic}
                         alt='Ảnh danh mục'
-                        className='object-cover w-full h-full rounded-lg border shadow'
+                        className='object-cover w-full h-full rounded-md border border-gray-300 bg-white'
                       />
                       <Button
                         type='text'
                         danger
                         icon={<DeleteOutlined />}
-                        className='absolute top-2 right-2 opacity-80 hover:opacity-100 bg-white/80'
+                        className='absolute top-1 right-1 opacity-80 hover:opacity-100 bg-white/80 p-1'
                         onClick={() => { setDisplayPic(''); setImageUrl(undefined); setIsDirty(true); }}
-                      >Xóa</Button>
+                      />
                     </div>
                   ) : (
-                    <label htmlFor='image-upload' className='flex flex-col items-center justify-center w-[180px] h-[180px] border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-100'>
-                      <CloudUploadOutlined style={{ fontSize: 40, color: '#aaa' }} />
-                      <span className='text-xs text-gray-500 mt-2'>Chọn ảnh (JPG, PNG, GIF, SVG, tối đa 1MB)</span>
+                    <label htmlFor='image-upload' className='flex flex-col items-center justify-center w-[56px] h-[56px] border rounded-md cursor-pointer bg-white hover:bg-gray-100'>
+                      <CloudUploadOutlined style={{ fontSize: 24, color: '#aaa' }} />
                       <input
                         id='image-upload'
                         type='file'
