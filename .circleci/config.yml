@@ -78,6 +78,10 @@ jobs:
           root: be
           paths:
             - target
+            - dockerfile
+            - docker-compose.yml
+            - pom.xml
+            - src
   test-be:
     executor: java-executor
     steps:
@@ -157,6 +161,14 @@ jobs:
           fingerprints:
             - "SHA256:2ddCb9OOC47UzX27NS3G1bHd5FeEFd7MD4++MtqCBQY"
       - run:
+          name: Verify workspace contents
+          command: |
+            echo "Current directory: $(pwd)"
+            echo "Directory contents:"
+            ls -la
+            echo "Target directory contents:"
+            ls -la target/ || echo "Target directory not found"
+      - run:
           name: Deploy Backend to VPS
           command: |
             # Create deployment script
@@ -186,6 +198,8 @@ jobs:
 
             if [ -z "$JAR_FILE" ]; then
               echo "❌ No JAR file found in target directory"
+              echo "Target directory contents:"
+              ls -la target/ || echo "Target directory not found"
               exit 1
             fi
 
