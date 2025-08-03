@@ -241,9 +241,6 @@ jobs:
             echo "🚀 Starting new container with docker-compose..."
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "cd ${BACKEND_PATH} && docker compose up -d --build"
 
-            # Clean up old images (keep last 2)
-            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker images ${DOCKER_IMAGE_NAME} -q | tail -n +3 | xargs -r docker rmi || true"
-
             echo "✅ Backend deployment completed successfully!"
             EOF
 
