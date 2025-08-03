@@ -2,16 +2,19 @@ import { useEffect, useState } from 'react'
 import { Button, Flex, Input, Popconfirm, Space, Table, Typography, message } from 'antd'
 import { Link } from 'react-router-dom'
 import { AnyAction } from '@reduxjs/toolkit'
-import { courseActions } from '@/app/actions/course.actions'
 import { useDispatch, useSelector } from 'react-redux'
+import { OrderActions } from '@/app/actions/orders.action'
 
 export default function ListOrders() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
-  const courses = useSelector((state) => state.course)
+  const orders = useSelector((state) => state.order)
+
+  console.log('orders', orders
+  )
 
   useEffect(() => {
-    dispatch(courseActions.getCourses() as unknown as AnyAction)
+    dispatch(OrderActions.getOrder() as unknown as AnyAction)
   }, [dispatch])
 
   const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,8 +26,6 @@ export default function ListOrders() {
 
   const handlerDeleteProduct = async (id: string) => {
     try {
-      // TODO: Thay bằng action xoá sản phẩm thực tế
-      // dispatch(courseActions.deleteCourse(id))
       message.success('Xoá sản phẩm thành công!')
     } catch (error: any) {
       message.error(error.data ? error.data.message : 'Xoá sản phẩm thất bại!')
@@ -34,52 +35,68 @@ export default function ListOrders() {
   const columns = [
     {
       title: '#',
-      dataIndex: 'key',
-      key: 'key',
+      dataIndex: 'id',
+      key: 'id',
       width: 40,
       align: 'center',
     },
     {
-      title: 'Tên sản phẩm',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Tổng số lượng',
+      dataIndex: 'subTotal',
+      key: 'subTotal',
       align: 'center',
       width: 180,
       render: (text: string) => <span>{text}</span>,
     },
     {
-      title: 'Mô tả',
-      dataIndex: 'description',
-      key: 'description',
+      title: 'Mã giảm giá ',
+      dataIndex: 'discountAmount',
+      key: 'discountAmount',
+      align: 'center',
+      width: 250,
+      render: (text: string) => <span>{text}</span>,
+    },
+     {
+      title: 'Tổng số lượng',
+      dataIndex: 'totalAmount',
+      key: 'totalAmount',
       align: 'center',
       width: 250,
       render: (text: string) => <span>{text}</span>,
     },
     {
-      title: 'Hành động',
-      key: 'action',
-      width: 150,
+      title: 'ID phiếu giảm giá',
+      dataIndex: 'couponId',
+      key: 'couponId',
       align: 'center',
-      render: (record: any) => (
-        <Space size={'middle'}>
-          <Link to={'' + record.id}>
-            <Button type='primary'>Sửa</Button>
-          </Link>
-          <Popconfirm
-            placement='topRight'
-            title={'Bạn có chắc muốn xoá sản phẩm này?'}
-            onConfirm={() => handlerDeleteProduct(record.id)}
-            onCancel={() => {}}
-            okText='Đồng ý'
-            cancelText='Huỷ bỏ'
-          >
-            <Button type='primary' danger>
-              Xoá
-            </Button>
-          </Popconfirm>
-        </Space>
-      ),
+      width: 250,
+      render: (text: string) => <span>{text}</span>,
     },
+    // {
+    //   title: 'Hành động',
+    //   key: 'action',
+    //   width: 150,
+    //   align: 'center',
+    //   render: (record: any) => (
+    //     <Space size={'middle'}>
+    //       <Link to={'' + record.id}>
+    //         <Button type='primary'>Sửa</Button>
+    //       </Link>
+    //       <Popconfirm
+    //         placement='topRight'
+    //         title={'Bạn có chắc muốn xoá sản phẩm này?'}
+    //         onConfirm={() => handlerDeleteProduct(record.id)}
+    //         onCancel={() => {}}
+    //         okText='Đồng ý'
+    //         cancelText='Huỷ bỏ'
+    //       >
+    //         <Button type='primary' danger>
+    //           Xoá
+    //         </Button>
+    //       </Popconfirm>
+    //     </Space>
+    //   ),
+    // },
   ]
 
   return (
@@ -100,9 +117,9 @@ export default function ListOrders() {
           placeholder={'Tìm kiếm'}
           style={{ borderRadius: '2rem' }}
         />
-        <Link to='add'>
+        {/* <Link to='add'>
           <Button type='primary'>Thêm sản phẩm</Button>
-        </Link>
+        </Link> */}
       </Flex>
       <Table
         style={{
@@ -113,8 +130,8 @@ export default function ListOrders() {
         }}
         columns={columns}
         sticky={{ offsetHeader: 0 }}
-        dataSource={courses?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
-        loading={courses.isLoading}
+        dataSource={orders?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
+        loading={orders.isLoading}
       />
     </>
   )

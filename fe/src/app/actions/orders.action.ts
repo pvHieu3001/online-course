@@ -1,10 +1,10 @@
 import { Dispatch } from '@reduxjs/toolkit'
-import { Orderervices } from '../services/Order.service'
+import { orderServices } from '../services/orders.service'
 import {
   isFetching,
   fetchedDone,
-  getOrderSuccessFully,
-  getOrderFailure,
+  getOrdersSuccessFully,
+  getOrdersFailure,
   deleteSuccessfully,
   deleteFailure,
   updateSuccessfully,
@@ -13,22 +13,22 @@ import {
   createSuccessfully,
   getByIdFailure,
   getByIdSuccessFully
-} from '../slices/Order.reducer'
+} from '../slices/order.reducer'
 
 export const getOrder = () => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  Orderervices
+  orderServices
     .getOrder()
-    .then((res) => dispatch(getOrderSuccessFully(res.data)))
-    .catch((error) => dispatch(getOrderFailure(error)))
+    .then((res) => dispatch(getOrdersSuccessFully(res.data)))
+    .catch((error) => dispatch(getOrdersFailure(error)))
     .finally(() => dispatch(fetchedDone()))
 }
 
 export const getOrderById = (id: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  Orderervices
+  orderServices
     .getOrderById(id)
     .then((res) => dispatch(getByIdSuccessFully(res.data)))
     .catch((error) => dispatch(getByIdFailure(error)))
@@ -38,7 +38,7 @@ export const getOrderById = (id: string) => (dispatch: Dispatch) => {
 export const createOrder = (data) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  Orderervices
+  orderServices
     .createOrder(data)
     .then((res) => dispatch(createSuccessfully(res.data)))
     .catch(() => dispatch(createFailure()))
@@ -48,7 +48,7 @@ export const createOrder = (data) => (dispatch: Dispatch) => {
 export const updateOrder = (id, data) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  Orderervices
+  orderServices
     .updateOrder(id, data)
     .then((res) => dispatch(updateSuccessfully(res.data)))
     .catch(() => dispatch(updateFailure()))
@@ -58,7 +58,7 @@ export const updateOrder = (id, data) => (dispatch: Dispatch) => {
 export const deleteOrder = (id: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  Orderervices
+  orderServices
     .deleteOrder(id)
     .then(() => dispatch(deleteSuccessfully()))
     .catch(() => dispatch(deleteFailure()))
