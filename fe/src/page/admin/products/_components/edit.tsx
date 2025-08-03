@@ -7,12 +7,14 @@ import TextEditor from './TextEditor/TextEditor'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
+import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 
 function EditProduct() {
   const { flug } = useParams()
   const dispatch = useDispatch()
   const courseStore = useSelector((state: any) => state.course)
+  const categoryStore = useSelector((state: any) => state.category)
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
   const navigate = useNavigate()
@@ -21,47 +23,45 @@ function EditProduct() {
     if (flug) {
       dispatch(courseActions.getCourseById(flug) as unknown as AnyAction)
     }
+    dispatch(categoryActions.getCategories() as unknown as AnyAction) // Lấy danh sách danh mục
   }, [dispatch, flug])
 
   const [description, setDescription] = useState<string>('')
+  const [displayPic, setDisplayPic] = useState<string>()
 
   useEffect(() => {
     setDescription(courseStore.data?.description ?? '')
-  }, [courseStore.data?.description])
+    if (courseStore.data?.imageUrl) {
+      setDisplayPic(`${import.meta.env.VITE_DOMAIN_URL}${courseStore.data.imageUrl}`)
+    }
+  }, [courseStore])
 
   const onFinish = async () => {
     const id = courseStore.data?.id
     const name = form.getFieldValue('name')
     const category_id = form.getFieldValue('category_id')
-    const image_url = form.getFieldValue('image_url')
+    const imageFile = form.getFieldValue('imageFile')
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
     const price = form.getFieldValue('price')
-    const rating = form.getFieldValue('rating')
-    const slug = form.getFieldValue('slug')
-    const source_url = form.getFieldValue('source_url')
+    const sourceUrl = form.getFieldValue('sourceUrl')
     const status = form.getFieldValue('status')
-    const total_rating = form.getFieldValue('total_rating')
-    const total_students = form.getFieldValue('total_students')
 
     const formdata = new FormData()
     formdata.append('id', id)
     formdata.append('name', name)
     formdata.append('category_id', category_id)
     formdata.append('description', description)
-    formdata.append('image_url', image_url)
+    formdata.append('imageFile', imageFile)
+    formdata.append('sourceUrl', sourceUrl)
     formdata.append('language', language)
     formdata.append('level', level)
-    formdata.append('price', String(price))
-    formdata.append('rating', String(rating))
-    formdata.append('slug', slug)
-    formdata.append('source_url', source_url)
+    formdata.append('price', price ?? 0)
     formdata.append('status', status)
-    formdata.append('total_rating', String(total_rating))
-    formdata.append('total_students', String(total_students))
 
     try {
       await dispatch(courseActions.updateCourse(id, formdata) as unknown as AnyAction)
+      await dispatch(courseActions.getCourses() as unknown as AnyAction)
       popupSuccess('Cập nhật sản phẩm thành công')
       navigate('..')
     } catch (error) {
@@ -108,7 +108,6 @@ function EditProduct() {
               updated_by: courseStore.data?.updated_by,
               category_id: courseStore.data?.category_id,
               description: courseStore.data?.description,
-              image_url: courseStore.data?.image_url,
               language: courseStore.data?.language,
               level: courseStore.data?.level,
               name: courseStore.data?.name,
@@ -185,36 +184,49 @@ function EditProduct() {
                     label='Tên khoá học'
                     rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}
                   >
-                    <Input placeholder='Nhập tên khoá học' />
+                    <Input placeholder='Nhập tên khoá học' size='large' />
                   </Form.Item>
 
                   <Form.Item name='category_id' label='Danh mục'>
-                    <Input placeholder='Nhập ID danh mục' />
+                    <Select
+                      placeholder='Chọn danh mục'
+                      loading={categoryStore.isLoading}
+                      allowClear
+                      showSearch
+                      optionFilterProp='children'
+                      size='large'
+                    >
+                      {categoryStore.data?.map((cat: any) => (
+                        <Select.Option key={cat.id} value={cat.id}>
+                          {cat.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
                   </Form.Item>
                   <Form.Item name='source_url' label='Nguồn video'>
-                    <Input placeholder='Nhập URL nguồn video' />
+                    <Input placeholder='Nhập URL nguồn video' size='large' />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item name='language' label='Ngôn ngữ'>
-                    <Select placeholder='Chọn ngôn ngữ'>
+                    <Select placeholder='Chọn ngôn ngữ' size='large'>
                       <Select.Option value='vi'>Tiếng Việt</Select.Option>
                       <Select.Option value='en'>English</Select.Option>
                       <Select.Option value='jp'>日本語</Select.Option>
                     </Select>
                   </Form.Item>
                   <Form.Item name='level' label='Trình độ'>
-                    <Select placeholder='Chọn trình độ'>
+                    <Select placeholder='Chọn trình độ' size='large'>
                       <Select.Option value='beginner'>Beginner</Select.Option>
                       <Select.Option value='intermediate'>Intermediate</Select.Option>
                       <Select.Option value='advanced'>Advanced</Select.Option>
                     </Select>
                   </Form.Item>
                   <Form.Item name='price' label='Giá'>
-                    <InputNumber className='w-full' min={0} placeholder='Nhập giá' />
+                    <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
                   </Form.Item>
                   <Form.Item name='status' label='Trạng thái'>
-                    <Select placeholder='Chọn trạng thái'>
+                    <Select placeholder='Chọn trạng thái' size='large'>
                       <Select.Option value='active'>Hoạt động</Select.Option>
                       <Select.Option value='inactive'>Không hoạt động</Select.Option>
                       <Select.Option value='draft'>Bản nháp</Select.Option>
@@ -228,13 +240,11 @@ function EditProduct() {
                 <TextEditor
                   content={description}
                   onHandleChange={(value) => {
-                    console.log(value)
                     setDescription(value)
                   }}
                 />
               </Form.Item>
             </Card>
-            <Divider orientation='left'>Ảnh Đại diện</Divider>
             <Card size='small' style={{ marginBottom: 24 }}>
               <Form.Item
                 name='gallery'
@@ -242,7 +252,7 @@ function EditProduct() {
                 style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 1rem' }}
               >
                 <Flex vertical gap={20}>
-                  <h2 className='font-bold text-[16px]'>Hình Ảnh</h2>
+                  <h2 className='font-bold text-[16px]'>Ảnh Đại diện</h2>
                   <div
                     style={{
                       flex: 5,
@@ -259,6 +269,17 @@ function EditProduct() {
                       align='center'
                       style={{ width: '100%', minHeight: '120px', borderRadius: '12px' }}
                     >
+                      {/* Hiển thị ảnh hiện tại từ DB nếu chưa chọn ảnh mới */}
+                      {!imageUrl && displayPic && (
+                        <div className='h-[100px] w-[120px] rounded-lg overflow-hidden relative'>
+                          <img
+                            src={displayPic}
+                            alt='Ảnh hiện tại'
+                            className='object-cover h-full w-full object-center rounded-lg border border-gray-300 bg-white'
+                          />
+                        </div>
+                      )}
+                      {/* Nếu đã chọn ảnh mới thì hiển thị preview ảnh mới */}
                       {imageUrl ? (
                         <div className='h-[100px] w-[120px] rounded-lg overflow-hidden relative'>
                           <img
@@ -326,15 +347,4 @@ function EditProduct() {
   )
 }
 
-// Định nghĩa modules và formats cho ReactQuill nếu chưa có
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ list: 'ordered' }, { list: 'bullet' }],
-    ['link', 'image'],
-    ['clean']
-  ]
-}
-const formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'link', 'image']
 export default EditProduct

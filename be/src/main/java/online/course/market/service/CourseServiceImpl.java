@@ -32,7 +32,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional(readOnly = true)
     public List<Course> getAll() {
-        return courseRepository.findAll();
+        return courseRepository.findAllByOrderByIdDesc();
     }
 
     @Override
