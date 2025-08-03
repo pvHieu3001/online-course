@@ -1,7 +1,6 @@
 package online.course.market.controller;
 
 import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
 import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.category.GetCategoryDto;
 import online.course.market.entity.dto.category.PostCategoryDto;
@@ -10,7 +9,7 @@ import online.course.market.entity.model.Category;
 import online.course.market.service.CategoryService;
 import online.course.market.utils.SlugUtils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -29,23 +28,36 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("api/v1/category")
 @Tag(name = "Category", description = "Category controller")
 public class CategoryController {
     private final CategoryService categoryService;
     private final ModelMapper modelMapper;
-
-    @Value("${application.upload.url}")
-    private String resourceFolder;
+    private final String resourceFolder;
 
     private Path uploadDir;
+    
+    // Constructor injection with qualifier for the upload URL bean
+    public CategoryController(CategoryService categoryService, ModelMapper modelMapper, 
+                            @Qualifier("uploadUrl") String resourceFolder) {
+        this.categoryService = categoryService;
+        this.modelMapper = modelMapper;
+        this.resourceFolder = resourceFolder;
+    }
+    
     @PostConstruct
     public void init() {
-        uploadDir = Paths.get(resourceFolder);
+        try {
+            uploadDir = Paths.get(resourceFolder);
+            // Create directory if it doesn't exist
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to initialize upload directory: " + resourceFolder, e);
+        }
     }
-
 
     private GetCategoryDto toDto(Category category) {
         return modelMapper.map(category, GetCategoryDto.class);
@@ -77,13 +89,9 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<ApiResponse<GetCategoryDto>> create(@Valid @ModelAttribute PostCategoryDto dto) {
         try {
-            if(!Files.exists(uploadDir)){
-                Files.createDirectories(uploadDir);
-            }
-
-            String imageFilename="";
-            if(dto.getImageFile() != null){
-                imageFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
+            String imageFilename = "";
+            if (dto.getImageFile() != null) {
+                imageFilename = UUID.randomUUID() + "_" + dto.getImageFile().getOriginalFilename();
                 Path imagePath = uploadDir.resolve(imageFilename);
                 Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -94,7 +102,7 @@ public class CategoryController {
             Category saved = categoryService.save(category);
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(saved)));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to save image file", e);
         }
     }
 
@@ -102,13 +110,9 @@ public class CategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<GetCategoryDto>> update(@Valid @ModelAttribute PutCategoryDto dto, @PathVariable Integer id) {
         try {
-            if(!Files.exists(uploadDir)){
-                Files.createDirectories(uploadDir);
-            }
-
-            String imageFilename="";
-            if(dto.getImageFile() != null){
-                imageFilename = UUID.randomUUID()+"_"+dto.getImageFile().getOriginalFilename();
+            String imageFilename = "";
+            if (dto.getImageFile() != null) {
+                imageFilename = UUID.randomUUID() + "_" + dto.getImageFile().getOriginalFilename();
                 Path imagePath = uploadDir.resolve(imageFilename);
                 Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -119,7 +123,7 @@ public class CategoryController {
             Category updated = categoryService.update(category, id);
             return ResponseEntity.ok(ApiResponse.success("Updated", toDto(updated)));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to save image file", e);
         }
     }
 

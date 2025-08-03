@@ -13,7 +13,7 @@ import online.course.market.entity.dto.course.PutCourseDto;
 import online.course.market.entity.model.Course;
 import online.course.market.utils.SlugUtils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -33,23 +33,31 @@ import jakarta.annotation.PostConstruct;
 @Tag(name = "Course", description = "Course controller")
 public class CourseController {
 
-    @Value("${application.upload.url}")
-    private String resourceFolder;
+    private final CourseService courseService;
+    private final ModelMapper modelMapper;
+    private final String resourceFolder;
 
     private Path uploadDir;
 
-    private final CourseService courseService;
-    private final ModelMapper modelMapper;
+    // Constructor injection with qualifier for the upload URL bean
+    public CourseController(CourseService courseService, ModelMapper modelMapper, 
+                          @Qualifier("uploadUrl") String resourceFolder) {
+        this.courseService = courseService;
+        this.modelMapper = modelMapper;
+        this.resourceFolder = resourceFolder;
+    }
 
     @PostConstruct
     public void init() {
-        uploadDir = Paths.get(resourceFolder);
-    }
-
-    // Constructor chỉ inject các bean
-    public CourseController(CourseService courseService, ModelMapper modelMapper) {
-        this.courseService = courseService;
-        this.modelMapper = modelMapper;
+        try {
+            uploadDir = Paths.get(resourceFolder);
+            // Create directory if it doesn't exist
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to initialize upload directory: " + resourceFolder, e);
+        }
     }
 
     // Helper: map Course sang GetCourseDto
