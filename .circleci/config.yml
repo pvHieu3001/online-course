@@ -193,13 +193,13 @@ jobs:
             # Create timestamp for backup
             TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-            # Find the JAR file
-            JAR_FILE=$(find target -name "*.jar" -not -name "*sources.jar" -not -name "*javadoc.jar" | head -1)
+            # Find the JAR file (fix path)
+            JAR_FILE=$(find be/target -name "*.jar" -not -name "*sources.jar" -not -name "*javadoc.jar" | head -1)
 
             if [ -z "$JAR_FILE" ]; then
-              echo "❌ No JAR file found in target directory"
-              echo "Target directory contents:"
-              ls -la target/ || echo "Target directory not found"
+              echo "❌ No JAR file found in be/target directory"
+              echo "be/target directory contents:"
+              ls -la be/target/ || echo "be/target directory not found"
               exit 1
             fi
 
@@ -226,7 +226,7 @@ jobs:
 
             # Upload entire backend directory with existing Docker files
             echo "📤 Uploading backend files..."
-            scp -o StrictHostKeyChecking=no -r . ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/
+            scp -o StrictHostKeyChecking=no -r be/* ${SERVER_USER}@${SERVER_HOST}:${BACKEND_PATH}/
 
             # Create uploads directory on server
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p /var/www/uploads"
