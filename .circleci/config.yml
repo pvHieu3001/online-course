@@ -96,7 +96,7 @@ jobs:
           at: fe
       - add_ssh_keys:
           fingerprints:
-            - "${fingerprints}"
+            - "SHA256:2ddCb9OOC47UzX27NS3G1bHd5FeEFd7MD4++MtqCBQY"
       - run:
           name: Deploy Frontend to Server
           command: |
@@ -155,7 +155,7 @@ jobs:
           at: be
       - add_ssh_keys:
           fingerprints:
-            - "${fingerprints}"
+            - "SHA256:2ddCb9OOC47UzX27NS3G1bHd5FeEFd7MD4++MtqCBQY"
       - run:
           name: Deploy Backend to VPS
           command: |
