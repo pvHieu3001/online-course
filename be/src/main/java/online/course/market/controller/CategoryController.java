@@ -118,7 +118,7 @@ public class CategoryController {
                 Path imagePath = uploadDir.resolve(imageFilename);
                 Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
                 log.info("Image saved: {}", imageFilename);
-                dto.setImage("/upload/" + imageFilename);
+                dto.setImage(imageFilename);
             } else {
                 dto.setImage(""); // No image uploaded
             }
@@ -161,7 +161,7 @@ public class CategoryController {
                 Path imagePath = uploadDir.resolve(imageFilename);
                 Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
                 log.info("New image saved: {}", imageFilename);
-                dto.setImage("/upload/" + imageFilename);
+                dto.setImage(imageFilename);
             } else {
                 // Keep existing image
                 dto.setImage(existingCategory.getImage());

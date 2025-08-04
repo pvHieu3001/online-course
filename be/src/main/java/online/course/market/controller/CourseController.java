@@ -132,8 +132,8 @@ public class CourseController {
             }
 
             dto.setSlug(SlugUtils.toSlug(dto.getName()));
-            dto.setImageUrl("/upload/" + imageFilename);
-            dto.setSourceUrl("/upload/" + sourceFilename);
+            dto.setImageUrl(imageFilename);
+            dto.setSourceUrl(sourceFilename);
             Course course = modelMapper.map(dto, Course.class);
             Course courseDb = courseService.save(course);
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(courseDb)));
@@ -166,8 +166,8 @@ public class CourseController {
             }
 
             dto.setSlug(SlugUtils.toSlug(dto.getName()));
-            dto.setImageUrl("/upload/" + imageFilename);
-            dto.setSourceUrl("/upload/" + sourceFilename);
+            dto.setImageUrl(imageFilename);
+            dto.setSourceUrl(sourceFilename);
 
             Course course = modelMapper.map(dto, Course.class);
             Course courseDb = courseService.update(course, id);
