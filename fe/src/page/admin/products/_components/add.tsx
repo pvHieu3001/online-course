@@ -29,7 +29,7 @@ function AddProduct() {
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
     const price = form.getFieldValue('price')
-    const source_url = form.getFieldValue('source_url')
+    const sourceUrl = form.getFieldValue('sourceUrl')
     const status = form.getFieldValue('status')
 
     const formdata = new FormData()
@@ -40,7 +40,7 @@ function AddProduct() {
     formdata.append('language', language)
     formdata.append('level', level)
     formdata.append('price', price ?? 0)
-    formdata.append('source_url', source_url)
+    formdata.append('sourceUrl', sourceUrl)
     formdata.append('status', status)
 
     try {
@@ -114,7 +114,7 @@ function AddProduct() {
                     ))}
                   </Select>
                 </Form.Item>
-                <Form.Item name='source_url' label='Nguồn video'>
+                <Form.Item name='sourceUrl' label='Nguồn video'>
                   <Input placeholder='Nhập URL nguồn video' />
                 </Form.Item>
               </Col>

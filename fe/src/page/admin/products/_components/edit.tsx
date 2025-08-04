@@ -40,7 +40,6 @@ function EditProduct() {
     const id = courseStore.data?.id
     const name = form.getFieldValue('name')
     const category_id = form.getFieldValue('category_id')
-    const imageFile = form.getFieldValue('imageFile')
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
     const price = form.getFieldValue('price')
@@ -52,7 +51,7 @@ function EditProduct() {
     formdata.append('name', name)
     formdata.append('category_id', category_id)
     formdata.append('description', description)
-    formdata.append('imageFile', imageFile)
+    formdata.append('imageFile', imageUrl as Blob)
     formdata.append('sourceUrl', sourceUrl)
     formdata.append('language', language)
     formdata.append('level', level)
@@ -203,7 +202,7 @@ function EditProduct() {
                       ))}
                     </Select>
                   </Form.Item>
-                  <Form.Item name='source_url' label='Nguồn video'>
+                  <Form.Item name='sourceUrl' label='Nguồn video'>
                     <Input placeholder='Nhập URL nguồn video' size='large' />
                   </Form.Item>
                 </Col>
