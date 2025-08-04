@@ -24,6 +24,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
+    public Category getBySlug(String slug) {
+        return categoryRepository.findBySlug(slug);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Category> getAll() {
         return categoryRepository.findAll();
     }
@@ -40,6 +46,9 @@ public class CategoryServiceImpl implements CategoryService {
         Category categoryDb = getById(id);
         categoryDb.setName(category.getName());
         categoryDb.setSlug(category.getSlug());
+        categoryDb.setParentId(category.getParentId());
+        categoryDb.setStatus(category.isStatus());
+        categoryDb.setImage(category.getImage());
         return categoryRepository.save(categoryDb);
     }
 

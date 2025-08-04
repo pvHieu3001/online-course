@@ -99,6 +99,15 @@ public class CourseController {
         return ResponseEntity.ok(ApiResponse.success(toDto(course)));
     }
 
+    @Operation(description = "Get courses by category endpoint", summary = "This is a summary for Course get by category endpoint")
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<ApiResponse<List<GetCourseDto>>> getByCategoryId(@PathVariable Integer categoryId) {
+        List<GetCourseDto> getCourseDtos = courseService.getByCategoryId(categoryId).stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.success(getCourseDtos));
+    }
+
     @Operation(description = "Save endpoint for Course", summary = "This is a summary for Course save endpoint")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<GetCourseDto>> saveCourse(@Valid @ModelAttribute PostCourseDto dto) {

@@ -35,6 +35,16 @@ export const getCategoryById = (id: string) => async (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const getCategoryBySlug = (slug: string) => async (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  await categoryServices
+    .getCategoryBySlug(slug)
+    .then((res) => dispatch(getByIdSuccessFully(res.data)))
+    .catch((error) => dispatch(getByIdSuccessFailure(error.toString())))
+    .finally(() => dispatch(fetchedDone()))
+}
+
 export const createCategory = (data) => async (dispatch: Dispatch) => {
   dispatch(isFetching())
 
@@ -68,6 +78,7 @@ export const deleteCategory = (id: string) => async (dispatch: Dispatch) => {
 export const categoryActions = {
   getCategories,
   getCategoryById,
+  getCategoryBySlug,
   createCategory,
   updateCategory,
   deleteCategory

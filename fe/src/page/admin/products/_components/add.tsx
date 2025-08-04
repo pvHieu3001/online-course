@@ -45,6 +45,7 @@ function AddProduct() {
 
     try {
       await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)
+      await dispatch(courseActions.getCourses() as unknown as AnyAction)
       popupSuccess('Thêm sản phẩm thành công')
       navigate('..')
     } catch (error) {

@@ -62,13 +62,13 @@ export default function ListCategory() {
     },
     {
       title: 'Trạng thái',
-      dataIndex: 'active',
-      key: 'active',
+      dataIndex: 'status',
+      key: 'status',
       align: 'center',
       width: 100,
-      render: (active) => {
-        const color = active == 0 ? 'volcano' : 'green'
-        const text = active == 0 ? 'Không Hoạt động' : 'Đang hoạt động'
+      render: (status) => {
+        const color = !status ? 'volcano' : 'green'
+        const text = !status ? 'Không Hoạt động' : 'Đang hoạt động'
 
         return <Tag color={color}>{text.toUpperCase()}</Tag>
       }

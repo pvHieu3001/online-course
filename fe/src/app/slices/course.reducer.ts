@@ -6,7 +6,7 @@ const initialState = {
   message: '',
   error_message: '',
   data: null,
-  dataList: null 
+  dataList: null
 }
 
 const courseSlice = createSlice({
@@ -66,6 +66,17 @@ const courseSlice = createSlice({
     deleteFailure: (state) => {
       state.error_message = 'Xóa Khóa Học Thất Bại'
       state.isLoading = false
+    },
+    getCoursesByCategorySuccessFully: (state, { payload }) => {
+      state.dataList = payload.data
+      state.code = payload.code
+      state.message = payload.message
+      state.isLoading = false
+    },
+    getCoursesByCategoryFailure: (state, { payload }) => {
+      state.code = payload.code || 'ERROR'
+      state.message = payload.error_message || 'Something went wrong'
+      state.isLoading = false
     }
   }
 })
@@ -82,7 +93,9 @@ export const {
   updateFailure,
   updateSuccessfully,
   deleteFailure,
-  deleteSuccessfully
+  deleteSuccessfully,
+  getCoursesByCategorySuccessFully,
+  getCoursesByCategoryFailure
 } = courseSlice.actions
 
 export default courseSlice.reducer

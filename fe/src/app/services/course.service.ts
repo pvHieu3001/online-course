@@ -27,6 +27,10 @@ function getPageCourse(page: string, size: string, sort: string) {
   return http.get(`/api/v1/course/pageable/?page=${page}&size=${size}&sort=${sort}`)
 }
 
+function getCoursesByCategory(categoryId: number) {
+  return http.get(`/api/v1/course/category/${categoryId}`)
+}
+
 export const courseServices = {
   getCourses,
   getCourseById,
@@ -34,4 +38,5 @@ export const courseServices = {
   createCourse,
   deleteCourse,
   getPageCourse,
+  getCoursesByCategory
 }

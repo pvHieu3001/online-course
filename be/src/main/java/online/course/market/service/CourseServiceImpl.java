@@ -85,4 +85,11 @@ public class CourseServiceImpl implements CourseService {
     public Course getById(Long id) {
         return courseRepository.findById(id).orElse(null);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Course> getByCategoryId(Integer categoryId) {
+        Assert.notNull(categoryId, "categoryId cannot be null");
+        return courseRepository.findByCategoryIdOrderByIdDesc(categoryId);
+    }
 }

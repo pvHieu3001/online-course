@@ -12,7 +12,9 @@ import {
   createFailure,
   createSuccessfully,
   getByIdFailure,
-  getByIdSuccessFully
+  getByIdSuccessFully,
+  getCoursesByCategorySuccessFully,
+  getCoursesByCategoryFailure
 } from '../slices/course.reducer'
 
 export const getCourses = () => (dispatch: Dispatch) => {
@@ -65,10 +67,21 @@ export const deleteCourse = (id: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const getCoursesByCategory = (categoryId: number) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  courseServices
+    .getCoursesByCategory(categoryId)
+    .then((res) => dispatch(getCoursesByCategorySuccessFully(res.data)))
+    .catch((error) => dispatch(getCoursesByCategoryFailure(error)))
+    .finally(() => dispatch(fetchedDone()))
+}
+
 export const courseActions = {
   getCourses,
   getCourseById,
   createCourse,
   updateCourse,
-  deleteCourse
+  deleteCourse,
+  getCoursesByCategory
 }

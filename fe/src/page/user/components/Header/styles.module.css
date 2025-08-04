@@ -162,3 +162,81 @@
   margin-top: 2px;
   line-height: 1.2;
 }
+
+.menuToggle {
+  display: none;
+  background: none;
+  border: none;
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.menuToggle svg {
+  color: #fff !important;
+}
+
+@media (max-width: 500px) {
+  .menuToggle {
+    display: block;
+  }
+  .menu {
+    display: none;
+  }
+  .sliderWrapper {
+    display: none;
+  }
+  .sidebarMenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80vw;
+    max-width: 320px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    padding: 24px 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: slideInMenu 0.2s;
+  }
+  .closeSidebar {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    cursor: pointer;
+  }
+  .sidebarMenu nav a {
+    display: block;
+    padding: 12px 0;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #eee;
+    color: #222;
+    text-decoration: none;
+  }
+  .sidebarMenu nav a:last-child {
+    border-bottom: none;
+  }
+
+  .sidebarMenu nav a.active {
+    color: #0683d7;
+    font-weight: bold;
+  }
+}
+
+@keyframes slideInMenu {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

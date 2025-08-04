@@ -7,8 +7,6 @@ import { categoryActions } from '@/app/actions'
 import { useNavigate } from 'react-router-dom'
 import TabCategory from '../TabCategory'
 
-
-
 function PageHome() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -20,7 +18,7 @@ function PageHome() {
   const courses = useSelector((state) => state.course)
   const categories = useSelector((state) => state.category)
 
-  console.log("categories", categories)
+  console.log('categories', categories)
 
   const handleDetail = (id: any) => {
     const course = courses.dataList.find((c: any) => c.id === id)
@@ -30,8 +28,6 @@ function PageHome() {
 
   return (
     <div className={styles.bg}>
-      
-
       <main className={styles.mainContent} role='main'>
         <section className={styles.courses} aria-label='Course listings'>
           {courses?.dataList?.map((course: any, i: number) => (
@@ -43,123 +39,116 @@ function PageHome() {
           ))}
         </section>
 
-        <TabCategory/>
+        <TabCategory />
       </main>
 
       <div className={styles.description} id='description'>
         <div className={styles.description_title}>
-          <h1>Free Course Site | Choose &amp; Download from 5000+ Courses</h1>
+          <h1>Free Course Site | Chọn & Tải về từ hơn 5000+ khóa học</h1>
         </div>
         <section className={styles.herald_txt}>
           <p>
-            Finding the right website to get started with learning for free isn’t simple. You may find it hard to get
-            your required course for free from any website unless you have reached freecoursesite. Our website stands at
-            the top when it comes to offering a versatile collection of courses from different fields.
+            Việc tìm một trang web phù hợp để bắt đầu học miễn phí không hề đơn giản. Bạn có thể gặp khó khăn khi tìm
+            khóa học mình cần mà không phải trả phí, trừ khi bạn đã biết đến FreeCourseSite. Trang web của chúng tôi
+            đứng đầu trong việc cung cấp bộ sưu tập khóa học đa dạng từ nhiều lĩnh vực khác nhau.
           </p>
           <p>
-            By exploring our collection of courses, you can find courses for affiliate marketing, photoshop, Shopify
-            development, and many other categories. Shortly, you will find a freecourse site good for every type of
-            learning from online courses.
+            Khi khám phá bộ sưu tập khóa học của chúng tôi, bạn có thể tìm thấy các khóa học về tiếp thị liên kết,
+            Photoshop, phát triển Shopify và nhiều danh mục khác. Nói ngắn gọn, FreeCourseSite là nơi lý tưởng cho mọi
+            hình thức học tập từ các khóa học trực tuyến.
           </p>
-          <h2>About Freecoursesite</h2>
+          <h2>Giới thiệu về FreeCourseSite</h2>
           <p>
-            Free Course Sites is an all-in-one solution for learners who can’t pay to buy expensive courses from online
-            mentors. We aim that learning is necessary for everyone without discrimination between rich and poor. That’s
-            why we are here with an extensive list of courses that anyone can download.
-          </p>
-          <p>
-            No matter where you are, what is your rank, and what is your financial status, you can get free courses from
-            our website. We are here to serve every learner in the world regardless of any factor impacting their
-            learning.
+            FreeCourseSite là giải pháp toàn diện cho những người học không có khả năng chi trả cho các khóa học đắt
+            tiền từ các giảng viên trực tuyến. Chúng tôi tin rằng học tập là cần thiết cho tất cả mọi người, không phân
+            biệt giàu nghèo. Đó là lý do chúng tôi mang đến danh sách khóa học phong phú mà ai cũng có thể tải về.
           </p>
           <p>
-            From freecoursesite, you can easily download as many courses as you want. Doesn’t matter what is your
-            required field, we have covered almost every field that can be learned from online courses. You can explore
-            the following section of this page to learn more about our freecourse list.
+            Dù bạn ở đâu, địa vị xã hội ra sao, hay tình trạng tài chính thế nào, bạn vẫn có thể tải về các khóa học
+            miễn phí từ trang web của chúng tôi. Chúng tôi phục vụ mọi người học trên toàn thế giới, không phân biệt bất
+            kỳ yếu tố nào ảnh hưởng đến việc học của họ.
           </p>
-          <h2>Our Major Course Categories</h2>
           <p>
-            Undoubtedly, the free course site covers multiple fields from 3D designing to HTML learning, YouTube
-            marketing to video editing, and many others. One can learn from any course freely without any fee or charges
-            as per their connected fields.
+            Từ FreeCourseSite, bạn có thể dễ dàng tải về bao nhiêu khóa học tùy thích. Không quan trọng lĩnh vực bạn cần
+            là gì, chúng tôi đã bao phủ hầu hết các lĩnh vực có thể học qua khóa học trực tuyến. Bạn có thể khám phá
+            phần tiếp theo của trang này để tìm hiểu thêm về danh sách khóa học miễn phí của chúng tôi.
           </p>
-          <p>But a few major fields that we are serving in are mentioned below.</p>
+          <h2>Danh mục khóa học chính</h2>
+          <p>
+            Không nghi ngờ gì, FreeCourseSite bao gồm nhiều lĩnh vực từ thiết kế 3D đến học HTML, tiếp thị YouTube đến
+            chỉnh sửa video và nhiều lĩnh vực khác. Bạn có thể học từ bất kỳ khóa học nào hoàn toàn miễn phí, không cần
+            trả phí hay lệ phí.
+          </p>
+          <p>Một số lĩnh vực chính mà chúng tôi đang phục vụ bao gồm:</p>
           <ul>
-            <li>Designing</li>
-            <li>Web Development</li>
-            <li>App Development</li>
-            <li>Programming</li>
-            <li>Database Management</li>
+            <li>Thiết kế</li>
+            <li>Phát triển Web</li>
+            <li>Phát triển Ứng dụng</li>
+            <li>Lập trình</li>
+            <li>Quản lý Cơ sở dữ liệu</li>
             <li>SEO</li>
           </ul>
           <p>
-            If you are new to the field and looking to learn a specific skill, we recommend exploring the above major
-            categories of courses. Free Course Sites have multiple tutorials for every skill making you proficient in a
-            specific skill from basic to advanced. Just get your computer, chair, and a notebook to get started with
-            learning from our freecourse site.
+            Nếu bạn mới bắt đầu và muốn học một kỹ năng cụ thể, chúng tôi khuyên bạn nên khám phá các danh mục khóa học
+            chính ở trên. FreeCourseSite có nhiều hướng dẫn cho từng kỹ năng, giúp bạn thành thạo từ cơ bản đến nâng
+            cao. Chỉ cần chuẩn bị máy tính, ghế ngồi và một cuốn sổ để bắt đầu học từ FreeCourseSite.
           </p>
-          <h2>Who Can Learn from Free Course Sites?</h2>
+          <h2>Ai có thể học từ FreeCourseSite?</h2>
           <p>
-            No limitations are applied to learning depending on any factor like gender, race, age, and financial status.
-            One can browse our freecourse site and explore it to get their desired course and be master in their skills.
-          </p>
-          <p>
-            Our website doesn’t only offer learning for beginners or professionals. But we are offering courses in
-            versatile collections to let everyone get what they want in terms of learning. Whether you have a basic
-            knowledge of the field or looking to get started with it, you can go ahead and learn something from our
-            courses.
+            Không có giới hạn nào trong việc học dựa trên các yếu tố như giới tính, chủng tộc, độ tuổi hay tình trạng
+            tài chính. Bất kỳ ai cũng có thể truy cập FreeCourseSite để tìm khóa học mong muốn và trở thành chuyên gia
+            trong lĩnh vực của mình.
           </p>
           <p>
-            Just explore our course collection to find the one that suits you. The best thing is you can read about the
-            course description from free course sites to learn what’s inside.
+            Trang web của chúng tôi không chỉ dành cho người mới bắt đầu hay chuyên gia. Chúng tôi cung cấp các khóa học
+            đa dạng để mọi người đều có thể tìm thấy điều mình cần. Dù bạn đã có kiến thức cơ bản hay mới bắt đầu, bạn
+            đều có thể học được điều gì đó từ các khóa học của chúng tôi.
           </p>
-          <h2>How to Download Courses From Freecourse Site?</h2>
           <p>
-            The process to download courses from freecourse sites is pretty simple. You only have to follow a few simple
-            steps. Here are the steps that you have to follow for downloading courses from our website.
+            Hãy khám phá bộ sưu tập khóa học của chúng tôi để tìm khóa học phù hợp với bạn. Điều tuyệt vời là bạn có thể
+            đọc mô tả khóa học để biết nội dung bên trong trước khi học.
           </p>
+          <h2>Cách tải khóa học từ FreeCourseSite?</h2>
+          <p>Quá trình tải khóa học từ FreeCourseSite rất đơn giản. Bạn chỉ cần thực hiện một vài bước sau:</p>
           <ol>
-            <li>Browse “Free Course Sites” and search for your required course</li>
-            <li>Click on the course you want to download</li>
-            <li>Scroll down unless you get a button labeled “Get Course Now” and click on it</li>
-            <li>It will open a new page where you have to wait for 15 seconds</li>
-            <li>Click on the “Get Link” button when shown on the screen</li>
+            <li>Truy cập “FreeCourseSite” và tìm khóa học bạn cần</li>
+            <li>Nhấp vào khóa học bạn muốn tải</li>
+            <li>Cuộn xuống cho đến khi thấy nút “Get Course Now” và nhấp vào đó</li>
+            <li>Một trang mới sẽ mở ra, bạn cần chờ 15 giây</li>
+            <li>Nhấp vào nút “Get Link” khi nó xuất hiện trên màn hình</li>
             <li>
-              By doing so, the course will be added to your G-drive. No need to share the Google account as it will
-              automatically redirect you to Google Drive after clicking on the button. Once the course is shown in the
-              drive, you can use its built-in downloading feature to get it on your computer/laptop/mobile.
+              Sau đó, khóa học sẽ được thêm vào Google Drive của bạn. Không cần chia sẻ tài khoản Google vì hệ thống sẽ
+              tự động chuyển hướng đến Drive. Khi khóa học hiển thị trong Drive, bạn có thể sử dụng tính năng tải về để
+              lưu vào máy tính/laptop/điện thoại.
             </li>
           </ol>
-          <h2>Why Choose a Free Course Site for Downloading Courses?</h2>
+          <h2>Tại sao chọn FreeCourseSite để tải khóa học?</h2>
           <p>
-            Multiple websites are available on the internet offering courses for free. Then the question that comes to
-            mind is “Why choose freecoursesite over others”. Here are some features that make us better than those
-            websites and let us stand at the top of the list.
+            Có rất nhiều trang web trên internet cung cấp khóa học miễn phí. Vậy tại sao nên chọn FreeCourseSite thay vì
+            các trang khác? Dưới đây là một số điểm nổi bật giúp chúng tôi vượt trội hơn:
           </p>
-          <h3>Safe Courses</h3>
+          <h3>Khóa học an toàn</h3>
           <p>
-            From our free course sites, you won’t get a single course that is affected by malware or malicious files. We
-            do care about our learner’s safety and always check a course before sharing it on our website. Our team
-            makes sure that the course doesn’t have a single malicious file making it difficult for learners to keep
-            their data safe.
+            Từ FreeCourseSite, bạn sẽ không nhận được bất kỳ khóa học nào chứa phần mềm độc hại hay tệp nguy hiểm. Chúng
+            tôi quan tâm đến sự an toàn của người học và luôn kiểm tra khóa học trước khi chia sẻ. Đội ngũ của chúng tôi
+            đảm bảo khóa học không chứa bất kỳ tệp độc hại nào gây ảnh hưởng đến dữ liệu của bạn.
           </p>
-          <h3>Wide Collection</h3>
+          <h3>Bộ sưu tập phong phú</h3>
           <p>
-            Free Course Site offers more than 5000 courses from different categories including the major ones mentioned
-            above. You can search for your required course and easily explore the collection to find the most suitable
-            one.
+            FreeCourseSite cung cấp hơn 5000 khóa học từ nhiều danh mục khác nhau, bao gồm cả các lĩnh vực chính đã nêu
+            ở trên. Bạn có thể tìm kiếm khóa học mình cần và dễ dàng khám phá bộ sưu tập để chọn khóa học phù hợp nhất.
           </p>
-          <h3>No Subscription Required</h3>
+          <h3>Không cần đăng ký</h3>
           <p>
-            Another major advantage of browsing our website is you won’t need any registration or subscription. You can
-            freely browse the website like <a href='https://thedownloadly.com/'>Downloadly</a>, download courses, and
-            learn from it. We will neither ask you for registration details or anything else.
+            Một lợi ích lớn khác khi truy cập trang web của chúng tôi là bạn không cần đăng ký hay tạo tài khoản. Bạn có
+            thể tự do duyệt trang web như <a href='https://thedownloadly.com/'>Downloadly</a>, tải khóa học và học tập.
+            Chúng tôi sẽ không yêu cầu thông tin đăng ký hay bất kỳ dữ liệu cá nhân nào.
           </p>
-          <h3>Easy to Download Interface</h3>
+          <h3>Giao diện tải về dễ sử dụng</h3>
           <p>
-            Additionally, freecoursesite has a built-in method to download courses for free. You can easily download any
-            course within a few steps without facing any hurdles. Its course downloader has a simple working interface
-            making it suitable for everyone to download and learn from the courses.
+            Ngoài ra, FreeCourseSite có phương thức tải khóa học tích hợp sẵn. Bạn có thể dễ dàng tải bất kỳ khóa học
+            nào chỉ với vài bước đơn giản mà không gặp khó khăn. Trình tải khóa học của chúng tôi có giao diện thân
+            thiện, phù hợp với mọi người dùng.
           </p>
         </section>
       </div>

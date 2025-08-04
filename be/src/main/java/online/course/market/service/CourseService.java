@@ -14,4 +14,5 @@ public interface CourseService {
 	void deleteById(final Long id);
 	Page<Course> finadAll(Pageable pageable);
 	Course getById(Long id);
+	List<Course> getByCategoryId(Integer categoryId);
 }

@@ -24,10 +24,12 @@ export default function EditCategory() {
   const [isDirty, setIsDirty] = useState(false)
 
   const dataCategories = Array.isArray(categoryStore.dataList)
-    ? (categoryStore.dataList as ICategory[]).map((item) => ({
-        label: item.name,
-        value: item.id
-      }))
+    ? (categoryStore.dataList as ICategory[])
+        .filter((item) => item.id !== parseInt(params.id ?? '0')) // Loại bỏ chính nó
+        .map((item) => ({
+          label: item.name,
+          value: item.id.toString() // Convert to string to match form value
+        }))
     : []
 
   const [imageUrl, setImageUrl] = useState<File>()
@@ -35,15 +37,16 @@ export default function EditCategory() {
 
   useEffect(() => {
     if (categoryStore.data) {
-      const data = categoryStore.data as ICategory & { image?: string; status?: number };
-      if (data.image) setDisplayPic(`${import.meta.env.VITE_DOMAIN_URL}${data.image}`);
+      const data = categoryStore.data as ICategory & { image?: string; status?: number }
+      if (data.image) setDisplayPic(`${import.meta.env.VITE_DOMAIN_URL}${data.image}`)
+
       form.setFieldsValue({
-        parent_id: data.parentId ? data.parentId : '',
-        status: data.status === 1 ? true : false,
+        parent_id: data.parentId ? data.parentId.toString() : '',
+        status: data.status,
         name: data.name
       })
     }
-  }, [categoryStore])
+  }, [categoryStore, dataCategories])
 
   // Xác nhận khi rời nếu có thay đổi
   useEffect(() => {
@@ -84,11 +87,6 @@ export default function EditCategory() {
 
     if (imageUrl) {
       formData.append('imageFile', imageUrl)
-    }
-
-    console.log('FormData contents:')
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value)
     }
 
     try {
@@ -248,6 +246,7 @@ export default function EditCategory() {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                           }
                           options={[{ value: '', label: 'Không có' }, ...dataCategories]}
+                          allowClear
                         />
                       </Form.Item>
                     </Flex>

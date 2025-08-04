@@ -89,6 +89,16 @@ public class CategoryController {
         return ResponseEntity.ok(ApiResponse.success(toDto(category)));
     }
 
+    @Operation(description = "Get by slug endpoint for Category", summary = "Get Category by slug")
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<ApiResponse<GetCategoryDto>> getBySlug(@PathVariable String slug) {
+        Category category = categoryService.getBySlug(slug);
+        if (category == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Category not found"));
+        }
+        return ResponseEntity.ok(ApiResponse.success(toDto(category)));
+    }
+
     @Operation(description = "Create Category", summary = "Create Category")
     @PostMapping
     public ResponseEntity<ApiResponse<GetCategoryDto>> create(@ModelAttribute PostCategoryDto dto) {

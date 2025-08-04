@@ -6,6 +6,10 @@ function getCategories() {
 function getCategoryById(id: string) {
   return http.get(`/api/v1/category/${id}`)
 }
+
+function getCategoryBySlug(slug: string) {
+  return http.get(`/api/v1/category/slug/${slug}`)
+}
 function updateCategory(id, data) {
   return http.put(`/api/v1/category/${id}`, data, {
     headers: {
@@ -30,6 +34,7 @@ function getPageCategory(page: string, size: string, sort: string) {
 export const categoryServices = {
   getCategories,
   getCategoryById,
+  getCategoryBySlug,
   updateCategory,
   createCategory,
   deleteCategory,

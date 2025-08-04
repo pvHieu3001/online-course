@@ -1,107 +1,199 @@
-import canvas from '../../../assets/images/base/canvas.png'
-import ai from '../../../assets/images/base/ai.jpg'
-import adobe from '../../../assets/images/base/adobe.jpg'
-import inteligent from '../../../assets/images/base/inteligent.jpg'
-import chatgpt from '../../../assets/images/base/chatgpt.jpg'
-import powerbi from '../../../assets/images/base/powerbi.png'
 import styles from './styles.module.css'
-import { useLocation } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import TabCategory from '../TabCategory'
+import { courseActions, categoryActions } from '@/app/actions'
 
 function CategoryDetailPage() {
+  const { slug } = useParams()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-    const location = useLocation()
-    const category = location.state
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [coursesPerPage] = useState(6)
 
-    const featuredCourses = [
-        { img: powerbi, title: 'Introduction to Microsoft Power BI' },
-        { img: chatgpt, title: 'ChatGPT Prompt Engineering ( Free Course )' },
-        { img: inteligent, title: 'N8N – Build intelligent AI 2.0 Agent Systems Without Coding' },
-        { img: adobe, title: 'Adobe Premiere Pro CC Masterclass for Video Editing' },
-        { img: ai, title: 'Adobe Illustrator CC for Learning Graphics Design' },
-        { img: canvas, title: 'Canva for Social Media Graphic Design and Video Editing' }
-    ]
+  // Get data from Redux store
+  const { dataList: courses, isLoading: coursesLoading } = useSelector((state) => state.course)
+  const { data: category, isLoading: categoryLoading } = useSelector((state) => state.category)
 
-    const courses = [
-        {
-            id: 1,
-            image: 'https://i.imgur.com/euT3ZqY.png',
-            category: 'Adobe After Affects · All Courses',
-            title: 'Adobe After Effects: Complete Animation Course for Beginners',
-            description:
-                'Adobe After Effects CC lets you make beautiful motion graphics, shape animations, and animated...'
-        },
-        {
-            id: 2,
-            image: 'https://i.imgur.com/NGEXCqT.png',
-            category: 'Adobe After Affects · All Courses',
-            title: 'Learn Adobe After Effects with a Crash Course for Creatives',
-            description:
-                'You can make great social media videos and motion graphics without any experience. Study theory...'
+  // Fetch category and courses when component mounts
+  useEffect(() => {
+    if (slug) {
+      dispatch(categoryActions.getCategoryBySlug(slug))
+    }
+  }, [slug])
+
+  // Fetch courses when category is loaded
+  useEffect(() => {
+    if (category && category.id) {
+      dispatch(courseActions.getCoursesByCategory(category.id))
+    }
+  }, [category])
+
+  // Handle course item click
+  const handleCourseClick = (course) => {
+    navigate('/course-detail', { state: course })
+  }
+
+  // Pagination logic
+  const indexOfLastCourse = currentPage * coursesPerPage
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage
+  const currentCourses = courses ? courses.slice(indexOfFirstCourse, indexOfLastCourse) : []
+  const totalPages = courses ? Math.ceil(courses.length / coursesPerPage) : 0
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // Generate page numbers
+  const getPageNumbers = () => {
+    const pageNumbers = []
+    const maxVisiblePages = 5
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i)
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pageNumbers.push(i)
         }
-    ];
+        pageNumbers.push('...')
+        pageNumbers.push(totalPages)
+      } else if (currentPage >= totalPages - 2) {
+        pageNumbers.push(1)
+        pageNumbers.push('...')
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pageNumbers.push(i)
+        }
+      } else {
+        pageNumbers.push(1)
+        pageNumbers.push('...')
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pageNumbers.push(i)
+        }
+        pageNumbers.push('...')
+        pageNumbers.push(totalPages)
+      }
+    }
+
+    return pageNumbers
+  }
+  // Show loading if category is still loading
+  if (categoryLoading) {
     return (
-        <>
-            <div className={styles.sliderWrapper}>
-                <section className={styles.slider} role='region' aria-label='Featured courses'>
-                    {featuredCourses.map((course, i) => (
-                        <div className={styles.sliderItem} key={i} role='button' tabIndex={0}>
-                            <img src={course.img} alt={`${course.title} thumbnail`} />
-                            <span>{course.title}</span>
-                        </div>
-                    ))}
-                </section>
-            </div>
-            <div className={styles.categoryDetailPage}>
-
-                <div className={styles.categoryDetail}>
-
-                    <div>
-                        <div className={styles.categoryLabel}>Category - {category.name}</div>
-                        <h1 className={styles.title}>
-                            Adobe After Effects Tutorials – Learn Adobe After Effects For Free
-                        </h1>
-                        <p className={styles.subtitle}>
-                            Adobe After Effects Tutorials – Learn Adobe After Effects For Free – how to compare
-                            in-camera footage with behind-the-scenes material, and make creative choices about
-                            blending them together. He also shares some beautiful special effects for adding
-                            flair to visuals. The final chapters show you how to put it all together, and make
-                            your Adobe CC workflow even more efficient, with presets.
-                        </p>
-                        <div className={styles.topics}>
-                            <div className={styles.topicsTitle}>Topics include:</div>
-                            <ul className={styles.topicList}>
-                                <li>Assessing your video footage</li>
-                                <li>Repairing and color correcting media</li>
-                                <li>Warming and cooling clips</li>
-                                <li>Shot matching</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className={styles.courseList}>
-                        {courses.map((course) => (
-                            <div className={styles.courseItem} key={course.id}>
-                                <img src={course.image} alt={course.title} className={styles.thumbnail} />
-                                <div className={styles.courseContent}>
-                                    <div className={styles.courseCategory}>{course.category}</div>
-                                    <div className={styles.courseTitle}>{course.title}</div>
-                                    <div className={styles.courseDescription}>{course.description}</div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-
-                <TabCategory />
-            </div>
-
-
-
-
-        </>
+      <div className={styles.bg}>
+        <div className={styles.categoryDetailPage}>
+          <div className={styles.loading}>Loading category...</div>
+        </div>
+      </div>
     )
+  }
+
+  // Show error if category not found
+  if (!category) {
+    return (
+      <div className={styles.bg}>
+        <div className={styles.categoryDetailPage}>
+          <div className={styles.noCourses}>Category not found</div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.bg}>
+      <div className={styles.categoryDetailPage}>
+        <div className={styles.categoryDetail}>
+          <div>
+            <div className={styles.categoryLabel}>Khóa học - {category.name}</div>
+            <h1 className={styles.title}>Adobe After Effects Tutorials – Learn Adobe After Effects For Free</h1>
+            <p className={styles.subtitle}>
+              Adobe After Effects Tutorials – Learn Adobe After Effects For Free – how to compare in-camera footage with
+              behind-the-scenes material, and make creative choices about blending them together. He also shares some
+              beautiful special effects for adding flair to visuals. The final chapters show you how to put it all
+              together, and make your Adobe CC workflow even more efficient, with presets.
+            </p>
+            <div className={styles.topics}>
+              <div className={styles.topicsTitle}>Topics include:</div>
+              <ul className={styles.topicList}>
+                <li>Assessing your video footage</li>
+                <li>Repairing and color correcting media</li>
+                <li>Warming and cooling clips</li>
+                <li>Shot matching</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className={styles.courseList}>
+            {coursesLoading ? (
+              <div className={styles.loading}>Loading courses...</div>
+            ) : currentCourses && currentCourses.length > 0 ? (
+              <>
+                {currentCourses.map((course) => (
+                  <div
+                    className={styles.courseItem}
+                    key={course.id}
+                    onClick={() => handleCourseClick(course)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img src={course.imageUrl} alt={course.name} className={styles.thumbnail} />
+                    <div className={styles.courseContent}>
+                      <div className={styles.courseCategory}>{category.name}</div>
+                      <div className={styles.courseTitle}>{course.name}</div>
+                      <div className={styles.courseDescription}>{course.description}</div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className={styles.pagination}>
+                    <button
+                      className={styles.pageButton}
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </button>
+
+                    {getPageNumbers().map((pageNumber, index) => (
+                      <button
+                        key={index}
+                        className={`${styles.pageButton} ${pageNumber === currentPage ? styles.activePage : ''} ${
+                          pageNumber === '...' ? styles.ellipsis : ''
+                        }`}
+                        onClick={() => (typeof pageNumber === 'number' ? handlePageChange(pageNumber) : null)}
+                        disabled={pageNumber === '...'}
+                      >
+                        {pageNumber}
+                      </button>
+                    ))}
+
+                    <button
+                      className={styles.pageButton}
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className={styles.noCourses}>No courses found in this category</div>
+            )}
+          </div>
+        </div>
+        <TabCategory />
+      </div>
+    </div>
+  )
 }
 
-export default CategoryDetailPage;
+export default CategoryDetailPage
