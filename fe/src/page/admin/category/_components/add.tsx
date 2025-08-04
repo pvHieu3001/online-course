@@ -23,7 +23,6 @@ export default function AddCategory() {
     : []
 
   const [imageUrl, setImageUrl] = useState<File>()
-  const [DisplayPic, setDisplayPic] = useState<string>()
 
   // Lấy danh sách category cha khi mount
   useEffect(() => {
@@ -83,21 +82,6 @@ export default function AddCategory() {
     }
   }
 
-  const selectedImg = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const types = ['jpeg', 'png', 'jpg', 'gif', 'webp']
-    if (!e.target.files || e.target.files.length === 0) return
-    const fileSelected = e.target.files[0]
-    const size = fileSelected.size
-    const type = types.includes(fileSelected.type.replace('image/', ''))
-    if (size <= 1048576 && type) {
-      setImageUrl(fileSelected)
-      setDisplayPic(URL.createObjectURL(fileSelected))
-      setIsDirty(true)
-    } else {
-      e.target.value = ''
-    }
-  }
-
   const onValuesChange = () => setIsDirty(true)
 
   return (
@@ -139,31 +123,29 @@ export default function AddCategory() {
                 style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
               >
                 <div className='flex flex-col items-center'>
-                  {DisplayPic ? (
-                    <div className='relative group w-[56px] h-[56px] mb-2'>
-                      <img
-                        src={DisplayPic}
-                        alt='Ảnh danh mục'
-                        className='object-cover w-full h-full rounded-md border border-gray-300 bg-white'
-                      />
-                      <Button
-                        type='text'
-                        danger
-                        icon={<DeleteOutlined />}
-                        className='absolute top-1 right-1 opacity-80 hover:opacity-100 bg-white/80 p-1'
-                        onClick={() => {
-                          setDisplayPic('')
-                          setImageUrl(undefined)
-                          setIsDirty(true)
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <label
-                      htmlFor='image-upload'
-                      className='flex flex-col items-center justify-center w-[56px] h-[56px] border rounded-md cursor-pointer bg-white hover:bg-gray-100'
-                    >
-                      <CloudUploadOutlined style={{ fontSize: 24, color: '#aaa' }} />
+                  <label
+                    htmlFor='image-upload'
+                    className='flex flex-col items-center justify-center w-[180px] h-[180px] border rounded-md cursor-pointer bg-white hover:bg-gray-100'
+                  >
+                    {imageUrl ? (
+                      <div className='relative group w-[180px] h-[180px] mb-2'>
+                        <img
+                          src={URL.createObjectURL(imageUrl as Blob)}
+                          alt='Ảnh danh mục'
+                          className='object-cover w-full h-full rounded-md border border-gray-300 bg-white'
+                        />
+                        <Button
+                          type='text'
+                          danger
+                          icon={<DeleteOutlined />}
+                          className='absolute top-1 right-1 opacity-80 hover:opacity-100 bg-white/80 p-1'
+                          onClick={() => {
+                            setImageUrl(undefined)
+                            setIsDirty(true)
+                          }}
+                        />
+                      </div>
+                    ) : (
                       <input
                         id='image-upload'
                         type='file'
@@ -171,10 +153,18 @@ export default function AddCategory() {
                         name='image'
                         className='hidden'
                         style={{ display: 'none' }}
-                        onChange={selectedImg}
+                        onChange={(e) => {
+                          if (!e.target.files || e.target.files.length === 0) return
+                          const file = e.target.files[0]
+                          if (file.size > 2 * 1024 * 1024) {
+                            popupError('Ảnh phải nhỏ hơn 2MB')
+                            return
+                          }
+                          setImageUrl(file)
+                        }}
                       />
-                    </label>
-                  )}
+                    )}
+                  </label>
                 </div>
               </Form.Item>
               <div

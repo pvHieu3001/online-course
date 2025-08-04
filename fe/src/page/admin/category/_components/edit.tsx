@@ -33,7 +33,7 @@ export default function EditCategory() {
     : []
 
   const [imageUrl, setImageUrl] = useState<File>()
-  const [DisplayPic, setDisplayPic] = useState<string>()
+  const [displayPic, setDisplayPic] = useState<string>()
 
   useEffect(() => {
     if (categoryStore.data) {
@@ -104,19 +104,6 @@ export default function EditCategory() {
   // Đánh dấu form đã thay đổi
   const onValuesChange = () => setIsDirty(true)
 
-  const selectedImg = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const types = ['jpeg', 'png', 'jpg', 'gif']
-    if (!e.target.files || e.target.files.length === 0) return
-    const fileSelected = e.target.files[0]
-    const size = fileSelected.size
-    const type = types.includes(fileSelected.type.replace('image/', ''))
-    if (size <= 1048576 && type) {
-      setImageUrl(fileSelected)
-      setDisplayPic(URL.createObjectURL(fileSelected))
-    } else {
-      e.target.value = ''
-    }
-  }
   if (categoryStore.error_message) {
     return <ErrorLoad />
   }
@@ -157,34 +144,41 @@ export default function EditCategory() {
                   style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
                 >
                   <div className='flex flex-col items-center'>
-                    {DisplayPic ? (
-                      <div className='relative group w-[180px] h-[180px] mb-2'>
-                        <img
-                          src={DisplayPic}
-                          alt='Ảnh danh mục'
-                          className='object-cover w-full h-full rounded-lg border shadow'
-                        />
-                        <Button
-                          type='text'
-                          danger
-                          icon={<DeleteOutlined />}
-                          className='absolute top-2 right-2 opacity-80 hover:opacity-100 bg-white/80'
-                          onClick={() => {
-                            setDisplayPic('')
-                            setImageUrl(undefined)
-                            setIsDirty(true)
-                          }}
-                        >
-                          Xóa
-                        </Button>
-                      </div>
-                    ) : (
-                      <label
-                        htmlFor='image-upload'
-                        className='flex flex-col items-center justify-center w-[180px] h-[180px] border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-100'
-                      >
-                        <CloudUploadOutlined style={{ fontSize: 40, color: '#aaa' }} />
-                        <span className='text-xs text-gray-500 mt-2'>Chọn ảnh (JPG, PNG, GIF, SVG, tối đa 1MB)</span>
+                    <label
+                      htmlFor='image-upload'
+                      className='flex flex-col items-center justify-center w-[180px] h-[180px] border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-100'
+                    >
+                      {!imageUrl && displayPic && (
+                        <div className='h-[180px] w-[180px] rounded-lg overflow-hidden relative'>
+                          <img
+                            src={displayPic}
+                            alt='Ảnh hiện tại'
+                            className='object-cover h-full w-full object-center rounded-lg border border-gray-300 bg-white'
+                          />
+                        </div>
+                      )}
+                      {imageUrl ? (
+                        <div className='relative group w-[180px] h-[180px] mb-2'>
+                          <img
+                            src={URL.createObjectURL(imageUrl as Blob)}
+                            alt='Ảnh danh mục'
+                            className='object-cover w-full h-full rounded-lg border shadow'
+                          />
+                          <Button
+                            type='text'
+                            danger
+                            icon={<DeleteOutlined />}
+                            className='absolute top-2 right-2 opacity-80 hover:opacity-100 bg-white/80'
+                            onClick={() => {
+                              setDisplayPic('')
+                              setImageUrl(undefined)
+                              setIsDirty(true)
+                            }}
+                          >
+                            Xóa
+                          </Button>
+                        </div>
+                      ) : (
                         <input
                           id='image-upload'
                           type='file'
@@ -192,10 +186,18 @@ export default function EditCategory() {
                           name='image'
                           className='hidden'
                           style={{ display: 'none' }}
-                          onChange={selectedImg}
+                          onChange={(e) => {
+                            if (!e.target.files || e.target.files.length === 0) return
+                            const file = e.target.files[0]
+                            if (file.size > 2 * 1024 * 1024) {
+                              popupError('Ảnh phải nhỏ hơn 2MB')
+                              return
+                            }
+                            setImageUrl(file)
+                          }}
                         />
-                      </label>
-                    )}
+                      )}
+                    </label>
                   </div>
                 </Form.Item>
                 <div
