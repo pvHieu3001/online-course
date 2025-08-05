@@ -3,6 +3,8 @@ package online.course.market.entity.dto.course;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import online.course.market.entity.dto.category.GetCategoryDto;
+
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -12,6 +14,7 @@ public class GetCourseDto {
     private Integer id;
     private String imageUrl;
     private String name;
+    private String content;
     private String description;
     private String sourceUrl;
     private String slug;
@@ -19,12 +22,13 @@ public class GetCourseDto {
     private String level;
     private String language;
     private String status;
-    private Integer categoryId;
     private Double rating;
     private Integer totalStudents;
     private Integer totalRating;
-    protected Long createdBy;
-    protected Long updatedBy;
     protected LocalDateTime createdAt;
     protected LocalDateTime updatedAt;
+
+    protected GetCategoryDto category;
+    protected String userCreate;
+    protected String userUpdate;
 }

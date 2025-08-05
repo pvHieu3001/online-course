@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select } from 'antd'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import TextEditor from './TextEditor/TextEditor'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
@@ -9,6 +9,7 @@ import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { formatDate } from '@/utils/formatDate'
+import TextArea from 'antd/es/input/TextArea'
 
 function EditProduct() {
   const { flug } = useParams()
@@ -17,7 +18,6 @@ function EditProduct() {
   const categoryStore = useSelector((state: any) => state.category)
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
-  const navigate = useNavigate()
   const [description, setDescription] = useState<string>('')
   const [displayPic, setDisplayPic] = useState<string>()
 
@@ -38,6 +38,7 @@ function EditProduct() {
   const onFinish = async () => {
     const id = courseStore.data?.id
     const name = form.getFieldValue('name')
+    const content = form.getFieldValue('content')
     const category_id = form.getFieldValue('category_id')
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
@@ -49,6 +50,7 @@ function EditProduct() {
     formdata.append('id', id)
     formdata.append('name', name)
     formdata.append('category_id', category_id)
+    formdata.append('content', content)
     formdata.append('description', description)
     formdata.append('imageFile', imageUrl as Blob)
     formdata.append('sourceUrl', sourceUrl)
@@ -105,6 +107,7 @@ function EditProduct() {
               updatedAt: formatDate(new Date(courseStore.data?.updatedAt)),
               updatedBy: courseStore.data?.updatedBy,
               category_id: courseStore.data?.category_id,
+              content: courseStore.data?.content,
               description: courseStore.data?.description,
               language: courseStore.data?.language,
               level: courseStore.data?.level,
@@ -153,17 +156,7 @@ function EditProduct() {
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name='createdBy' label='Người tạo'>
-                    <Input disabled />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
                   <Form.Item name='updatedAt' label='Ngày cập nhật'>
-                    <Input disabled />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name='updatedBy' label='Người cập nhật'>
                     <Input disabled />
                   </Form.Item>
                 </Col>
@@ -179,8 +172,18 @@ function EditProduct() {
                   >
                     <Input placeholder='Nhập tên khoá học' size='large' />
                   </Form.Item>
-
-                  <Form.Item name='category_id' label='Danh mục'>
+                  <Form.Item
+                    name='content'
+                    label='Nội dung khoá học'
+                    rules={[{ required: true, message: 'Vui lòng nhập nội dung khoá học!' }]}
+                  >
+                    <TextArea placeholder='Nhập nội dung khoá học' size='large' />
+                  </Form.Item>
+                  <Form.Item
+                    name='category_id'
+                    label='Danh mục'
+                    rules={[{ required: true, message: 'Vui lòng nhập danh mục!' }]}
+                  >
                     <Select
                       placeholder='Chọn danh mục'
                       loading={categoryStore.isLoading}

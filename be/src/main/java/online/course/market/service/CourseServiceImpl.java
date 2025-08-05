@@ -2,7 +2,9 @@ package online.course.market.service;
 
 import java.util.List;
 
+import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
+import online.course.market.repository.CategoryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import lombok.AllArgsConstructor;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -44,7 +47,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public Course update(Course course, Long id) {
+    public Course update(Course course, Long id, Integer catId) {
 
         Assert.notNull(id, "id cannot be null");
         Assert.notNull(course, "course cannot be null");
@@ -52,6 +55,8 @@ public class CourseServiceImpl implements CourseService {
         Course courseDb = courseRepository.findById(id)
                 .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "course not found"));
 
+        Category category = categoryRepository.findById(catId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
         courseDb.setName(course.getName());
         courseDb.setDescription(course.getDescription());
         courseDb.setLanguage(course.getLanguage());
@@ -60,7 +65,7 @@ public class CourseServiceImpl implements CourseService {
         courseDb.setSlug(course.getSlug());
         courseDb.setRating(course.getRating());
         courseDb.setStatus(course.getStatus());
-        courseDb.setCategoryId(course.getCategoryId());
+        courseDb.setCategory(category);
         courseDb.setSourceUrl(course.getSourceUrl());
         courseDb.setImageUrl(course.getImageUrl());
         return courseRepository.save(courseDb);

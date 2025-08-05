@@ -3,14 +3,18 @@ package online.course.market.controller;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import online.course.market.entity.dto.ApiResponse;
+import online.course.market.entity.dto.category.GetCategoryDto;
 import online.course.market.entity.dto.course.GetCourseDto;
 import online.course.market.entity.dto.course.PostCourseDto;
 import online.course.market.entity.dto.course.PutCourseDto;
+import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
+import online.course.market.service.CategoryService;
 import online.course.market.utils.SlugUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,15 +38,17 @@ import jakarta.annotation.PostConstruct;
 public class CourseController {
 
     private final CourseService courseService;
+    private final CategoryService categoryService;
     private final ModelMapper modelMapper;
     private final String resourceFolder;
 
     private Path uploadDir;
 
     // Constructor injection with qualifier for the upload URL bean
-    public CourseController(CourseService courseService, ModelMapper modelMapper, 
-                          @Qualifier("uploadUrl") String resourceFolder) {
+    public CourseController(CourseService courseService, CategoryService categoryService, ModelMapper modelMapper,
+                            @Qualifier("uploadUrl") String resourceFolder) {
         this.courseService = courseService;
+        this.categoryService = categoryService;
         this.modelMapper = modelMapper;
         this.resourceFolder = resourceFolder;
     }
@@ -76,7 +82,12 @@ public class CourseController {
     @Operation(description = "Get all endpoint for Course", summary = "This is a summary for Course get all endpoint")
     @GetMapping
     public ResponseEntity<ApiResponse<List<GetCourseDto>>> getAll() {
-        List<GetCourseDto> getCourseDtos = courseService.getAll().stream().map(this::toDto).collect(Collectors.toList());
+        List<GetCourseDto> getCourseDtos = courseService.getAll().stream().map((course)->{
+            GetCourseDto courseDto =  toDto(course);
+            Optional.ofNullable(course.getCategory())
+                    .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, GetCategoryDto.class)));
+            return courseDto;
+        }).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(getCourseDtos));
     }
 
@@ -135,6 +146,8 @@ public class CourseController {
             dto.setImageUrl(imageFilename);
             dto.setSourceUrl(sourceFilename);
             Course course = modelMapper.map(dto, Course.class);
+            Category category = categoryService.getById(dto.getCategoryId());
+            course.setCategory(category);
             Course courseDb = courseService.save(course);
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(courseDb)));
         } catch (IOException e) {
@@ -170,7 +183,7 @@ public class CourseController {
             dto.setSourceUrl(sourceFilename);
 
             Course course = modelMapper.map(dto, Course.class);
-            Course courseDb = courseService.update(course, id);
+            Course courseDb = courseService.update(course, id, dto.getCategoryId());
             return ResponseEntity.ok(ApiResponse.success("Updated", toDto(courseDb)));
         } catch (IOException e) {
             throw new RuntimeException(e);

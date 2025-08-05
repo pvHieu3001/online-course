@@ -23,8 +23,7 @@ export default function ListProduct() {
 
   const handlerDeleteProduct = async (id: string) => {
     try {
-      // TODO: Thay bằng action xoá sản phẩm thực tế
-      // dispatch(courseActions.deleteCourse(id))
+      dispatch(courseActions.deleteCourse(id))
       message.success('Xoá sản phẩm thành công!')
     } catch (error: any) {
       message.error(error.data ? error.data.message : 'Xoá sản phẩm thất bại!')
@@ -40,12 +39,20 @@ export default function ListProduct() {
       align: 'center'
     },
     {
-      title: 'Tên sản phẩm',
+      title: 'Tên khóa học',
       dataIndex: 'name',
       key: 'name',
       align: 'center',
       width: 180,
       render: (text: string) => <span>{text}</span>
+    },
+    {
+      title: 'Loại khóa học',
+      dataIndex: 'category',
+      key: 'category',
+      align: 'center',
+      width: 180,
+      render: (_text: string, record: any) => <span className={`px-3 py-1 rounded-full text-sm font-medium ${record.category?.name ? "text-gray-800" : "text-purple-800"}`}>{record.category?.name || '_'}</span>
     },
     {
       title: 'Độ khó',
@@ -72,12 +79,12 @@ export default function ListProduct() {
       }
     },
     {
-      title: 'Mô tả',
-      dataIndex: 'description',
-      key: 'description',
+      title: 'Nội dung',
+      dataIndex: 'content',
+      key: 'content',
       align: 'center',
       width: 250,
-      render: (text: string) => <span dangerouslySetInnerHTML={{ __html: text }} />
+      render: (text: string) => <span>{text}</span>
     },
     {
       title: 'Giá',

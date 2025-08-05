@@ -1,5 +1,4 @@
-import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Divider, Select } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,6 +6,7 @@ import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import TextEditor from './TextEditor/TextEditor'
+import TextArea from 'antd/es/input/TextArea'
 
 function AddProduct() {
   const dispatch = useDispatch()
@@ -15,7 +15,6 @@ function AddProduct() {
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [displayPic, setDisplayPic] = useState<string>()
-  const navigate = useNavigate()
   const [detail, setDetail] = useState<string>('')
 
   useEffect(() => {
@@ -24,6 +23,7 @@ function AddProduct() {
 
   const onFinish = async () => {
     const name = form.getFieldValue('name')
+    const content = form.getFieldValue('content')
     const category_id = form.getFieldValue('category_id')
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
@@ -34,6 +34,7 @@ function AddProduct() {
     const formdata = new FormData()
     formdata.append('name', name)
     formdata.append('category_id', category_id)
+    formdata.append('content', content)
     formdata.append('description', detail)
     formdata.append('imageFile', imageUrl as Blob)
     formdata.append('language', language)
@@ -97,7 +98,18 @@ function AddProduct() {
                 >
                   <Input placeholder='Nhập tên khoá học' size='large' />
                 </Form.Item>
-                <Form.Item name='category_id' label='Danh mục'>
+                <Form.Item
+                  name='content'
+                  label='Nội dung khoá học'
+                  rules={[{ required: true, message: 'Vui lòng nhập nội dung khoá học!' }]}
+                >
+                  <TextArea placeholder='Nhập nội dung khoá học' size='large' />
+                </Form.Item>
+                <Form.Item
+                  name='category_id'
+                  label='Danh mục'
+                  rules={[{ required: true, message: 'Vui lòng nhập danh mục!' }]}
+                >
                   <Select
                     placeholder='Chọn danh mục'
                     loading={categoryStore.isLoading}
@@ -119,24 +131,24 @@ function AddProduct() {
               </Col>
               <Col span={12}>
                 <Form.Item name='language' label='Ngôn ngữ'>
-                  <Select placeholder='Chọn ngôn ngữ'>
+                  <Select placeholder='Chọn ngôn ngữ' size='large'>
                     <Select.Option value='vi'>Tiếng Việt</Select.Option>
                     <Select.Option value='en'>English</Select.Option>
                     <Select.Option value='jp'>日本語</Select.Option>
                   </Select>
                 </Form.Item>
                 <Form.Item name='level' label='Trình độ'>
-                  <Select placeholder='Chọn trình độ'>
+                  <Select placeholder='Chọn trình độ' size='large'>
                     <Select.Option value='beginner'>Dễ</Select.Option>
                     <Select.Option value='intermediate'>Trung Bình</Select.Option>
                     <Select.Option value='advanced'>Khó</Select.Option>
                   </Select>
                 </Form.Item>
                 <Form.Item name='price' label='Giá'>
-                  <InputNumber className='w-full' min={0} placeholder='Nhập giá' />
+                  <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
                 </Form.Item>
                 <Form.Item name='status' label='Trạng thái'>
-                  <Select placeholder='Chọn trạng thái'>
+                  <Select placeholder='Chọn trạng thái' size='large'>
                     <Select.Option value='active'>Hoạt động</Select.Option>
                     <Select.Option value='inactive'>Không hoạt động</Select.Option>
                     <Select.Option value='draft'>Bản nháp</Select.Option>

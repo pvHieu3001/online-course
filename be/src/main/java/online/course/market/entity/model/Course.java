@@ -17,6 +17,7 @@ public class Course extends BaseEntity {
     private Integer id;
     private String imageUrl;
     private String name;
+    private String content;
     private String description;
     private String sourceUrl;
     private String slug;
@@ -24,7 +25,11 @@ public class Course extends BaseEntity {
     private String level;
     private String language;
     private String status;
-    private Integer categoryId;
+
+    @OneToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
+
     private Double rating;
     private Integer totalStudents;
     private Integer totalRating;
