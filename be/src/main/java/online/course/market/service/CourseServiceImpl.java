@@ -62,6 +62,7 @@ public class CourseServiceImpl implements CourseService {
         courseDb.setStatus(course.getStatus());
         courseDb.setCategoryId(course.getCategoryId());
         courseDb.setSourceUrl(course.getSourceUrl());
+        courseDb.setImageUrl(course.getImageUrl());
         return courseRepository.save(courseDb);
     }
 

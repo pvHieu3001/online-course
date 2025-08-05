@@ -122,11 +122,6 @@ function EditProduct() {
             <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
               <Row gutter={16}>
                 <Col span={8}>
-                  <Form.Item name='id' label='ID'>
-                    <Input disabled />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
                   <Form.Item name='created_at' label='Ngày tạo'>
                     <Input disabled />
                   </Form.Item>
