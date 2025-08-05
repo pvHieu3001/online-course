@@ -209,10 +209,10 @@ jobs:
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p ${BACKEND_PATH}"
 
             # Backup current Docker image if it exists
-            if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker images | grep -q ${DOCKER_IMAGE_NAME}"; then
-              echo "📦 Creating backup of current Docker image..."
-              ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker save ${DOCKER_IMAGE_NAME}:latest | gzip > ${BACKUP_PATH}/backend_docker_backup_${TIMESTAMP}.tar.gz"
-            fi
+            #if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker images | grep -q ${DOCKER_IMAGE_NAME}"; then
+            #  echo "📦 Creating backup of current Docker image..."
+            #  ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker save ${DOCKER_IMAGE_NAME}:latest | gzip > ${BACKUP_PATH}/backend_docker_backup_${TIMESTAMP}.tar.gz"
+            #fi
 
             # Stop and remove current container if it exists
             if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker ps -a | grep -q ${DOCKER_CONTAINER_NAME}"; then
@@ -223,6 +223,8 @@ jobs:
 
             # Remove old Docker image
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker rmi ${DOCKER_IMAGE_NAME}:latest || true"
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker system prune"
+
 
             # Upload entire backend directory with existing Docker files
             echo "📤 Uploading backend files..."

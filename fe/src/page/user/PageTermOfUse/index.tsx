@@ -24,7 +24,7 @@ function PageTermOfUse() {
           <h2>4. Bảo mật thông tin</h2>
           <p>Chúng tôi cam kết bảo vệ thông tin cá nhân của người dùng theo chính sách bảo mật.</p>
           <h2>5. Liên hệ</h2>
-          <p>Nếu có thắc mắc về điều khoản, vui lòng liên hệ qua email: support@freecoursesite.vn</p>
+          <p>Nếu có thắc mắc về điều khoản, vui lòng liên hệ qua email: support@ChiaSeKhoaHoc.vn</p>
         </section>
       </div>
     </div>

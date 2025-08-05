@@ -46,9 +46,9 @@ function TabCategory() {
       <div className={styles.categoriesBox}>
         <h2 className={styles.categoriesLabel}>Loại khóa học</h2>
         <ul className={styles.categoriesList} role='list'>
-          {categories?.dataList?.map((category: any, i: number) => (
+          {categories?.dataList?.map((category: any, index: number) => (
             <li
-              key={i}
+              key={index}
               role='button'
               tabIndex={0}
               onClick={() => handleCategoryDetail(category.slug)}
@@ -59,7 +59,7 @@ function TabCategory() {
                 }
               }}
             >
-              <span className={styles.catCount}>{category.id}</span>
+              <span className={styles.catCount}>{index}</span>
               {category.name}
             </li>
           ))}

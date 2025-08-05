@@ -24,7 +24,6 @@ function AddProduct() {
   const navigate = useNavigate()
   const fileInputRef = useRef<any>(null)
   const numberFile = useRef<number>(0)
-  const [typeDiscount, setTypeDiscount] = useState<string>('')
 
   const onFinish = async () => {
     const name = form.getFieldValue('name')

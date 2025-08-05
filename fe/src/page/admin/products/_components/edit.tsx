@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Divider, Select } from 'antd'
+import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import TextEditor from './TextEditor/TextEditor'
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
+import { formatDate } from '@/utils/formatDate'
 
 function EditProduct() {
   const { flug } = useParams()
@@ -17,6 +18,8 @@ function EditProduct() {
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
   const navigate = useNavigate()
+  const [description, setDescription] = useState<string>('')
+  const [displayPic, setDisplayPic] = useState<string>()
 
   useEffect(() => {
     if (flug) {
@@ -24,9 +27,6 @@ function EditProduct() {
     }
     dispatch(categoryActions.getCategories() as unknown as AnyAction) // Lấy danh sách danh mục
   }, [dispatch, flug])
-
-  const [description, setDescription] = useState<string>('')
-  const [displayPic, setDisplayPic] = useState<string>()
 
   useEffect(() => {
     setDescription(courseStore.data?.description ?? '')
@@ -68,7 +68,7 @@ function EditProduct() {
   }
 
   const handleCancel = () => {
-    navigate('..')
+    window.location.href = '/admin/products'
   }
 
   return (
@@ -100,10 +100,10 @@ function EditProduct() {
             className='p-10 relative'
             initialValues={{
               id: courseStore.data?.id,
-              created_at: courseStore.data?.created_at,
-              created_by: courseStore.data?.created_by,
-              updated_at: courseStore.data?.updated_at,
-              updated_by: courseStore.data?.updated_by,
+              createdAt: formatDate(new Date(courseStore.data?.createdAt)),
+              createdBy: courseStore.data?.createdBy,
+              updatedAt: formatDate(new Date(courseStore.data?.updatedAt)),
+              updatedBy: courseStore.data?.updatedBy,
               category_id: courseStore.data?.category_id,
               description: courseStore.data?.description,
               language: courseStore.data?.language,
@@ -121,23 +121,8 @@ function EditProduct() {
             <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
               <Row gutter={16}>
                 <Col span={8}>
-                  <Form.Item name='created_at' label='Ngày tạo'>
-                    <Input disabled />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name='created_by' label='Người tạo'>
-                    <Input disabled />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name='updated_at' label='Ngày cập nhật'>
-                    <Input disabled />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name='updated_by' label='Người cập nhật'>
-                    <Input disabled />
+                  <Form.Item name='slug' label='Slug'>
+                    <Input disabled placeholder='Nhập slug' />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
@@ -163,8 +148,23 @@ function EditProduct() {
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name='slug' label='Slug'>
-                    <Input disabled placeholder='Nhập slug' />
+                  <Form.Item name='createdAt' label='Ngày tạo'>
+                    <Input disabled />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name='createdBy' label='Người tạo'>
+                    <Input disabled />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name='updatedAt' label='Ngày cập nhật'>
+                    <Input disabled />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item name='updatedBy' label='Người cập nhật'>
+                    <Input disabled />
                   </Form.Item>
                 </Col>
               </Row>
@@ -189,7 +189,7 @@ function EditProduct() {
                       optionFilterProp='children'
                       size='large'
                     >
-                      {categoryStore.data?.map((cat: any) => (
+                      {categoryStore.dataList?.map((cat: any) => (
                         <Select.Option key={cat.id} value={cat.id}>
                           {cat.name}
                         </Select.Option>

@@ -25,7 +25,7 @@ function PagePolicy() {
             khoá học do bên thứ ba cung cấp.
           </p>
           <h2>4. Liên hệ</h2>
-          <p>Nếu có thắc mắc về chính sách, vui lòng liên hệ qua email: support@freecoursesite.vn</p>
+          <p>Nếu có thắc mắc về chính sách, vui lòng liên hệ qua email: support@ChiaSeKhoaHoc.vn</p>
         </section>
       </div>
     </div>

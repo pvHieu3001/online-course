@@ -8,12 +8,12 @@ const Footer = () => {
         <div className={styles.copyrightBar}>
           Copyright © 2025. Created by
           <a
-            href='https://freecoursesites.com'
+            href='https://chiasekhoahoc.com'
             target='_blank'
             rel='noopener noreferrer'
             className={styles.copyrightLink}
           >
-            Free Course Sites
+            Chi Sẻ Khóa Học Miễn Phí
           </a>
           .
         </div>
