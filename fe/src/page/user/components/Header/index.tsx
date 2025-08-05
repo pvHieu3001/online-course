@@ -87,6 +87,13 @@ const Header = () => {
             <button className={styles.closeSidebar} aria-label='Đóng menu' onClick={() => setMenuOpen(false)}>
               <CloseOutlined style={{ fontSize: 24 }} />
             </button>
+
+            {/* 🔍 Search input */}
+            <div className={styles.mobileSearch}>
+              <input type='text' placeholder='Tìm kiếm khóa học...' className={styles.searchInput} />
+              <button className={styles.searchButton}>🔍</button>
+            </div>
+
             <nav>
               {menuItems.map((item, i) => (
                 <a

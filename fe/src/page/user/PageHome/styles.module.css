@@ -36,11 +36,10 @@
 }
 
 .courseCard img {
-  width: 100%;
-  height: 160px;
+  width: 100vw;
+  height: auto;
+  display: block;
   object-fit: cover;
-  border-radius: 6px;
-  margin-bottom: 12px;
 }
 
 .courseCat {
@@ -256,7 +255,7 @@
   }
 
   .courseCard img {
-    height: 140px;
+    height: 160px;
   }
 
   .courseTitle {
@@ -356,7 +355,7 @@
   }
 
   .courseCard img {
-    height: 120px;
+    height: 160px;
   }
 
   .courseTitle {
