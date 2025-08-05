@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Flex, Input, Popconfirm, Space, Table, Typography, message } from 'antd'
+import { Button, Flex, Input, Popconfirm, Space, Table, Tag, Typography, message } from 'antd'
 import { Link } from 'react-router-dom'
 import { AnyAction } from '@reduxjs/toolkit'
 import { courseActions } from '@/app/actions/course.actions'
@@ -53,7 +53,23 @@ export default function ListProduct() {
       key: 'level',
       align: 'center',
       width: 250,
-      render: (text: string) => <span>{text}</span>
+      render: (level: string) => {
+        let color = ''
+        switch (level?.toLowerCase()) {
+          case 'beginner':
+            color = 'green'
+            break
+          case 'intermediate':
+            color = 'orange'
+            break
+          case 'advanced':
+            color = 'red'
+            break
+          default:
+            color = 'blue'
+        }
+        return <Tag color={color}>{level}</Tag>
+      }
     },
     {
       title: 'Mô tả',
@@ -69,7 +85,7 @@ export default function ListProduct() {
       key: 'price',
       align: 'center',
       width: 250,
-      render: (text: string) => <span>{text??0}</span>
+      render: (text: string) => <span>{text ?? 0}</span>
     },
     {
       title: 'Hành động',

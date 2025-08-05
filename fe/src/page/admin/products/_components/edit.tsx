@@ -61,7 +61,7 @@ function EditProduct() {
       await dispatch(courseActions.updateCourse(id, formdata) as unknown as AnyAction)
       await dispatch(courseActions.getCourses() as unknown as AnyAction)
       popupSuccess('Cập nhật sản phẩm thành công')
-      navigate('..')
+      window.location.href = '/admin/products'
     } catch (error) {
       popupError('Cập nhật sản phẩm thất bại')
     }
@@ -210,9 +210,9 @@ function EditProduct() {
                   </Form.Item>
                   <Form.Item name='level' label='Trình độ'>
                     <Select placeholder='Chọn trình độ' size='large'>
-                      <Select.Option value='beginner'>Beginner</Select.Option>
-                      <Select.Option value='intermediate'>Intermediate</Select.Option>
-                      <Select.Option value='advanced'>Advanced</Select.Option>
+                      <Select.Option value='beginner'>Dễ</Select.Option>
+                      <Select.Option value='intermediate'>Trung Bình</Select.Option>
+                      <Select.Option value='advanced'>Khó</Select.Option>
                     </Select>
                   </Form.Item>
                   <Form.Item name='price' label='Giá'>

@@ -46,14 +46,14 @@ function AddProduct() {
       await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)
       await dispatch(courseActions.getCourses() as unknown as AnyAction)
       popupSuccess('Thêm sản phẩm thành công')
-      navigate('..')
+      window.location.href = '/admin/products'
     } catch (error) {
       popupError('Thêm sản phẩm thất bại')
     }
   }
 
   const handleCancel = () => {
-    navigate('..')
+    window.location.href = '/admin/products'
   }
 
   // Xử lý chọn ảnh đại diện (giống bên edit)
@@ -127,9 +127,9 @@ function AddProduct() {
                 </Form.Item>
                 <Form.Item name='level' label='Trình độ'>
                   <Select placeholder='Chọn trình độ'>
-                    <Select.Option value='beginner'>Beginner</Select.Option>
-                    <Select.Option value='intermediate'>Intermediate</Select.Option>
-                    <Select.Option value='advanced'>Advanced</Select.Option>
+                    <Select.Option value='beginner'>Dễ</Select.Option>
+                    <Select.Option value='intermediate'>Trung Bình</Select.Option>
+                    <Select.Option value='advanced'>Khó</Select.Option>
                   </Select>
                 </Form.Item>
                 <Form.Item name='price' label='Giá'>
