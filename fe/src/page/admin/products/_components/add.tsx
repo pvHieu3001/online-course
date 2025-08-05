@@ -7,6 +7,7 @@ import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import TextEditor from './TextEditor/TextEditor'
 import TextArea from 'antd/es/input/TextArea'
+import { useNavigate } from 'react-router-dom'
 
 function AddProduct() {
   const dispatch = useDispatch()
@@ -16,6 +17,7 @@ function AddProduct() {
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [displayPic, setDisplayPic] = useState<string>()
   const [detail, setDetail] = useState<string>('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(categoryActions.getCategories() as any)
@@ -24,7 +26,7 @@ function AddProduct() {
   const onFinish = async () => {
     const name = form.getFieldValue('name')
     const content = form.getFieldValue('content')
-    const category_id = form.getFieldValue('category_id')
+    const categoryId = form.getFieldValue('categoryId')
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
     const price = form.getFieldValue('price')
@@ -33,7 +35,7 @@ function AddProduct() {
 
     const formdata = new FormData()
     formdata.append('name', name)
-    formdata.append('category_id', category_id)
+    formdata.append('categoryId', categoryId)
     formdata.append('content', content)
     formdata.append('description', detail)
     formdata.append('imageFile', imageUrl as Blob)
@@ -47,7 +49,7 @@ function AddProduct() {
       await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)
       await dispatch(courseActions.getCourses() as unknown as AnyAction)
       popupSuccess('Thêm sản phẩm thành công')
-      window.location.href = '/admin/products'
+      navigate('..')
     } catch (error) {
       popupError('Thêm sản phẩm thất bại')
     }
@@ -106,7 +108,7 @@ function AddProduct() {
                   <TextArea placeholder='Nhập nội dung khoá học' size='large' />
                 </Form.Item>
                 <Form.Item
-                  name='category_id'
+                  name='categoryId'
                   label='Danh mục'
                   rules={[{ required: true, message: 'Vui lòng nhập danh mục!' }]}
                 >

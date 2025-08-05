@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select } from 'antd'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import TextEditor from './TextEditor/TextEditor'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
@@ -20,6 +20,7 @@ function EditProduct() {
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [description, setDescription] = useState<string>('')
   const [displayPic, setDisplayPic] = useState<string>()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (flug) {
@@ -39,7 +40,7 @@ function EditProduct() {
     const id = courseStore.data?.id
     const name = form.getFieldValue('name')
     const content = form.getFieldValue('content')
-    const category_id = form.getFieldValue('category_id')
+    const categoryId = form.getFieldValue('categoryId')
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
     const price = form.getFieldValue('price')
@@ -49,7 +50,7 @@ function EditProduct() {
     const formdata = new FormData()
     formdata.append('id', id)
     formdata.append('name', name)
-    formdata.append('category_id', category_id)
+    formdata.append('categoryId', categoryId)
     formdata.append('content', content)
     formdata.append('description', description)
     formdata.append('imageFile', imageUrl as Blob)
@@ -106,7 +107,7 @@ function EditProduct() {
               createdBy: courseStore.data?.createdBy,
               updatedAt: formatDate(new Date(courseStore.data?.updatedAt)),
               updatedBy: courseStore.data?.updatedBy,
-              category_id: courseStore.data?.category_id,
+              categoryId: courseStore.data?.categoryId,
               content: courseStore.data?.content,
               description: courseStore.data?.description,
               language: courseStore.data?.language,
@@ -180,7 +181,7 @@ function EditProduct() {
                     <TextArea placeholder='Nhập nội dung khoá học' size='large' />
                   </Form.Item>
                   <Form.Item
-                    name='category_id'
+                    name='categoryId'
                     label='Danh mục'
                     rules={[{ required: true, message: 'Vui lòng nhập danh mục!' }]}
                   >

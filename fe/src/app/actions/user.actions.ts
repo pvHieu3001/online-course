@@ -16,71 +16,116 @@ import {
   getByIdSuccess
 } from '../slices/user.reducer'
 
-export const getUsers = () => async (dispatch: Dispatch) => {
-  dispatch(isFetching)
-
-  await userService.getUsers().then(
-    (res) => dispatch(getUsersSuccess(res)),
-    (error) => dispatch(getUsersFailure(error))
-  )
-}
-
-export const getUserById = (id: string) => async (dispatch: Dispatch) => {
-  dispatch(isFetching)
-
-  await userService.getUserById(id).then(
-    (res) => dispatch(getByIdSuccess(res)),
-    (error) => dispatch(getByIdFailure(error))
-  )
-}
-
-export const createUser = (data) => async (dispatch: Dispatch) => {
+// Get all users
+export const getUsers = () => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await userService
+  return userService
+    .getUsers()
+    .then((res) => {
+      dispatch(getUsersSuccess(res))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getUsersFailure(error))
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
+// Get user by ID
+export const getUserById = (id: string) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return userService
+    .getUserById(id)
+    .then((res) => {
+      dispatch(getByIdSuccess(res))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getByIdFailure(error))
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
+// Create user
+export const createUser = (data) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return userService
     .createUser(data)
-    .then((res) => dispatch(createSuccessfully(res.data)))
-    .catch(() => dispatch(createFailure()))
+    .then((res) => {
+      dispatch(createSuccessfully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(createFailure())
+      throw error
+    })
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const updateUser = (id, data) => async (dispatch: Dispatch) => {
+// Update user
+export const updateUser = (id, data) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await userService
+  return userService
     .updateUser(id, data)
-    .then((res) => dispatch(updateSuccessfully(res.data)))
-    .catch(() => dispatch(updateFailure()))
+    .then((res) => {
+      dispatch(updateSuccessfully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(updateFailure())
+      throw error
+    })
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const deleteUser = (id: string) => async (dispatch: Dispatch) => {
+// Delete user
+export const deleteUser = (id: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await userService
+  return userService
     .deleteUser(id)
-    .then(() => dispatch(deleteSuccessfully()))
-    .catch(() => dispatch(deleteFailure()))
+    .then((res) => {
+      dispatch(deleteSuccessfully())
+      return res
+    })
+    .catch((error) => {
+      dispatch(deleteFailure())
+      throw error
+    })
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const login = (token) => async (dispatch: Dispatch) => {
-  dispatch(isFetching)
-  await userService.login(token).then(
-    (res) => {
+// Login user
+export const login = (token) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return userService
+    .login(token)
+    .then((res) => {
       dispatch(loginSuccess(res))
-    },
-    (error) => {
-      dispatch(loginSuccess(error))
-    }
-  )
+      return res
+    })
+    .catch((error) => {
+      // 👇 Tùy vào mục đích, có thể dispatch lỗi riêng nếu cần
+      dispatch(loginSuccess(error)) // <-- nên có loginFailure?
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
 }
 
+// Logout user (sync action)
 function logout() {
   userService.logout()
-  return { type: userConstants.LOGOUT }
+  return { type: 'LOGOUT' } // ⛔ userConstants.LOGOUT không thấy được import
 }
 
+// Export actions
 export const userActions = {
   login,
   getUsers,

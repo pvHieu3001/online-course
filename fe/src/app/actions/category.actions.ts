@@ -15,63 +15,99 @@ import {
   getByIdSuccessFully
 } from '../slices/category.reducer'
 
-export const getCategories = () => async (dispatch: Dispatch) => {
+export const getCategories = () => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await categoryServices
+  return categoryServices
     .getCategories()
-    .then((res) => dispatch(getCategoriesSuccessFully(res.data)))
-    .catch((error) => dispatch(getCategoriesSuccessFailure(error.toString())))
+    .then((res) => {
+      dispatch(getCategoriesSuccessFully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getCategoriesSuccessFailure(error.toString()))
+      throw error
+    })
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const getCategoryById = (id: string) => async (dispatch: Dispatch) => {
+export const getCategoryById = (id: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await categoryServices
+  return categoryServices
     .getCategoryById(id)
-    .then((res) => dispatch(getByIdSuccessFully(res.data)))
-    .catch((error) => dispatch(getByIdSuccessFailure(error.toString())))
+    .then((res) => {
+      dispatch(getByIdSuccessFully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getByIdSuccessFailure(error.toString()))
+      throw error
+    })
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const getCategoryBySlug = (slug: string) => async (dispatch: Dispatch) => {
+export const getCategoryBySlug = (slug: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await categoryServices
+  return categoryServices
     .getCategoryBySlug(slug)
-    .then((res) => dispatch(getByIdSuccessFully(res.data)))
-    .catch((error) => dispatch(getByIdSuccessFailure(error.toString())))
+    .then((res) => {
+      dispatch(getByIdSuccessFully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getByIdSuccessFailure(error.toString()))
+      throw error
+    })
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const createCategory = (data) => async (dispatch: Dispatch) => {
+export const createCategory = (data) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await categoryServices
+  return categoryServices
     .createCategory(data)
-    .then((res) => dispatch(createSuccessfully(res.data)))
-    .catch(() => dispatch(createFailure()))
+    .then((res) => {
+      dispatch(createSuccessfully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(createFailure())
+      throw error
+    })
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const updateCategory = (id, data) => async (dispatch: Dispatch) => {
+export const updateCategory = (id, data) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await categoryServices
+  return categoryServices
     .updateCategory(id, data)
-    .then((res) => dispatch(updateSuccessfully(res.data)))
-    .catch(() => dispatch(updateFailure()))
+    .then((res) => {
+      dispatch(updateSuccessfully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(updateFailure())
+      throw error
+    })
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const deleteCategory = (id: string) => async (dispatch: Dispatch) => {
+export const deleteCategory = (id: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
-  await categoryServices
+  return categoryServices
     .deleteCategory(id)
-    .then(() => dispatch(deleteSuccessfully()))
-    .catch(() => dispatch(deleteFailure()))
+    .then((res) => {
+      dispatch(deleteSuccessfully())
+      return res
+    })
+    .catch((error) => {
+      dispatch(deleteFailure())
+      throw error
+    })
     .finally(() => dispatch(fetchedDone()))
 }
 
