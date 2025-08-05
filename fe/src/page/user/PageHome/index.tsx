@@ -32,7 +32,7 @@ function PageHome() {
         <section className={styles.courses} aria-label='Course listings'>
           {courses?.dataList?.map((course: any, i: number) => (
             <article className={styles.courseCard} key={i} role='article' onClick={() => handleDetail(course.id)}>
-              <img src={`https://dogohiephong.vn/${course.imageUrl}`} alt={`${course.name} course image`} />
+              <img src={`${import.meta.env.VITE_DOMAIN_URL}${course.imageUrl}`} alt={`${course.name} course image`} />
               <div className={styles.courseCat}>{course.categoryId}</div>
               <h3 className={styles.courseTitle}>{course.name}</h3>
             </article>

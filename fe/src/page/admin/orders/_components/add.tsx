@@ -318,7 +318,6 @@ function AddProduct() {
             >
               Tạo
             </Button>
-            <Button type='dashed'>Đặt lại</Button>
           </Flex>
         </Form>
       </Drawer>

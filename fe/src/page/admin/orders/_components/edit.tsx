@@ -386,7 +386,6 @@ function EditProduct() {
               >
                 Cập nhật
               </Button>
-              <Button type='dashed'>Đặt lại</Button>
             </Flex>
           </Form>
         </Drawer>

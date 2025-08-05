@@ -1,7 +1,6 @@
 import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Divider, Select } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { CloudUploadOutlined } from '@ant-design/icons'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
@@ -175,31 +174,29 @@ function AddProduct() {
                     align='center'
                     style={{ width: '100%', minHeight: '120px', borderRadius: '12px' }}
                   >
-                    {/* Hiển thị preview ảnh nếu đã chọn */}
-                    {displayPic ? (
-                      <div className='h-[100px] w-[120px] rounded-lg overflow-hidden relative'>
-                        <img
-                          src={displayPic}
-                          alt='Preview'
-                          className='object-cover h-full w-full object-center rounded-lg border border-gray-300 bg-white'
-                        />
-                        <Button
-                          type='text'
-                          danger
-                          size='small'
-                          style={{ position: 'absolute', top: 4, right: 4, zIndex: 2 }}
-                          onClick={handleDeleteImage}
-                        >
-                          Xóa
-                        </Button>
-                      </div>
-                    ) : (
-                      <label
-                        htmlFor='image-upload'
-                        className='flex flex-col items-center justify-center w-[120px] h-[100px] border rounded-md cursor-pointer bg-white hover:bg-gray-100'
-                      >
-                        <CloudUploadOutlined style={{ fontSize: 24, color: '#aaa' }} />
-                        <span className='text-xs text-gray-400'>Chọn ảnh</span>
+                    <label
+                      htmlFor='image-upload'
+                      className='flex flex-col items-center justify-center w-[120px] h-[100px] border rounded-md cursor-pointer bg-white hover:bg-gray-100'
+                    >
+                      {/* Hiển thị preview ảnh nếu đã chọn */}
+                      {displayPic ? (
+                        <div className='h-[100px] w-[120px] rounded-lg overflow-hidden relative'>
+                          <img
+                            src={displayPic}
+                            alt='Preview'
+                            className='object-cover h-full w-full object-center rounded-lg border border-gray-300 bg-white'
+                          />
+                          <Button
+                            type='text'
+                            danger
+                            size='small'
+                            style={{ position: 'absolute', top: 4, right: 4, zIndex: 2 }}
+                            onClick={handleDeleteImage}
+                          >
+                            Xóa
+                          </Button>
+                        </div>
+                      ) : (
                         <input
                           id='image-upload'
                           type='file'
@@ -209,8 +206,8 @@ function AddProduct() {
                           style={{ display: 'none' }}
                           onChange={handleImageChange}
                         />
-                      </label>
-                    )}
+                      )}
+                    </label>
                   </Flex>
                 </div>
               </Flex>
@@ -221,7 +218,6 @@ function AddProduct() {
             <Button loading={courseStore.isLoading} disabled={courseStore.isLoading} htmlType='submit' type='primary'>
               Tạo
             </Button>
-            <Button type='dashed'>Đặt lại</Button>
           </Flex>
         </Form>
       </Drawer>

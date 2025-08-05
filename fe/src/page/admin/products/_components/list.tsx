@@ -37,7 +37,7 @@ export default function ListProduct() {
       dataIndex: 'key',
       key: 'key',
       width: 40,
-      align: 'center',
+      align: 'center'
     },
     {
       title: 'Tên sản phẩm',
@@ -45,7 +45,15 @@ export default function ListProduct() {
       key: 'name',
       align: 'center',
       width: 180,
-      render: (text: string) => <span>{text}</span>,
+      render: (text: string) => <span>{text}</span>
+    },
+    {
+      title: 'Độ khó',
+      dataIndex: 'level',
+      key: 'level',
+      align: 'center',
+      width: 250,
+      render: (text: string) => <span>{text}</span>
     },
     {
       title: 'Mô tả',
@@ -53,7 +61,15 @@ export default function ListProduct() {
       key: 'description',
       align: 'center',
       width: 250,
-      render: (text: string) => <span>{text}</span>,
+      render: (text: string) => <span dangerouslySetInnerHTML={{ __html: text }} />
+    },
+    {
+      title: 'Giá',
+      dataIndex: 'price',
+      key: 'price',
+      align: 'center',
+      width: 250,
+      render: (text: string) => <span>{text??0}</span>
     },
     {
       title: 'Hành động',
@@ -78,8 +94,8 @@ export default function ListProduct() {
             </Button>
           </Popconfirm>
         </Space>
-      ),
-    },
+      )
+    }
   ]
 
   return (
