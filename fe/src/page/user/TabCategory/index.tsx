@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react'
-import styles from './styles.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 import { categoryActions } from '@/app/actions'
@@ -30,22 +29,36 @@ function TabCategory() {
   }
 
   return (
-    <aside className={styles.sidebar} role='complementary'>
-      <div className={styles.searchBox}>
-        <h2 className={styles.searchLabel}>Tìm kiếm khóa học</h2>
-        <form onSubmit={handleSearch} className={styles.searchInputWrap}>
-          <input type='text' placeholder='Type here to search...' aria-label='Search for courses' />
-          <button type='submit' aria-label='Submit search'>
-            <span className={styles.searchIcon} role='img' aria-label='Search'>
+    <aside className='w-full lg:w-[20%] bg-white p-6 rounded-lg shadow-md' role='complementary'>
+      {/* Search Box */}
+      <div className='mb-8'>
+        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Tìm kiếm khóa học</h2>
+        <form
+          onSubmit={handleSearch}
+          className='flex rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500'
+        >
+          <input
+            type='text'
+            placeholder='Type here to search...'
+            aria-label='Search for courses'
+            className='flex-1 px-4 py-2 focus:outline-none'
+          />
+          <button
+            type='submit'
+            aria-label='Submit search'
+            className='px-4 bg-blue-600 text-white hover:bg-blue-700 transition'
+          >
+            <span role='img' aria-label='Search'>
               🔍
             </span>
           </button>
         </form>
       </div>
 
-      <div className={styles.categoriesBox}>
-        <h2 className={styles.categoriesLabel}>Loại khóa học</h2>
-        <ul className={styles.categoriesList} role='list'>
+      {/* Categories Box */}
+      <div>
+        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Loại khóa học</h2>
+        <ul className='space-y-2' role='list'>
           {categories?.dataList?.map((category: any, index: number) => (
             <li
               key={index}
@@ -58,9 +71,10 @@ function TabCategory() {
                   handleCategoryDetail(category.slug)
                 }
               }}
+              className='flex items-center justify-between px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500'
             >
-              <span className={styles.catCount}>{index}</span>
-              {category.name}
+              <span className='text-gray-700 font-medium'>{category.name}</span>
+              <span className='text-sm text-gray-500 bg-white px-2 py-0.5 rounded-full border'>{index}</span>
             </li>
           ))}
         </ul>
