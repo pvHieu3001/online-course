@@ -99,6 +99,7 @@ export default function ListProduct() {
       key: 'action',
       width: 150,
       align: 'center',
+      fixed: 'right',
       render: (record: any) => (
         <Space size={'middle'}>
           <Link to={'' + record.id}>
@@ -152,6 +153,7 @@ export default function ListProduct() {
         }}
         columns={columns}
         sticky={{ offsetHeader: 0 }}
+        scrool={{x:1200}}
         dataSource={courses?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
         loading={courses.isLoading}
       />
