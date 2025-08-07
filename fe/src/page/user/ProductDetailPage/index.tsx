@@ -6,7 +6,7 @@ function ProductDetailPage() {
   return (
     <div>
       <header className='max-w-4xl mx-auto mt-8 px-4'>
-        <p className='text-sm uppercase tracking-wide text-blue-500'>{course.category.name}</p>
+        <p className='text-sm uppercase tracking-wide text-blue-500'>{course.category?.name}</p>
         <h1 className='text-3xl font-bold mt-2'>{course.name}</h1>
       </header>
 
@@ -29,8 +29,8 @@ function ProductDetailPage() {
       </section>
 
       <section className='max-w-4xl mx-auto mt-10 px-4 bg-white p-6 rounded-lg shadow'>
-        <h2 className='text-xl font-semibold mb-4'></h2>
-        <div dangerouslySetInnerHTML={{ __html: course.courseBenefits }}>Lý Do Bạn Nên Chọn Khóa Học Này</div>
+        <h2 className='text-xl font-semibold mb-4'>Lý Do Bạn Nên Chọn Khóa Học Này</h2>
+        <div dangerouslySetInnerHTML={{ __html: course.courseBenefits }}></div>
       </section>
 
       <section className='max-w-4xl mx-auto mt-10 px-4 text-center'>
