@@ -22,6 +22,7 @@ public class PutCourseDto {
     String name;
     String content;
     String description;
+    String courseBenefits;
     String slug;
     Integer price;
     String level;

@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select } from 'antd'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import TextEditor from './TextEditor/TextEditor'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
@@ -9,7 +9,6 @@ import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { formatDate } from '@/utils/formatDate'
-import TextArea from 'antd/es/input/TextArea'
 
 function EditProduct() {
   const { flug } = useParams()
@@ -19,8 +18,9 @@ function EditProduct() {
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [description, setDescription] = useState<string>('')
+  const [content, setContent] = useState<string>('')
+  const [courseBenefits, setCourseBenefits] = useState<string>('')
   const [displayPic, setDisplayPic] = useState<string>()
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (flug) {
@@ -31,6 +31,8 @@ function EditProduct() {
 
   useEffect(() => {
     setDescription(courseStore.data?.description ?? '')
+    setContent(courseStore.data?.content ?? '')
+    setCourseBenefits(courseStore.data?.courseBenefits ?? '')
     if (courseStore.data?.imageUrl) {
       setDisplayPic(`${import.meta.env.VITE_DOMAIN_URL}${courseStore.data.imageUrl}`)
     }
@@ -110,6 +112,7 @@ function EditProduct() {
               categoryId: courseStore.data?.categoryId,
               content: courseStore.data?.content,
               description: courseStore.data?.description,
+              courseBenefits: courseStore.data?.courseBenefits,
               language: courseStore.data?.language,
               level: courseStore.data?.level,
               name: courseStore.data?.name,
@@ -123,23 +126,23 @@ function EditProduct() {
             }}
           >
             <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
-              <Row gutter={16}>
-                <Col span={8}>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} sm={12} md={8}>
                   <Form.Item name='slug' label='Slug'>
                     <Input disabled placeholder='Nhập slug' />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col xs={24} sm={12} md={8}>
                   <Form.Item name='total_students' label='Tổng số học viên'>
                     <InputNumber disabled className='w-full' min={0} placeholder='Nhập tổng số học viên' />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col xs={24} sm={12} md={8}>
                   <Form.Item name='total_rating' label='Tổng số đánh giá'>
                     <InputNumber disabled className='w-full' min={0} placeholder='Nhập tổng số đánh giá' />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col xs={24} sm={12} md={8}>
                   <Form.Item name='rating' label='Đánh giá'>
                     <InputNumber
                       disabled
@@ -151,12 +154,12 @@ function EditProduct() {
                     />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col xs={24} sm={12} md={8}>
                   <Form.Item name='createdAt' label='Ngày tạo'>
                     <Input disabled />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col xs={24} sm={12} md={8}>
                   <Form.Item name='updatedAt' label='Ngày cập nhật'>
                     <Input disabled />
                   </Form.Item>
@@ -164,21 +167,14 @@ function EditProduct() {
               </Row>
             </Card>
             <Card title='Thông tin khoá học' size='small' style={{ marginBottom: 24 }}>
-              <Row gutter={16}>
-                <Col span={12}>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} md={12}>
                   <Form.Item
                     name='name'
                     label='Tên khoá học'
                     rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}
                   >
                     <Input placeholder='Nhập tên khoá học' size='large' />
-                  </Form.Item>
-                  <Form.Item
-                    name='content'
-                    label='Nội dung khoá học'
-                    rules={[{ required: true, message: 'Vui lòng nhập nội dung khoá học!' }]}
-                  >
-                    <TextArea placeholder='Nhập nội dung khoá học' size='large' />
                   </Form.Item>
                   <Form.Item
                     name='categoryId'
@@ -204,7 +200,8 @@ function EditProduct() {
                     <Input placeholder='Nhập URL nguồn video' size='large' />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+
+                <Col xs={24} md={12}>
                   <Form.Item name='language' label='Ngôn ngữ'>
                     <Select placeholder='Chọn ngôn ngữ' size='large'>
                       <Select.Option value='vi'>Tiếng Việt</Select.Option>
@@ -233,9 +230,29 @@ function EditProduct() {
               </Row>
             </Card>
             <Card size='small' style={{ marginBottom: 24 }}>
-              <Form.Item name='description' className='m-0' label={'Mô tả chi tiết'}>
+              <Form.Item name='content' className='m-0' label={'Nội dung khoá học'}>
+                <TextEditor
+                  content={content}
+                  onHandleChange={(value) => {
+                    setDescription(value)
+                  }}
+                />
+              </Form.Item>
+            </Card>
+            <Card size='small' style={{ marginBottom: 24 }}>
+              <Form.Item name='description' className='m-0' label={'Mô tả chi tiết khoá học'}>
                 <TextEditor
                   content={description}
+                  onHandleChange={(value) => {
+                    setDescription(value)
+                  }}
+                />
+              </Form.Item>
+            </Card>
+            <Card size='small' style={{ marginBottom: 24 }}>
+              <Form.Item name='courseBenefits' className='m-0' label={'Lợi ích khoá học'}>
+                <TextEditor
+                  content={courseBenefits}
                   onHandleChange={(value) => {
                     setDescription(value)
                   }}

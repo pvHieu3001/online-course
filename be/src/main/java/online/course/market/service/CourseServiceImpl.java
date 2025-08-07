@@ -59,6 +59,7 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         courseDb.setName(course.getName());
         courseDb.setDescription(course.getDescription());
+        courseDb.setCourseBenefits(course.getCourseBenefits());
         courseDb.setLanguage(course.getLanguage());
         courseDb.setLevel(course.getLevel());
         courseDb.setPrice(course.getPrice());
