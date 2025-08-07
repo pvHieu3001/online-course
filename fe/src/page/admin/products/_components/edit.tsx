@@ -39,9 +39,9 @@ function EditProduct() {
   }, [courseStore])
 
   const onFinish = async () => {
+    console.log('hahahaha' + content)
     const id = courseStore.data?.id
     const name = form.getFieldValue('name')
-    const content = form.getFieldValue('content')
     const categoryId = form.getFieldValue('categoryId')
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
@@ -55,7 +55,10 @@ function EditProduct() {
     formdata.append('categoryId', categoryId)
     formdata.append('content', content)
     formdata.append('description', description)
-    formdata.append('imageFile', imageUrl as Blob)
+    formdata.append('courseBenefits', courseBenefits)
+    if (imageUrl) {
+      formdata.append('imageFile', imageUrl as Blob)
+    }
     formdata.append('sourceUrl', sourceUrl)
     formdata.append('language', language)
     formdata.append('level', level)
@@ -109,7 +112,7 @@ function EditProduct() {
               createdBy: courseStore.data?.createdBy,
               updatedAt: formatDate(new Date(courseStore.data?.updatedAt)),
               updatedBy: courseStore.data?.updatedBy,
-              categoryId: courseStore.data?.categoryId,
+              categoryId: courseStore.data?.category.id,
               content: courseStore.data?.content,
               description: courseStore.data?.description,
               courseBenefits: courseStore.data?.courseBenefits,
@@ -176,26 +179,28 @@ function EditProduct() {
                   >
                     <Input placeholder='Nhập tên khoá học' size='large' />
                   </Form.Item>
-                  <Form.Item
-                    name='categoryId'
-                    label='Danh mục'
-                    rules={[{ required: true, message: 'Vui lòng nhập danh mục!' }]}
-                  >
-                    <Select
-                      placeholder='Chọn danh mục'
-                      loading={categoryStore.isLoading}
-                      allowClear
-                      showSearch
-                      optionFilterProp='children'
-                      size='large'
+                  {categoryStore.dataList?.length > 0 && (
+                    <Form.Item
+                      name='categoryId'
+                      label='Danh mục'
+                      rules={[{ required: true, message: 'Vui lòng nhập danh mục!' }]}
                     >
-                      {categoryStore.dataList?.map((cat: any) => (
-                        <Select.Option key={cat.id} value={cat.id}>
-                          {cat.name}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
+                      <Select
+                        placeholder='Chọn danh mục'
+                        loading={categoryStore.isLoading}
+                        allowClear
+                        showSearch
+                        optionFilterProp='children'
+                        size='large'
+                      >
+                        {categoryStore.dataList?.map((cat: any) => (
+                          <Select.Option key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  )}
                   <Form.Item name='sourceUrl' label='Nguồn video'>
                     <Input placeholder='Nhập URL nguồn video' size='large' />
                   </Form.Item>
@@ -234,7 +239,7 @@ function EditProduct() {
                 <TextEditor
                   content={content}
                   onHandleChange={(value) => {
-                    setDescription(value)
+                    setContent(value)
                   }}
                 />
               </Form.Item>
@@ -254,7 +259,7 @@ function EditProduct() {
                 <TextEditor
                   content={courseBenefits}
                   onHandleChange={(value) => {
-                    setDescription(value)
+                    setCourseBenefits(value)
                   }}
                 />
               </Form.Item>

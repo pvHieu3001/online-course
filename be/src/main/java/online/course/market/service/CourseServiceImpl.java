@@ -58,6 +58,7 @@ public class CourseServiceImpl implements CourseService {
         Category category = categoryRepository.findById(catId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         courseDb.setName(course.getName());
+        courseDb.setContent(course.getContent());
         courseDb.setDescription(course.getDescription());
         courseDb.setCourseBenefits(course.getCourseBenefits());
         courseDb.setLanguage(course.getLanguage());
@@ -68,7 +69,7 @@ public class CourseServiceImpl implements CourseService {
         courseDb.setStatus(course.getStatus());
         courseDb.setCategory(category);
         courseDb.setSourceUrl(course.getSourceUrl());
-        courseDb.setImageUrl(course.getImageUrl());
+        courseDb.setImageUrl(course.getImageUrl() != null && course.getImageUrl() != "" ? course.getImageUrl() : courseDb.getImageUrl());
         return courseRepository.save(courseDb);
     }
 
