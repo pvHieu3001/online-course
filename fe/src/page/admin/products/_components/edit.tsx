@@ -122,10 +122,10 @@ function EditProduct() {
               price: courseStore.data?.price,
               rating: courseStore.data?.rating,
               slug: courseStore.data?.slug,
-              source_url: courseStore.data?.source_url,
+              sourceUrl: courseStore.data?.sourceUrl,
               status: courseStore.data?.status,
-              total_rating: courseStore.data?.total_rating,
-              total_students: courseStore.data?.total_students
+              totalRating: courseStore.data?.totalRating,
+              totalStudents: courseStore.data?.totalStudents
             }}
           >
             <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
