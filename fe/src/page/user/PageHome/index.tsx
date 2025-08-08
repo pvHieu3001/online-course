@@ -20,10 +20,10 @@ function PageHome() {
 
   console.log('categories', categories)
 
-  const handleDetail = (id: any) => {
-    const course = courses.dataList.find((c: any) => c.id === id)
+  const handleDetail = (slug: any) => {
+    const course = courses.dataList.find((c: any) => c.slug === slug)
     if (!course) return
-    navigate(`/product-detail/${id}`, { state: course })
+    navigate(`/chi-tiet-khoa-hoc/${slug}`, { state: course })
   }
 
   return (
@@ -31,7 +31,7 @@ function PageHome() {
       <main className={styles.mainContent} role='main'>
         <section className={styles.courses} aria-label='Course listings'>
           {courses?.dataList?.map((course: any, i: number) => (
-            <article className={styles.courseCard} key={i} role='article' onClick={() => handleDetail(course.id)}>
+            <article className={styles.courseCard} key={i} role='article' onClick={() => handleDetail(course.slug)}>
               <img src={`${import.meta.env.VITE_DOMAIN_URL}${course.imageUrl}`} alt={`${course.name} course image`} />
               <div className={styles.courseCat}>{course.categoryId}</div>
               <h3 className={styles.courseTitle}>{course.name}</h3>

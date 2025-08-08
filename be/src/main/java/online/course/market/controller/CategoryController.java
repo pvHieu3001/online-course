@@ -94,7 +94,7 @@ public class CategoryController {
     public ResponseEntity<ApiResponse<GetCategoryDto>> getBySlug(@PathVariable String slug) {
         Category category = categoryService.getBySlug(slug);
         if (category == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Category not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Danh mục không tồn tại"));
         }
         return ResponseEntity.ok(ApiResponse.success(toDto(category)));
     }

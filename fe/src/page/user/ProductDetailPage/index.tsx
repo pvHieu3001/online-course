@@ -3,7 +3,6 @@ import TabCategory from '../TabCategory'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { courseActions } from '@/app/actions'
-import category from '@/page/admin/category'
 
 function ProductDetailPage() {
   const dispatch = useDispatch()
@@ -13,9 +12,9 @@ function ProductDetailPage() {
 
   useEffect(() => {
     if (course && course.category?.id) {
-      dispatch(courseActions.getCoursesByCategory(category.id))
+      dispatch(courseActions.getCoursesByCategory(course.category.id))
     }
-  }, [category])
+  }, [])
 
   return (
     <div className='max-w-7xl mx-auto mt-8 px-4 flex flex-col lg:flex-row gap-8'>

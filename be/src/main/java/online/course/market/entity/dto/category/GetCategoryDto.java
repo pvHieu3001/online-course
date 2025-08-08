@@ -11,6 +11,8 @@ public class GetCategoryDto {
     private Integer id;
     private Integer parentId;
     private String name;
+    private String content;
+    private String description;
     private String slug;
     private boolean status;
     private String image;

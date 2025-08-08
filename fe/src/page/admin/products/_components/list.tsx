@@ -44,7 +44,11 @@ export default function ListProduct() {
       key: 'name',
       align: 'center',
       width: 180,
-      render: (text: string) => <span>{text}</span>
+      render: (text: string) => (
+        <span className='block max-w-[160px] truncate text-ellipsis overflow-hidden whitespace-nowrap' title={text}>
+          {text}
+        </span>
+      )
     },
     {
       title: 'Loại khóa học',
@@ -52,7 +56,15 @@ export default function ListProduct() {
       key: 'category',
       align: 'center',
       width: 180,
-      render: (_text: string, record: any) => <span className={`px-3 py-1 rounded-full text-sm font-medium ${record.category?.name ? "text-gray-800" : "text-purple-800"}`}>{record.category?.name || '_'}</span>
+      render: (_text: string, record: any) => (
+        <span
+          className={`px-3 py-1 rounded-full text-sm font-medium ${
+            record.category?.name ? 'text-gray-800' : 'text-purple-800'
+          }`}
+        >
+          {record.category?.name || '_'}
+        </span>
+      )
     },
     {
       title: 'Độ khó',
@@ -79,20 +91,30 @@ export default function ListProduct() {
       }
     },
     {
-      title: 'Nội dung',
-      dataIndex: 'content',
-      key: 'content',
-      align: 'center',
-      width: 250,
-      render: (text: string) => <span>{text}</span>
-    },
-    {
       title: 'Giá',
       dataIndex: 'price',
       key: 'price',
       align: 'center',
       width: 250,
       render: (text: string) => <span>{text ?? 0}</span>
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center',
+      width: 250,
+      render: (status: boolean) => {
+        const statusClass = status
+          ? 'bg-green-100 text-green-700 border border-green-300'
+          : 'bg-gray-100 text-gray-700 border border-gray-300'
+
+        return (
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusClass}`}>
+            {status ? 'Hoạt động' : 'Không hoạt động'}
+          </span>
+        )
+      }
     },
     {
       title: 'Hành động',
@@ -153,7 +175,7 @@ export default function ListProduct() {
         }}
         columns={columns}
         sticky={{ offsetHeader: 0 }}
-        scrool={{x:1200}}
+        scrool={{ x: 1200 }}
         dataSource={courses?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
         loading={courses.isLoading}
       />

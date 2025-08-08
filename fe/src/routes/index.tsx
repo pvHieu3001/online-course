@@ -31,8 +31,8 @@ export default function Router() {
           <Route path='' element={<Base />}>
             <Route index element={<PageHome />} />
             <Route path='cart' element={<></>} />
-            <Route path='product-detail/:slug' element={<ProductDetailPage />} />
-            <Route path='category-detail/:slug' element={<CategoryDetailPage />} />
+            <Route path='chi-tiet-khoa-hoc/:slug' element={<ProductDetailPage />} />
+            <Route path='khoa-hoc-theo-chu-de/:slug' element={<CategoryDetailPage />} />
             <Route path='privacy-policy' element={<PagePolicy />} />
             <Route path='term-of-use' element={<PageTermOfUse />} />
             <Route path='copyright' element={<PageCopyright />} />

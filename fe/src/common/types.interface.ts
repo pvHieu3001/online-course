@@ -24,4 +24,6 @@ export interface ICategory {
   parentId: number
   name: string
   slug: string
+  description: string
+  content: string
 }

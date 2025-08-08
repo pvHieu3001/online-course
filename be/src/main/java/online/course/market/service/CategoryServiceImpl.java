@@ -19,7 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(readOnly = true)
     public Category getById(Integer id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "Category not found"));
+                .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "Danh mục không tồn tại"));
     }
 
     @Override
@@ -49,6 +49,8 @@ public class CategoryServiceImpl implements CategoryService {
         categoryDb.setParentId(category.getParentId());
         categoryDb.setStatus(category.isStatus());
         categoryDb.setImage(category.getImage());
+        categoryDb.setContent(category.getContent());
+        categoryDb.setDescription(category.getDescription());
         return categoryRepository.save(categoryDb);
     }
 

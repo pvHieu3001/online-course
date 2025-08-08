@@ -17,6 +17,8 @@ public class Category extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    private String content;
+    private String description;
     private String slug;
     private boolean status;
     private String image;

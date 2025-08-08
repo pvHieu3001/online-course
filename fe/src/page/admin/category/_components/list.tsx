@@ -78,6 +78,7 @@ export default function ListCategory() {
       key: 'action',
       width: 150,
       align: 'center',
+      fixed: 'right',
       render: (record) => (
         <Space size={'middle'}>
           <Link to={'' + record.id}>
@@ -143,6 +144,7 @@ export default function ListCategory() {
           }}
           columns={columns}
           sticky={{ offsetHeader: 0 }}
+          scrool={{ x: 1200 }}
           dataSource={categories?.dataList?.map((category: ICategory, index: number) => ({
             ...category,
             key: index + 1

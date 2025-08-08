@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select } from 'antd'
+import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select, Switch } from 'antd'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import TextEditor from './TextEditor/TextEditor'
@@ -214,6 +214,7 @@ function EditProduct() {
                       <Select.Option value='jp'>日本語</Select.Option>
                     </Select>
                   </Form.Item>
+
                   <Form.Item name='level' label='Trình độ'>
                     <Select placeholder='Chọn trình độ' size='large'>
                       <Select.Option value='beginner'>Dễ</Select.Option>
@@ -221,16 +222,19 @@ function EditProduct() {
                       <Select.Option value='advanced'>Khó</Select.Option>
                     </Select>
                   </Form.Item>
-                  <Form.Item name='price' label='Giá'>
-                    <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
-                  </Form.Item>
-                  <Form.Item name='status' label='Trạng thái'>
-                    <Select placeholder='Chọn trạng thái' size='large'>
-                      <Select.Option value='active'>Hoạt động</Select.Option>
-                      <Select.Option value='inactive'>Không hoạt động</Select.Option>
-                      <Select.Option value='draft'>Bản nháp</Select.Option>
-                    </Select>
-                  </Form.Item>
+
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item name='price' label='Giá'>
+                        <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
+                        <Switch checkedChildren='Hoạt động' unCheckedChildren='Không hoạt động' />
+                      </Form.Item>
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
             </Card>

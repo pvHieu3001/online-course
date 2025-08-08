@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import TabCategory from '../TabCategory'
 import { courseActions, categoryActions } from '@/app/actions'
+import _ from 'lodash'
 
 function CategoryDetailPage() {
   const { slug } = useParams()
@@ -34,7 +35,7 @@ function CategoryDetailPage() {
 
   // Handle course item click
   const handleCourseClick = (course) => {
-    navigate('/course-detail', { state: course })
+    navigate('/chi-tiet-khoa-hoc', { state: course })
   }
 
   // Pagination logic
@@ -95,102 +96,100 @@ function CategoryDetailPage() {
     )
   }
 
-  // Show error if category not found
+  // Show error if Danh mục không tồn tại
   if (!category) {
     return (
       <div className={styles.bg}>
         <div className={styles.categoryDetailPage}>
-          <div className={styles.noCourses}>Category not found</div>
+          <div className={styles.noCourses}>Danh mục không tồn tại</div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className={styles.bg}>
-      <div className={styles.categoryDetailPage}>
-        <div className={styles.categoryDetail}>
-          <div>
-            <div className={styles.categoryLabel}>Khóa học - {category.name}</div>
-            <h1 className={styles.title}>Adobe After Effects Tutorials – Learn Adobe After Effects For Free</h1>
-            <p className={styles.subtitle}>
-              Adobe After Effects Tutorials – Learn Adobe After Effects For Free – how to compare in-camera footage with
-              behind-the-scenes material, and make creative choices about blending them together. He also shares some
-              beautiful special effects for adding flair to visuals. The final chapters show you how to put it all
-              together, and make your Adobe CC workflow even more efficient, with presets.
-            </p>
-            <div className={styles.topics}>
-              <div className={styles.topicsTitle}>Topics include:</div>
-              <ul className={styles.topicList}>
-                <li>Assessing your video footage</li>
-                <li>Repairing and color correcting media</li>
-                <li>Warming and cooling clips</li>
-                <li>Shot matching</li>
-              </ul>
+    <div className='bg-gray-100 py-8 px-4'>
+      <div className='max-w-7xl mx-auto'>
+        <div className='flex flex-col lg:flex-row gap-8'>
+          {/* Nội dung chính bên trái */}
+          <div className='flex-1 bg-white rounded-lg shadow-md p-6'>
+            <div>
+              <div className='text-sm font-semibold text-indigo-600 mb-2'>Khóa học - {category.name}</div>
+              <h1 className='text-2xl font-bold text-gray-800 mb-4'>Mô tả chủ đề</h1>
+              <p className='text-gray-600 mb-6'>{category.description}</p>
+
+              <div className='mb-6'>
+                <div className='text-lg font-semibold text-gray-700 mb-2'>Nội dung:</div>
+                <p className='list-disc list-inside text-gray-600 space-y-1'>{category.content}</p>
+              </div>
+            </div>
+
+            <div>
+              {coursesLoading ? (
+                <div className='text-center text-gray-500'>Đang tải khóa học...</div>
+              ) : currentCourses && currentCourses.length > 0 ? (
+                <>
+                  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6'>
+                    {currentCourses.map((course) => (
+                      <div
+                        key={course.id}
+                        onClick={() => handleCourseClick(course)}
+                        className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition'
+                      >
+                        <img
+                          src={course.imageUrl}
+                          alt={course.name}
+                          className='w-full h-40 object-cover rounded-md mb-4'
+                        />
+                        <div>
+                          <div className='text-sm text-indigo-500 font-medium'>{category.name}</div>
+                          <div className='text-lg font-semibold text-gray-800'>{course.name}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {totalPages > 1 && (
+                    <div className='flex justify-center items-center space-x-2'>
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className='px-3 py-1 bg-white border rounded hover:bg-gray-100 disabled:opacity-50'
+                      >
+                        Trước
+                      </button>
+
+                      {getPageNumbers().map((pageNumber, index) => (
+                        <button
+                          key={index}
+                          onClick={() => (typeof pageNumber === 'number' ? handlePageChange(pageNumber) : null)}
+                          disabled={pageNumber === '...'}
+                          className={`px-3 py-1 border rounded ${
+                            pageNumber === currentPage ? 'bg-indigo-500 text-white' : 'bg-white hover:bg-gray-100'
+                          } ${pageNumber === '...' ? 'cursor-default text-gray-400' : ''}`}
+                        >
+                          {pageNumber}
+                        </button>
+                      ))}
+
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className='px-3 py-1 bg-white border rounded hover:bg-gray-100 disabled:opacity-50'
+                      >
+                        Tiếp
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className='text-center text-gray-500'>Không tìm thấy khóa học nào trong danh mục này</div>
+              )}
             </div>
           </div>
 
-          <div className={styles.courseList}>
-            {coursesLoading ? (
-              <div className={styles.loading}>Loading courses...</div>
-            ) : currentCourses && currentCourses.length > 0 ? (
-              <>
-                {currentCourses.map((course) => (
-                  <div
-                    className={styles.courseItem}
-                    key={course.id}
-                    onClick={() => handleCourseClick(course)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <img src={course.imageUrl} alt={course.name} className={styles.thumbnail} />
-                    <div className={styles.courseContent}>
-                      <div className={styles.courseCategory}>{category.name}</div>
-                      <div className={styles.courseTitle}>{course.name}</div>
-                      <div className={styles.courseDescription}>{course.description}</div>
-                    </div>
-                  </div>
-                ))}
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className={styles.pagination}>
-                    <button
-                      className={styles.pageButton}
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                    >
-                      Previous
-                    </button>
-
-                    {getPageNumbers().map((pageNumber, index) => (
-                      <button
-                        key={index}
-                        className={`${styles.pageButton} ${pageNumber === currentPage ? styles.activePage : ''} ${
-                          pageNumber === '...' ? styles.ellipsis : ''
-                        }`}
-                        onClick={() => (typeof pageNumber === 'number' ? handlePageChange(pageNumber) : null)}
-                        disabled={pageNumber === '...'}
-                      >
-                        {pageNumber}
-                      </button>
-                    ))}
-
-                    <button
-                      className={styles.pageButton}
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                    >
-                      Next
-                    </button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className={styles.noCourses}>No courses found in this category</div>
-            )}
-          </div>
+          <TabCategory />
         </div>
-        <TabCategory />
       </div>
     </div>
   )

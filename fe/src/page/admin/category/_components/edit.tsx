@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons'
-import { Flex, Form, Input, Button, Switch, Select, Drawer } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
+import { Flex, Form, Input, Button, Switch, Select, Drawer, Descriptions, Col, Row } from 'antd'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ErrorLoad from '../../components/util/ErrorLoad'
@@ -43,7 +43,9 @@ export default function EditCategory() {
       form.setFieldsValue({
         parent_id: data.parentId ? data.parentId.toString() : '',
         status: data.status,
-        name: data.name
+        name: data.name,
+        description: data.description,
+        content: data.content
       })
     }
   }, [categoryStore, dataCategories])
@@ -81,6 +83,8 @@ export default function EditCategory() {
 
     formData.append('name', name)
     formData.append('status', active.toString())
+    formData.append('content', form.getFieldValue('content'))
+    formData.append('description', form.getFieldValue('description'))
     if (parent_id) {
       formData.append('parentId', parent_id.toString())
     }
@@ -109,10 +113,11 @@ export default function EditCategory() {
   }
   return (
     <Drawer
-      width={'70%'}
+      width='70%'
       title={<span className='font-bold text-xl'>Chỉnh sửa danh mục</span>}
       onClose={handleCancel}
       open={true}
+      bodyStyle={{ padding: 24, maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}
       footer={
         <div style={{ textAlign: 'right' }}>
           <Button onClick={handleCancel} style={{ marginRight: 8 }}>
@@ -131,17 +136,17 @@ export default function EditCategory() {
             form={form}
             name='category'
             layout='vertical'
-            className='w-full p-6'
             onFinish={handleSubmit}
             onValuesChange={onValuesChange}
             initialValues={{}}
           >
-            <Flex gap={32} wrap='wrap'>
-              <Flex className='flex-[2] min-w-[300px]' vertical gap={16}>
+            <Row gutter={[24, 24]}>
+              {/* Cột trái: Ảnh và Cài đặt */}
+              <Col xs={24} md={8}>
                 <Form.Item
                   label={<span className='font-semibold'>Ảnh đại diện</span>}
-                  className='border-[1px] p-[24px] rounded-md border-[#F1F1F4] bg-[#fafbfc]'
-                  style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
+                  className='border p-6 rounded-md bg-[#fafbfc]'
+                  style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.03)' }}
                 >
                   <div className='flex flex-col items-center'>
                     <label
@@ -200,9 +205,10 @@ export default function EditCategory() {
                     </label>
                   </div>
                 </Form.Item>
+
                 <div
-                  className='border rounded-md overflow-hidden flex-1 bg-[#fafbfc]'
-                  style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem' }}
+                  className='border rounded-md bg-[#fafbfc] overflow-hidden'
+                  style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.05)' }}
                 >
                   <div className='p-2'>
                     <h2 className='font-semibold'>Cài đặt</h2>
@@ -216,19 +222,20 @@ export default function EditCategory() {
                   </div>
                   <div className='text-xs text-gray-400 px-2 pb-2'>Bật để danh mục này hiển thị trên website.</div>
                 </div>
-              </Flex>
-              <Flex vertical className='flex-[6] min-w-[300px]'>
+              </Col>
+
+              {/* Cột phải: Tổng quan */}
+              <Col xs={24} md={16}>
                 <div
-                  className='border-[1px] p-[24px] rounded-md bg-[#fafbfc]'
-                  style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
+                  className='border p-6 rounded-md bg-[#fafbfc]'
+                  style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.03)' }}
                 >
                   <h2 className='mb-5 font-bold text-[16px]'>Tổng quan</h2>
-                  <Flex vertical gap={20}>
-                    <Flex gap={30} wrap='wrap'>
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={12}>
                       <Form.Item
                         name='name'
                         label='Tên danh mục'
-                        className='w-full max-w-[350px]'
                         rules={[
                           { required: true, message: 'Vui lòng nhập tên danh mục!' },
                           { max: 120, message: 'Tên không vượt quá 120 ký tự' },
@@ -237,11 +244,12 @@ export default function EditCategory() {
                       >
                         <Input size='large' placeholder='Nhập tên danh mục...' />
                       </Form.Item>
-                      <Form.Item name='parent_id' label='Danh mục cha' className='w-full max-w-[250px]'>
+                    </Col>
+                    <Col xs={24} sm={12}>
+                      <Form.Item name='parent_id' label='Danh mục cha'>
                         <Select
                           showSearch
                           loading={categoryStore.isLoading}
-                          style={{ width: '100%', height: 40 }}
                           placeholder='Chọn danh mục cha (nếu có)'
                           optionFilterProp='label'
                           filterOption={(input, option) =>
@@ -251,11 +259,31 @@ export default function EditCategory() {
                           allowClear
                         />
                       </Form.Item>
-                    </Flex>
-                  </Flex>
+                    </Col>
+                    <Col span={24}>
+                      <Form.Item
+                        name='description'
+                        label='Mô tả ngắn'
+                        rules={[{ max: 300, message: 'Mô tả không vượt quá 300 ký tự' }]}
+                      >
+                        <Input.TextArea
+                          rows={3}
+                          placeholder='Nhập mô tả ngắn về danh mục...'
+                          showCount
+                          maxLength={300}
+                          size='large'
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col span={24}>
+                      <Form.Item name='content' label='Nội dung chi tiết'>
+                        <Input.TextArea rows={6} placeholder='Nhập nội dung chi tiết...' size='large' />
+                      </Form.Item>
+                    </Col>
+                  </Row>
                 </div>
-              </Flex>
-            </Flex>
+              </Col>
+            </Row>
           </Form>
         )}
       </Spin>

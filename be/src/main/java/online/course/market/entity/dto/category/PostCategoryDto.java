@@ -13,6 +13,8 @@ public class PostCategoryDto {
     private Integer parentId;
     @NotBlank(message = "Name is required")
     private String name;
+    private String content;
+    private String description;
     private String slug;
     private boolean status;
     private MultipartFile imageFile;

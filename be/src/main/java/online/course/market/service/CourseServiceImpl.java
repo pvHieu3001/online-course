@@ -56,7 +56,7 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "course not found"));
 
         Category category = categoryRepository.findById(catId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new RuntimeException("Danh mục không tồn tại"));
         courseDb.setName(course.getName());
         courseDb.setContent(course.getContent());
         courseDb.setDescription(course.getDescription());
