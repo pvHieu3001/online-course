@@ -17,11 +17,11 @@ import {
   getCoursesByCategoryFailure
 } from '../slices/course.reducer'
 
-export const getCourses = () => (dispatch: Dispatch) => {
+export const getCourses = (status?: string, search?: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return courseServices
-    .getCourses()
+    .getCourses(status ?? '', search ?? '')
     .then((res) => {
       dispatch(getCoursesSuccessFully(res.data))
       return res

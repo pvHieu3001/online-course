@@ -43,7 +43,7 @@ function AddProduct() {
     formdata.append('level', level)
     formdata.append('price', price ?? 0)
     formdata.append('sourceUrl', sourceUrl)
-    formdata.append('status', status)
+    formdata.append('status', status ? 'active' : 'inactive')
 
     try {
       await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)

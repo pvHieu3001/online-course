@@ -75,7 +75,6 @@ function ProductDetailPage() {
                   height: '200px'
                 }}
               >
-                {/* Overlay */}
                 <div className='absolute inset-0 bg-white/70 flex flex-col justify-center items-center text-gray-800 px-4 text-center'>
                   <span className='bg-sky-500 text-xs font-semibold px-3 py-1 rounded mb-2 text-white'>
                     {course.category?.name}
@@ -90,7 +89,6 @@ function ProductDetailPage() {
         <section className='max-w-4xl mx-auto mt-10 px-4 text-center'></section>
       </div>
 
-      {/* TabCategory - 30% */}
       <TabCategory />
     </div>
   )

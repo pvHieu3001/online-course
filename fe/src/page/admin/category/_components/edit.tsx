@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { DeleteOutlined } from '@ant-design/icons'
-import { Flex, Form, Input, Button, Switch, Select, Drawer, Descriptions, Col, Row } from 'antd'
+import { Form, Input, Button, Switch, Select, Drawer, Col, Row } from 'antd'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ErrorLoad from '../../components/util/ErrorLoad'

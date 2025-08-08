@@ -16,6 +16,7 @@ import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
 import online.course.market.service.CategoryService;
 import online.course.market.utils.SlugUtils;
+import org.hibernate.annotations.Parameter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -81,13 +82,21 @@ public class CourseController {
 
     @Operation(description = "Get all endpoint for Course", summary = "This is a summary for Course get all endpoint")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<GetCourseDto>>> getAll() {
-        List<GetCourseDto> getCourseDtos = courseService.getAll().stream().map((course)->{
-            GetCourseDto courseDto =  toDto(course);
-            Optional.ofNullable(course.getCategory())
-                    .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, GetCategoryDto.class)));
-            return courseDto;
-        }).collect(Collectors.toList());
+    public ResponseEntity<ApiResponse<List<GetCourseDto>>> getAll(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String search) {
+
+        List<GetCourseDto> getCourseDtos = courseService.getAll().stream()
+                .filter(course -> status == null || status.isEmpty() || course.getStatus().equalsIgnoreCase(status))
+                .filter(course -> search == null || search.isEmpty() || course.getName().toLowerCase().contains(search.toLowerCase()))
+                .map(course -> {
+                    GetCourseDto courseDto = toDto(course);
+                    Optional.ofNullable(course.getCategory())
+                            .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, GetCategoryDto.class)));
+                    return courseDto;
+                })
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(ApiResponse.success(getCourseDtos));
     }
 

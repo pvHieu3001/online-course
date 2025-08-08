@@ -1,21 +1,13 @@
 import { Menu, Flex } from 'antd'
-import logo from '../../../assets/images/manager/logo.png'
 import UseSidenav from '../../../feature/UseSidenav'
-import { Typography } from 'antd'
 import Tables from './icon/Tables'
-import Billing from './icon/Billing'
-import Rtl from './icon/Rtl'
-import profile from './icon/Profile'
 import Dashboard from './icon/Dashboard'
 import { useEffect, useState } from 'react'
-
 import type { MenuProps } from 'antd'
 import { useSelector } from 'react-redux'
 
 function Sidenav() {
-  const { Text } = Typography
-
-  const { bgIcon, darkColor, inActiveColor } = useSelector((state) => state.web)
+  const { darkColor } = useSelector((state) => state.web)
   const [stateOpenKeys, setStateOpenKeys] = useState<string[]>([])
 
   const useSidenav = UseSidenav({
@@ -54,7 +46,7 @@ function Sidenav() {
         ),
         link: '/admin/users'
       },
-         {
+      {
         label: (
           <>
             <Flex align='center' gap={10} justify='center' className='children-menu'>
@@ -116,9 +108,7 @@ function Sidenav() {
 
       setStateOpenKeys(
         openKeys
-          // remove repeat key
           .filter((_, index) => index !== repeatIndex)
-          // remove current level all child
           .filter((key) => levelKeys[key] <= levelKeys[currentOpenKey])
       )
     } else {
@@ -134,11 +124,15 @@ function Sidenav() {
 
   return (
     <>
-      <Flex gap={10} className='brand' style={{ display: 'flex', alignItems: 'center' }}>
-        <img src={logo} alt='' />
-        <span className=' text-center'>Bảng điều khiển</span>
+      <Flex align='center' gap={10}>
+        <svg xmlns='http://www.w3.org/2000/svg' className='w-6 h-6 text-black' fill='currentColor' viewBox='0 0 24 24'>
+          <path d='M12 2L1 7l11 5 9-4.09V17h2V7L12 2z' />
+          <path d='M11 12.83L3.26 9.26 2 9.91l9 4.09 9-4.09-1.26-.65L13 12.83V20h-2v-7.17z' />
+        </svg>
+
+        <span className='text-black font-semibold text-lg'>Chia Sẻ Khóa Học</span>
       </Flex>
-      <hr />
+
       <Menu
         theme='light'
         mode='inline'
@@ -147,6 +141,7 @@ function Sidenav() {
         defaultSelectedKeys={stateOpenKeys}
         items={items}
         onOpenChange={onOpenChange}
+        className='mt-2'
       />
     </>
   )

@@ -2,19 +2,27 @@ import React, { useState, useEffect } from 'react'
 
 import { Badge, Button, List, Avatar, Input, Drawer, Space, Flex } from 'antd'
 
-import { SearchOutlined, StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons'
+import {
+  SearchOutlined,
+  StarOutlined,
+  LikeOutlined,
+  MessageOutlined,
+  UserOutlined,
+  HomeOutlined
+} from '@ant-design/icons'
 import bell from './icon/Bell'
 import toggler from './icon/Togge'
 import { setMiniSidenav, setNotification } from '../../../app/slices/web.reducer'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 function Header() {
   const { notification } = useSelector((state) => state.web)
   const [showSidenav, setShowSidenav] = useState(false)
   const dispatch = useDispatch()
 
-  const data = Array.from({ length: 23 }).map((_, i) => ({
+  const data = Array.from({ length: 2 }).map((_, i) => ({
     href: 'https://ant.design',
     title: `ant design part ${i}`,
     avatar: `https://api.dicebear.com/7.x/miniavs/svg?seed=${i}`,
@@ -77,6 +85,10 @@ function Header() {
         />
       </Drawer>
       <Flex gap={10} justify='space-between' align='center'>
+        <Link to='/' className='flex items-center gap-2 text-black hover:text-blue-500 transition-colors duration-200'>
+          <HomeOutlined className='text-black text-xl' />
+          <span>Trang chủ</span>
+        </Link>
         <Input
           className='header-search w-[250px]'
           prefix={

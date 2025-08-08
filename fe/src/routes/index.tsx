@@ -3,7 +3,6 @@ import Manager from '../page/admin/index'
 import Dashboard from '../page/admin/dashboard/Dashboard'
 import Layout from '../page'
 import NotPage from '../page/error/404'
-import Profile from '../page/admin/profile'
 import Base from '../page/user'
 import PageHome from '../page/user/PageHome'
 import UserManagement from '../page/admin/user'
@@ -41,7 +40,6 @@ export default function Router() {
           <Route path='admin' element={<Manager />}>
             <Route index element={<Navigate to='/admin/dashboard' />} />
             <Route path='dashboard' element={<Dashboard />} />
-            <Route path='profile' element={<Profile />} />
 
             <Route path='users' element={<UserManagement />}>
               <Route path='add' element={<AddUser />} />

@@ -4,14 +4,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import TabCategory from '../TabCategory'
 
 function PageHome() {
+  const params = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   useEffect(() => {
-    dispatch(courseActions.getCourses() as unknown as AnyAction)
+    dispatch(courseActions.getCourses('active', params.search) as unknown as AnyAction)
     dispatch(categoryActions.getCategories() as unknown as AnyAction)
   }, [dispatch])
 

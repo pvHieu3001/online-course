@@ -39,7 +39,6 @@ function EditProduct() {
   }, [courseStore])
 
   const onFinish = async () => {
-    console.log('hahahaha' + content)
     const id = courseStore.data?.id
     const name = form.getFieldValue('name')
     const categoryId = form.getFieldValue('categoryId')
@@ -63,7 +62,7 @@ function EditProduct() {
     formdata.append('language', language)
     formdata.append('level', level)
     formdata.append('price', price ?? 0)
-    formdata.append('status', status)
+    formdata.append('status', status ? 'active' : 'inactive')
 
     try {
       await dispatch(courseActions.updateCourse(id, formdata) as unknown as AnyAction)
@@ -112,7 +111,7 @@ function EditProduct() {
               createdBy: courseStore.data?.createdBy,
               updatedAt: formatDate(new Date(courseStore.data?.updatedAt)),
               updatedBy: courseStore.data?.updatedBy,
-              categoryId: courseStore.data?.category.id,
+              categoryId: courseStore.data?.category?.id,
               content: courseStore.data?.content,
               description: courseStore.data?.description,
               courseBenefits: courseStore.data?.courseBenefits,

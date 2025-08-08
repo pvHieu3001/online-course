@@ -23,9 +23,9 @@ const Header = () => {
 
   const menuItems = [
     { label: 'TRANG CHỦ', href: '/' },
-    { label: 'MÃ GIẢM GIÁ 100% UDEMY', href: '/category-detail/udemy' },
-    { label: 'TẤT CẢ KHÓA HỌC', href: '/category-detail/all' },
-    { label: 'TRÒ CHƠI', href: '/category-detail/game' },
+    { label: 'MÃ GIẢM GIÁ 100% UDEMY', href: '/khoa-hoc-theo-chu-de/udemy' },
+    { label: 'TẤT CẢ KHÓA HỌC', href: '/khoa-hoc-theo-chu-de/all' },
+    { label: 'TRÒ CHƠI', href: '/khoa-hoc-theo-chu-de/game' },
     { label: 'ĐIỀU KHOẢN SỬ DỤNG', href: '/term-of-use' },
     { label: 'CHÍNH SÁCH BẢO MẬT', href: '/privacy-policy' },
     { label: 'BẢN QUYỀN', href: '/copyright' }
