@@ -21,7 +21,7 @@ function AddProduct() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    dispatch(categoryActions.getCategories() as any)
+    dispatch(categoryActions.getCategories() as unknown as AnyAction)
   }, [dispatch])
 
   const onFinish = async () => {

@@ -19,7 +19,7 @@ function PageHome() {
 
   const courses = useSelector((state:RootState) => state.course)
 
-  const handleDetail = (slug: any) => {
+  const handleDetail = (slug: string) => {
     const course = courses.dataList.find((c: any) => c.slug === slug)
     if (!course) return
     navigate(`/chi-tiet-khoa-hoc/${slug}`, { state: course })

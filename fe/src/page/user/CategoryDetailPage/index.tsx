@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import TabCategory from '../TabCategory'
 import { courseActions, categoryActions } from '@/app/actions'
-import _ from 'lodash'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 

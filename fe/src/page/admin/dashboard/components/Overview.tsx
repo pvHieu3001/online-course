@@ -2,7 +2,7 @@ import { Card, Col, Flex, Row, Select, Typography } from 'antd'
 import Barchart from './charts/barChart'
 
 export default function Overview() {
-    const { Title, Text } = Typography;    
+    const {Text } = Typography;    
 
     return (
         <Card bordered={false} className="criclebox h-full">

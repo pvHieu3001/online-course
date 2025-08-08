@@ -1,7 +1,7 @@
 
 import Chart from "react-apexcharts";
 
-const Piechart = ({color}: {color: string}) => {
+const Piechart = () => {
     const chartConfig = {
         type: "pie",
         height: 250,

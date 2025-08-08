@@ -19,7 +19,7 @@ function TabCategory() {
     }
   }, []) // Empty dependency array - only run once
 
-  const handleCategoryDetail = (slug: any) => {
+  const handleCategoryDetail = (slug: string) => {
     const category = categories.dataList.find((c: any) => c.slug === slug)
     if (!category) return
     navigate(`/khoa-hoc-theo-chu-de/${slug}`)

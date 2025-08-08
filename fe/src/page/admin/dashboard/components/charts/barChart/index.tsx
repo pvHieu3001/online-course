@@ -1,7 +1,7 @@
 
   import Chart from "react-apexcharts";
 
-  const Barchart = ({color}: {color: string}) => {
+  const Barchart = () => {
       const chartConfig = {
           type: "bar",
           height: 250,

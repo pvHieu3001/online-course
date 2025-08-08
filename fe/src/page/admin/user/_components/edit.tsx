@@ -3,12 +3,12 @@ import { Button, Form, Input} from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Select } from 'antd';
 import type { SelectProps  } from 'antd';
-import LoadingUser from '../util/Loading';
 import ErrorLoad from '../../components/util/ErrorLoad';
 import { useEffect, useState } from 'react';
 import { popupSuccess, popupError } from '@/page/shared/Toast'
 import { UploadOutlined } from '@ant-design/icons'
 import { Image } from 'antd';
+import Loading from '@/page/Loading';
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 }
@@ -141,7 +141,7 @@ export default function EditUser() {
     navigate('..')
   }
 
-  if(isLoading || dataLoading) return <LoadingUser />
+  if(isLoading || dataLoading) return <Loading />
   if(isError) return <ErrorLoad />
   return (
     <>
