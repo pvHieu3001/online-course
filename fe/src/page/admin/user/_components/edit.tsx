@@ -49,8 +49,6 @@ export default function EditUser() {
   const [optionsDistrict, setOptionDistrict] = useState<SelectProps['options']>([])
   
   const onFinish = async (values: Iuser | any) => {
-    console.log(values);
-    
     const formData = new FormData()
     for (const key  in values ) {
        if(String(key) == 'upload'){

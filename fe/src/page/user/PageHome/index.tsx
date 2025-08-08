@@ -17,9 +17,6 @@ function PageHome() {
   }, [dispatch])
 
   const courses = useSelector((state) => state.course)
-  const categories = useSelector((state) => state.category)
-
-  console.log('categories', categories)
 
   const handleDetail = (slug: any) => {
     const course = courses.dataList.find((c: any) => c.slug === slug)

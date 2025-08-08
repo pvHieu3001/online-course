@@ -10,8 +10,6 @@ export default function ListOrders() {
   const [searchValue, setSearchValue] = useState('')
   const orders = useSelector((state) => state.order)
 
-  console.log('orders', orders)
-
   useEffect(() => {
     dispatch(OrderActions.getOrder() as unknown as AnyAction)
   }, [dispatch])

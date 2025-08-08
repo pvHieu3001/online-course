@@ -1,29 +1,29 @@
-import { toast } from 'react-toastify'
-import Party from '../components/icon/partyIcon'
-import ErrorIcon from '../components/icon/errorIcon'
+import { toast } from 'react-toastify';
+import { SmileOutlined, CloseCircleOutlined } from '@ant-design/icons'; // Ant Design icons
+import 'react-toastify/dist/ReactToastify.css';
+
 export const popupSuccess = (text: string) => {
-  return toast(text, {
-    icon: <Party />,
+  return toast.success(text, {
+    icon: <SmileOutlined style={{ color: '#52c41a', fontSize: 20 }} />,
     position: 'top-right',
     autoClose: 5000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    progress: undefined,
     theme: 'light'
-  })
-}
+  });
+};
+
 export const popupError = (text: string) => {
-  toast.error(text, {
-    icon: <ErrorIcon />,
+  return toast.error(text, {
+    icon: <CloseCircleOutlined style={{ color: '#ff4d4f', fontSize: 20 }} />,
     position: 'top-right',
     autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    progress: undefined,
     theme: 'light'
-  })
-}
+  });
+};
