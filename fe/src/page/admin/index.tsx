@@ -9,10 +9,11 @@ import { setVisible } from '../../app/slices/web.reducer'
 import styles from './styles.module.css'
 import clsx from 'clsx'
 import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@/app/store'
 
 const Manager = () => {
   const { Header: AntHeader, Content, Sider } = Layout
-  const { fixedNavbar, miniSidenav } = useSelector((state) => state.web)
+  const { fixedNavbar, miniSidenav } = useSelector((state: RootState) => state.web)
   const dispatch = useDispatch()
 
   return (

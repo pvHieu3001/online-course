@@ -7,6 +7,7 @@ import { popupSuccess } from '@/page/shared/Toast'
 import { userActions } from '@/app/actions'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { AnyAction } from '@reduxjs/toolkit'
+import { RootState } from '@/app/store'
 
 type User = {
   id: number | string
@@ -21,7 +22,7 @@ export default function ListUser() {
   const [id, setId] = useState<number | string>()
   const [searchValue, setSearchValue] = useState('')
   const dispatch = useDispatch()
-  const userStore = useSelector((state: any) => state.user)
+  const userStore = useSelector((state: RootState) => state.user)
   const { dataList, isLoading } = userStore
   const isDeleting = isLoading
 

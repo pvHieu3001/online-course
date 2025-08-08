@@ -15,3 +15,5 @@ export const store = configureStore({
     order: orderSlice
   }
 })
+
+export type RootState = ReturnType<typeof store.getState>

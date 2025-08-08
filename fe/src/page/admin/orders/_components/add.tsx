@@ -21,6 +21,7 @@ import ReactQuill from 'react-quill'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
 import { AnyAction } from '@reduxjs/toolkit'
+import { RootState } from '@/app/store'
 
 interface gallery {
   image: File | string
@@ -31,11 +32,11 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 function AddProduct() {
   const dispatch = useDispatch()
-  const courseStore = useSelector((state: any) => state.course)
+  const courseStore = useSelector((state: RootState) => state.course)
   const [form] = Form.useForm()
   const [gallery, setGallery] = useState<Array<gallery>>([])
   const navigate = useNavigate()
-  const fileInputRef = useRef<any>(null)
+  const fileInputRef = useRef(null)
   const numberFile = useRef<number>(0)
 
   const onFinish = async () => {

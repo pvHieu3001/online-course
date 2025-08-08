@@ -8,11 +8,12 @@ import { AnyAction } from '@reduxjs/toolkit'
 import TextArea from 'antd/es/input/TextArea'
 import { useNavigate } from 'react-router-dom'
 import TextEditor from '../../components/TextEditor/QuillEditor'
+import { RootState } from '@/app/store'
 
 function AddProduct() {
   const dispatch = useDispatch()
-  const categoryStore = useSelector((state: any) => state.category)
-  const courseStore = useSelector((state: any) => state.course)
+  const categoryStore = useSelector((state: RootState) => state.category)
+  const courseStore = useSelector((state: RootState) => state.course)
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [displayPic, setDisplayPic] = useState<string>()

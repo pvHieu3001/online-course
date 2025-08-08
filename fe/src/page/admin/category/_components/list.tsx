@@ -8,11 +8,12 @@ import { categoryActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { ICategory } from '@/common/types.interface'
+import { RootState } from '@/app/store'
 
 export default function ListCategory() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
-  const categories = useSelector((state) => state.category)
+  const categories = useSelector((state: RootState) => state.category)
 
   useEffect(() => {
     dispatch(categoryActions.getCategories() as unknown as AnyAction)

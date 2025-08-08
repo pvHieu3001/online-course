@@ -5,11 +5,12 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { courseActions } from '@/app/actions/course.actions'
 import { useDispatch, useSelector } from 'react-redux'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
+import { RootState } from '@/app/store'
 
 export default function ListProduct() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
-  const courses = useSelector((state) => state.course)
+  const courses = useSelector((state: RootState) => state.course)
 
   useEffect(() => {
     dispatch(courseActions.getCourses() as unknown as AnyAction)

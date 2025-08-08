@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import styles from './styles.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
@@ -6,6 +6,7 @@ import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions'
 import { useNavigate, useParams } from 'react-router-dom'
 import TabCategory from '../TabCategory'
+import { RootState } from '@/app/store'
 
 function PageHome() {
   const params = useParams()
@@ -16,7 +17,7 @@ function PageHome() {
     dispatch(categoryActions.getCategories() as unknown as AnyAction)
   }, [dispatch])
 
-  const courses = useSelector((state) => state.course)
+  const courses = useSelector((state:RootState) => state.course)
 
   const handleDetail = (slug: any) => {
     const course = courses.dataList.find((c: any) => c.slug === slug)

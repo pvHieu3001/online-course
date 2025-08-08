@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { courseActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
+import { RootState } from '@/app/store'
 
 function ProductDetailPage() {
   const dispatch = useDispatch()
-  const { dataList: relatedCourses } = useSelector((state) => state.course)
+  const { dataList: relatedCourses } = useSelector((state: RootState) => state.course)
   const location = useLocation()
   const course = location.state
 
@@ -34,17 +35,17 @@ function ProductDetailPage() {
           />
         </section>
 
-        <section className='mt-10 p-6 '>
+        <section className='mt-10'>
           <h2 className='text-2xl font-semibold mb-4'>Nội Dung Bạn Sẽ Được Đào Tạo</h2>
           <div dangerouslySetInnerHTML={{ __html: course.content }}></div>
         </section>
 
-        <section className='mt-10 p-6 '>
+        <section className='mt-10'>
           <h2 className='text-2xl font-semibold mb-4'>Giới Thiệu Khóa Học</h2>
           <div dangerouslySetInnerHTML={{ __html: course.description }}></div>
         </section>
 
-        <section className='mt-10 bg-white p-6 rounded-lg shadow'>
+        <section className='mt-10 bg-white rounded-lg shadow'>
           <h2 className='text-xl font-semibold mb-4'>Lý Do Bạn Nên Chọn Khóa Học Này</h2>
           <div dangerouslySetInnerHTML={{ __html: course.courseBenefits }}></div>
         </section>

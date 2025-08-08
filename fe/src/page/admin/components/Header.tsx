@@ -5,9 +5,10 @@ import { StarOutlined, LikeOutlined, MessageOutlined, HomeOutlined } from '@ant-
 import { setMiniSidenav, setNotification } from '../../../app/slices/web.reducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { RootState } from '@/app/store'
 
 function Header() {
-  const { notification } = useSelector((state) => state.web)
+  const { notification } = useSelector((state: RootState) => state.web)
   const [showSidenav, setShowSidenav] = useState(false)
   const dispatch = useDispatch()
 

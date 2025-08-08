@@ -6,6 +6,7 @@ import TabCategory from '../TabCategory'
 import { courseActions, categoryActions } from '@/app/actions'
 import _ from 'lodash'
 import { AnyAction } from '@reduxjs/toolkit'
+import { RootState } from '@/app/store'
 
 function CategoryDetailPage() {
   const { slug } = useParams()
@@ -17,8 +18,8 @@ function CategoryDetailPage() {
   const [coursesPerPage] = useState(6)
 
   // Get data from Redux store
-  const { dataList: courses, isLoading: coursesLoading } = useSelector((state) => state.course)
-  const { data: category, isLoading: categoryLoading } = useSelector((state) => state.category)
+  const { dataList: courses, isLoading: coursesLoading } = useSelector((state: RootState) => state.course)
+  const { data: category, isLoading: categoryLoading } = useSelector((state: RootState) => state.category)
 
   // Fetch category and courses when component mounts
   useEffect(() => {

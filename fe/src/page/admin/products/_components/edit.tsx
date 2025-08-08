@@ -9,12 +9,13 @@ import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { formatDate } from '@/utils/formatDate'
 import TextEditor from '../../components/TextEditor/QuillEditor'
+import { RootState } from '@/app/store'
 
 function EditProduct() {
   const { flug } = useParams()
   const dispatch = useDispatch()
-  const courseStore = useSelector((state: any) => state.course)
-  const categoryStore = useSelector((state: any) => state.category)
+  const courseStore = useSelector((state: RootState) => state.course)
+  const categoryStore = useSelector((state: RootState) => state.category)
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [description, setDescription] = useState<string>('')

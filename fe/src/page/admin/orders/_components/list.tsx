@@ -4,11 +4,12 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { OrderActions } from '@/app/actions/orders.action'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
+import { RootState } from '@/app/store'
 
 export default function ListOrders() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
-  const orders = useSelector((state) => state.order)
+  const orders = useSelector((state: RootState) => state.order)
 
   useEffect(() => {
     dispatch(OrderActions.getOrder() as unknown as AnyAction)

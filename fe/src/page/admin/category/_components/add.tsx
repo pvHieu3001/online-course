@@ -7,6 +7,7 @@ import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { categoryActions } from '@/app/actions'
 import { ICategory } from '@/common/types.interface'
 import { AnyAction } from '@reduxjs/toolkit'
+import { RootState } from '@/app/store'
 
 export default function AddCategory() {
   const navigate = useNavigate()
@@ -14,7 +15,7 @@ export default function AddCategory() {
   const [isDirty, setIsDirty] = useState(false)
   const [isLoading, setIsLoading] = useState(false) // giả lập loading nếu chưa có biến
   const dispatch = useDispatch()
-  const categoryStore = useSelector((state: any) => state.category)
+  const categoryStore = useSelector((state: RootState) => state.category)
 
   const dataCategories = Array.isArray(categoryStore.dataList)
     ? (categoryStore.dataList as ICategory[]).map((item) => ({

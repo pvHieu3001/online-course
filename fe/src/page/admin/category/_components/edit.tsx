@@ -10,10 +10,12 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { ICategory } from '@/common/types.interface'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal, Spin } from 'antd'
+import { RootState } from '@/app/store'
+
 export default function EditCategory() {
   const params = useParams()
   const dispatch = useDispatch()
-  const categoryStore = useSelector((state) => state.category)
+  const categoryStore = useSelector((state: RootState) => state.category)
   useEffect(() => {
     dispatch(categoryActions.getCategoryById(params.id ?? '0') as unknown as AnyAction)
     dispatch(categoryActions.getCategories() as unknown as AnyAction)

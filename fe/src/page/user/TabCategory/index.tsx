@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 import { categoryActions } from '@/app/actions'
 import { useNavigate } from 'react-router-dom'
+import { RootState } from '@/app/store'
 
 function TabCategory() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const categories = useSelector((state: any) => state.category)
+  const categories = useSelector((state: RootState) => state.category)
   const hasLoaded = useRef(false)
 
   useEffect(() => {

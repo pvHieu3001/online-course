@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import TextEditor from '../../components/TextEditor/QuillEditor'
+import { RootState } from '@/app/store'
 
 interface gallery {
   image: File | string
@@ -34,7 +35,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 function EditProduct() {
   const { flug } = useParams()
   const dispatch = useDispatch()
-  const courseStore = useSelector((state: any) => state.course)
+  const courseStore = useSelector((state: RootState) => state.course)
   const [form] = Form.useForm()
   const [gallery, setGallery] = useState<Array<gallery>>([])
   const navigate = useNavigate()

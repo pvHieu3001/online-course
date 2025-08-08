@@ -2,9 +2,10 @@ import { Outlet } from 'react-router-dom'
 import { Snackbar, Alert } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
+import { RootState } from '@/app/store'
 
 const Layout = () => {
-  const alert = useSelector((state) => state.alert)
+  const alert = useSelector((state: RootState) => state.alert)
 
   const [state, setState] = useState({
     openSnackbar: false

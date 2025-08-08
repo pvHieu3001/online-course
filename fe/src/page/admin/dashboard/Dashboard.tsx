@@ -7,10 +7,11 @@ import dollor from './components/icon/Dollor'
 import profile from './components/icon/Profile'
 import Overview from './components/Overview'
 import { useSelector } from 'react-redux'
+import { RootState } from '@/app/store'
 
 export default function Dashboard() {
   const { Title } = Typography
-  const { backgroundColor } = useSelector((state) => state.web)
+  const { backgroundColor } = useSelector((state: RootState) => state.web)
   const count = [
     {
       today: 'Today’s Sales',
