@@ -104,14 +104,15 @@ export default function ListProduct() {
       key: 'status',
       align: 'center',
       width: 250,
-      render: (status: boolean) => {
-        const statusClass = status
-          ? 'bg-green-100 text-green-700 border border-green-300'
-          : 'bg-gray-100 text-gray-700 border border-gray-300'
+      render: (status: string) => {
+        const statusClass =
+          status == 'active'
+            ? 'bg-green-100 text-green-700 border border-green-300'
+            : 'bg-gray-100 text-gray-700 border border-gray-300'
 
         return (
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusClass}`}>
-            {status ? 'Hoạt động' : 'Không hoạt động'}
+            {status == 'active' ? 'Hoạt động' : 'Không hoạt động'}
           </span>
         )
       }

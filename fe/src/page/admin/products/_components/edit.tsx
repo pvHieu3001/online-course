@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select, Switch } from 'antd'
 import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { act, useEffect, useState } from 'react'
 import TextEditor from './TextEditor/TextEditor'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { useDispatch, useSelector } from 'react-redux'
@@ -122,7 +122,7 @@ function EditProduct() {
               rating: courseStore.data?.rating,
               slug: courseStore.data?.slug,
               sourceUrl: courseStore.data?.sourceUrl,
-              status: courseStore.data?.status,
+              status: courseStore.data?.status == 'active' ? true : false,
               totalRating: courseStore.data?.totalRating,
               totalStudents: courseStore.data?.totalStudents
             }}
