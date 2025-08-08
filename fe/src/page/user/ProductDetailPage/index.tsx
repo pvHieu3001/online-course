@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import TabCategory from '../TabCategory'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
@@ -67,23 +67,24 @@ function ProductDetailPage() {
           </h2>
           <div className='border-t border-gray-300 mt-2 pt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
             {relatedCourses?.slice(0, 3).map((course, index) => (
-              <div
-                key={index}
-                className='relative rounded overflow-hidden shadow-md hover:shadow-lg transition'
-                style={{
-                  backgroundImage: `url(${import.meta.env.VITE_DOMAIN_URL}${course.imageUrl})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  height: '200px'
-                }}
-              >
-                <div className='absolute inset-0 bg-white/70 flex flex-col justify-center items-center text-gray-800 px-4 text-center'>
-                  <span className='bg-sky-500 text-xs font-semibold px-3 py-1 rounded mb-2 text-white'>
-                    {course.category?.name}
-                  </span>
-                  <h3 className='text-base font-medium leading-snug'>{course.name}</h3>
+              <Link to={'/chi-tiet-khoa-hoc/' + course.slug} state={course} key={index}>
+                <div
+                  className='relative rounded overflow-hidden shadow-md hover:shadow-lg transition'
+                  style={{
+                    backgroundImage: `url(${import.meta.env.VITE_DOMAIN_URL}${course.imageUrl})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    height: '200px'
+                  }}
+                >
+                  <div className='absolute inset-0 bg-white/70 flex flex-col justify-center items-center text-gray-800 px-4 text-center'>
+                    <span className='bg-sky-500 text-xs font-semibold px-3 py-1 rounded mb-2 text-white'>
+                      {course.category?.name}
+                    </span>
+                    <h3 className='text-base font-medium leading-snug'>{course.name}</h3>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>

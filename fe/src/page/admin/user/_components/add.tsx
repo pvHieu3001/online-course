@@ -3,11 +3,11 @@ import { Button, Form, Input } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { Select } from 'antd'
 import type { SelectProps } from 'antd'
-import LoadingUser from '../util/Loading'
 import ErrorLoad from '../../components/util/ErrorLoad'
 import { useEffect, useState } from 'react'
 import { popupSuccess, popupError } from '@/page/shared/Toast'
 import { UploadOutlined } from '@ant-design/icons'
+import Loading from '@/page/Loading'
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 }
@@ -26,7 +26,7 @@ const validateMessages = {
 /* eslint-enable no-template-curly-in-string */
 
 export default function AddUser() {
-  const [file, setFile] = useState({ 
+  const [file, setFile] = useState({
     data: {},
     loading: false
   })
@@ -37,7 +37,6 @@ export default function AddUser() {
       loading: false
     })
     onSuccess('Upload successful', file)
- 
   }
 
   const [createUser, { isLoading: loadingCreateUser }] = useCreateUserMutation()
@@ -45,33 +44,29 @@ export default function AddUser() {
   const [optionsDistrict, setOptionDistrict] = useState<SelectProps['options']>([])
 
   const onFinish = async (values: Iuser | any) => {
-   
     const formData = new FormData()
-    for (const key  in values ) {
-       if(String(key) == 'image'){
-        formData.append(key,values[key][0].originFileObj);
-        continue;
-       }
-       if(String(key) == 'is_active'){
-        if(values[key]){
-           formData.append(key,'1')
-        }else {
-           formData.append(key,'0')
+    for (const key in values) {
+      if (String(key) == 'image') {
+        formData.append(key, values[key][0].originFileObj)
+        continue
+      }
+      if (String(key) == 'is_active') {
+        if (values[key]) {
+          formData.append(key, '1')
+        } else {
+          formData.append(key, '0')
         }
-        continue;
-       }
-       formData.append(key,values[key])
-       
+        continue
+      }
+      formData.append(key, values[key])
     }
     try {
-      await createUser(formData).unwrap();
-      popupSuccess('Add user success');
-      handleCancel();
+      await createUser(formData).unwrap()
+      popupSuccess('Add user success')
+      handleCancel()
     } catch (error) {
-      popupError('Add user error');
+      popupError('Add user error')
     }
-   
-
   }
 
   const [getDistrict, { data: dataDistricts, isLoading: districtLoading }] = useLazyGetDistrictsQuery()
@@ -115,13 +110,12 @@ export default function AddUser() {
     navigate('..')
   }
 
-  if (isLoading) return <LoadingUser />
+  if (isLoading) return <Loading />
   if (isError) return <ErrorLoad />
   return (
     <>
-      <Modal okButtonProps={{ hidden: true }}  title='Add user' open={true} onCancel={handleCancel}>
+      <Modal okButtonProps={{ hidden: true }} title='Add user' open={true} onCancel={handleCancel}>
         <Form
-        
           form={form}
           {...layout}
           name='nest-messages'
@@ -136,7 +130,7 @@ export default function AddUser() {
             <Input type='email' placeholder='Enter your email' />
           </Form.Item>
 
-          <Form.Item name='password' label='Password' rules={[{ required: true , min : 8, max: 30}, ]}>
+          <Form.Item name='password' label='Password' rules={[{ required: true, min: 8, max: 30 }]}>
             <Input type='password' placeholder='*******' />
           </Form.Item>
 
@@ -191,17 +185,17 @@ export default function AddUser() {
               ]}
             />
           </Form.Item>
-          <Form.Item 
-                    className='m-0' 
-                    label='Active'
-                    name='is_active' 
-                    valuePropName="checked"
-                >
-                    <Switch />
-                </Form.Item>
+          <Form.Item className='m-0' label='Active' name='is_active' valuePropName='checked'>
+            <Switch />
+          </Form.Item>
 
           <Form.Item className='mt-3' wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-            <Button loading={loadingCreateUser || file.loading} disabled={loadingCreateUser} type='primary' htmlType='submit'>
+            <Button
+              loading={loadingCreateUser || file.loading}
+              disabled={loadingCreateUser}
+              type='primary'
+              htmlType='submit'
+            >
               Create
             </Button>
           </Form.Item>
