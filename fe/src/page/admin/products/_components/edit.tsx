@@ -1,14 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select, Switch } from 'antd'
 import { useParams } from 'react-router-dom'
-import { act, useEffect, useState } from 'react'
-import TextEditor from './TextEditor/TextEditor'
+import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { formatDate } from '@/utils/formatDate'
+import TextEditor from '../../components/TextEditor/QuillEditor'
 
 function EditProduct() {
   const { flug } = useParams()
@@ -67,10 +67,10 @@ function EditProduct() {
     try {
       await dispatch(courseActions.updateCourse(id, formdata) as unknown as AnyAction)
       await dispatch(courseActions.getCourses() as unknown as AnyAction)
-      popupSuccess('Cập nhật sản phẩm thành công')
+      popupSuccess('Cập nhật khóa học thành công')
       window.location.href = '/admin/products'
     } catch (error) {
-      popupError('Cập nhật sản phẩm thất bại')
+      popupError('Cập nhật khóa học thất bại')
     }
   }
 

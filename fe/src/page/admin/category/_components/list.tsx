@@ -3,7 +3,6 @@ import { Button, Flex, Input, Popconfirm, Space, Table, Tag, Typography, message
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
-import '../../styles/category.css'
 import ErrorLoad from '../../components/util/ErrorLoad'
 import { categoryActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
@@ -108,7 +107,7 @@ export default function ListCategory() {
   return (
     <>
       <div className='flex items-center justify-between my-2'>
-        <Typography.Title editable level={2} style={{ margin: 0 }}>
+        <Typography.Title level={2} style={{ margin: 0 }}>
           Danh sách danh mục
         </Typography.Title>
       </div>

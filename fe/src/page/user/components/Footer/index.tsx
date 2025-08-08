@@ -6,14 +6,14 @@ const Footer = () => {
       <div className={styles.container}>
         {/* Footer thông tin */}
         <div className={styles.copyrightBar}>
-          Copyright © 2025. Created by
+          Copyright © 2025. Created by &nbsp;
           <a
             href='https://chiasekhoahoc.com'
             target='_blank'
             rel='noopener noreferrer'
             className={styles.copyrightLink}
           >
-            Chi Sẻ Khóa Học Miễn Phí
+            chiasekhoahoc.com
           </a>
           .
         </div>

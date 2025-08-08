@@ -1,19 +1,8 @@
 import React, { useState, useEffect } from 'react'
 
-import { Badge, Button, List, Avatar, Input, Drawer, Space, Flex } from 'antd'
-
-import {
-  SearchOutlined,
-  StarOutlined,
-  LikeOutlined,
-  MessageOutlined,
-  UserOutlined,
-  HomeOutlined
-} from '@ant-design/icons'
-import bell from './icon/Bell'
-import toggler from './icon/Togge'
+import { Badge, Button, List, Avatar, Drawer, Space, Flex } from 'antd'
+import { StarOutlined, LikeOutlined, MessageOutlined, HomeOutlined } from '@ant-design/icons'
 import { setMiniSidenav, setNotification } from '../../../app/slices/web.reducer'
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -89,26 +78,16 @@ function Header() {
           <HomeOutlined className='text-black text-xl' />
           <span>Trang chủ</span>
         </Link>
-        <Input
-          className='header-search w-[250px]'
-          prefix={
-            <div className=' px-2'>
-              <SearchRoundedIcon />
-            </div>
-          }
-          size='small'
-          placeholder={'Tìm kiếm'}
-          style={{
-            borderRadius: '2rem',
-            border: 'none',
-            backgroundColor: '#ffff',
-            boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem'
-          }}
-        />
         <Flex align='center' gap={20}>
           <Badge size='small' count={4}>
             <a href='#pablo' className='ant-dropdown-link' onClick={() => dispatch(setNotification(true))}>
-              {bell}
+              <svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg' key={0}>
+                <path
+                  d='M10 2C6.68632 2 4.00003 4.68629 4.00003 8V11.5858L3.29292 12.2929C3.00692 12.5789 2.92137 13.009 3.07615 13.3827C3.23093 13.7564 3.59557 14 4.00003 14H16C16.4045 14 16.7691 13.7564 16.9239 13.3827C17.0787 13.009 16.9931 12.5789 16.7071 12.2929L16 11.5858V8C16 4.68629 13.3137 2 10 2Z'
+                  fill='#111827'
+                ></path>
+                <path d='M10 18C8.34315 18 7 16.6569 7 15H13C13 16.6569 11.6569 18 10 18Z' fill='#111827'></path>
+              </svg>
             </a>
           </Badge>
           <Flex align='center' gap={10} justify='center' className='rounded-[999px]'>
@@ -116,7 +95,9 @@ function Header() {
           </Flex>
           {showSidenav && (
             <Button type='link' className='sidebar-toggler' onClick={() => dispatch(setMiniSidenav(false))}>
-              {toggler}
+              <svg width='20' height='20' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512' key={0}>
+                <path d='M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z'></path>
+              </svg>
             </Button>
           )}
         </Flex>

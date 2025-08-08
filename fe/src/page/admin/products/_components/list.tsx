@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { AnyAction } from '@reduxjs/toolkit'
 import { courseActions } from '@/app/actions/course.actions'
 import { useDispatch, useSelector } from 'react-redux'
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 
 export default function ListProduct() {
   const dispatch = useDispatch()
@@ -23,10 +24,10 @@ export default function ListProduct() {
 
   const handlerDeleteProduct = async (id: string) => {
     try {
-      dispatch(courseActions.deleteCourse(id))
-      message.success('Xoá sản phẩm thành công!')
+      dispatch(courseActions.deleteCourse(id) as unknown as AnyAction)
+      message.success('Xoá khóa học thành công!')
     } catch (error: any) {
-      message.error(error.data ? error.data.message : 'Xoá sản phẩm thất bại!')
+      message.error(error.data ? error.data.message : 'Xoá khóa học thất bại!')
     }
   }
 
@@ -130,7 +131,7 @@ export default function ListProduct() {
           </Link>
           <Popconfirm
             placement='topRight'
-            title={'Bạn có chắc muốn xoá sản phẩm này?'}
+            title={'Bạn có chắc muốn xoá khóa học này?'}
             onConfirm={() => handlerDeleteProduct(record.id)}
             onCancel={() => {}}
             okText='Đồng ý'
@@ -148,13 +149,18 @@ export default function ListProduct() {
   return (
     <>
       <div className='flex items-center justify-between my-2'>
-        <Typography.Title editable level={2} style={{ margin: 0 }}>
-          Danh sách sản phẩm
+        <Typography.Title level={2} style={{ margin: 0 }}>
+          Danh sách khóa học
         </Typography.Title>
       </div>
       <Flex wrap='wrap' gap='small' className='my-5' align='center' justify='space-between'>
         <Input
           className='header-search w-[250px]'
+          prefix={
+            <div className=' px-2'>
+              <SearchRoundedIcon />
+            </div>
+          }
           value={searchValue}
           spellCheck={false}
           allowClear
@@ -164,7 +170,7 @@ export default function ListProduct() {
           style={{ borderRadius: '2rem' }}
         />
         <Link to='add'>
-          <Button type='primary'>Thêm sản phẩm</Button>
+          <Button type='primary'>Thêm khóa học</Button>
         </Link>
       </Flex>
       <Table

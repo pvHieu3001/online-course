@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
-import TextEditor from './TextEditor/TextEditor'
 import TextArea from 'antd/es/input/TextArea'
 import { useNavigate } from 'react-router-dom'
+import TextEditor from '../../components/TextEditor/QuillEditor'
 
 function AddProduct() {
   const dispatch = useDispatch()
@@ -48,10 +48,10 @@ function AddProduct() {
     try {
       await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)
       await dispatch(courseActions.getCourses() as unknown as AnyAction)
-      popupSuccess('Thêm sản phẩm thành công')
+      popupSuccess('Thêm khóa học thành công')
       navigate('..')
     } catch (error) {
-      popupError('Thêm sản phẩm thất bại')
+      popupError('Thêm khóa học thất bại')
     }
   }
 
@@ -81,7 +81,7 @@ function AddProduct() {
     <>
       <Drawer
         open={true}
-        title={<h2 className=' font-bold text-[24px]'>Tạo sản phẩm mới</h2>}
+        title={<h2 className=' font-bold text-[24px]'>Tạo khóa học mới</h2>}
         width={'85%'}
         styles={{
           header: { height: 60 },

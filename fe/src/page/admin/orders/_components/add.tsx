@@ -1,6 +1,20 @@
-import { Col, Flex, Row, Button, Form, Input, Drawer, UploadProps, GetProp, InputNumber, Card, Divider, Select } from 'antd'
+import {
+  Col,
+  Flex,
+  Row,
+  Button,
+  Form,
+  Input,
+  Drawer,
+  UploadProps,
+  GetProp,
+  InputNumber,
+  Card,
+  Divider,
+  Select
+} from 'antd'
 import { useNavigate } from 'react-router-dom'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ReactQuill from 'react-quill'
@@ -20,7 +34,6 @@ function AddProduct() {
   const courseStore = useSelector((state: any) => state.course)
   const [form] = Form.useForm()
   const [gallery, setGallery] = useState<Array<gallery>>([])
-  const [imageUrl, setImageUrl] = useState<Blob>()
   const navigate = useNavigate()
   const fileInputRef = useRef<any>(null)
   const numberFile = useRef<number>(0)
@@ -54,17 +67,13 @@ function AddProduct() {
     formdata.append('status', status)
     formdata.append('total_rating', String(total_rating))
     formdata.append('total_students', String(total_students))
-    // Nếu muốn giữ gallery thì giữ lại phần này
-    formdata.append('gallery', gallery ? JSON.stringify(gallery) : '')
-    // Nếu muốn giữ image upload thì giữ lại phần này
-    formdata.append('thumbnail', imageUrl ? imageUrl : '')
 
     try {
       await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)
-      popupSuccess('Thêm sản phẩm thành công')
+      popupSuccess('Thêm khóa học thành công')
       navigate('..')
     } catch (error) {
-      popupError('Thêm sản phẩm thất bại')
+      popupError('Thêm khóa học thất bại')
     }
   }
 
@@ -89,18 +98,7 @@ function AddProduct() {
       ['clean']
     ]
   }
-  const formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'image'
-  ]
+  const formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'link', 'image']
 
   const selectGallery = async (e: any) => {
     if (gallery.length > 6) return
@@ -144,7 +142,7 @@ function AddProduct() {
     <>
       <Drawer
         open={true}
-        title={<h2 className=' font-bold text-[24px]'>Tạo sản phẩm mới</h2>}
+        title={<h2 className=' font-bold text-[24px]'>Tạo khóa học mới</h2>}
         width={'85%'}
         styles={{
           header: { height: 60 },
@@ -156,7 +154,11 @@ function AddProduct() {
           <Card title='Thông tin khoá học' size='small' style={{ marginBottom: 24 }}>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name='name' label='Tên khoá học' rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}> 
+                <Form.Item
+                  name='name'
+                  label='Tên khoá học'
+                  rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}
+                >
                   <Input placeholder='Nhập tên khoá học' />
                 </Form.Item>
                 <Form.Item name='slug' label='Slug'>
@@ -256,7 +258,9 @@ function AddProduct() {
                         <Flex style={{ width: '100%', color: 'gray' }} vertical justify='center' align='center'>
                           <span style={{ fontSize: '11px' }}>
                             Kích thước tối đa: 50MB{' '}
-                            <span className={`${gallery.length != 5 ? 'text-red-400' : 'text-blue-400'}`}>{gallery.length}/5</span>
+                            <span className={`${gallery.length != 5 ? 'text-red-400' : 'text-blue-400'}`}>
+                              {gallery.length}/5
+                            </span>
                           </span>
                           <span style={{ fontSize: '11px' }}>JPG, PNG, GIF, SVG</span>
                         </Flex>

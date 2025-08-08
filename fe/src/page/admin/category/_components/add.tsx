@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom'
-import { CloudUploadOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Flex, Form, Input, Modal, Button, Switch, Select, Drawer, Spin } from 'antd'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { categoryActions } from '@/app/actions'
 import { ICategory } from '@/common/types.interface'
+import { AnyAction } from '@reduxjs/toolkit'
 
 export default function AddCategory() {
   const navigate = useNavigate()
@@ -26,7 +27,7 @@ export default function AddCategory() {
 
   // Lấy danh sách category cha khi mount
   useEffect(() => {
-    dispatch(categoryActions.getCategories() as any)
+    dispatch(categoryActions.getCategories() as unknown as AnyAction)
   }, [dispatch])
 
   // Xác nhận khi rời nếu có thay đổi
@@ -70,8 +71,8 @@ export default function AddCategory() {
     }
     try {
       setIsLoading(true)
-      await dispatch(categoryActions.createCategory(formData) as any)
-      await dispatch(categoryActions.getCategories() as any)
+      await dispatch(categoryActions.createCategory(formData) as unknown as AnyAction)
+      await dispatch(categoryActions.getCategories() as unknown as AnyAction)
       popupSuccess('Thêm danh mục thành công')
       setIsDirty(false)
       navigate('..')

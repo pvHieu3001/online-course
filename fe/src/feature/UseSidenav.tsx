@@ -1,7 +1,6 @@
 import type { MenuProps } from 'antd';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import UseLink from './UseLink';
 type MenuItem = Required<MenuProps>['items'][number];
 
 type MyMenu = {
@@ -38,9 +37,9 @@ export default function UseSidenav({components}: MyItemSidenav) {
         if(currentElement.link && currentElement.link != undefined){
             
             currentElement.label = (
-                <UseLink to={currentElement.link}>
+                <Link to={currentElement.link}>
                     {currentElement.label}
-                </UseLink>
+                </Link>
             )
 
             if(keyActive && currentElement.link == link){

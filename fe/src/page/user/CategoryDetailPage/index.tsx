@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import TabCategory from '../TabCategory'
 import { courseActions, categoryActions } from '@/app/actions'
 import _ from 'lodash'
+import { AnyAction } from '@reduxjs/toolkit'
 
 function CategoryDetailPage() {
   const { slug } = useParams()
@@ -22,14 +23,14 @@ function CategoryDetailPage() {
   // Fetch category and courses when component mounts
   useEffect(() => {
     if (slug) {
-      dispatch(categoryActions.getCategoryBySlug(slug))
+      dispatch(categoryActions.getCategoryBySlug(slug) as unknown as AnyAction)
     }
   }, [slug])
 
   // Fetch courses when category is loaded
   useEffect(() => {
     if (category && category.id) {
-      dispatch(courseActions.getCoursesByCategory(category.id))
+      dispatch(courseActions.getCoursesByCategory(category.id) as unknown as AnyAction)
     }
   }, [category])
 

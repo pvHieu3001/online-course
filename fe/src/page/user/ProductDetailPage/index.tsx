@@ -3,6 +3,7 @@ import TabCategory from '../TabCategory'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { courseActions } from '@/app/actions'
+import { AnyAction } from '@reduxjs/toolkit'
 
 function ProductDetailPage() {
   const dispatch = useDispatch()
@@ -12,7 +13,7 @@ function ProductDetailPage() {
 
   useEffect(() => {
     if (course && course.category?.id) {
-      dispatch(courseActions.getCoursesByCategory(course.category.id))
+      dispatch(courseActions.getCoursesByCategory(course.category.id) as unknown as AnyAction)
     }
   }, [])
 

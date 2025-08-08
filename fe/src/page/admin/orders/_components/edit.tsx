@@ -1,15 +1,28 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Col, Flex, Row, Button, Form, Input, Drawer, UploadProps, GetProp, InputNumber, Image, Card, Divider, Select } from 'antd'
+import {
+  Col,
+  Flex,
+  Row,
+  Button,
+  Form,
+  Input,
+  Drawer,
+  UploadProps,
+  GetProp,
+  InputNumber,
+  Card,
+  Divider,
+  Select
+} from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons'
-import TextEditor from './TextEditor/TextEditor'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ReactQuill from 'react-quill'
-import pencil from '../../../../assets/images/manager/pencil.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
 import { AnyAction } from '@reduxjs/toolkit'
+import TextEditor from '../../components/TextEditor/QuillEditor'
 
 interface gallery {
   image: File | string
@@ -24,9 +37,6 @@ function EditProduct() {
   const courseStore = useSelector((state: any) => state.course)
   const [form] = Form.useForm()
   const [gallery, setGallery] = useState<Array<gallery>>([])
-  const [imageUrl, setImageUrl] = useState<Blob>()
-  const [typeDiscount, setTypeDiscount] = useState<string>('')
-  const [editDetail, setEditDetail] = useState(false)
   const navigate = useNavigate()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const numberFile = useRef<number>(0)
@@ -78,17 +88,13 @@ function EditProduct() {
     formdata.append('status', status)
     formdata.append('total_rating', String(total_rating))
     formdata.append('total_students', String(total_students))
-    // Nếu muốn giữ gallery thì giữ lại phần này
-    formdata.append('gallery', gallery ? JSON.stringify(gallery) : '')
-    // Nếu muốn giữ image upload thì giữ lại phần này
-    formdata.append('thumbnail', imageUrl ? imageUrl : '')
 
     try {
       await dispatch(courseActions.updateCourse(id, formdata) as unknown as AnyAction)
-      popupSuccess('Cập nhật sản phẩm thành công')
+      popupSuccess('Cập nhật khóa học thành công')
       navigate('..')
     } catch (error) {
-      popupError('Cập nhật sản phẩm thất bại')
+      popupError('Cập nhật khóa học thất bại')
     }
   }
 
@@ -149,7 +155,7 @@ function EditProduct() {
           open={true}
           title={
             <>
-              <h2 className=' font-bold text-[24px]'>Cập nhật sản phẩm</h2>
+              <h2 className=' font-bold text-[24px]'>Cập nhật khóa học</h2>
             </>
           }
           width={'85%'}
@@ -217,7 +223,11 @@ function EditProduct() {
             <Card title='Thông tin khoá học' size='small' style={{ marginBottom: 24 }}>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item name='name' label='Tên khoá học' rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}>
+                  <Form.Item
+                    name='name'
+                    label='Tên khoá học'
+                    rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}
+                  >
                     <Input placeholder='Nhập tên khoá học' />
                   </Form.Item>
                   <Form.Item name='slug' label='Slug'>
@@ -279,12 +289,7 @@ function EditProduct() {
                 <TextEditor data={courseStore.data?.content} />
               </Form.Item>
               <Form.Item name='detail' label='Mô tả chi tiết'>
-                <ReactQuill
-                  modules={modules}
-                  formats={formats}
-                  theme='snow'
-                  className='h-[200px]'
-                />
+                <ReactQuill modules={modules} formats={formats} theme='snow' className='h-[200px]' />
               </Form.Item>
             </Card>
             <Divider orientation='left'>Ảnh & Gallery</Divider>
@@ -404,16 +409,5 @@ const modules = {
     ['clean']
   ]
 }
-const formats = [
-  'header',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'link',
-  'image'
-]
+const formats = ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'link', 'image']
 export default EditProduct

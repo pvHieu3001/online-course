@@ -1,46 +1,62 @@
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.bubble.css';
+import { useRef, useState, useEffect } from 'react'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
-
-function QuillEditor() {
-  const [value, setValue] = useState('');
-
-  const modules = {
-    toolbar: {
-      container: [
-        [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['bold', 'italic', 'underline'],
-        ['link', 'image'],
-        [{ 'color': [] }, { 'background': [] }], // Include color and background color in toolbar
-        ['clean']
-      ],
-    },
-    clipboard: {
-      matchVisual: false,
-    }
-  };
-
-    const formats = [
-        'header', 'font', 'size',
-        'bold', 'italic', 'underline',
-        'list', 'bullet',
-        'link', 'image'
-    ];
-
-    const editorStyles = {
-        height: '150px', // Set height to 50px
-        border: '1px solid #ccc', // Example border style
-        borderRadius: '5px', // Example border radius
-        padding: '10px', // Example padding
-      };
-
-  return (
-    <div style={editorStyles}>
-        <ReactQuill theme="snow" value={value} onChange={setValue} modules={modules} formats={formats}/>
-    </div>
-  );
+interface TextEditorProps {
+  content: string
+  onHandleChange: (value: string) => void
 }
 
-export default QuillEditor
+export default function TextEditor({ content, onHandleChange }: TextEditorProps) {
+  const [value, setValue] = useState(content)
+  const childRef = useRef(null)
+
+  useEffect(() => {
+    setValue(content)
+  }, [content])
+
+  const modules = {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      [{ size: [] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+      ['link', 'image', 'video'],
+      ['clean']
+    ],
+    clipboard: {
+      matchVisual: false
+    }
+  }
+
+  const formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+    'video'
+  ]
+  return (
+    <ReactQuill
+      ref={childRef}
+      value={value}
+      modules={modules}
+      formats={formats}
+      theme='snow'
+      className='h-[200px]'
+      onChange={(val) => {
+        setValue(val)
+        onHandleChange(val)
+      }}
+    />
+  )
+}

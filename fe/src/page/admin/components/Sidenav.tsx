@@ -1,72 +1,62 @@
 import { Menu, Flex } from 'antd'
 import UseSidenav from '../../../feature/UseSidenav'
-import Tables from './icon/Tables'
-import Dashboard from './icon/Dashboard'
 import { useEffect, useState } from 'react'
 import type { MenuProps } from 'antd'
-import { useSelector } from 'react-redux'
+import {
+  ReadOutlined,
+  TagsOutlined,
+  UsergroupAddOutlined,
+  ShoppingCartOutlined,
+  DashboardOutlined
+} from '@ant-design/icons'
 
 function Sidenav() {
-  const { darkColor } = useSelector((state) => state.web)
   const [stateOpenKeys, setStateOpenKeys] = useState<string[]>([])
 
   const useSidenav = UseSidenav({
     components: [
       {
         label: (
-          <>
-            <Flex align='center' gap={10} justify='center' className='children-menu'>
-              {<Tables color={darkColor} />}
-              <span className='label font-bold text-[#344767]'>Sản phẩm</span>
-            </Flex>
-          </>
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <ReadOutlined className='text-[18px] text-[#344767]' />
+            <span className='label font-bold text-[#344767]'>Khóa học</span>
+          </Flex>
         ),
         link: '/admin/products'
       },
       {
         label: (
-          <>
-            <Flex align='center' gap={10} justify='center' className='children-menu'>
-              {<Tables color={darkColor} />}
-              <span className='label font-bold text-[#344767]'>Danh mục</span>
-            </Flex>
-          </>
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <TagsOutlined className='text-[18px] text-[#344767]' />
+            <span className='label font-bold text-[#344767]'>Danh mục</span>
+          </Flex>
         ),
         link: '/admin/categories'
       },
-
       {
         label: (
-          <>
-            <Flex align='center' gap={10} justify='center' className='children-menu'>
-              {<Tables color={darkColor} />}
-              <span className='label font-bold text-[#344767]'>Người dùng</span>
-            </Flex>
-          </>
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <UsergroupAddOutlined className='text-[18px] text-[#344767]' />
+            <span className='label font-bold text-[#344767]'>Người dùng</span>
+          </Flex>
         ),
         link: '/admin/users'
       },
       {
         label: (
-          <>
-            <Flex align='center' gap={10} justify='center' className='children-menu'>
-              {<Tables color={darkColor} />}
-              <span className='label font-bold text-[#344767]'>Order</span>
-            </Flex>
-          </>
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <ShoppingCartOutlined className='text-[18px] text-[#344767]' />
+            <span className='label font-bold text-[#344767]'>Order</span>
+          </Flex>
         ),
         link: '/admin/orders'
       },
       {
         label: (
-          <>
-            <div>
-              <Flex justify='center' align='center'>
-                <div className={`icon `}>{<Dashboard color={darkColor} />}</div>
-                <span className={`label font-bold text-[#344767]`}>Dashboard</span>
-              </Flex>
-            </div>
-          </>
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <DashboardOutlined className='text-[18px] text-[#344767]' />
+            <span className='label font-bold text-[#344767]'>Dashboard</span>
+          </Flex>
         ),
         link: '/admin/dashboard'
       }
