@@ -22,6 +22,6 @@ public class Notification {
     protected String content;
     @NotNull
     private String type;
-    private boolean isRead;
-    private boolean isDeleted;
+    private Boolean isRead;
+    private Boolean isDeleted;
 }

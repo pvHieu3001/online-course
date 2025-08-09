@@ -10,14 +10,14 @@ function getCategoryById(id: string) {
 function getCategoryBySlug(slug: string) {
   return http.get(`/api/v1/category/slug/${slug}`)
 }
-function updateCategory(id: string, data: FormData) {
+function updateCategory(id?: string, data?: FormData) {
   return http.put(`/api/v1/category/${id}`, data, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   })
 }
-function createCategory(data:FormData) {
+function createCategory(data: FormData) {
   return http.post(`/api/v1/category`, data, {
     headers: {
       'Content-Type': 'multipart/form-data'

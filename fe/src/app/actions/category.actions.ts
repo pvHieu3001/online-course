@@ -79,7 +79,7 @@ export const createCategory = (data: FormData) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const updateCategory = (id: string, data: FormData) => (dispatch: Dispatch) => {
+export const updateCategory = (id?: string, data?: FormData) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return categoryServices

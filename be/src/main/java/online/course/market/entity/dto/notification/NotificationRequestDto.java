@@ -13,6 +13,6 @@ public class NotificationRequestDto {
     private String content;
     private Integer userId;
     private String type;
-    private boolean isRead;
-    private boolean isDeleted;
+    private Boolean isRead;
+    private Boolean isDeleted;
 } 
