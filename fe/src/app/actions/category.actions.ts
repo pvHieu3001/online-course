@@ -63,7 +63,7 @@ export const getCategoryBySlug = (slug: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const createCategory = (data) => (dispatch: Dispatch) => {
+export const createCategory = (data: FormData) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return categoryServices
@@ -79,7 +79,7 @@ export const createCategory = (data) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const updateCategory = (id, data) => (dispatch: Dispatch) => {
+export const updateCategory = (id: string, data: FormData) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return categoryServices

@@ -9,11 +9,11 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificationResponseDto {
-    private String id;
+    private Integer id;
     private String title;
     private String content;
-    private String userId;
+    private Integer userId;
     private String type;
-    private Date isRead;
-    private Date isDeleted;
+    private boolean isRead;
+    private boolean isDeleted;
 } 

@@ -1,3 +1,4 @@
+import { IUser } from '@/common/types.interface'
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -5,7 +6,8 @@ const initialState = {
   code: '',
   message: '',
   error_message: '',
-  data: null
+  data: <IUser>(<unknown>null),
+  dataList: <IUser[]>(<unknown>null)
 }
 
 const userSlice = createSlice({
@@ -23,7 +25,7 @@ const userSlice = createSlice({
       state.isLoading = false
     },
     postCourseSuccess: (state, { payload }) => {
-      state.data.push(payload) 
+      state.dataList.push(payload) 
       state.isLoading = false
     },
     getUsersFailure: (state, { payload }) => {

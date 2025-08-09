@@ -49,7 +49,7 @@ export const getCourseById = (id: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const createCourse = (data) => (dispatch: Dispatch) => {
+export const createCourse = (data: FormData) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return courseServices
@@ -65,7 +65,7 @@ export const createCourse = (data) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const updateCourse = (id, data) => (dispatch: Dispatch) => {
+export const updateCourse = (id: string, data: FormData) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return courseServices

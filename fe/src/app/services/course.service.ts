@@ -6,14 +6,14 @@ function getCourses(status?: string, search?: string) {
 function getCourseById(id: string) {
   return http.get(`/api/v1/course/${id}`)
 }
-function updateCourse(id, data) {
+function updateCourse(id: string, data: FormData) {
   return http.put(`/api/v1/course/${id}`, data, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   })
 }
-function createCourse(data) {
+function createCourse(data: FormData) {
   return http.post(`/api/v1/course`, data, {
     headers: {
       'Content-Type': 'multipart/form-data'

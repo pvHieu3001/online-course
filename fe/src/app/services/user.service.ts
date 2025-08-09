@@ -2,12 +2,13 @@ import http from '../http-common'
 import httpauth from '../http-auth'
 import { LOCAL_STORAGE_USER, LOCAL_STORAGE_TOKEN, ADMIN_BASE_API } from '../constants'
 import axs from '../http-common'
+import { ILogin, IUser } from '@/common/types.interface'
 
 function getUsers() {
   return http.get(`/api/v1/user`)
 }
 
-async function login(data) {
+async function login(data: ILogin) {
   const res = await httpauth.post(`/api/v1/auth/login`, data)
   const token = res.data.data.access_token
   axs.defaults.headers.common.Authorization = `Bearer ${token}`
@@ -26,10 +27,10 @@ function logout() {
 function getUserById(id: string) {
   return http.get(`/api/v1/user/${id}`)
 }
-function updateUser(id, data) {
+function updateUser(id: string, data: IUser) {
   return http.put(`/api/v1/user/${id}`, data)
 }
-function createUser(data) {
+function createUser(data: IUser) {
   return http.post(`/api/v1/user`, data)
 }
 function deleteUser(id: string) {

@@ -9,6 +9,7 @@ import TextArea from 'antd/es/input/TextArea'
 import { useNavigate } from 'react-router-dom'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
+import { ICategory } from '@/common/types.interface'
 
 function AddProduct() {
   const dispatch = useDispatch()
@@ -121,7 +122,7 @@ function AddProduct() {
                     optionFilterProp='children'
                     size='large'
                   >
-                    {categoryStore.dataList?.map((cat: any) => (
+                    {categoryStore.dataList?.map((cat: ICategory) => (
                       <Select.Option key={cat.id} value={cat.id}>
                         {cat.name}
                       </Select.Option>

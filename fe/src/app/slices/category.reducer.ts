@@ -1,3 +1,4 @@
+import { ICategory } from '@/common/types.interface'
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -5,8 +6,8 @@ const initialState = {
   code: '',
   message: '',
   error_message: '',
-  data: null,
-  dataList: null
+  data: <ICategory>(<unknown>null),
+  dataList: <ICategory[]>(<unknown>null)
 }
 
 const categorySlice = createSlice({

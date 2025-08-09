@@ -15,6 +15,7 @@ import {
   getByIdFailure,
   getByIdSuccess
 } from '../slices/user.reducer'
+import { ILogin, IUser } from '@/common/types.interface'
 
 // Get all users
 export const getUsers = () => (dispatch: Dispatch) => {
@@ -51,7 +52,7 @@ export const getUserById = (id: string) => (dispatch: Dispatch) => {
 }
 
 // Create user
-export const createUser = (data) => (dispatch: Dispatch) => {
+export const createUser = (data: IUser) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return userService
@@ -68,7 +69,7 @@ export const createUser = (data) => (dispatch: Dispatch) => {
 }
 
 // Update user
-export const updateUser = (id, data) => (dispatch: Dispatch) => {
+export const updateUser = (id: string, data: IUser) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return userService
@@ -102,7 +103,7 @@ export const deleteUser = (id: string) => (dispatch: Dispatch) => {
 }
 
 // Login user
-export const login = (token) => (dispatch: Dispatch) => {
+export const login = (token: ILogin) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return userService

@@ -1,5 +1,4 @@
 import axios from 'axios'
-// import {LOCAL_STORAGE_TOKEN, BASE_API} from "./constants";
 import { LOCAL_STORAGE_TOKEN, EXTERNAL_BASE_API } from './constants'
 
 const onSuccessInterceptorRequest = async (config) => {

@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { MenuOutlined, CloseOutlined } from '@ant-design/icons'
 import styles from './styles.module.css'
-import canvas from '../../../../assets/images/base/canvas.png'
-import ai from '../../../../assets/images/base/ai.jpg'
-import adobe from '../../../../assets/images/base/adobe.jpg'
-import inteligent from '../../../../assets/images/base/inteligent.jpg'
-import chatgpt from '../../../../assets/images/base/chatgpt.jpg'
-import powerbi from '../../../../assets/images/base/powerbi.png'
+import canvas from '../../../../assets/images/canvas.png'
+import ai from '../../../../assets/images/ai.jpg'
+import adobe from '../../../../assets/images/adobe.jpg'
+import inteligent from '../../../../assets/images/inteligent.jpg'
+import chatgpt from '../../../../assets/images/chatgpt.jpg'
+import powerbi from '../../../../assets/images/powerbi.png'
 import { useLocation } from 'react-router-dom'
 
 const Header = () => {
@@ -24,8 +24,6 @@ const Header = () => {
   const menuItems = [
     { label: 'TRANG CHỦ', href: '/' },
     { label: 'MÃ GIẢM GIÁ 100% UDEMY', href: '/khoa-hoc-theo-chu-de/udemy' },
-    { label: 'TẤT CẢ KHÓA HỌC', href: '/khoa-hoc-theo-chu-de/all' },
-    { label: 'TRÒ CHƠI', href: '/khoa-hoc-theo-chu-de/game' },
     { label: 'ĐIỀU KHOẢN SỬ DỤNG', href: '/term-of-use' },
     { label: 'CHÍNH SÁCH BẢO MẬT', href: '/privacy-policy' },
     { label: 'BẢN QUYỀN', href: '/copyright' }

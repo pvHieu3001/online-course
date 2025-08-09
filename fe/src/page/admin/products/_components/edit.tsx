@@ -10,6 +10,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { formatDate } from '@/utils/formatDate'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
+import { ICategory } from '@/common/types.interface'
 
 function EditProduct() {
   const { flug } = useParams()
@@ -50,7 +51,7 @@ function EditProduct() {
     const status = form.getFieldValue('status')
 
     const formdata = new FormData()
-    formdata.append('id', id)
+    formdata.append('id', id as string)
     formdata.append('name', name)
     formdata.append('categoryId', categoryId)
     formdata.append('content', content)
@@ -66,7 +67,7 @@ function EditProduct() {
     formdata.append('status', status ? 'active' : 'inactive')
 
     try {
-      await dispatch(courseActions.updateCourse(id, formdata) as unknown as AnyAction)
+      await dispatch(courseActions.updateCourse(id as string, formdata) as unknown as AnyAction)
       await dispatch(courseActions.getCourses() as unknown as AnyAction)
       popupSuccess('Cập nhật khóa học thành công')
       window.location.href = '/admin/products'
@@ -108,9 +109,9 @@ function EditProduct() {
             className='p-10 relative'
             initialValues={{
               id: courseStore.data?.id,
-              createdAt: formatDate(new Date(courseStore.data?.createdAt)),
+              createdAt: formatDate(courseStore.data?.createdAt ? new Date(courseStore.data?.createdAt) : new Date()),
               createdBy: courseStore.data?.createdBy,
-              updatedAt: formatDate(new Date(courseStore.data?.updatedAt)),
+              updatedAt: formatDate(courseStore.data?.updatedAt ? new Date(courseStore.data?.updatedAt) : new Date()),
               updatedBy: courseStore.data?.updatedBy,
               categoryId: courseStore.data?.category?.id,
               content: courseStore.data?.content,
@@ -193,7 +194,7 @@ function EditProduct() {
                         optionFilterProp='children'
                         size='large'
                       >
-                        {categoryStore.dataList?.map((cat: any) => (
+                        {categoryStore.dataList?.map((cat: ICategory) => (
                           <Select.Option key={cat.id} value={cat.id}>
                             {cat.name}
                           </Select.Option>

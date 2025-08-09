@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { courseActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
+import { IProduct } from '@/common/types.interface'
 
 function ProductDetailPage() {
   const dispatch = useDispatch()
@@ -20,7 +21,6 @@ function ProductDetailPage() {
 
   return (
     <div className='max-w-7xl mx-auto mt-8 px-4 flex flex-col lg:flex-row gap-8'>
-      {/* Main Content - 70% */}
       <div className='lg:w-[80%] w-full'>
         <header className='mt-8'>
           <p className='text-sm uppercase tracking-wide text-blue-500'>{course.category?.name}</p>
@@ -66,7 +66,7 @@ function ProductDetailPage() {
             Bạn Cũng Có Thể Thích
           </h2>
           <div className='border-t border-gray-300 mt-2 pt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-            {relatedCourses?.slice(0, 3).map((course, index) => (
+            {relatedCourses?.slice(0, 3).map((course: IProduct, index: number) => (
               <Link to={'/chi-tiet-khoa-hoc/' + course.slug} state={course} key={index}>
                 <div
                   className='relative rounded overflow-hidden shadow-md hover:shadow-lg transition'

@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { LOCAL_STORAGE_USER, LOCAL_STORAGE_TOKEN, ADMIN_BASE_API } from './constants'
 
-const onSuccessInterceptorRequest = async (config) => {
+const onSuccessInterceptorRequest = async (config: any) => {
   return config
 }
-const onErrorInterceptorRequest = (rs) => Promise.reject(rs)
+const onErrorInterceptorRequest = (rs: any) => Promise.reject(rs)
 
 const goToWorkspace = () => {
   localStorage.removeItem(LOCAL_STORAGE_USER)

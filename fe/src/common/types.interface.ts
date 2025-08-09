@@ -1,22 +1,25 @@
 export interface IProduct {
-  id: number | string
-  created_at: string
-  created_by: string
-  updated_at: string
-  updated_by: string
-  category_id: number | string
+  id: string
+  createdAt?: string
+  createdBy?: string
+  updatedAt?: string
+  updatedBy?: string
+  categoryId: number | string
+  category: ICategory
   description: string
-  image_url: string
+  content: string
+  courseBenefits: string
+  imageUrl: string
   language: string
   level: string
   name: string
   price: number
   rating: number
   slug: string
-  source_url: string
+  sourceUrl: string
   status: string
-  total_rating: number
-  total_students: number
+  totalRating: number
+  totalStudents: number
 }
 
 export interface ICategory {
@@ -26,4 +29,44 @@ export interface ICategory {
   slug: string
   description: string
   content: string
+}
+
+export interface ILogin {
+  username: string
+  password: string
+}
+
+export interface IUser {
+  id: number
+  firstname: string
+  username: string
+  password: string
+  lastname: string
+  email: string
+  createAt: string
+}
+
+export interface IOrder {
+  id: number
+  subTotal: number
+  discountAmount: number
+  totalAmount: number
+  couponId: number
+  status: string
+}
+
+export interface ILog {
+  id: number
+  userId: number
+  courseId: number
+  name: string
+  action: string
+  ipAddress: string
+  userAgent: string
+}
+
+export interface IError {
+  data: string
+  code: number
+  message: number
 }

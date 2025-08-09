@@ -10,8 +10,8 @@ import lombok.AllArgsConstructor;
 public class LogRequestDto {
     private Integer userId;
     private Integer courseId;
-    private Integer name;
-    private Integer action;
-    private Integer ipAddress;
-    private Integer userAgent;
+    private String name;
+    private String action;
+    private String ipAddress;
+    private String userAgent;
 } 

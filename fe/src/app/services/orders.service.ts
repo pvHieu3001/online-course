@@ -1,3 +1,4 @@
+import { IOrder } from '@/common/types.interface'
 import http from '../http-common'
 
 function getOrder() {
@@ -6,14 +7,14 @@ function getOrder() {
 function getOrderById(id: string) {
   return http.get(`/api/v1/order/${id}`)
 }
-function updateOrder(id, data) {
+function updateOrder(id: string, data: IOrder) {
   return http.put(`/api/v1/order/${id}`, data, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
   })
 }
-function createOrder(data) {
+function createOrder(data: IOrder) {
   return http.post(`/api/v1/order`, data, {
     headers: {
       'Content-Type': 'multipart/form-data'
@@ -33,5 +34,5 @@ export const orderServices = {
   updateOrder,
   createOrder,
   deleteOrder,
-  getPageOrder,
+  getPageOrder
 }

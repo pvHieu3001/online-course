@@ -11,8 +11,8 @@ import java.util.Date;
 public class NotificationRequestDto {
     private String title;
     private String content;
-    private String userId;
+    private Integer userId;
     private String type;
-    private Date isRead;
-    private Date isDeleted;
+    private boolean isRead;
+    private boolean isDeleted;
 } 

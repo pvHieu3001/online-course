@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { OrderActions } from '@/app/actions/orders.action'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { RootState } from '@/app/store'
+import { IOrder } from '@/common/types.interface'
 
 export default function ListOrders() {
   const dispatch = useDispatch()
@@ -97,7 +98,7 @@ export default function ListOrders() {
         }}
         columns={columns}
         sticky={{ offsetHeader: 0 }}
-        dataSource={orders?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
+        dataSource={orders?.dataList?.map((item: IOrder, index: number) => ({ ...item, key: index + 1 }))}
         loading={orders.isLoading}
       />
     </>

@@ -4,6 +4,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { categoryActions } from '@/app/actions'
 import { useNavigate } from 'react-router-dom'
 import { RootState } from '@/app/store'
+import { ICategory } from '@/common/types.interface'
 
 function TabCategory() {
   const dispatch = useDispatch()
@@ -12,15 +13,14 @@ function TabCategory() {
   const hasLoaded = useRef(false)
 
   useEffect(() => {
-    // Only fetch categories if not already loading and not loaded
     if (!hasLoaded.current && !categories.isLoading && (!categories.dataList || categories.dataList.length === 0)) {
       hasLoaded.current = true
       dispatch(categoryActions.getCategories() as unknown as AnyAction)
     }
-  }, []) // Empty dependency array - only run once
+  }, [])
 
   const handleCategoryDetail = (slug: string) => {
-    const category = categories.dataList.find((c: any) => c.slug === slug)
+    const category = categories.dataList.find((c: ICategory) => c.slug === slug)
     if (!category) return
     navigate(`/khoa-hoc-theo-chu-de/${slug}`)
   }
@@ -31,7 +31,6 @@ function TabCategory() {
 
   return (
     <aside className='w-full lg:w-[20%] bg-white p-6 rounded-lg shadow-md' role='complementary'>
-      {/* Search Box */}
       <div className='mb-8'>
         <h2 className='text-lg font-semibold text-gray-800 mb-3'>Tìm kiếm khóa học</h2>
         <form
@@ -60,7 +59,7 @@ function TabCategory() {
       <div>
         <h2 className='text-lg font-semibold text-gray-800 mb-3'>Loại khóa học</h2>
         <ul className='space-y-2' role='list'>
-          {categories?.dataList?.map((category: any, index: number) => (
+          {categories?.dataList?.map((category: ICategory, index: number) => (
             <li
               key={index}
               role='button'

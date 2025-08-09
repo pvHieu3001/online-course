@@ -14,6 +14,7 @@ import {
   getByIdFailure,
   getByIdSuccessFully
 } from '../slices/order.reducer'
+import { IOrder } from '@/common/types.interface'
 
 // Get all orders
 export const getOrder = () => (dispatch: Dispatch) => {
@@ -50,7 +51,7 @@ export const getOrderById = (id: string) => (dispatch: Dispatch) => {
 }
 
 // Create order
-export const createOrder = (data) => (dispatch: Dispatch) => {
+export const createOrder = (data: IOrder) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return orderServices
@@ -67,7 +68,7 @@ export const createOrder = (data) => (dispatch: Dispatch) => {
 }
 
 // Update order
-export const updateOrder = (id, data) => (dispatch: Dispatch) => {
+export const updateOrder = (id: string, data: IOrder) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return orderServices

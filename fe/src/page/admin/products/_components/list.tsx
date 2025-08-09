@@ -6,6 +6,7 @@ import { courseActions } from '@/app/actions/course.actions'
 import { useDispatch, useSelector } from 'react-redux'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { RootState } from '@/app/store'
+import { IProduct } from '@/common/types.interface'
 
 export default function ListProduct() {
   const dispatch = useDispatch()
@@ -58,7 +59,7 @@ export default function ListProduct() {
       key: 'category',
       align: 'center',
       width: 180,
-      render: (_text: string, record: any) => (
+      render: (_text: string, record: IProduct) => (
         <span
           className={`px-3 py-1 rounded-full text-sm font-medium ${
             record.category?.name ? 'text-gray-800' : 'text-purple-800'
@@ -125,7 +126,7 @@ export default function ListProduct() {
       width: 150,
       align: 'center',
       fixed: 'right',
-      render: (record: any) => (
+      render: (record: IProduct) => (
         <Space size={'middle'}>
           <Link to={'' + record.id}>
             <Button type='primary'>Sửa</Button>
@@ -184,7 +185,7 @@ export default function ListProduct() {
         columns={columns}
         sticky={{ offsetHeader: 0 }}
         scrool={{ x: 1200 }}
-        dataSource={courses?.dataList?.map((item: any, index: number) => ({ ...item, key: index + 1 }))}
+        dataSource={courses?.dataList?.map((item: IProduct, index: number) => ({ ...item, key: index + 1 }))}
         loading={courses.isLoading}
       />
     </>

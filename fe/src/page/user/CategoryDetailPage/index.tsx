@@ -6,6 +6,7 @@ import TabCategory from '../TabCategory'
 import { courseActions, categoryActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
+import { IProduct } from '@/common/types.interface'
 
 function CategoryDetailPage() {
   const { slug } = useParams()
@@ -35,7 +36,7 @@ function CategoryDetailPage() {
   }, [category])
 
   // Handle course item click
-  const handleCourseClick = (course) => {
+  const handleCourseClick = (course: IProduct) => {
     navigate('/chi-tiet-khoa-hoc', { state: course })
   }
 
@@ -46,7 +47,7 @@ function CategoryDetailPage() {
   const totalPages = courses ? Math.ceil(courses.length / coursesPerPage) : 0
 
   // Handle page change
-  const handlePageChange = (pageNumber) => {
+  const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }

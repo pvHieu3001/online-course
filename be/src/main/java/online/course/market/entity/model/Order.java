@@ -16,10 +16,10 @@ public class Order {
     private Integer id;
     @NotNull
     private Double subTotal;
-    protected Double discountAmount;
+    private Double discountAmount;
     @NotNull
-    protected Double totalAmount;
-    protected Integer couponId;
+    private Double totalAmount;
+    private Integer couponId;
     @NotNull
-    protected String status;
+    private String status;
 }

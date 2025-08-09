@@ -7,6 +7,7 @@ import { categoryActions } from '@/app/actions'
 import { useNavigate, useParams } from 'react-router-dom'
 import TabCategory from '../TabCategory'
 import { RootState } from '@/app/store'
+import { IProduct } from '@/common/types.interface'
 
 function PageHome() {
   const params = useParams()
@@ -20,7 +21,7 @@ function PageHome() {
   const courses = useSelector((state:RootState) => state.course)
 
   const handleDetail = (slug: string) => {
-    const course = courses.dataList.find((c: any) => c.slug === slug)
+    const course = courses.dataList.find((c: IProduct) => c.slug === slug)
     if (!course) return
     navigate(`/chi-tiet-khoa-hoc/${slug}`, { state: course })
   }
@@ -29,7 +30,7 @@ function PageHome() {
     <div className={styles.bg}>
       <main className={styles.mainContent} role='main'>
         <section className={styles.courses} aria-label='Course listings'>
-          {courses?.dataList?.map((course: any, i: number) => (
+          {courses?.dataList?.map((course: IProduct, i: number) => (
             <article className={styles.courseCard} key={i} role='article' onClick={() => handleDetail(course.slug)}>
               <img src={`${import.meta.env.VITE_DOMAIN_URL}${course.imageUrl}`} alt={`${course.name} course image`} />
               <div className={styles.courseCat}>{course.categoryId}</div>
