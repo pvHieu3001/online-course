@@ -33,6 +33,11 @@ const Header = () => {
     { label: 'BẢN QUYỀN', href: '/copyright' }
   ]
 
+  const getImageUrl = (url: string): string => {
+    const domain = import.meta.env.VITE_DOMAIN_URL
+    return url.startsWith('/') ? `${domain}${url}` : `${domain}/${url}`
+  }
+
   return (
     <div className={styles.bg}>
       <div className={styles.topbar} role='banner'>
@@ -107,7 +112,7 @@ const Header = () => {
         <section className={styles.slider} role='region' aria-label='Featured courses'>
           {courses?.dataDiplayHotList?.map((course, i) => (
             <div className={styles.sliderItem} key={i} role='button' tabIndex={0}>
-              <img src={course.imageUrl} alt={`${course.name} thumbnail`} />
+              <img src={getImageUrl(course.imageUrl)} alt={`${course.name} thumbnail`} />
               <span>{course.name}</span>
             </div>
           ))}
