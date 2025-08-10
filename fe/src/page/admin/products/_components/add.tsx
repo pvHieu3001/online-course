@@ -1,11 +1,10 @@
-import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select } from 'antd'
+import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select, Switch } from 'antd'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
-import TextArea from 'antd/es/input/TextArea'
 import { useNavigate } from 'react-router-dom'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
@@ -19,37 +18,41 @@ function AddProduct() {
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [displayPic, setDisplayPic] = useState<string>()
   const [detail, setDetail] = useState<string>('')
+  const [content, setContent] = useState<string>('')
+  const [courseBenefits, setCourseBenefits] = useState<string>('')
   const navigate = useNavigate()
 
   useEffect(() => {
-    dispatch(categoryActions.getCategories() as unknown as AnyAction)
+    dispatch(categoryActions.getCategories('') as unknown as AnyAction)
   }, [dispatch])
 
   const onFinish = async () => {
     const name = form.getFieldValue('name')
-    const content = form.getFieldValue('content')
     const categoryId = form.getFieldValue('categoryId')
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
     const price = form.getFieldValue('price')
     const sourceUrl = form.getFieldValue('sourceUrl')
     const status = form.getFieldValue('status')
+    const isDisplayHot = form.getFieldValue('isDisplayHot')
 
     const formdata = new FormData()
     formdata.append('name', name)
     formdata.append('categoryId', categoryId)
     formdata.append('content', content)
     formdata.append('description', detail)
+    formdata.append('courseBenefits', courseBenefits)
     formdata.append('imageFile', imageUrl as Blob)
     formdata.append('language', language)
     formdata.append('level', level)
     formdata.append('price', price ?? 0)
     formdata.append('sourceUrl', sourceUrl)
     formdata.append('status', status ? 'active' : 'inactive')
+    formdata.append('isDisplayHot', isDisplayHot)
 
     try {
       await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)
-      await dispatch(courseActions.getCourses() as unknown as AnyAction)
+      await dispatch(courseActions.getCourses('', '', false) as unknown as AnyAction)
       popupSuccess('Thêm khóa học thành công')
       navigate('..')
     } catch (error) {
@@ -103,13 +106,6 @@ function AddProduct() {
                   <Input placeholder='Nhập tên khoá học' size='large' />
                 </Form.Item>
                 <Form.Item
-                  name='content'
-                  label='Nội dung khoá học'
-                  rules={[{ required: true, message: 'Vui lòng nhập nội dung khoá học!' }]}
-                >
-                  <TextArea placeholder='Nhập nội dung khoá học' size='large' />
-                </Form.Item>
-                <Form.Item
                   name='categoryId'
                   label='Danh mục'
                   rules={[{ required: true, message: 'Vui lòng nhập danh mục!' }]}
@@ -132,6 +128,18 @@ function AddProduct() {
                 <Form.Item name='sourceUrl' label='Nguồn video'>
                   <Input placeholder='Nhập URL nguồn video' />
                 </Form.Item>
+                <Row gutter={16}>
+                  <Col span={8}>
+                    <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
+                      <Switch className='w-20' checkedChildren='Active' unCheckedChildren='Inactive' />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item name='isDisplayHot' label='Khóa học nổi bật' valuePropName='checked'>
+                      <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                    </Form.Item>
+                  </Col>
+                </Row>
               </Col>
               <Col span={12}>
                 <Form.Item name='language' label='Ngôn ngữ'>
@@ -151,19 +159,32 @@ function AddProduct() {
                 <Form.Item name='price' label='Giá'>
                   <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
                 </Form.Item>
-                <Form.Item name='status' label='Trạng thái'>
-                  <Select placeholder='Chọn trạng thái' size='large'>
-                    <Select.Option value='active'>Hoạt động</Select.Option>
-                    <Select.Option value='inactive'>Không hoạt động</Select.Option>
-                    <Select.Option value='draft'>Bản nháp</Select.Option>
-                  </Select>
-                </Form.Item>
               </Col>
             </Row>
           </Card>
           <Card size='small' style={{ marginBottom: 24 }}>
+            <Form.Item name='content' className='m-0' label={'Nội dung khoá học'}>
+              <TextEditor
+                content={content}
+                onHandleChange={(value) => {
+                  setContent(value)
+                }}
+              />
+            </Form.Item>
+          </Card>
+          <Card size='small' style={{ marginBottom: 24 }}>
             <Form.Item name='description' label='Nhập mô tả' required>
               <TextEditor content={detail} onHandleChange={(val) => setDetail(val)} />
+            </Form.Item>
+          </Card>
+          <Card size='small' style={{ marginBottom: 24 }}>
+            <Form.Item name='courseBenefits' className='m-0' label={'Lợi ích khoá học'}>
+              <TextEditor
+                content={courseBenefits}
+                onHandleChange={(value) => {
+                  setCourseBenefits(value)
+                }}
+              />
             </Form.Item>
           </Card>
           <Card size='small' style={{ marginBottom: 24 }}>

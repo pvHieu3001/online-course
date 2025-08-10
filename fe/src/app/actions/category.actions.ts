@@ -15,11 +15,11 @@ import {
   getByIdSuccessFully
 } from '../slices/category.reducer'
 
-export const getCategories = () => (dispatch: Dispatch) => {
+export const getCategories = (searchValue: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return categoryServices
-    .getCategories()
+    .getCategories(searchValue)
     .then((res) => {
       dispatch(getCategoriesSuccessFully(res.data))
       return res

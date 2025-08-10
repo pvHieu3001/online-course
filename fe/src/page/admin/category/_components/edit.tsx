@@ -18,7 +18,7 @@ export default function EditCategory() {
   const categoryStore = useSelector((state: RootState) => state.category)
   useEffect(() => {
     dispatch(categoryActions.getCategoryById(params.id ?? '0') as unknown as AnyAction)
-    dispatch(categoryActions.getCategories() as unknown as AnyAction)
+    dispatch(categoryActions.getCategories("") as unknown as AnyAction)
   }, [])
 
   const navigate = useNavigate()

@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select, Switch } from 'antd'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,6 +13,7 @@ import { RootState } from '@/app/store'
 import { ICategory } from '@/common/types.interface'
 
 function EditProduct() {
+  const navigator = useNavigate()
   const { flug } = useParams()
   const dispatch = useDispatch()
   const courseStore = useSelector((state: RootState) => state.course)
@@ -28,8 +29,8 @@ function EditProduct() {
     if (flug) {
       dispatch(courseActions.getCourseById(flug) as unknown as AnyAction)
     }
-    dispatch(categoryActions.getCategories() as unknown as AnyAction) // Lấy danh sách danh mục
-  }, [dispatch, flug])
+    dispatch(categoryActions.getCategories('') as unknown as AnyAction) // Lấy danh sách danh mục
+  }, [flug])
 
   useEffect(() => {
     setDescription(courseStore.data?.description ?? '')
@@ -49,6 +50,7 @@ function EditProduct() {
     const price = form.getFieldValue('price')
     const sourceUrl = form.getFieldValue('sourceUrl')
     const status = form.getFieldValue('status')
+    const isDisplayHot = form.getFieldValue('isDisplayHot')
 
     const formdata = new FormData()
     formdata.append('id', id as string)
@@ -65,19 +67,20 @@ function EditProduct() {
     formdata.append('level', level)
     formdata.append('price', price ?? 0)
     formdata.append('status', status ? 'active' : 'inactive')
+    formdata.append('isDisplayHot', isDisplayHot)
 
     try {
       await dispatch(courseActions.updateCourse(id as string, formdata) as unknown as AnyAction)
-      await dispatch(courseActions.getCourses() as unknown as AnyAction)
+      await dispatch(courseActions.getCourses('', '', false) as unknown as AnyAction)
       popupSuccess('Cập nhật khóa học thành công')
-      window.location.href = '/admin/products'
+      navigator('..')
     } catch (error) {
       popupError('Cập nhật khóa học thất bại')
     }
   }
 
   const handleCancel = () => {
-    window.location.href = '/admin/products'
+    navigator('..')
   }
 
   return (
@@ -125,6 +128,7 @@ function EditProduct() {
               slug: courseStore.data?.slug,
               sourceUrl: courseStore.data?.sourceUrl,
               status: courseStore.data?.status == 'active' ? true : false,
+              isDisplayHot: courseStore.data?.isDisplayHot,
               totalRating: courseStore.data?.totalRating,
               totalStudents: courseStore.data?.totalStudents
             }}
@@ -224,15 +228,20 @@ function EditProduct() {
                     </Select>
                   </Form.Item>
 
-                  <Row gutter={16}>
-                    <Col span={12}>
+                  <Row gutter={16} >
+                    <Col span={8}>
                       <Form.Item name='price' label='Giá'>
                         <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
                       </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                       <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
-                        <Switch checkedChildren='Hoạt động' unCheckedChildren='Không hoạt động' />
+                        <Switch className='w-20' checkedChildren='Active' unCheckedChildren='Inactive' />
+                      </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                      <Form.Item name='isDisplayHot' label='Khóa học nổi bật' valuePropName='checked'>
+                        <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                       </Form.Item>
                     </Col>
                   </Row>

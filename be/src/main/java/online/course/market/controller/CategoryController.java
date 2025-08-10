@@ -77,8 +77,10 @@ public class CategoryController {
 
     @Operation(description = "Get all endpoint for Category", summary = "Get all Category")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<GetCategoryDto>>> getAll() {
-        List<GetCategoryDto> dtos = categoryService.getAll().stream().map(this::toDto).collect(Collectors.toList());
+    public ResponseEntity<ApiResponse<List<GetCategoryDto>>> getAll(@RequestParam(required = false) String search) {
+        List<GetCategoryDto> dtos = categoryService.getAll().stream()
+                .filter(category -> search == null || search.isEmpty() || category.getName().toLowerCase().contains(search.toLowerCase()))
+                .map(this::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(dtos));
     }
 

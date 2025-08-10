@@ -46,7 +46,7 @@ function EditProduct() {
     if (flug) {
       dispatch(courseActions.getCourseById(flug) as unknown as AnyAction)
     }
-  }, [dispatch, flug])
+  }, [flug])
 
   useEffect(() => {
     if (courseStore.data && courseStore.data.gallery) {

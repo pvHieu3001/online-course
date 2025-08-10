@@ -1,4 +1,5 @@
 export interface IProduct {
+  isDisplayHot: any
   id: string
   createdAt?: string
   createdBy?: string

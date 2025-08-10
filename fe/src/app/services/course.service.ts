@@ -1,7 +1,7 @@
 import http from '../http-common'
 
-function getCourses(status?: string, search?: string) {
-  return http.get('/api/v1/course?status=' + status + '&search=' + search)
+function getCourses(status?: string, search?: string, isDisplayHot?: boolean) {
+  return http.get('/api/v1/course?status=' + status + '&search=' + search + '&isDisplayHot=' + isDisplayHot)
 }
 function getCourseById(id: string) {
   return http.get(`/api/v1/course/${id}`)

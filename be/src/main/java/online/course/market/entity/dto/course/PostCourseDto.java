@@ -26,6 +26,7 @@ public class PostCourseDto {
     String level;
     String language;
     String status;
+    Boolean isDisplayHot;
     Integer categoryId;
     Double rating;
     Integer totalStudents;

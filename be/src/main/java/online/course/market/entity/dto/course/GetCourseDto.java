@@ -23,6 +23,7 @@ public class GetCourseDto {
     private String level;
     private String language;
     private String status;
+    private Boolean isDisplayHot;
     private Double rating;
     private Integer totalStudents;
     private Integer totalRating;

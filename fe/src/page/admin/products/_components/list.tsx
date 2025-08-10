@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Flex, Input, Popconfirm, Space, Table, Tag, Typography, message } from 'antd'
+import { Button, Flex, Input, Popconfirm, Select, Space, Table, TableProps, Tag, Typography, message } from 'antd'
 import { Link } from 'react-router-dom'
 import { AnyAction } from '@reduxjs/toolkit'
 import { courseActions } from '@/app/actions/course.actions'
@@ -7,15 +7,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
+import { UnorderedListOutlined } from '@ant-design/icons'
 
 export default function ListProduct() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
+  const [active, setActive] = useState('')
   const courses = useSelector((state: RootState) => state.course)
 
   useEffect(() => {
-    dispatch(courseActions.getCourses() as unknown as AnyAction)
-  }, [dispatch])
+    dispatch(courseActions.getCourses(active, searchValue, false) as unknown as AnyAction)
+  }, [searchValue, active])
 
   const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value
@@ -28,12 +30,12 @@ export default function ListProduct() {
     try {
       dispatch(courseActions.deleteCourse(id) as unknown as AnyAction)
       message.success('Xoá khóa học thành công!')
-    } catch (error: any) {
-      message.error(error.data ? error.data.message : 'Xoá khóa học thất bại!')
+    } catch (error) {
+      message.error('Xoá khóa học thất bại!')
     }
   }
 
-  const columns = [
+  const columns: TableProps<IProduct>['columns'] = [
     {
       title: '#',
       dataIndex: 'key',
@@ -156,21 +158,40 @@ export default function ListProduct() {
         </Typography.Title>
       </div>
       <Flex wrap='wrap' gap='small' className='my-5' align='center' justify='space-between'>
-        <Input
-          className='header-search w-[250px]'
-          prefix={
-            <div className=' px-2'>
-              <SearchRoundedIcon />
-            </div>
-          }
-          value={searchValue}
-          spellCheck={false}
-          allowClear
-          onChange={handleChangeSearch}
-          size='small'
-          placeholder={'Tìm kiếm'}
-          style={{ borderRadius: '2rem' }}
-        />
+        <div className='flex items-center'>
+          <Input
+            className='header-search w-[250px]'
+            prefix={
+              <div className=' px-2'>
+                <SearchRoundedIcon />
+              </div>
+            }
+            value={searchValue}
+            spellCheck={false}
+            allowClear
+            onChange={handleChangeSearch}
+            size='small'
+            placeholder={'Tìm kiếm'}
+            style={{ borderRadius: '2rem' }}
+          />
+          <Select className='ml-2 w-40' onChange={(value) => setActive(value)} value={active} size='large'>
+            <Select.Option value=''>Trạng Thái</Select.Option>
+            <Select.Option value='active'>Hoạt Động</Select.Option>
+            <Select.Option value='inactive'>Không Hoạt Động</Select.Option>
+          </Select>
+          <Button
+            size='large'
+            type='default'
+            className='ml-2'
+            onClick={() => {
+              setSearchValue('')
+              setActive('')
+            }}
+          >
+            <UnorderedListOutlined /> Tất Cả
+          </Button>
+        </div>
+
         <Link to='add'>
           <Button type='primary'>Thêm khóa học</Button>
         </Link>
@@ -184,7 +205,7 @@ export default function ListProduct() {
         }}
         columns={columns}
         sticky={{ offsetHeader: 0 }}
-        scrool={{ x: 1200 }}
+        scroll={{ x: 1200 }}
         dataSource={courses?.dataList?.map((item: IProduct, index: number) => ({ ...item, key: index + 1 }))}
         loading={courses.isLoading}
       />

@@ -1,7 +1,7 @@
 import http from '../http-common'
 
-function getCategories() {
-  return http.get('/api/v1/category')
+function getCategories(search: string) {
+  return http.get('/api/v1/category?search=' + search)
 }
 function getCategoryById(id: string) {
   return http.get(`/api/v1/category/${id}`)

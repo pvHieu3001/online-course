@@ -84,11 +84,13 @@ public class CourseController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<GetCourseDto>>> getAll(
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Boolean isDisplayHot) {
 
         List<GetCourseDto> getCourseDtos = courseService.getAll().stream()
                 .filter(course -> status == null || status.isEmpty() || course.getStatus().equalsIgnoreCase(status))
                 .filter(course -> search == null || search.isEmpty() || course.getName().toLowerCase().contains(search.toLowerCase()))
+                .filter(course -> !isDisplayHot  || course.getIsDisplayHot())
                 .map(course -> {
                     GetCourseDto courseDto = toDto(course);
                     Optional.ofNullable(course.getCategory())

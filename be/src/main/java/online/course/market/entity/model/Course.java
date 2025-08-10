@@ -29,6 +29,7 @@ public class Course extends BaseEntity {
     private String level;
     private String language;
     private String status;
+    private Boolean isDisplayHot;
 
     @OneToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")

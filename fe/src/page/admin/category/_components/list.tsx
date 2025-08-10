@@ -16,16 +16,16 @@ export default function ListCategory() {
   const categories = useSelector((state: RootState) => state.category)
 
   useEffect(() => {
-    dispatch(categoryActions.getCategories() as unknown as AnyAction)
-  }, [])
+    dispatch(categoryActions.getCategories(searchValue) as unknown as AnyAction)
+  }, [searchValue])
 
   const handlerDistableCategory = async (id: string) => {
     try {
       dispatch(categoryActions.deleteCategory(id) as unknown as AnyAction)
-      dispatch(categoryActions.getCategories() as unknown as AnyAction)
+      dispatch(categoryActions.getCategories('') as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
-    } catch (error: any) {
-      message.error(error.data ? error.data.message : 'Vô hiệu hoá danh mục thất bại!')
+    } catch (error) {
+      message.error('Vô hiệu hoá danh mục thất bại!')
     }
   }
 
@@ -144,7 +144,7 @@ export default function ListCategory() {
           }}
           columns={columns}
           sticky={{ offsetHeader: 0 }}
-          scrool={{ x: 1200 }}
+          scroll={{ x: 1200 }}
           dataSource={categories?.dataList?.map((category: ICategory, index: number) => ({
             ...category,
             key: index + 1

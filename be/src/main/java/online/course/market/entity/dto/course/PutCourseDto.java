@@ -28,6 +28,7 @@ public class PutCourseDto {
     String level;
     String language;
     String status;
+    Boolean isDisplayHot;
     Integer categoryId;
     Double rating;
     Integer totalStudents;

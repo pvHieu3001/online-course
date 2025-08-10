@@ -1,15 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MenuOutlined, CloseOutlined } from '@ant-design/icons'
 import styles from './styles.module.css'
-import canvas from '../../../../assets/images/canvas.png'
-import ai from '../../../../assets/images/ai.jpg'
-import adobe from '../../../../assets/images/adobe.jpg'
-import inteligent from '../../../../assets/images/inteligent.jpg'
-import chatgpt from '../../../../assets/images/chatgpt.jpg'
-import powerbi from '../../../../assets/images/powerbi.png'
 import { useLocation } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { courseActions } from '@/app/actions'
+import { AnyAction } from '@reduxjs/toolkit'
+import { RootState } from '@/app/store'
 
 const Header = () => {
+  const dispatch = useDispatch()
   const today = new Date()
   const dateStr = today.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -17,9 +16,14 @@ const Header = () => {
     month: 'long',
     day: 'numeric'
   })
-  const location = useLocation() // 👈 Lấy URL hiện tại
+  const location = useLocation()
   const currentPath = location.pathname
   const [menuOpen, setMenuOpen] = useState(false)
+  const courses = useSelector((state: RootState) => state.course)
+
+  useEffect(() => {
+    dispatch(courseActions.getCourses('active', '', true) as unknown as AnyAction)
+  }, [dispatch])
 
   const menuItems = [
     { label: 'TRANG CHỦ', href: '/' },
@@ -27,15 +31,6 @@ const Header = () => {
     { label: 'ĐIỀU KHOẢN SỬ DỤNG', href: '/term-of-use' },
     { label: 'CHÍNH SÁCH BẢO MẬT', href: '/privacy-policy' },
     { label: 'BẢN QUYỀN', href: '/copyright' }
-  ]
-
-  const featuredCourses = [
-    { img: powerbi, title: 'Giới thiệu về Microsoft Power BI' },
-    { img: chatgpt, title: 'Kỹ thuật tạo Prompt với ChatGPT (Khóa học miễn phí)' },
-    { img: inteligent, title: 'N8N – Xây dựng hệ thống AI 2.0 thông minh không cần lập trình' },
-    { img: adobe, title: 'Adobe Premiere Pro CC – Khóa học chỉnh sửa video chuyên sâu' },
-    { img: ai, title: 'Adobe Illustrator CC – Học thiết kế đồ họa từ cơ bản đến nâng cao' },
-    { img: canvas, title: 'Canva – Thiết kế đồ họa và chỉnh sửa video cho mạng xã hội' }
   ]
 
   return (
@@ -48,13 +43,12 @@ const Header = () => {
 
       <div className={styles.bannerWrapper}>
         <header className={styles.banner} role='banner'>
-          {/* <img src='/logo.png' alt='FCS Logo' className={styles.logo} /> */}
           <svg width='120' height='120' viewBox='0 0 120 120' fill='none' xmlns='http://www.w3.org/2000/svg'>
             <rect width='120' height='120' rx='24' fill='#2563eb' />
             <path d='M30 80V40L60 25L90 40V80L60 95L30 80Z' fill='#fff' />
             <path d='M60 25V95' stroke='#2563eb' strokeWidth='4' />
             <text x='60' y='70' textAnchor='middle' fill='#2563eb' fontSize='32' fontFamily='Arial' fontWeight='bold'>
-              K
+              EDU
             </text>
           </svg>
           <span className={styles.slogan}>HỌC MIỄN PHÍ – CHIA SẺ KIẾN THỨC – NÂNG TẦM BẢN THÂN</span>
@@ -111,10 +105,10 @@ const Header = () => {
 
       <div className={styles.sliderWrapper}>
         <section className={styles.slider} role='region' aria-label='Featured courses'>
-          {featuredCourses.map((course, i) => (
+          {courses?.dataDiplayHotList?.map((course, i) => (
             <div className={styles.sliderItem} key={i} role='button' tabIndex={0}>
-              <img src={course.img} alt={`${course.title} thumbnail`} />
-              <span>{course.title}</span>
+              <img src={course.imageUrl} alt={`${course.name} thumbnail`} />
+              <span>{course.name}</span>
             </div>
           ))}
         </section>

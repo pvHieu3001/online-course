@@ -3,22 +3,21 @@ import styles from './styles.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 import { courseActions } from '@/app/actions/course.actions'
-import { categoryActions } from '@/app/actions'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import TabCategory from '../TabCategory'
 import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
+import { useQuery } from '@/utils/useQuery'
 
 function PageHome() {
-  const params = useParams()
+  const query = useQuery()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  useEffect(() => {
-    dispatch(courseActions.getCourses('active', params.search) as unknown as AnyAction)
-    dispatch(categoryActions.getCategories() as unknown as AnyAction)
-  }, [dispatch])
+  const courses = useSelector((state: RootState) => state.course)
 
-  const courses = useSelector((state:RootState) => state.course)
+  useEffect(() => {
+    dispatch(courseActions.getCourses('active', query.get('search'), false) as unknown as AnyAction)
+  }, [query.get('search')])
 
   const handleDetail = (slug: string) => {
     const course = courses.dataList.find((c: IProduct) => c.slug === slug)

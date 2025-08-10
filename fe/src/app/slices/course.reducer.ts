@@ -7,7 +7,8 @@ const initialState = {
   message: '',
   error_message: '',
   data: <IProduct>(<unknown>null),
-  dataList: <IProduct[]>(<unknown>null)
+  dataList: <IProduct[]>(<unknown>null),
+  dataDiplayHotList: <IProduct[]>(<unknown>null)
 }
 
 const courseSlice = createSlice({
@@ -22,6 +23,12 @@ const courseSlice = createSlice({
     },
     getCoursesSuccessFully: (state, { payload }) => {
       state.dataList = payload.data
+      state.code = payload.code
+      state.message = payload.message
+      state.isLoading = false
+    },
+    getCoursesHotSuccessFully: (state, { payload }) => {
+      state.dataDiplayHotList = payload.data
       state.code = payload.code
       state.message = payload.message
       state.isLoading = false
@@ -96,7 +103,8 @@ export const {
   deleteFailure,
   deleteSuccessfully,
   getCoursesByCategorySuccessFully,
-  getCoursesByCategoryFailure
+  getCoursesByCategoryFailure,
+  getCoursesHotSuccessFully
 } = courseSlice.actions
 
 export default courseSlice.reducer

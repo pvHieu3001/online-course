@@ -14,15 +14,20 @@ import {
   getByIdFailure,
   getByIdSuccessFully,
   getCoursesByCategorySuccessFully,
-  getCoursesByCategoryFailure
+  getCoursesByCategoryFailure,
+  getCoursesHotSuccessFully
 } from '../slices/course.reducer'
 
-export const getCourses = (status?: string, search?: string) => (dispatch: Dispatch) => {
+export const getCourses = (status?: string, search?: string | null, isDisplayHot?: boolean) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return courseServices
-    .getCourses(status ?? '', search ?? '')
+    .getCourses(status ?? '', search ?? '', isDisplayHot)
     .then((res) => {
+      if (isDisplayHot) {
+        dispatch(getCoursesHotSuccessFully(res.data))
+        return res
+      }
       dispatch(getCoursesSuccessFully(res.data))
       return res
     })
