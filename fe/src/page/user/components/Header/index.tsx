@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { MenuOutlined, CloseOutlined } from '@ant-design/icons'
 import styles from './styles.module.css'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
+import { IProduct } from '@/common/types.interface'
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -20,6 +21,7 @@ const Header = () => {
   const currentPath = location.pathname
   const [menuOpen, setMenuOpen] = useState(false)
   const courses = useSelector((state: RootState) => state.course)
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(courseActions.getCourses('active', '', true) as unknown as AnyAction)
@@ -36,6 +38,10 @@ const Header = () => {
   const getImageUrl = (url: string): string => {
     const domain = import.meta.env.VITE_DOMAIN_URL
     return url.startsWith('/') ? `${domain}${url}` : `${domain}/${url}`
+  }
+
+  const handleDetail = (course: IProduct) => {
+    navigate(`/chi-tiet-khoa-hoc/${course.slug}`, { state: course })
   }
 
   return (
@@ -111,7 +117,7 @@ const Header = () => {
       <div className={styles.sliderWrapper}>
         <section className={styles.slider} role='region' aria-label='Featured courses'>
           {courses?.dataDiplayHotList?.map((course, i) => (
-            <div className={styles.sliderItem} key={i} role='button' tabIndex={0}>
+            <div onClick={() => handleDetail(course)} className={styles.sliderItem} key={i} role='button' tabIndex={0}>
               <img src={getImageUrl(course.imageUrl)} alt={`${course.name} thumbnail`} />
               <span>{course.name}</span>
             </div>
