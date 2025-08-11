@@ -36,7 +36,7 @@ function ProductDetailPage() {
           <img
             src={`${import.meta.env.VITE_DOMAIN_URL}${course.imageUrl}`}
             alt={`${course.name}`}
-            className='rounded-lg shadow-md w-full'
+            className='rounded-lg shadow-md w-full max-w-sm h-48 object-cover'
           />
         </section>
 
