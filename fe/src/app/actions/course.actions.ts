@@ -54,6 +54,22 @@ export const getCourseById = (id: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const getCourseBySlug = (slug: string) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return courseServices
+    .getCourseBySlug(slug)
+    .then((res) => {
+      dispatch(getByIdSuccessFully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getByIdFailure(error))
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
 export const createCourse = (data: FormData) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
@@ -121,6 +137,7 @@ export const getCoursesByCategory = (categoryId: number) => (dispatch: Dispatch)
 export const courseActions = {
   getCourses,
   getCourseById,
+  getCourseBySlug,
   createCourse,
   updateCourse,
   deleteCourse,

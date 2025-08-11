@@ -96,14 +96,6 @@ export default function ListProduct() {
       }
     },
     {
-      title: 'Giá',
-      dataIndex: 'price',
-      key: 'price',
-      align: 'center',
-      width: 250,
-      render: (text: string) => <span>{text ?? 0}</span>
-    },
-    {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',

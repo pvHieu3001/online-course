@@ -1,24 +1,35 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import TabCategory from '../TabCategory'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { courseActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
 
 function ProductDetailPage() {
+  const { slug } = useParams()
   const dispatch = useDispatch()
-  const { dataList: relatedCourses } = useSelector((state: RootState) => state.course)
+  const { dataList: relatedCourses, data } = useSelector((state: RootState) => state.course)
   const location = useLocation()
   const navigate = useNavigate()
-  const course = location.state
+  const [course, setCourse] = useState(location.state)
 
   useEffect(() => {
     if (course && course.category?.id) {
       dispatch(courseActions.getCoursesByCategory(course.category.id) as unknown as AnyAction)
     }
+
+    if (!course && slug) {
+      dispatch(courseActions.getCourseBySlug(slug) as unknown as AnyAction)
+    }
   }, [])
+
+  useEffect(() => {
+    if (data && data.slug === slug) {
+      setCourse(data)
+    }
+  }, [data])
 
   const handleDetail = (courseRelate: IProduct) => {
     navigate(`/chi-tiet-khoa-hoc/${courseRelate.slug}`, { state: courseRelate })

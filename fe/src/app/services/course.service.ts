@@ -6,6 +6,9 @@ function getCourses(status?: string, search?: string, isDisplayHot?: boolean) {
 function getCourseById(id: string) {
   return http.get(`/api/v1/course/${id}`)
 }
+function getCourseBySlug(slug: string) {
+  return http.get(`/api/v1/course/slug/${slug}`)
+}
 function updateCourse(id: string, data: FormData) {
   return http.put(`/api/v1/course/${id}`, data, {
     headers: {
@@ -34,6 +37,7 @@ function getCoursesByCategory(categoryId: number) {
 export const courseServices = {
   getCourses,
   getCourseById,
+  getCourseBySlug,
   updateCourse,
   createCourse,
   deleteCourse,

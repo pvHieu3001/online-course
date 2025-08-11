@@ -96,6 +96,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
+    public Course getBySlug(String slug) {
+        return courseRepository.findBySlug(slug).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Course> getByCategoryId(Integer categoryId) {
         Assert.notNull(categoryId, "categoryId cannot be null");
         return courseRepository.findByCategoryIdOrderByIdDesc(categoryId);

@@ -12,4 +12,6 @@ public interface CourseRepository extends JpaRepository<Course, Long>{
     List<Course> findAllByOrderByIdDesc();
     
     List<Course> findByCategoryIdOrderByIdDesc(Integer categoryId);
+
+    Optional<Course> findBySlug(String slug);
 }

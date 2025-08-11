@@ -121,6 +121,16 @@ public class CourseController {
         return ResponseEntity.ok(ApiResponse.success(toDto(course)));
     }
 
+    @Operation(description = "Get by slug endpoint for Course", summary = "This is a summary for Course get by id endpoint")
+    @GetMapping("/{slug}")
+    public ResponseEntity<ApiResponse<GetCourseDto>> getById(@PathVariable String slug) {
+        Course course = courseService.getBySlug(slug);
+        if (course == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Course not found"));
+        }
+        return ResponseEntity.ok(ApiResponse.success(toDto(course)));
+    }
+
     @Operation(description = "Get courses by category endpoint", summary = "This is a summary for Course get by category endpoint")
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<ApiResponse<List<GetCourseDto>>> getByCategoryId(@PathVariable Integer categoryId) {
