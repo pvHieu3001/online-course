@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
-import { UnorderedListOutlined } from '@ant-design/icons'
+import { EyeOutlined, UnorderedListOutlined } from '@ant-design/icons'
 
 export default function ListProduct() {
   const dispatch = useDispatch()
@@ -130,6 +130,9 @@ export default function ListProduct() {
       fixed: 'right',
       render: (record: IProduct) => (
         <Space size={'middle'}>
+          <Link to={`/chi-tiet-khoa-hoc/${record.slug}`}>
+            <Button icon={<EyeOutlined />} />
+          </Link>
           <Link to={'' + record.id}>
             <Button type='primary'>Sửa</Button>
           </Link>

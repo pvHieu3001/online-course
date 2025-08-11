@@ -9,6 +9,7 @@ import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
 import { useQuery } from '@/utils/useQuery'
 import Description from './Description'
+import Link from 'antd/es/typography/Link'
 
 function PageHome() {
   const query = useQuery()
@@ -58,7 +59,7 @@ function PageHome() {
                 onKeyDown={(e) => e.key === 'Enter' && handleDetail(course.slug)}
               >
                 <img src={getImageUrl(course.imageUrl)} alt={`${course.name} course image`} loading='lazy' />
-                <div className={styles.courseCat}>{course.categoryId}</div>
+                <Link className={styles.courseCat}>{course.category?.name}</Link>
                 <h3 className={styles.courseTitle}>{course.name}</h3>
               </article>
             ))}
