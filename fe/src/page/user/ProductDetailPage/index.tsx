@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import TabCategory from '../TabCategory'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
@@ -11,6 +11,7 @@ function ProductDetailPage() {
   const dispatch = useDispatch()
   const { dataList: relatedCourses } = useSelector((state: RootState) => state.course)
   const location = useLocation()
+  const navigate = useNavigate()
   const course = location.state
 
   useEffect(() => {
@@ -18,6 +19,10 @@ function ProductDetailPage() {
       dispatch(courseActions.getCoursesByCategory(course.category.id) as unknown as AnyAction)
     }
   }, [])
+
+  const handleDetail = (courseRelate: IProduct) => {
+    navigate(`/chi-tiet-khoa-hoc/${courseRelate.slug}`, { state: courseRelate })
+  }
 
   return (
     <div className='max-w-7xl mx-auto mt-8 px-4 flex flex-col lg:flex-row gap-8'>
@@ -37,17 +42,47 @@ function ProductDetailPage() {
 
         <section className='mt-10'>
           <h2 className='text-2xl font-semibold mb-4'>Nội Dung Bạn Sẽ Được Đào Tạo</h2>
-          <div dangerouslySetInnerHTML={{ __html: course.content }}></div>
+          <div
+            className='text-xl leading-8 text-gray-800 
+             [&_p]:mb-4 
+             [&_h1]:text-4xl 
+             [&_h2]:text-3xl 
+             [&_h3]:text-2xl 
+             [&_ul]:list-disc 
+             [&_ul]:pl-6 
+             [&_a]:text-blue-600 [&_a:hover]:underline'
+            dangerouslySetInnerHTML={{ __html: course.content }}
+          ></div>
         </section>
 
         <section className='mt-10'>
           <h2 className='text-2xl font-semibold mb-4'>Giới Thiệu Khóa Học</h2>
-          <div dangerouslySetInnerHTML={{ __html: course.description }}></div>
+          <div
+            className='text-xl leading-8 text-gray-800 
+             [&_p]:mb-4 
+             [&_h1]:text-4xl 
+             [&_h2]:text-3xl 
+             [&_h3]:text-2xl 
+             [&_ul]:list-disc 
+             [&_ul]:pl-6 
+             [&_a]:text-blue-600 [&_a:hover]:underline'
+            dangerouslySetInnerHTML={{ __html: course.description }}
+          ></div>
         </section>
 
-        <section className='mt-10 bg-white rounded-lg shadow'>
+        <section className='mt-10'>
           <h2 className='text-xl font-semibold mb-4'>Lý Do Bạn Nên Chọn Khóa Học Này</h2>
-          <div dangerouslySetInnerHTML={{ __html: course.courseBenefits }}></div>
+          <div
+            className='text-xl leading-8 text-gray-800 
+             [&_p]:mb-4 
+             [&_h1]:text-4xl 
+             [&_h2]:text-3xl 
+             [&_h3]:text-2xl 
+             [&_ul]:list-disc 
+             [&_ul]:pl-6 
+             [&_a]:text-blue-600 [&_a:hover]:underline'
+            dangerouslySetInnerHTML={{ __html: course.courseBenefits }}
+          ></div>
         </section>
 
         <section className='mt-10 text-center'>
@@ -67,24 +102,25 @@ function ProductDetailPage() {
           </h2>
           <div className='border-t border-gray-300 mt-2 pt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
             {relatedCourses?.slice(0, 3).map((course: IProduct, index: number) => (
-              <Link to={'/chi-tiet-khoa-hoc/' + course.slug} state={course} key={index}>
-                <div
-                  className='relative rounded overflow-hidden shadow-md hover:shadow-lg transition'
-                  style={{
-                    backgroundImage: `url(${import.meta.env.VITE_DOMAIN_URL}${course.imageUrl})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    height: '200px'
-                  }}
-                >
-                  <div className='absolute inset-0 bg-white/50 flex flex-col justify-center items-center text-gray-800 px-4 text-center'>
-                    <span className='bg-sky-500 text-xs font-semibold px-3 py-1 rounded mb-2 text-white'>
-                      {course.category?.name}
-                    </span>
-                    <h3 className='text-base font-medium leading-snug'>{course.name}</h3>
-                  </div>
+              <div
+                key={index}
+                onClick={() => handleDetail(course)}
+                className='relative group rounded-lg overflow-hidden shadow-md cursor-pointer transition-all duration-300 hover:shadow-xl'
+                style={{
+                  backgroundImage: `url(${import.meta.env.VITE_DOMAIN_URL}${course.imageUrl})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  height: '220px'
+                }}
+              >
+                <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10' />
+                <div className='absolute inset-0 z-20 flex flex-col justify-between p-4 text-white'>
+                  <span className='bg-sky-500 text-[10px] font-semibold px-2 py-1 rounded uppercase self-start'>
+                    {course.category?.name}
+                  </span>
+                  <h3 className='text-sm sm:text-base font-semibold leading-snug line-clamp-2'>{course.name}</h3>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </section>
