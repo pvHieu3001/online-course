@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
-import { Flex, Form, Input, Modal, Button, Switch, Select, Drawer, Spin } from 'antd'
+import { Form, Input, Modal, Button, Switch, Select, Drawer, Spin, Row, Col } from 'antd'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
@@ -28,7 +28,7 @@ export default function AddCategory() {
 
   // Lấy danh sách category cha khi mount
   useEffect(() => {
-    dispatch(categoryActions.getCategories("") as unknown as AnyAction)
+    dispatch(categoryActions.getCategories('') as unknown as AnyAction)
   }, [dispatch])
 
   // Xác nhận khi rời nếu có thay đổi
@@ -73,7 +73,7 @@ export default function AddCategory() {
     try {
       setIsLoading(true)
       await dispatch(categoryActions.createCategory(formData) as unknown as AnyAction)
-      await dispatch(categoryActions.getCategories("") as unknown as AnyAction)
+      await dispatch(categoryActions.getCategories('') as unknown as AnyAction)
       popupSuccess('Thêm danh mục thành công')
       setIsDirty(false)
       navigate('..')
@@ -117,8 +117,9 @@ export default function AddCategory() {
             status: true
           }}
         >
-          <Flex gap={32} wrap='wrap'>
-            <Flex className='flex-[2] min-w-[300px]' vertical gap={16}>
+          <Row gutter={[24, 24]}>
+            {/* Cột trái: Ảnh và Cài đặt */}
+            <Col xs={24} md={8}>
               <Form.Item
                 label={<span className='font-semibold'>Ảnh đại diện</span>}
                 className='border-[1px] p-[24px] rounded-md border-[#F1F1F4] bg-[#fafbfc]'
@@ -185,15 +186,17 @@ export default function AddCategory() {
                 </div>
                 <div className='text-xs text-gray-400 px-2 pb-2'>Bật để danh mục này hiển thị trên website.</div>
               </div>
-            </Flex>
-            <Flex vertical className='flex-[6] min-w-[300px]'>
+            </Col>
+
+            {/* Cột phải: Tổng quan */}
+            <Col xs={24} md={16}>
               <div
                 className='border-[1px] p-[24px] rounded-md bg-[#fafbfc]'
                 style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
               >
                 <h2 className='mb-5 font-bold text-[16px]'>Tổng quan</h2>
-                <Flex vertical gap={20}>
-                  <Flex gap={30} wrap='wrap'>
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} sm={12}>
                     <Form.Item
                       name='name'
                       label='Tên danh mục'
@@ -206,6 +209,8 @@ export default function AddCategory() {
                     >
                       <Input size='large' placeholder='Nhập tên danh mục...' />
                     </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12}>
                     <Form.Item name='parent_id' label='Danh mục cha' className='w-full max-w-[250px]'>
                       <Select
                         showSearch
@@ -218,11 +223,31 @@ export default function AddCategory() {
                         options={[{ value: '', label: 'Không có' }, ...dataCategories]}
                       />
                     </Form.Item>
-                  </Flex>
-                </Flex>
+                  </Col>
+                  <Col span={24}>
+                    <Form.Item
+                      name='description'
+                      label='Mô tả ngắn'
+                      rules={[{ max: 300, message: 'Mô tả không vượt quá 300 ký tự' }]}
+                    >
+                      <Input.TextArea
+                        rows={3}
+                        placeholder='Nhập mô tả ngắn về danh mục...'
+                        showCount
+                        maxLength={300}
+                        size='large'
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={24}>
+                    <Form.Item name='content' label='Nội dung chi tiết'>
+                      <Input.TextArea rows={6} placeholder='Nhập nội dung chi tiết...' size='large' />
+                    </Form.Item>
+                  </Col>
+                </Row>
               </div>
-            </Flex>
-          </Flex>
+            </Col>
+          </Row>
         </Form>
       </Spin>
     </Drawer>
