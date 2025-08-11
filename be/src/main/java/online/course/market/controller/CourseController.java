@@ -122,7 +122,7 @@ public class CourseController {
     }
 
     @Operation(description = "Get by slug endpoint for Course", summary = "This is a summary for Course get by id endpoint")
-    @GetMapping("/{slug}")
+    @GetMapping("/slug/{slug}")
     public ResponseEntity<ApiResponse<GetCourseDto>> getById(@PathVariable String slug) {
         Course course = courseService.getBySlug(slug);
         if (course == null) {
