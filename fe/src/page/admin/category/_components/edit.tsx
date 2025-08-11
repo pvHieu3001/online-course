@@ -97,7 +97,7 @@ export default function EditCategory() {
 
     try {
       await dispatch(categoryActions.updateCategory(params.id, formData) as unknown as AnyAction)
-      await dispatch(categoryActions.getCategories() as unknown as AnyAction)
+      await dispatch(categoryActions.getCategories('') as unknown as AnyAction)
       popupSuccess('Cập nhật danh mục thành công')
       setIsDirty(false)
       navigate('..')
