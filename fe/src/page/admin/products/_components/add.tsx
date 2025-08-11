@@ -96,8 +96,9 @@ function AddProduct() {
       >
         <Form layout='vertical' form={form} name='nest-messages' onFinish={onFinish} className='p-10 relative'>
           <Card title='Thông tin khoá học' size='small' style={{ marginBottom: 24 }}>
-            <Row gutter={16}>
-              <Col span={12}>
+            <Row gutter={[16, 16]}>
+              {/* Cột trái */}
+              <Col xs={24} md={12}>
                 <Form.Item
                   name='name'
                   label='Tên khoá học'
@@ -105,6 +106,7 @@ function AddProduct() {
                 >
                   <Input placeholder='Nhập tên khoá học' size='large' />
                 </Form.Item>
+
                 <Form.Item
                   name='categoryId'
                   label='Danh mục'
@@ -125,23 +127,29 @@ function AddProduct() {
                     ))}
                   </Select>
                 </Form.Item>
+
                 <Form.Item name='sourceUrl' label='Nguồn video'>
-                  <Input placeholder='Nhập URL nguồn video' />
+                  <Input placeholder='Nhập URL nguồn video' size='large' />
                 </Form.Item>
-                <Row gutter={16}>
-                  <Col span={8}>
+
+                {/* Row chứa switch */}
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} sm={12} md={8}>
                     <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
                       <Switch className='w-20' checkedChildren='Active' unCheckedChildren='Inactive' />
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
+
+                  <Col xs={24} sm={12} md={8}>
                     <Form.Item name='isDisplayHot' label='Khóa học nổi bật' valuePropName='checked'>
                       <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                     </Form.Item>
                   </Col>
                 </Row>
               </Col>
-              <Col span={12}>
+
+              {/* Cột phải */}
+              <Col xs={24} md={12}>
                 <Form.Item name='language' label='Ngôn ngữ'>
                   <Select placeholder='Chọn ngôn ngữ' size='large'>
                     <Select.Option value='vi'>Tiếng Việt</Select.Option>
@@ -149,6 +157,7 @@ function AddProduct() {
                     <Select.Option value='jp'>日本語</Select.Option>
                   </Select>
                 </Form.Item>
+
                 <Form.Item name='level' label='Trình độ'>
                   <Select placeholder='Chọn trình độ' size='large'>
                     <Select.Option value='beginner'>Dễ</Select.Option>
@@ -156,6 +165,7 @@ function AddProduct() {
                     <Select.Option value='advanced'>Khó</Select.Option>
                   </Select>
                 </Form.Item>
+
                 <Form.Item name='price' label='Giá'>
                   <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
                 </Form.Item>

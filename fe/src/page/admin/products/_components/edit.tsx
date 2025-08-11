@@ -228,18 +228,20 @@ function EditProduct() {
                     </Select>
                   </Form.Item>
 
-                  <Row gutter={16} >
-                    <Col span={8}>
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={12} md={8}>
                       <Form.Item name='price' label='Giá'>
                         <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
+
+                    <Col xs={24} sm={12} md={8}>
                       <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
                         <Switch className='w-20' checkedChildren='Active' unCheckedChildren='Inactive' />
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
+
+                    <Col xs={24} sm={12} md={8}>
                       <Form.Item name='isDisplayHot' label='Khóa học nổi bật' valuePropName='checked'>
                         <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                       </Form.Item>
