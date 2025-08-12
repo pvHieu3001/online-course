@@ -41,7 +41,7 @@ const Header = () => {
   }
 
   const handleDetail = (course: IProduct) => {
-    navigate(`/chi-tiet-khoa-hoc/${course.slug}`, { state: course })
+    navigate(`/chi-tiet-khoa-hoc/${course.slug}`)
   }
 
   return (

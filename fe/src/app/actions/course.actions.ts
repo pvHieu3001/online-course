@@ -3,6 +3,7 @@ import { courseServices } from '../services/course.service'
 import {
   isFetching,
   fetchedDone,
+  reset,
   getCoursesSuccessFully,
   getCoursesFailure,
   deleteSuccessfully,
@@ -134,6 +135,10 @@ export const getCoursesByCategory = (categoryId: number) => (dispatch: Dispatch)
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const resetCourse = () => (dispatch: Dispatch) => {
+  dispatch(reset())
+}
+
 export const courseActions = {
   getCourses,
   getCourseById,
@@ -141,5 +146,6 @@ export const courseActions = {
   createCourse,
   updateCourse,
   deleteCourse,
-  getCoursesByCategory
+  getCoursesByCategory,
+  resetCourse
 }

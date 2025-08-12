@@ -37,7 +37,7 @@ function CategoryDetailPage() {
 
   // Handle course item click
   const handleCourseClick = (course: IProduct) => {
-    navigate('/chi-tiet-khoa-hoc', { state: course })
+    navigate(`/chi-tiet-khoa-hoc/${course.slug}`)
   }
 
   // Pagination logic

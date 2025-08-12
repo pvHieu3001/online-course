@@ -21,6 +21,14 @@ const courseSlice = createSlice({
     fetchedDone: (state) => {
       state.isLoading = false
     },
+    reset: (state) => {
+      state.isLoading = true
+      state.code = ''
+      state.message = ''
+      state.error_message = ''
+      state.data = null as unknown as IProduct
+      state.dataList = []
+    },
     getCoursesSuccessFully: (state, { payload }) => {
       state.dataList = payload.data
       state.code = payload.code
@@ -104,7 +112,8 @@ export const {
   deleteSuccessfully,
   getCoursesByCategorySuccessFully,
   getCoursesByCategoryFailure,
-  getCoursesHotSuccessFully
+  getCoursesHotSuccessFully,
+  reset
 } = courseSlice.actions
 
 export default courseSlice.reducer
