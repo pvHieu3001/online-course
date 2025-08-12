@@ -6,6 +6,7 @@ import { courseActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
+import { getImageUrl } from '@/utils/getImageUrl'
 
 function ProductDetailPage() {
   const { slug } = useParams()
@@ -15,7 +16,7 @@ function ProductDetailPage() {
 
   useEffect(() => {
     if (slug) {
-      dispatch(courseActions.resetCourse() as unknown as AnyAction);
+      dispatch(courseActions.resetCourse() as unknown as AnyAction)
       dispatch(courseActions.getCourseBySlug(slug) as unknown as AnyAction)
     }
   }, [slug])
@@ -44,7 +45,7 @@ function ProductDetailPage() {
 
             <section className='mt-8'>
               <img
-                src={course.imageUrl ? `${import.meta.env.VITE_DOMAIN_URL}${course.imageUrl}` : '/default-image.jpg'}
+                src={getImageUrl(course.imageUrl)}
                 alt={course.name || 'Ảnh khóa học'}
                 className='rounded-lg shadow-md w-full max-w-sm h-48 object-cover'
               />

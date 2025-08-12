@@ -7,6 +7,7 @@ import { courseActions, categoryActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
+import { getImageUrl } from '@/utils/getImageUrl'
 
 function CategoryDetailPage() {
   const { slug } = useParams()
@@ -139,7 +140,7 @@ function CategoryDetailPage() {
                         className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition'
                       >
                         <img
-                          src={course.imageUrl}
+                          src={getImageUrl(course.imageUrl)}
                           alt={course.name}
                           className='w-full h-40 object-cover rounded-md mb-4'
                         />

@@ -7,6 +7,7 @@ import { courseActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
+import { getImageUrl } from '@/utils/getImageUrl'
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -34,11 +35,6 @@ const Header = () => {
     { label: 'CHÍNH SÁCH BẢO MẬT', href: '/privacy-policy' },
     { label: 'BẢN QUYỀN', href: '/copyright' }
   ]
-
-  const getImageUrl = (url: string): string => {
-    const domain = import.meta.env.VITE_DOMAIN_URL
-    return url.startsWith('/') ? `${domain}${url}` : `${domain}/${url}`
-  }
 
   const handleDetail = (course: IProduct) => {
     navigate(`/chi-tiet-khoa-hoc/${course.slug}`)

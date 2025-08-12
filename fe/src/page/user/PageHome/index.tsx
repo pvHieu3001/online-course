@@ -10,6 +10,7 @@ import { IProduct } from '@/common/types.interface'
 import { useQuery } from '@/utils/useQuery'
 import Description from './Description'
 import Link from 'antd/es/typography/Link'
+import { getImageUrl } from '@/utils/getImageUrl'
 
 function PageHome() {
   const query = useQuery()
@@ -28,11 +29,6 @@ function PageHome() {
     if (course) {
       navigate(`/chi-tiet-khoa-hoc/${slug}`, { state: course })
     }
-  }
-
-  const getImageUrl = (url: string): string => {
-    const domain = import.meta.env.VITE_DOMAIN_URL
-    return url.startsWith('/') ? `${domain}${url}` : `${domain}/${url}`
   }
 
   return (

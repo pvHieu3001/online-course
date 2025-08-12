@@ -72,6 +72,7 @@ function EditProduct() {
     try {
       await dispatch(courseActions.updateCourse(id as string, formdata) as unknown as AnyAction)
       await dispatch(courseActions.getCourses('', '', false) as unknown as AnyAction)
+      await dispatch(courseActions.getCourses('', '', true) as unknown as AnyAction)
       popupSuccess('Cập nhật khóa học thành công')
       navigator('..')
     } catch (error) {
