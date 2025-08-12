@@ -7,17 +7,30 @@ import { useDispatch, useSelector } from 'react-redux'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
-import { EyeOutlined, UnorderedListOutlined } from '@ant-design/icons'
+import { EyeOutlined, UnorderedListOutlined, StarOutlined } from '@ant-design/icons'
 
 export default function ListProduct() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
   const [active, setActive] = useState('')
+  const [isHot, setIsHot] = useState(false)
+  const [dataTable, setDataTable] = useState<(IProduct & { key: number })[]>([])
+
   const courses = useSelector((state: RootState) => state.course)
 
   useEffect(() => {
-    dispatch(courseActions.getCourses(active, searchValue, false) as unknown as AnyAction)
-  }, [searchValue, active])
+    dispatch(courseActions.getCourses(active, searchValue, isHot) as unknown as AnyAction)
+  }, [searchValue, active, isHot, dispatch])
+
+  useEffect(() => {
+    if (!isHot && courses.dataList) {
+      setDataTable(courses.dataList?.map((item: IProduct, index: number) => ({ ...item, key: index + 1 })))
+    } else if (isHot && courses.dataDiplayHotList) {
+      setDataTable(courses.dataDiplayHotList.map((item: IProduct, index: number) => ({ ...item, key: index + 1 })))
+    } else {
+      setDataTable([])
+    }
+  }, [courses, isHot])
 
   const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value
@@ -177,10 +190,25 @@ export default function ListProduct() {
           <Button
             size='large'
             type='default'
+            className={`ml-2 ${
+              isHot
+                ? 'bg-yellow-400 text-white hover:bg-yellow-500' // khi bật (true)
+                : 'text-gray-700 hover:bg-gray-300' // khi tắt (false)
+            }`}
+            onClick={() => {
+              setIsHot(!isHot)
+            }}
+          >
+            <StarOutlined /> Được yêu thích
+          </Button>
+          <Button
+            size='large'
+            type='default'
             className='ml-2'
             onClick={() => {
               setSearchValue('')
               setActive('')
+              setIsHot(false)
             }}
           >
             <UnorderedListOutlined /> Tất Cả
@@ -201,7 +229,7 @@ export default function ListProduct() {
         columns={columns}
         sticky={{ offsetHeader: 0 }}
         scroll={{ x: 1200 }}
-        dataSource={courses?.dataList?.map((item: IProduct, index: number) => ({ ...item, key: index + 1 }))}
+        dataSource={dataTable}
         loading={courses.isLoading}
       />
     </>
