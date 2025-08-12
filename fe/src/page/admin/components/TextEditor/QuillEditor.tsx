@@ -45,18 +45,21 @@ export default function TextEditor({ content, onHandleChange }: TextEditorProps)
     'image',
     'video'
   ]
+
   return (
-    <ReactQuill
-      ref={childRef}
-      value={value}
-      modules={modules}
-      formats={formats}
-      theme='snow'
-      className='h-[200px]'
-      onChange={(val) => {
-        setValue(val)
-        onHandleChange(val)
-      }}
-    />
+    <div className="react-quill-wrapper">
+      <ReactQuill
+        ref={childRef}
+        value={value}
+        modules={modules}
+        formats={formats}
+        theme="snow"
+        className="custom-quill"
+        onChange={(val) => {
+          setValue(val)
+          onHandleChange(val)
+        }}
+      />
+    </div>
   )
 }
