@@ -57,6 +57,7 @@ function ProductDetailPage() {
                 <div
                   className='text-xl leading-8 text-gray-800 
                 [&_p]:mb-4 
+                [&_p]:text-xl
                 [&_h1]:text-4xl 
                 [&_h2]:text-3xl 
                 [&_h3]:text-2xl 
@@ -75,7 +76,8 @@ function ProductDetailPage() {
               {course.description ? (
                 <div
                   className='text-xl leading-8 text-gray-800 
-                [&_p]:mb-4 
+                [&_p]:mb-4
+                [&_p]:text-xl
                 [&_h1]:text-4xl 
                 [&_h2]:text-3xl 
                 [&_h3]:text-2xl 
@@ -95,6 +97,7 @@ function ProductDetailPage() {
                 <div
                   className='text-xl leading-8 text-gray-800 
                 [&_p]:mb-4 
+                [&_p]:text-xl
                 [&_h1]:text-4xl 
                 [&_h2]:text-3xl 
                 [&_h3]:text-2xl 

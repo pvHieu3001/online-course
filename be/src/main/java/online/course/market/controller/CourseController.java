@@ -192,7 +192,7 @@ public class CourseController {
                 Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            String sourceFilename="";
+            String sourceFilename = dto.getSourceUrl();
             if(dto.getSourceFile() != null){
                 sourceFilename = UUID.randomUUID()+"_"+dto.getSourceFile().getOriginalFilename();
                 Path sourcePath = uploadDir.resolve(sourceFilename);
