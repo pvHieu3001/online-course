@@ -1,5 +1,7 @@
 package online.course.market.service;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import online.course.market.entity.model.Category;
@@ -71,7 +73,13 @@ public class CourseServiceImpl implements CourseService {
         courseDb.setSourceUrl(course.getSourceUrl());
         courseDb.setImageUrl(course.getImageUrl() != null && course.getImageUrl() != "" ? course.getImageUrl() : courseDb.getImageUrl());
         courseDb.setIsDisplayHot(course.getIsDisplayHot());
-        return courseRepository.save(courseDb);
+        Course newCourse = courseRepository.save(courseDb);
+
+        if(course.getCategory().getId() != catId){
+            categoryRepository.updateNumberCourseByIds(Arrays.asList(course.getCategory().getId(), catId));
+        }
+
+        return newCourse;
     }
 
     @Override

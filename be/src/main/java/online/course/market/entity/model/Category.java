@@ -23,4 +23,5 @@ public class Category extends BaseEntity {
     private boolean status;
     private String image;
     private Integer parentId;
+    private Integer numberCourse;
 }

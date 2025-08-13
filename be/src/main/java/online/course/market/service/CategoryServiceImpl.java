@@ -60,4 +60,10 @@ public class CategoryServiceImpl implements CategoryService {
         Category categoryDb = getById(id);
         categoryRepository.delete(categoryDb);
     }
+
+    @Transactional
+    @Override
+    public void refreshCourseCount(List<Integer> ids) {
+        categoryRepository.updateNumberCourseByIds(ids);
+    }
 } 

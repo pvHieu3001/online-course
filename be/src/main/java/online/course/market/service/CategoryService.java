@@ -1,6 +1,8 @@
 package online.course.market.service;
 
 import online.course.market.entity.model.Category;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 public interface CategoryService {
@@ -10,4 +12,6 @@ public interface CategoryService {
     Category save(Category category);
     Category update(Category category, Integer id);
     void deleteById(Integer id);
-} 
+    @Transactional
+    void refreshCourseCount(List<Integer> ids);
+}

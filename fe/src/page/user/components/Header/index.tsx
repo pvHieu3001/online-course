@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons'
+import { MenuOutlined, CloseOutlined, SearchOutlined } from '@ant-design/icons'
 import styles from './styles.module.css'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,6 +23,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const courses = useSelector((state: RootState) => state.course)
   const navigate = useNavigate()
+  const router = useNavigate()
 
   useEffect(() => {
     dispatch(courseActions.getCourses('active', '', true) as unknown as AnyAction)
@@ -38,6 +39,17 @@ const Header = () => {
 
   const handleDetail = (course: IProduct) => {
     navigate(`/chi-tiet-khoa-hoc/${course.slug}`)
+  }
+
+  const handleSearch = (keyword: string) => {
+    router(`?search=${encodeURIComponent(keyword)}`)
+  }
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch((e.target as HTMLInputElement).value)
+      setMenuOpen(false) // Đóng menu sau khi tìm kiếm
+    }
   }
 
   return (
@@ -87,10 +99,16 @@ const Header = () => {
               <CloseOutlined style={{ fontSize: 24 }} />
             </button>
 
-            {/* 🔍 Search input */}
-            <div className={styles.mobileSearch}>
-              <input type='text' placeholder='Tìm kiếm khóa học...' className={styles.searchInput} />
-              <button className={styles.searchButton}>🔍</button>
+            <div className='relative w-full max-w-md mt-10'>
+              <span className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500'>
+                <SearchOutlined />
+              </span>
+              <input
+                onKeyDown={handleSearchKeyDown}
+                type='text'
+                placeholder='Tìm kiếm khóa học...'
+                className='w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+              />
             </div>
 
             <nav>
