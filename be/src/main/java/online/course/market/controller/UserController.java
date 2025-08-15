@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ public class UserController {
 
 	private final UserService userService;
 	private final ModelMapper modelMapper;
+	private final PasswordEncoder passwordEncoder;
 
 	@Operation(description = "Get pageable endpoint for user", summary = "This is a summary for user get pageable endpoint")
 	@GetMapping(value = "/pageable")
@@ -73,6 +75,7 @@ public class UserController {
 	@Operation(description = "Save  endpoint for user", summary = "This is a summary for user save endpoint")
 	@PostMapping
 	public ResponseEntity<GetUserDto> saveUser(@Valid @RequestBody PostUserDto dto) {
+		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 		UserModel user = modelMapper.map(dto, UserModel.class);
 		UserModel userDb = userService.save(user);
 		GetUserDto getUserDto = modelMapper.map(userDb, GetUserDto.class);

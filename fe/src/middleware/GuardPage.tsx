@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import { popupError } from "@/page/shared/Toast";
-import { useLocalStorage } from "@uidotdev/usehooks";
-import { Navigate, Outlet } from "react-router-dom";
+import { useEffect, useState } from 'react'
+import { popupError } from '@/page/shared/Toast'
+import { Navigate, Outlet } from 'react-router-dom'
+import { LOCAL_STORAGE_TOKEN } from '@/app/constants'
 
 export default function GuardPage() {
-  const [user] = useLocalStorage("user", undefined);
-  const [showError, setShowError] = useState(false);
+  const token = localStorage.getItem(LOCAL_STORAGE_TOKEN)
+  const [showError, setShowError] = useState(false)
 
   useEffect(() => {
-    if (!user) {
-      popupError("Vui lòng đăng nhập trước!");
-      setShowError(true);
+    if (!token) {
+      popupError('Vui lòng đăng nhập trước!')
+      setShowError(true)
     }
-  }, [user]);
+  }, [token])
 
-  if (!user && showError) {
-    return <Navigate to="/" />;
+  if (!token && showError) {
+    return <Navigate to='/login' />
   }
 
-  return <Outlet />;
+  return <Outlet />
 }

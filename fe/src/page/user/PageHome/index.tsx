@@ -48,7 +48,7 @@ function PageHome() {
             dataList?.map((course: IProduct) => (
               <article
                 className={styles.courseCard}
-                key={course.slug}
+                key={course.id}
                 role='button'
                 tabIndex={0}
                 onClick={() => handleDetail(course.slug)}

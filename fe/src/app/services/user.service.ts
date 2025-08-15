@@ -1,6 +1,6 @@
 import http from '../http-common'
 import httpauth from '../http-auth'
-import { LOCAL_STORAGE_USER, LOCAL_STORAGE_TOKEN, ADMIN_BASE_API } from '../constants'
+import { LOCAL_STORAGE_USER, LOCAL_STORAGE_TOKEN, EXTERNAL_BASE_API } from '../constants'
 import axs from '../http-common'
 import { ILogin, IRegister, IUser } from '@/common/types.interface'
 
@@ -10,7 +10,7 @@ function getUsers() {
 
 async function login(data: ILogin) {
   const res = await httpauth.post(`/api/v1/auth/login`, data)
-  const token = res.data.data.access_token
+  const token = res.data.access_token
   axs.defaults.headers.common.Authorization = `Bearer ${token}`
 
   localStorage.setItem(LOCAL_STORAGE_TOKEN, token)
@@ -19,7 +19,7 @@ async function login(data: ILogin) {
 
 async function register(data: IRegister) {
   const res = await httpauth.post(`/api/v1/auth/register`, data)
-  const token = res.data.data.access_token
+  const token = res.data.access_token
   axs.defaults.headers.common.Authorization = `Bearer ${token}`
 
   localStorage.setItem(LOCAL_STORAGE_TOKEN, token)
@@ -29,7 +29,7 @@ async function register(data: IRegister) {
 function logout() {
   localStorage.removeItem(LOCAL_STORAGE_TOKEN)
   localStorage.removeItem(LOCAL_STORAGE_USER)
-  const url = `${ADMIN_BASE_API}/login`
+  const url = `${EXTERNAL_BASE_API}/login`
   window.location.href = url
 }
 

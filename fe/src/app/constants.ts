@@ -1,7 +1,5 @@
-// import getLocalStorage dari helper/localStorage yang đã được tạo
 import { getLocalStorage } from "../utils/localStorage";
 
-const ADMIN_BASE_API = import.meta.env.VITE_ADMIN_BASE_URL;
 const ADMIN_BASE_IMAGE_URL = import.meta.env.VITE_ADMIN_BASE_IMAGE_URL;
 const EXTERNAL_BASE_API = import.meta.env.VITE_EXTERNAL_BASE_API;
 
@@ -15,7 +13,6 @@ const TOKEN = {
 };
 
 export {
-  ADMIN_BASE_API,
   ADMIN_BASE_IMAGE_URL,
   EXTERNAL_BASE_API,
   LOCAL_STORAGE_TOKEN,
