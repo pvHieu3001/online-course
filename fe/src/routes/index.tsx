@@ -21,12 +21,16 @@ import PagePolicy from '../page/user/PagePolicy'
 import PageTermOfUse from '../page/user/PageTermOfUse'
 import PageCopyright from '../page/user/PageCopyright'
 import ProductOrdersManagement from '@/page/admin/orders'
+import SignUp from '@/page/auth/signup'
+import Login from '@/page/auth/login'
 
 export default function Router() {
   return (
     <>
       <Routes>
         <Route path='/' element={<Layout />}>
+          <Route path='login' element={<Login />} />
+          <Route path='signup' element={<SignUp />} />
           <Route path='' element={<Base />}>
             <Route index element={<PageHome />} />
             <Route path='cart' element={<></>} />
@@ -36,29 +40,30 @@ export default function Router() {
             <Route path='term-of-use' element={<PageTermOfUse />} />
             <Route path='copyright' element={<PageCopyright />} />
           </Route>
+          <Route element={<GuardPage />}>
+            <Route path='admin' element={<Manager />}>
+              <Route index element={<Navigate to='/admin/dashboard' />} />
+              <Route path='dashboard' element={<Dashboard />} />
 
-          <Route path='admin' element={<Manager />}>
-            <Route index element={<Navigate to='/admin/dashboard' />} />
-            <Route path='dashboard' element={<Dashboard />} />
+              <Route path='users' element={<UserManagement />}>
+                <Route path='add' element={<AddUser />} />
+                <Route path=':id' element={<EditUser />} />
+              </Route>
 
-            <Route path='users' element={<UserManagement />}>
-              <Route path='add' element={<AddUser />} />
-              <Route path=':id' element={<EditUser />} />
-            </Route>
+              <Route path='products' element={<ProductManagement />}>
+                <Route path='add' element={<AddProduct />} />
+                <Route path=':flug' element={<EditProduct />} />
+              </Route>
 
-            <Route path='products' element={<ProductManagement />}>
-              <Route path='add' element={<AddProduct />} />
-              <Route path=':flug' element={<EditProduct />} />
-            </Route>
+              <Route path='orders' element={<ProductOrdersManagement />}>
+                <Route path='add' element={<AddProduct />} />
+                <Route path=':flug' element={<EditProduct />} />
+              </Route>
 
-            <Route path='orders' element={<ProductOrdersManagement />}>
-              <Route path='add' element={<AddProduct />} />
-              <Route path=':flug' element={<EditProduct />} />
-            </Route>
-
-            <Route path='categories' element={<CategoryManagement />}>
-              <Route path='add' element={<AddCategory />} />
-              <Route path=':id' element={<EditCategory />} />
+              <Route path='categories' element={<CategoryManagement />}>
+                <Route path='add' element={<AddCategory />} />
+                <Route path=':id' element={<EditCategory />} />
+              </Route>
             </Route>
           </Route>
         </Route>

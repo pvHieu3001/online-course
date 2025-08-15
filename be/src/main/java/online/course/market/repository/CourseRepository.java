@@ -5,8 +5,10 @@ import java.util.Optional;
 
 import online.course.market.entity.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-public interface CourseRepository extends JpaRepository<Course, Long>{
+public interface CourseRepository extends JpaRepository<Course, Integer>{
     Optional<Course> findByName(final String name);
 
     List<Course> findAllByOrderByIdDesc();
@@ -14,4 +16,15 @@ public interface CourseRepository extends JpaRepository<Course, Long>{
     List<Course> findByCategoryIdOrderByIdDesc(Integer categoryId);
 
     Optional<Course> findBySlug(String slug);
+
+    @Query("SELECT c FROM Course c " +
+            "WHERE (:status IS NULL OR c.status = :status) " +
+            "AND (:search IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+            "AND (:isDisplayHot IS NULL OR c.isDisplayHot = :isDisplayHot)")
+    List<Course> filterCourse(@Param("status") String status,
+                              @Param("search") String search,
+                              @Param("isDisplayHot") Boolean isDisplayHot);
+
+    @Query("SELECT c FROM Course c WHERE c.isDisplayHot = true")
+    List<Course> getRecommendCourse();
 }

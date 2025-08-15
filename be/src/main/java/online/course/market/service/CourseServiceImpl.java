@@ -28,10 +28,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
-    public Course getByName(String name) {
-        Assert.notNull(name, "name cannot be null");
-        return courseRepository.findByName(name).orElseThrow(
-                () -> new CJNotFoundException(CustomCodeException.CODE_400, "course not found with name "+name));
+    public List<Course> getRecommendCourse() {
+        return courseRepository.getRecommendCourse();
+
     }
 
     @Override
@@ -49,7 +48,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public Course update(Course course, Long id, Integer catId) {
+    public Course update(Course course, Integer id, Integer catId) {
 
         Assert.notNull(id, "id cannot be null");
         Assert.notNull(course, "course cannot be null");
@@ -84,7 +83,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         Assert.notNull(id, "id cannot be null");
         Course courseDb = courseRepository.findById(id)
                 .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "course not found"));
@@ -99,7 +98,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
-    public Course getById(Long id) {
+    public Course getById(Integer id) {
         return courseRepository.findById(id).orElse(null);
     }
 
@@ -107,6 +106,11 @@ public class CourseServiceImpl implements CourseService {
     @Transactional(readOnly = true)
     public Course getBySlug(String slug) {
         return courseRepository.findBySlug(slug).orElse(null);
+    }
+
+    @Override
+    public List<Course> filterCourse(String status, String search, Boolean isDisplayHot) {
+        return courseRepository.filterCourse(status, search, isDisplayHot);
     }
 
     @Override

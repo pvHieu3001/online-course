@@ -16,7 +16,7 @@ import {
   getByIdSuccessFully,
   getCoursesByCategorySuccessFully,
   getCoursesByCategoryFailure,
-  getCoursesHotSuccessFully
+  getRecommendCoursesSuccessFully
 } from '../slices/course.reducer'
 
 export const getCourses = (status?: string, search?: string | null, isDisplayHot?: boolean) => (dispatch: Dispatch) => {
@@ -25,11 +25,23 @@ export const getCourses = (status?: string, search?: string | null, isDisplayHot
   return courseServices
     .getCourses(status ?? '', search ?? '', isDisplayHot)
     .then((res) => {
-      if (isDisplayHot) {
-        dispatch(getCoursesHotSuccessFully(res.data))
-        return res
-      }
       dispatch(getCoursesSuccessFully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getCoursesFailure(error))
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
+export const getRecommendCourses = () => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return courseServices
+    .getRecommendCourses()
+    .then((res) => {
+      dispatch(getRecommendCoursesSuccessFully(res.data))
       return res
     })
     .catch((error) => {
@@ -147,5 +159,6 @@ export const courseActions = {
   updateCourse,
   deleteCourse,
   getCoursesByCategory,
-  resetCourse
+  resetCourse,
+  getRecommendCourses
 }

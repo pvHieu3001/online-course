@@ -1,14 +1,22 @@
+import { useEffect, useState } from "react";
 import { popupError } from "@/page/shared/Toast";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-export default function GuardPage({children}: { children: React.ReactNode }){
-  
-    const [user] = useLocalStorage('user', undefined);
-    if(!user){
-         popupError('Vui lòng đăng nhập trước!')
-         return <Navigate to="/" />;
+export default function GuardPage() {
+  const [user] = useLocalStorage("user", undefined);
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      popupError("Vui lòng đăng nhập trước!");
+      setShowError(true);
     }
-    return <> {children}</>
+  }, [user]);
 
+  if (!user && showError) {
+    return <Navigate to="/" />;
+  }
+
+  return <Outlet />;
 }

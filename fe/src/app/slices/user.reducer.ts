@@ -48,6 +48,14 @@ const userSlice = createSlice({
       state.error_message = payload.message
       state.isLoading = false
     },
+    signupSuccess: (state, { payload }) => {
+      state.data = payload
+      state.isLoading = false
+    },
+    signupFailure: (state, { payload }) => {
+      state.error_message = payload.message
+      state.isLoading = false
+    },
     createSuccessfully: (state, { payload }) => {
       state.data = payload.data
       state.message = 'Tạo Người Dùng Thành Công'
@@ -86,6 +94,8 @@ export const {
   getByIdSuccess,
   loginSuccess,
   loginFailure,
+  signupSuccess,
+  signupFailure,
   createFailure,
   createSuccessfully,
   updateFailure,

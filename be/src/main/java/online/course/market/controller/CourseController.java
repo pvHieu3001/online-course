@@ -7,14 +7,18 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import jakarta.servlet.http.HttpServletRequest;
 import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.category.GetCategoryDto;
 import online.course.market.entity.dto.course.GetCourseDto;
 import online.course.market.entity.dto.course.PostCourseDto;
 import online.course.market.entity.dto.course.PutCourseDto;
+import online.course.market.entity.dto.log.LogRequestDto;
 import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
+import online.course.market.entity.model.Log;
 import online.course.market.service.CategoryService;
+import online.course.market.service.LogService;
 import online.course.market.utils.SlugUtils;
 import org.hibernate.annotations.Parameter;
 import org.modelmapper.ModelMapper;
@@ -33,25 +37,30 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.annotation.PostConstruct;
 
+import static online.course.market.utils.Constant.*;
+
 @RestController
 @RequestMapping("api/v1/course")
 @Tag(name = "Course", description = "Course controller")
 public class CourseController {
 
+    private final LogService logService;
     private final CourseService courseService;
     private final CategoryService categoryService;
     private final ModelMapper modelMapper;
     private final String resourceFolder;
+    private final String env;
 
     private Path uploadDir;
 
-    // Constructor injection with qualifier for the upload URL bean
-    public CourseController(CourseService courseService, CategoryService categoryService, ModelMapper modelMapper,
-                            @Qualifier("uploadUrl") String resourceFolder) {
+    public CourseController(LogService logService, CourseService courseService, CategoryService categoryService, ModelMapper modelMapper,
+                            @Qualifier("uploadUrl") String resourceFolder, @Qualifier("env") String environment) {
+        this.logService = logService;
         this.courseService = courseService;
         this.categoryService = categoryService;
         this.modelMapper = modelMapper;
         this.resourceFolder = resourceFolder;
+        this.env = environment;
     }
 
     @PostConstruct
@@ -85,35 +94,34 @@ public class CourseController {
     public ResponseEntity<ApiResponse<List<GetCourseDto>>> getAll(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) Boolean isDisplayHot) {
+            @RequestParam(required = false) Boolean isDisplayHot,
+            HttpServletRequest request) {
+        logService.save(env, request, 1, null, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE);
 
-        List<GetCourseDto> getCourseDtos = courseService.getAll().stream()
-                .filter(course -> status == null || status.isEmpty() || course.getStatus().equalsIgnoreCase(status))
-                .filter(course -> search == null || search.isEmpty() || course.getName().toLowerCase().contains(search.toLowerCase()))
-                .filter(course -> !isDisplayHot  || course.getIsDisplayHot())
-                .map(course -> {
-                    GetCourseDto courseDto = toDto(course);
-                    Optional.ofNullable(course.getCategory())
-                            .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, GetCategoryDto.class)));
-                    return courseDto;
-                })
-                .collect(Collectors.toList());
+        List<GetCourseDto> getCourseDtos = courseService.filterCourse(status, search, isDisplayHot).stream()
+            .map(course -> {
+                GetCourseDto courseDto = toDto(course);
+                Optional.ofNullable(course.getCategory())
+                        .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, GetCategoryDto.class)));
+                return courseDto;
+            })
+            .collect(Collectors.toList());
 
         return ResponseEntity.ok(ApiResponse.success(getCourseDtos));
     }
 
     @Operation(description = "Get by name endpoint for Course", summary = "This is a summary for Course get by name endpoint")
-    @GetMapping("/{name}/name")
-    public ResponseEntity<ApiResponse<GetCourseDto>> getCourseByName(@PathVariable String name) {
-        Course courseDb = courseService.getByName(name);
-        if (courseDb == null)
-            throw new CJNotFoundException(CustomCodeException.CODE_400, "Course not found with name " + name);
-        return ResponseEntity.ok(ApiResponse.success(toDto(courseDb)));
+    @GetMapping("/recommend")
+    public ResponseEntity<ApiResponse<List<GetCourseDto>>> getRecommendCourse() {
+        List<GetCourseDto> recommendCourse = courseService.getRecommendCourse().stream().map(this::toDto).toList();
+        return ResponseEntity.ok(ApiResponse.success(recommendCourse));
     }
 
     @Operation(description = "Get by id endpoint for Course", summary = "This is a summary for Course get by id endpoint")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<GetCourseDto>> getById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<GetCourseDto>> getById(@PathVariable Integer id, HttpServletRequest request) {
+        logService.save(env, request, 1, null, LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE);
+
         Course course = courseService.getById(id);
         if (course == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Course not found"));
@@ -123,11 +131,9 @@ public class CourseController {
 
     @Operation(description = "Get by slug endpoint for Course", summary = "This is a summary for Course get by id endpoint")
     @GetMapping("/slug/{slug}")
-    public ResponseEntity<ApiResponse<GetCourseDto>> getById(@PathVariable String slug) {
+    public ResponseEntity<ApiResponse<GetCourseDto>> getById(@PathVariable String slug, HttpServletRequest request) {
         Course course = courseService.getBySlug(slug);
-        if (course == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Course not found"));
-        }
+        logService.save(env, request, 1, course.getId(), LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE);
         return ResponseEntity.ok(ApiResponse.success(toDto(course)));
     }
 
@@ -142,9 +148,8 @@ public class CourseController {
 
     @Operation(description = "Save endpoint for Course", summary = "This is a summary for Course save endpoint")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<GetCourseDto>> saveCourse(@Valid @ModelAttribute PostCourseDto dto) {
+    public ResponseEntity<ApiResponse<GetCourseDto>> saveCourse(@Valid @ModelAttribute PostCourseDto dto, HttpServletRequest request) {
         try {
-
             if(!Files.exists(uploadDir)){
                 Files.createDirectories(uploadDir);
             }
@@ -170,6 +175,7 @@ public class CourseController {
             Category category = categoryService.getById(dto.getCategoryId());
             course.setCategory(category);
             Course courseDb = courseService.save(course);
+            logService.save(env, request, 1, courseDb.getId(), LOG_CREATE_COURSE, LOG_ACTION_CREATE_NEW_COURSE);
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(courseDb)));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -179,7 +185,7 @@ public class CourseController {
     @Operation(description = "Update endpoint for Course", summary = "This is a summary for Course update endpoint")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<GetCourseDto>> updateCourse(@Valid @ModelAttribute PutCourseDto dto,
-                                                                 @PathVariable Long id) {
+                                                                 @PathVariable Integer id, HttpServletRequest request) {
         try {
             if(!Files.exists(uploadDir)){
                 Files.createDirectories(uploadDir);
@@ -205,6 +211,7 @@ public class CourseController {
 
             Course course = modelMapper.map(dto, Course.class);
             Course courseDb = courseService.update(course, id, dto.getCategoryId());
+            logService.save(env, request, 1, courseDb.getId(), LOG_UPDATE_COURSE, LOG_ACTION_UPDATE_COURSE);
             return ResponseEntity.ok(ApiResponse.success("Updated", toDto(courseDb)));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -213,8 +220,9 @@ public class CourseController {
 
     @Operation(description = "Delete endpoint for Course", summary = "This is a summary for Course delete endpoint")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable Integer id, HttpServletRequest request) {
         courseService.deleteById(id);
+        logService.save(env, request, 1, id, LOG_DELETE_COURSE, LOG_ACTION_DELETE_COURSE);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("Deleted", null));
     }
 }

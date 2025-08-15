@@ -5,15 +5,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CourseService {
-	Course getByName(final String name);
+	List<Course> getRecommendCourse();
 	List<Course> getAll();
 	Course save(final Course course);
-	Course update(final Course course, final Long id, final Integer catId);
-	void deleteById(final Long id);
+	Course update(final Course course, final Integer id, final Integer catId);
+	void deleteById(final Integer id);
 	Page<Course> finadAll(Pageable pageable);
-	Course getById(Long id);
+	Course getById(Integer id);
 	List<Course> getByCategoryId(Integer categoryId);
     Course getBySlug(String slug);
+	List<Course> filterCourse(String status, String search, Boolean isDisplayHot);
 }

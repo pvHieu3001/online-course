@@ -37,6 +37,14 @@ export interface ILogin {
   password: string
 }
 
+export interface IRegister {
+  firstname: string
+  username: string
+  password: string
+  lastname: string
+  email: string
+}
+
 export interface IUser {
   id: number
   firstname: string

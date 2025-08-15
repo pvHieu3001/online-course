@@ -4,12 +4,12 @@ import ScrollToTop from '../../utils/ScrollToTop'
 import '../../assets/fonts/line-awesome-1.3.0/css/line-awesome.css'
 import styles from './styles.module.css'
 import Header from './components/Header'
-import { Helmet, HelmetProvider } from 'react-helmet-async'
+import { Helmet } from 'react-helmet-async'
 import Footer from './components/Footer'
 
 function Base() {
   return (
-    <HelmetProvider>
+    <>
       <div className={styles.modules}>
         <Helmet>
           <title>Chia Sẻ Khóa Học</title>
@@ -25,7 +25,7 @@ function Base() {
         </main>
       </div>
       <Footer />
-    </HelmetProvider>
+    </>
   )
 }
 

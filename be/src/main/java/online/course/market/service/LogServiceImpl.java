@@ -1,16 +1,23 @@
 package online.course.market.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import online.course.market.entity.dto.log.LogRequestDto;
 import online.course.market.entity.model.Log;
 import online.course.market.repository.LogRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+
+import static online.course.market.utils.Constant.LOG_ACTION_GET_ALL_COURSE;
+import static online.course.market.utils.Constant.LOG_VIEW_COURSE;
 
 @Service
 @AllArgsConstructor
 public class LogServiceImpl implements LogService {
     private final LogRepository logRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public Log getById(Integer id) {
@@ -23,8 +30,17 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public Log save(Log log) {
-        return logRepository.save(log);
+    public void save(String env, HttpServletRequest request, Integer userId, Integer courseId, String name, String action) {
+        if(!env.equals("dev")){
+            String ipAddress = request.getHeader("X-Forwarded-For");
+            if (ipAddress == null || ipAddress.isEmpty()) {
+                ipAddress = request.getRemoteAddr();
+            }
+            String userAgent = request.getHeader("User-Agent");
+            LogRequestDto dto = new LogRequestDto(userId, courseId, name, action, ipAddress, userAgent);
+            Log log = modelMapper.map(dto, Log.class);
+            logRepository.save(log);
+        }
     }
 
     @Override

@@ -13,9 +13,12 @@ import {
   updateFailure,
   updateSuccessfully,
   getByIdFailure,
-  getByIdSuccess
+  getByIdSuccess,
+  loginFailure,
+  signupSuccess,
+  signupFailure
 } from '../slices/user.reducer'
-import { ILogin, IUser } from '@/common/types.interface'
+import { ILogin, IRegister, IUser } from '@/common/types.interface'
 
 // Get all users
 export const getUsers = () => (dispatch: Dispatch) => {
@@ -113,8 +116,24 @@ export const login = (token: ILogin) => (dispatch: Dispatch) => {
       return res
     })
     .catch((error) => {
-      // 👇 Tùy vào mục đích, có thể dispatch lỗi riêng nếu cần
-      dispatch(loginSuccess(error)) // <-- nên có loginFailure?
+      dispatch(loginFailure(error))
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
+// Signup user
+export const signup = (data: IRegister) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return userService
+    .register(data)
+    .then((res) => {
+      dispatch(signupSuccess(res))
+      return res
+    })
+    .catch((error) => {
+      dispatch(signupFailure(error))
       throw error
     })
     .finally(() => dispatch(fetchedDone()))
@@ -129,6 +148,7 @@ function logout() {
 // Export actions
 export const userActions = {
   login,
+  signup,
   getUsers,
   logout,
   getUserById,

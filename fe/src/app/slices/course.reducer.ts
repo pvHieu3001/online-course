@@ -8,7 +8,7 @@ const initialState = {
   error_message: '',
   data: <IProduct>(<unknown>null),
   dataList: <IProduct[]>(<unknown>null),
-  dataDiplayHotList: <IProduct[]>(<unknown>null)
+  recommends: <IProduct[]>(<unknown>null)
 }
 
 const courseSlice = createSlice({
@@ -35,8 +35,8 @@ const courseSlice = createSlice({
       state.message = payload.message
       state.isLoading = false
     },
-    getCoursesHotSuccessFully: (state, { payload }) => {
-      state.dataDiplayHotList = payload.data
+    getRecommendCoursesSuccessFully: (state, { payload }) => {
+      state.recommends = payload.data
       state.code = payload.code
       state.message = payload.message
       state.isLoading = false
@@ -112,7 +112,7 @@ export const {
   deleteSuccessfully,
   getCoursesByCategorySuccessFully,
   getCoursesByCategoryFailure,
-  getCoursesHotSuccessFully,
+  getRecommendCoursesSuccessFully,
   reset
 } = courseSlice.actions
 

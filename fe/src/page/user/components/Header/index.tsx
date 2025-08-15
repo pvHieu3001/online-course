@@ -26,7 +26,7 @@ const Header = () => {
   const router = useNavigate()
 
   useEffect(() => {
-    dispatch(courseActions.getCourses('active', '', true) as unknown as AnyAction)
+    dispatch(courseActions.getRecommendCourses() as unknown as AnyAction)
   }, [dispatch])
 
   const menuItems = [
@@ -130,7 +130,7 @@ const Header = () => {
 
       <div className={styles.sliderWrapper}>
         <section className={styles.slider} role='region' aria-label='Featured courses'>
-          {courses?.dataDiplayHotList?.map((course, i) => (
+          {courses.recommends?.map((course, i) => (
             <div onClick={() => handleDetail(course)} className={styles.sliderItem} key={i} role='button' tabIndex={0}>
               <img src={getImageUrl(course.imageUrl)} alt={`${course.name} thumbnail`} />
               <span>{course.name}</span>

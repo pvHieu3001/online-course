@@ -9,9 +9,17 @@ public class UploadConfig {
     
     @Value("${application.upload.url:/app/uploads}")
     private String uploadUrl;
+
+    @Value("${application.env:dev}")
+    private String env;
     
     @Bean
     public String uploadUrl() {
         return uploadUrl;
+    }
+
+    @Bean
+    public String env() {
+        return env;
     }
 } 

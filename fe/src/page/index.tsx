@@ -3,6 +3,7 @@ import { Snackbar, Alert } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { RootState } from '@/app/store'
+import { HelmetProvider } from 'react-helmet-async'
 
 const Layout = () => {
   const alert = useSelector((state: RootState) => state.alert)
@@ -27,7 +28,7 @@ const Layout = () => {
   }, [alert])
 
   return (
-    <>
+    <HelmetProvider>
       <Outlet />
       {alert.message && (
         <Snackbar
@@ -42,7 +43,7 @@ const Layout = () => {
           </Alert>
         </Snackbar>
       )}
-    </>
+    </HelmetProvider>
   )
 }
 

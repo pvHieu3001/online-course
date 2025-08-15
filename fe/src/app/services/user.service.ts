@@ -2,7 +2,7 @@ import http from '../http-common'
 import httpauth from '../http-auth'
 import { LOCAL_STORAGE_USER, LOCAL_STORAGE_TOKEN, ADMIN_BASE_API } from '../constants'
 import axs from '../http-common'
-import { ILogin, IUser } from '@/common/types.interface'
+import { ILogin, IRegister, IUser } from '@/common/types.interface'
 
 function getUsers() {
   return http.get(`/api/v1/user`)
@@ -10,6 +10,15 @@ function getUsers() {
 
 async function login(data: ILogin) {
   const res = await httpauth.post(`/api/v1/auth/login`, data)
+  const token = res.data.data.access_token
+  axs.defaults.headers.common.Authorization = `Bearer ${token}`
+
+  localStorage.setItem(LOCAL_STORAGE_TOKEN, token)
+  return res.data
+}
+
+async function register(data: IRegister) {
+  const res = await httpauth.post(`/api/v1/auth/register`, data)
   const token = res.data.data.access_token
   axs.defaults.headers.common.Authorization = `Bearer ${token}`
 
@@ -43,6 +52,7 @@ function getPageUser(page: string, size: string, sort: string) {
 export const userService = {
   getUsers,
   login,
+  register,
   logout,
   getUserById,
   updateUser,

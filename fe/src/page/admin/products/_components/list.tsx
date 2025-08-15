@@ -23,14 +23,8 @@ export default function ListProduct() {
   }, [searchValue, active, isHot, dispatch])
 
   useEffect(() => {
-    if (!isHot && courses.dataList) {
-      setDataTable(courses.dataList?.map((item: IProduct, index: number) => ({ ...item, key: index + 1 })))
-    } else if (isHot && courses.dataDiplayHotList) {
-      setDataTable(courses.dataDiplayHotList.map((item: IProduct, index: number) => ({ ...item, key: index + 1 })))
-    } else {
-      setDataTable([])
-    }
-  }, [courses, isHot])
+    setDataTable(courses.dataList.map((item: IProduct, index: number) => ({ ...item, key: index + 1 })))
+  }, [courses])
 
   const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value

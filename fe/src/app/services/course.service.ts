@@ -3,6 +3,9 @@ import http from '../http-common'
 function getCourses(status?: string, search?: string, isDisplayHot?: boolean) {
   return http.get('/api/v1/course?status=' + status + '&search=' + search + '&isDisplayHot=' + isDisplayHot)
 }
+function getRecommendCourses() {
+  return http.get('/api/v1/course/recommend')
+}
 function getCourseById(id: string) {
   return http.get(`/api/v1/course/${id}`)
 }
@@ -42,5 +45,6 @@ export const courseServices = {
   createCourse,
   deleteCourse,
   getPageCourse,
-  getCoursesByCategory
+  getCoursesByCategory,
+  getRecommendCourses
 }
