@@ -1,6 +1,6 @@
 import http from '../http-common'
 
-function getCourses(status?: string, search?: string, isDisplayHot?: boolean) {
+function getCourses(status?: string, search?: string, isDisplayHot?: string) {
   return http.get('/api/v1/user/course?status=' + status + '&search=' + search + '&isDisplayHot=' + isDisplayHot)
 }
 function getRecommendCourses() {

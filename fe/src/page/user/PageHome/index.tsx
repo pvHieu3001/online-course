@@ -21,7 +21,7 @@ function PageHome() {
   const { dataList, isLoading, error_message } = useSelector((state: RootState) => state.course)
 
   useEffect(() => {
-    dispatch(courseActions.getCourses('active', search, false) as unknown as AnyAction)
+    dispatch(courseActions.getCourses('active', search, '') as unknown as AnyAction)
   }, [search])
 
   const handleDetail = (slug: string) => {

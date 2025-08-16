@@ -12,9 +12,11 @@ import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
 import { ICategory } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
+import { useQuery } from '@/utils/useQuery'
 
 function EditProduct() {
   const navigator = useNavigate()
+  const query = useQuery()
   const { flug } = useParams()
   const dispatch = useDispatch()
   const courseStore = useSelector((state: RootState) => state.course)
@@ -72,7 +74,13 @@ function EditProduct() {
 
     try {
       await dispatch(courseActions.updateCourse(id as string, formdata) as unknown as AnyAction)
-      await dispatch(courseActions.getCourses('', '', false) as unknown as AnyAction)
+      await dispatch(
+        courseActions.getCourses(
+          query.get('status') ?? '',
+          query.get('search'),
+          query.get('isHot')
+        ) as unknown as AnyAction
+      )
       popupSuccess('Cập nhật khóa học thành công')
       navigator('..')
     } catch (error) {

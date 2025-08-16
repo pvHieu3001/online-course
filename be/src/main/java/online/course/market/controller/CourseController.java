@@ -3,6 +3,7 @@ package online.course.market.controller;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import jakarta.servlet.http.HttpServletRequest;
@@ -78,14 +79,17 @@ public class CourseController {
     public ResponseEntity<ApiResponse<List<GetCourseDto>>> getAll(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) Boolean isDisplayHot,
+            @RequestParam(required = false) String isDisplayHot,
             HttpServletRequest request) {
         logService.save(env, request, 1, null, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE);
-
+        Boolean displayHot =
+                isDisplayHot == null || isDisplayHot.isBlank() ? null :
+                        "1".equals(isDisplayHot) ? Boolean.TRUE :
+                                "0".equals(isDisplayHot) ? Boolean.FALSE : null;
         List<GetCourseDto> getCourseDtos = courseService.filterCourse(
                 !String.valueOf(status).isEmpty() ? status : null,
                 !String.valueOf(search).isEmpty() ? search : null,
-                isDisplayHot
+                        displayHot
             )
                 .stream().map(course -> {
                 GetCourseDto courseDto = toDto(course);

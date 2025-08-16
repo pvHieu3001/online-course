@@ -19,11 +19,11 @@ import {
   getRecommendCoursesSuccessFully
 } from '../slices/course.reducer'
 
-export const getCourses = (status?: string, search?: string | null, isDisplayHot?: boolean) => (dispatch: Dispatch) => {
+export const getCourses = (status?: string, search?: string, isDisplayHot?: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return courseServices
-    .getCourses(status ?? null, search ?? null, isDisplayHot)
+    .getCourses(status, search, isDisplayHot)
     .then((res) => {
       dispatch(getCoursesSuccessFully(res.data))
       return res

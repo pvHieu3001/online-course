@@ -13,7 +13,7 @@ export default function ListProduct() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
   const [active, setActive] = useState('')
-  const [isHot, setIsHot] = useState(false)
+  const [isHot, setIsHot] = useState('') // blank: all, 0: false, 1: true
   const [dataTable, setDataTable] = useState<(IProduct & { key: number })[]>([])
 
   const courses = useSelector((state: RootState) => state.course)
@@ -132,7 +132,7 @@ export default function ListProduct() {
           <Link to={`/chi-tiet-khoa-hoc/${record.slug}`}>
             <Button icon={<EyeOutlined />} />
           </Link>
-          <Link to={'' + record.id}>
+          <Link to={'' + record.id + `?status=${active}&isHot=${isHot}&search=${searchValue}`}>
             <Button type='primary'>Sửa</Button>
           </Link>
           <Popconfirm
@@ -185,12 +185,12 @@ export default function ListProduct() {
             size='large'
             type='default'
             className={`ml-2 ${
-              isHot
+              isHot == '1'
                 ? 'bg-yellow-400 text-white hover:bg-yellow-500' // khi bật (true)
                 : 'text-gray-700 hover:bg-gray-300' // khi tắt (false)
             }`}
             onClick={() => {
-              setIsHot(!isHot)
+              setIsHot(isHot == '' || isHot == '0' ? '1' : '0')
             }}
           >
             <StarOutlined /> Được yêu thích
@@ -202,14 +202,14 @@ export default function ListProduct() {
             onClick={() => {
               setSearchValue('')
               setActive('')
-              setIsHot(false)
+              setIsHot('')
             }}
           >
             <UnorderedListOutlined /> Tất Cả
           </Button>
         </div>
 
-        <Link to='add'>
+        <Link to={`add?status=${active}&isHot=${isHot}&search=${searchValue}`}>
           <Button type='primary'>Thêm khóa học</Button>
         </Link>
       </Flex>

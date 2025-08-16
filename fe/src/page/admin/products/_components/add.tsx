@@ -9,8 +9,10 @@ import { useNavigate } from 'react-router-dom'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
 import { ICategory } from '@/common/types.interface'
+import { useQuery } from '@/utils/useQuery'
 
 function AddProduct() {
+  const query = useQuery()
   const dispatch = useDispatch()
   const categoryStore = useSelector((state: RootState) => state.category)
   const courseStore = useSelector((state: RootState) => state.course)
@@ -52,7 +54,13 @@ function AddProduct() {
 
     try {
       await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)
-      await dispatch(courseActions.getCourses('', '', false) as unknown as AnyAction)
+      await dispatch(
+        courseActions.getCourses(
+          query.get('status') ?? '',
+          query.get('search'),
+          query.get('isHot')
+        ) as unknown as AnyAction
+      )
       popupSuccess('Thêm khóa học thành công')
       navigate('..')
     } catch (error) {
