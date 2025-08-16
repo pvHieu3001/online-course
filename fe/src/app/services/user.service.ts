@@ -1,6 +1,6 @@
 import http from '../http-common'
 import httpauth from '../http-auth'
-import { LOCAL_STORAGE_USER, LOCAL_STORAGE_TOKEN, EXTERNAL_BASE_API } from '../constants'
+import { LOCAL_STORAGE_USER, LOCAL_STORAGE_TOKEN, DOMAIN_URL } from '../constants'
 import axs from '../http-common'
 import { ILogin, IRegister, IUser } from '@/common/types.interface'
 
@@ -29,7 +29,7 @@ async function register(data: IRegister) {
 function logout() {
   localStorage.removeItem(LOCAL_STORAGE_TOKEN)
   localStorage.removeItem(LOCAL_STORAGE_USER)
-  const url = `${EXTERNAL_BASE_API}/login`
+  const url = `${DOMAIN_URL}/login`
   window.location.href = url
 }
 
