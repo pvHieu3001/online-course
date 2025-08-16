@@ -77,8 +77,8 @@ function EditProduct() {
       await dispatch(
         courseActions.getCourses(
           query.get('status') ?? '',
-          query.get('search'),
-          query.get('isHot')
+          query.get('search') ?? '',
+          query.get('isHot') ?? ''
         ) as unknown as AnyAction
       )
       popupSuccess('Cập nhật khóa học thành công')
