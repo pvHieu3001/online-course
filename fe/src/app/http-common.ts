@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { LOCAL_STORAGE_TOKEN, EXTERNAL_BASE_API, LOCAL_STORAGE_USER } from './constants'
+import { LOCAL_STORAGE_TOKEN, EXTERNAL_BASE_API, LOCAL_STORAGE_USER, DOMAIN_URL } from './constants'
 
 const onSuccessInterceptorRequest = async (config) => {
   return config
@@ -9,7 +9,7 @@ const onErrorInterceptorRequest = (rs) => Promise.reject(rs)
 const goToWorkspace = () => {
   localStorage.removeItem(LOCAL_STORAGE_USER)
   localStorage.removeItem(LOCAL_STORAGE_TOKEN)
-  const url = `${EXTERNAL_BASE_API}login`
+  const url = `${DOMAIN_URL}login`
   window.location.href = url
 }
 
