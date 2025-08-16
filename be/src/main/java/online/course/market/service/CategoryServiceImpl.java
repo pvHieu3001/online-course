@@ -7,8 +7,8 @@ import online.course.market.repository.CategoryRepository;
 import online.course.market.utils.CustomCodeException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -63,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public void refreshCourseCount(List<Integer> ids) {
+    public void refreshCourseCount(Set<Integer> ids) {
         categoryRepository.updateNumberCourseByIds(ids);
     }
 } 

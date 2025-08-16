@@ -11,6 +11,7 @@ import { ICategory } from '@/common/types.interface'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal, Spin } from 'antd'
 import { RootState } from '@/app/store'
+import { getImageUrl } from '@/utils/getImageUrl'
 
 export default function EditCategory() {
   const params = useParams()
@@ -18,7 +19,7 @@ export default function EditCategory() {
   const categoryStore = useSelector((state: RootState) => state.category)
   useEffect(() => {
     dispatch(categoryActions.getCategoryById(params.id ?? '0') as unknown as AnyAction)
-    dispatch(categoryActions.getCategories("") as unknown as AnyAction)
+    dispatch(categoryActions.getCategories('') as unknown as AnyAction)
   }, [])
 
   const navigate = useNavigate()
@@ -40,7 +41,7 @@ export default function EditCategory() {
   useEffect(() => {
     if (categoryStore.data) {
       const data = categoryStore.data as ICategory & { image?: string; status?: number }
-      if (data.image) setDisplayPic(`${import.meta.env.VITE_DOMAIN_URL}${data.image}`)
+      if (data.image) setDisplayPic(getImageUrl(data.image))
 
       form.setFieldsValue({
         parent_id: data.parentId ? data.parentId.toString() : '',

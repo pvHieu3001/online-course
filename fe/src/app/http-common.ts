@@ -1,16 +1,24 @@
 import axios from 'axios'
-import { LOCAL_STORAGE_TOKEN, EXTERNAL_BASE_API } from './constants'
+import { LOCAL_STORAGE_TOKEN, EXTERNAL_BASE_API, LOCAL_STORAGE_USER } from './constants'
 
 const onSuccessInterceptorRequest = async (config) => {
   return config
 }
 const onErrorInterceptorRequest = (rs) => Promise.reject(rs)
 
+const goToWorkspace = () => {
+  localStorage.removeItem(LOCAL_STORAGE_USER)
+  localStorage.removeItem(LOCAL_STORAGE_TOKEN)
+  const url = `${EXTERNAL_BASE_API}login`
+  window.location.href = url
+}
+
 const onErrorInterceptorResponse = (error) => {
   if (error) {
     if (!error.response.ok) {
       if (error.response.status === 401) {
         console.log('error 401')
+        goToWorkspace()
       }
       if (error.response.status === 403) {
         console.log('error 403')

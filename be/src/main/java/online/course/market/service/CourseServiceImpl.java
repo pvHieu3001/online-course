@@ -3,6 +3,9 @@ package online.course.market.service;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
@@ -18,6 +21,8 @@ import online.course.market.repository.CourseRepository;
 import online.course.market.utils.CustomCodeException;
 
 import lombok.AllArgsConstructor;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @AllArgsConstructor
@@ -74,9 +79,11 @@ public class CourseServiceImpl implements CourseService {
         courseDb.setIsDisplayHot(course.getIsDisplayHot());
         Course newCourse = courseRepository.save(courseDb);
 
-        if(course.getCategory().getId() != catId){
-            categoryRepository.updateNumberCourseByIds(Arrays.asList(course.getCategory().getId(), catId));
-        }
+
+        categoryRepository.updateNumberCourseByIds(
+                Stream.of(course.getCategory() !=null ? course.getCategory().getId() : null, catId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet()));
 
         return newCourse;
     }

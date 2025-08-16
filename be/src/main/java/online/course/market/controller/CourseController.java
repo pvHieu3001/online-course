@@ -82,8 +82,12 @@ public class CourseController {
             HttpServletRequest request) {
         logService.save(env, request, 1, null, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE);
 
-        List<GetCourseDto> getCourseDtos = courseService.filterCourse(status, search, isDisplayHot).stream()
-            .map(course -> {
+        List<GetCourseDto> getCourseDtos = courseService.filterCourse(
+                !String.valueOf(status).isEmpty() ? status : null,
+                !String.valueOf(search).isEmpty() ? search : null,
+                isDisplayHot
+            )
+                .stream().map(course -> {
                 GetCourseDto courseDto = toDto(course);
                 Optional.ofNullable(course.getCategory())
                         .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, GetCategoryDto.class)));

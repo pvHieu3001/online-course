@@ -23,7 +23,7 @@ export const getCourses = (status?: string, search?: string | null, isDisplayHot
   dispatch(isFetching())
 
   return courseServices
-    .getCourses(status ?? '', search ?? '', isDisplayHot)
+    .getCourses(status ?? null, search ?? null, isDisplayHot)
     .then((res) => {
       dispatch(getCoursesSuccessFully(res.data))
       return res

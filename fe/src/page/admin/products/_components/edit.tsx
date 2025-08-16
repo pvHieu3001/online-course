@@ -11,6 +11,7 @@ import { formatDate } from '@/utils/formatDate'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
 import { ICategory } from '@/common/types.interface'
+import { getImageUrl } from '@/utils/getImageUrl'
 
 function EditProduct() {
   const navigator = useNavigate()
@@ -37,7 +38,7 @@ function EditProduct() {
     setContent(courseStore.data?.content ?? '')
     setCourseBenefits(courseStore.data?.courseBenefits ?? '')
     if (courseStore.data?.imageUrl) {
-      setDisplayPic(`${import.meta.env.VITE_DOMAIN_URL}${courseStore.data.imageUrl}`)
+      setDisplayPic(getImageUrl(courseStore.data.imageUrl))
     }
   }, [courseStore])
 
@@ -72,7 +73,6 @@ function EditProduct() {
     try {
       await dispatch(courseActions.updateCourse(id as string, formdata) as unknown as AnyAction)
       await dispatch(courseActions.getCourses('', '', false) as unknown as AnyAction)
-      await dispatch(courseActions.getCourses('', '', true) as unknown as AnyAction)
       popupSuccess('Cập nhật khóa học thành công')
       navigator('..')
     } catch (error) {

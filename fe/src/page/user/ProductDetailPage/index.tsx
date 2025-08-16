@@ -139,9 +139,7 @@ function ProductDetailPage() {
                       className='relative group rounded-lg overflow-hidden shadow-md cursor-pointer transition-all duration-300 hover:shadow-xl'
                       style={{
                         backgroundImage: `url(${
-                          related.imageUrl
-                            ? `${import.meta.env.VITE_DOMAIN_URL}${related.imageUrl}`
-                            : '/default-image.jpg'
+                          related.imageUrl ? getImageUrl(related.imageUrl) : '/default-image.jpg'
                         })`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
