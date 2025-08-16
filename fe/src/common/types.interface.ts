@@ -1,5 +1,7 @@
+import { number } from "joi"
+
 export interface IProduct {
-  isDisplayHot: any
+  isDisplayHot: string // blank: all, 0: false, 1: true
   id: string
   createdAt?: string
   createdBy?: string
@@ -30,6 +32,9 @@ export interface ICategory {
   slug: string
   description: string
   content: string
+  image: string
+  status: boolean
+  numberCourse: number
 }
 
 export interface ILogin {

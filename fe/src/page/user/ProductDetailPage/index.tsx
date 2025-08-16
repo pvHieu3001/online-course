@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import TabCategory from '../TabCategory'
+import TabCategory from '../components/TabCategory'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { courseActions } from '@/app/actions'
