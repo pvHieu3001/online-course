@@ -2,7 +2,6 @@ package online.course.market.controller;
 
 import lombok.AllArgsConstructor;
 import online.course.market.entity.dto.ApiResponse;
-import online.course.market.entity.dto.log.LogRequestDto;
 import online.course.market.entity.dto.log.LogResponseDto;
 import online.course.market.entity.model.Log;
 import online.course.market.service.LogService;

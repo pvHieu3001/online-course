@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import online.course.market.entity.dto.user.GetUserDto;
 import online.course.market.entity.dto.user.PostUserDto;
 import online.course.market.entity.dto.user.PutUserDto;
@@ -26,7 +25,6 @@ import online.course.market.entity.model.UserModel;
 import online.course.market.exception.CJNotFoundException;
 import online.course.market.service.UserService;
 import online.course.market.utils.CustomCodeException;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
