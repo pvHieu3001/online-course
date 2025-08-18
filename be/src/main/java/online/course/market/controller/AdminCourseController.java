@@ -2,9 +2,14 @@ package online.course.market.controller;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import jakarta.servlet.http.HttpServletRequest;
 import online.course.market.entity.dto.ApiResponse;
+import online.course.market.entity.dto.category.GetCategoryDto;
 import online.course.market.entity.dto.course.GetCourseDto;
 import online.course.market.entity.dto.course.PostCourseDto;
 import online.course.market.entity.dto.course.PutCourseDto;

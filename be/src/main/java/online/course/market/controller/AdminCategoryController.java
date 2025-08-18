@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("api/v1/admin/category")
 @Tag(name = "Category", description = "Category controller")
-public class CategoryController {
+public class AdminCategoryController {
     private final CategoryService categoryService;
     private final ModelMapper modelMapper;
     private final String resourceFolder;
@@ -40,7 +40,7 @@ public class CategoryController {
     private Path uploadDir;
     
     // Constructor injection with qualifier for the upload URL bean
-    public CategoryController(CategoryService categoryService, ModelMapper modelMapper, 
+    public AdminCategoryController(CategoryService categoryService, ModelMapper modelMapper,
                             @Qualifier("uploadUrl") String resourceFolder) {
         this.categoryService = categoryService;
         this.modelMapper = modelMapper;
