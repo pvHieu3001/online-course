@@ -61,6 +61,11 @@
   display: inline-block;
 }
 
+.courseCat:hover {
+  color: #2d71ca !important;
+  border-bottom: 1px solid #1793e6 !important;
+}
+
 .courseTitle {
   font-size: 18px;
   font-weight: 600;

@@ -117,14 +117,8 @@ function CategoryDetailPage() {
           {/* Nội dung chính bên trái */}
           <div className='flex-1 bg-white rounded-lg shadow-md p-6'>
             <div>
-              <div className='text-sm font-semibold text-indigo-600 mb-2'>Khóa học - {category.name}</div>
-              <h1 className='text-2xl font-bold text-gray-800 mb-4'>Mô tả chủ đề</h1>
-              <p className='text-gray-600 mb-6'>{category.description}</p>
-
-              <div className='mb-6'>
-                <div className='text-lg font-semibold text-gray-700 mb-2'>Nội dung:</div>
-                <p className='list-disc list-inside text-gray-600 space-y-1'>{category.content}</p>
-              </div>
+              <div className='text-xl font-semibold text-indigo-600 mb-2'>Khóa học - {category.name}</div>
+              <p className='text-gray-700 mb-6 text-base'>{category.description}</p>
             </div>
 
             <div>
@@ -132,24 +126,37 @@ function CategoryDetailPage() {
                 <div className='text-center text-gray-500'>Đang tải khóa học...</div>
               ) : currentCourses && currentCourses.length > 0 ? (
                 <>
-                  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6'>
-                    {currentCourses.map((course) => (
-                      <div
-                        key={course.id}
-                        onClick={() => handleCourseClick(course)}
-                        className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition'
-                      >
-                        <img
-                          src={getImageUrl(course.imageUrl)}
-                          alt={course.name}
-                          className='w-full h-40 object-cover rounded-md mb-4'
-                        />
-                        <div>
-                          <div className='text-sm text-indigo-500 font-medium'>{category.name}</div>
-                          <div className='text-lg font-semibold text-gray-800'>{course.name}</div>
+                  <div className='flex flex-col gap-6 mb-6'>
+                    {currentCourses.map((course) => {
+                      const stripHtml = (html) => {
+                        const tmp = document.createElement('div')
+                        tmp.innerHTML = html
+                        return tmp.textContent || tmp.innerText || ''
+                      }
+
+                      const shortDescription = stripHtml(course.description).slice(0, 200) + '...'
+                      return (
+                        <div
+                          key={course.id}
+                          onClick={() => handleCourseClick(course)}
+                          className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition flex items-center space-x-4'
+                        >
+                          <img
+                            src={getImageUrl(course.imageUrl)}
+                            alt={course.name}
+                            className='w-100 h-40 object-cover rounded-md flex-shrink-0'
+                          />
+                          <div>
+                            <div className='text-sm text-indigo-500 font-medium'>{category.name}</div>
+                            <div className='text-lg font-semibold text-gray-800'>{course.name}</div>
+                            <div
+                              dangerouslySetInnerHTML={{ __html: shortDescription }}
+                              className='text-gray-600 text-base mt-1'
+                            ></div>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
 
                   {totalPages > 1 && (

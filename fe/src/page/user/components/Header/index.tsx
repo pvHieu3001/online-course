@@ -31,10 +31,10 @@ const Header = () => {
 
   const menuItems = [
     { label: 'TRANG CHỦ', href: '/' },
-    { label: 'MÃ GIẢM GIÁ 100% UDEMY', href: '/khoa-hoc-theo-chu-de/udemy' },
-    { label: 'ĐIỀU KHOẢN SỬ DỤNG', href: '/term-of-use' },
-    { label: 'CHÍNH SÁCH BẢO MẬT', href: '/privacy-policy' },
-    { label: 'BẢN QUYỀN', href: '/copyright' }
+    { label: 'TẤT CẢ KHÓA HỌC', href: '/khoa-hoc-theo-chu-de/100-off-udemy-coupon' },
+    { label: 'CÔNG NGHỆ', href: '/term-of-use' },
+    { label: 'TIỆN ÍCH', href: '/privacy-policy' },
+    { label: 'TIN TỨC MỚI NHẤT', href: '/copyright' }
   ]
 
   const handleDetail = (course: IProduct) => {

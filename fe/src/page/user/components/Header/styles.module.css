@@ -78,7 +78,7 @@
 .menu a {
   color: #fff;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 14px;
   padding: 0 10px;
   height: 100%;
@@ -89,10 +89,13 @@
   white-space: nowrap;
 }
 
-.menu a.active,
+.menu a.active {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.2);;
+}
 .menu a:hover {
-  border-bottom: 3px solid #fff;
-  color: #181818;
+  color: #424242;
+  background-color: #fff;
 }
 
 .searchIcon {
@@ -156,11 +159,16 @@
 }
 
 .sliderItem span {
-  font-size: 12px;
-  color: #222;
+  font-size: 13px;
+  color: #666;
   text-align: center;
   margin-top: 2px;
   line-height: 1.2;
+  font-weight: 400;
+}
+
+.sliderItem span:hover {
+  color: #111111;
 }
 
 .menuToggle {
