@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v1/category")
+@RequestMapping("api/v1/user/category")
 @Tag(name = "Category", description = "Category controller")
 public class CategoryController {
     private final CategoryService categoryService;
