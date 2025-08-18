@@ -16,13 +16,13 @@ export default function ListCategory() {
   const categories = useSelector((state: RootState) => state.category)
 
   useEffect(() => {
-    dispatch(categoryActions.getCategories(searchValue) as unknown as AnyAction)
+    dispatch(categoryActions.getAdminCategories(searchValue) as unknown as AnyAction)
   }, [searchValue])
 
   const handlerDistableCategory = async (id: string) => {
     try {
       dispatch(categoryActions.deleteCategory(id) as unknown as AnyAction)
-      dispatch(categoryActions.getCategories('') as unknown as AnyAction)
+      dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error) {
       message.error('Vô hiệu hoá danh mục thất bại!')

@@ -19,7 +19,7 @@ export default function ListProduct() {
   const courses = useSelector((state: RootState) => state.course)
 
   useEffect(() => {
-    dispatch(courseActions.getCourses(active, searchValue, isHot) as unknown as AnyAction)
+    dispatch(courseActions.getAdminCourses(active, searchValue, isHot) as unknown as AnyAction)
   }, [searchValue, active, isHot, dispatch])
 
   useEffect(() => {

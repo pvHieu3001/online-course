@@ -1,19 +1,15 @@
 package online.course.market.security.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
-
+import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
-
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import online.course.market.entity.model.UserModel;
+import online.course.market.security.entity.SecurityUser;
 import online.course.market.security.service.JwtService;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -55,25 +51,30 @@ public class DefaultJwtService implements JwtService {
 	}
 
 	@Override
-	public String getToken(UserModel userModel) {
-		return getToken(new HashMap<>(),userModel, jwtExpiration);
+	public String getToken(SecurityUser securityUser) {
+		return getToken(new HashMap<>(), securityUser, jwtExpiration);
 	}
 	
 	@Override
 	public String getRefreshToken(
-			UserModel userModel
+			SecurityUser securityUser
 	) {
-	    return getToken(new HashMap<>(), userModel, refreshExpiration);
+	    return getToken(new HashMap<>(), securityUser, refreshExpiration);
 	}
 	
 	private String getToken(
 			Map<String, Object> extraClains, 
-			UserModel userModel,
+			SecurityUser securityUser,
 			long expiration) {		
+				List<String> roles = securityUser.getAuthorities()
+						.stream()
+						.map(GrantedAuthority::getAuthority)
+						.collect(Collectors.toList());
 		return Jwts
 				.builder()
 				.setClaims(extraClains)
-				.setSubject(userModel.getUsername())
+				.claim("authorities", roles)
+				.setSubject(securityUser.getUsername())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis()+expiration))
 				.signWith(getSignInKey(), SignatureAlgorithm.HS256)

@@ -29,7 +29,7 @@ async function register(data: IRegister) {
 function logout() {
   localStorage.removeItem(LOCAL_STORAGE_TOKEN)
   localStorage.removeItem(LOCAL_STORAGE_USER)
-  const url = `${DOMAIN_URL}/login`
+  const url = `${DOMAIN_URL}login`
   window.location.href = url
 }
 

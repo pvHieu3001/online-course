@@ -3,7 +3,6 @@ package online.course.market.security;
 import java.io.IOException;
 import java.util.Set;
 import java.util.regex.Pattern;
-
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -44,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private static final Set<Pattern> WHITE_LIST_URL = Set.of(
 			Pattern.compile("^/api/v1/auth.*$"),
 			Pattern.compile("^/api/v1/user/course.*$"),
-			Pattern.compile("^/api/v1/category.*$"));
+			Pattern.compile("^/api/v1/user/category.*$"));
 
 	private boolean isWhitelisted(String path) {
 		return WHITE_LIST_URL.stream().anyMatch(pattern -> pattern.matcher(path).matches());

@@ -69,6 +69,46 @@ public class AdminCourseController {
         return modelMapper.map(course, GetCourseDto.class);
     }
 
+    @Operation(description = "Get all endpoint for Course", summary = "This is a summary for Course get all endpoint")
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<GetCourseDto>>> getAll(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String isDisplayHot,
+            HttpServletRequest request) {
+        logService.save(env, request, 1, null, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE);
+        Boolean displayHot =
+                isDisplayHot == null || isDisplayHot.isBlank() ? null :
+                        "1".equals(isDisplayHot) ? Boolean.TRUE :
+                                "0".equals(isDisplayHot) ? Boolean.FALSE : null;
+        List<GetCourseDto> getCourseDtos = courseService.filterCourse(
+                !String.valueOf(status).isEmpty() ? status : null,
+                !String.valueOf(search).isEmpty() ? search : null,
+                        displayHot
+            )
+                .stream().map(course -> {
+                GetCourseDto courseDto = toDto(course);
+                Optional.ofNullable(course.getCategory())
+                        .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, GetCategoryDto.class)));
+                return courseDto;
+            })
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok(ApiResponse.success(getCourseDtos));
+    }
+
+    @Operation(description = "Get by id endpoint for Course", summary = "This is a summary for Course get by id endpoint")
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<GetCourseDto>> getById(@PathVariable Integer id, HttpServletRequest request) {
+        logService.save(env, request, 1, null, LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE);
+
+        Course course = courseService.getById(id);
+        if (course == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Course not found"));
+        }
+        return ResponseEntity.ok(ApiResponse.success(toDto(course)));
+    }
+
     @Operation(description = "Save endpoint for Course", summary = "This is a summary for Course save endpoint")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<GetCourseDto>> saveCourse(@Valid @ModelAttribute PostCourseDto dto, HttpServletRequest request) {

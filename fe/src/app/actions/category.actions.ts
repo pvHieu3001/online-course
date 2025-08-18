@@ -31,6 +31,22 @@ export const getCategories = (searchValue: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const getAdminCategories = (searchValue: string) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return categoryServices
+    .getAdminCategories(searchValue)
+    .then((res) => {
+      dispatch(getCategoriesSuccessFully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getCategoriesSuccessFailure(error.toString()))
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
 export const getCategoryById = (id: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
@@ -113,6 +129,7 @@ export const deleteCategory = (id: string) => (dispatch: Dispatch) => {
 
 export const categoryActions = {
   getCategories,
+  getAdminCategories,
   getCategoryById,
   getCategoryBySlug,
   createCategory,

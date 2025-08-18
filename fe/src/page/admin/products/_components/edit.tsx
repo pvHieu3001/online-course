@@ -32,7 +32,7 @@ function EditProduct() {
     if (flug) {
       dispatch(courseActions.getCourseById(flug) as unknown as AnyAction)
     }
-    dispatch(categoryActions.getCategories('') as unknown as AnyAction) // Lấy danh sách danh mục
+    dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction) // Lấy danh sách danh mục
   }, [flug])
 
   useEffect(() => {
@@ -75,7 +75,7 @@ function EditProduct() {
     try {
       await dispatch(courseActions.updateCourse(id as string, formdata) as unknown as AnyAction)
       await dispatch(
-        courseActions.getCourses(
+        courseActions.getAdminCourses(
           query.get('status') ?? '',
           query.get('search') ?? '',
           query.get('isHot') ?? ''

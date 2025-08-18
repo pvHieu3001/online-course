@@ -28,7 +28,7 @@ export default function AddCategory() {
 
   // Lấy danh sách category cha khi mount
   useEffect(() => {
-    dispatch(categoryActions.getCategories('') as unknown as AnyAction)
+    dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
   }, [dispatch])
 
   // Xác nhận khi rời nếu có thay đổi
@@ -73,7 +73,7 @@ export default function AddCategory() {
     try {
       setIsLoading(true)
       await dispatch(categoryActions.createCategory(formData) as unknown as AnyAction)
-      await dispatch(categoryActions.getCategories('') as unknown as AnyAction)
+      await dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
       popupSuccess('Thêm danh mục thành công')
       setIsDirty(false)
       navigate('..')

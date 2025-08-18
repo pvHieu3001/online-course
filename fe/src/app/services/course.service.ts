@@ -3,11 +3,14 @@ import http from '../http-common'
 function getCourses(status?: string, search?: string, isDisplayHot?: string) {
   return http.get('/api/v1/user/course?status=' + status + '&search=' + search + '&isDisplayHot=' + isDisplayHot)
 }
+function getAdminCourses(status?: string, search?: string, isDisplayHot?: string) {
+  return http.get('/api/v1/admin/course?status=' + status + '&search=' + search + '&isDisplayHot=' + isDisplayHot)
+}
 function getRecommendCourses() {
   return http.get('/api/v1/user/course/recommend')
 }
 function getCourseById(id: string) {
-  return http.get(`/api/v1/user/course/${id}`)
+  return http.get(`/api/v1/admin/course/${id}`)
 }
 function getCourseBySlug(slug: string) {
   return http.get(`/api/v1/user/course/slug/${slug}`)
@@ -39,6 +42,7 @@ function getCoursesByCategory(categoryId: number) {
 
 export const courseServices = {
   getCourses,
+  getAdminCourses,
   getCourseById,
   getCourseBySlug,
   updateCourse,

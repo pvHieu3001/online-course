@@ -35,6 +35,22 @@ export const getCourses = (status?: string, search?: string, isDisplayHot?: stri
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const getAdminCourses = (status?: string, search?: string, isDisplayHot?: string) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return courseServices
+    .getAdminCourses(status, search, isDisplayHot)
+    .then((res) => {
+      dispatch(getCoursesSuccessFully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getCoursesFailure(error))
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
 export const getRecommendCourses = () => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
@@ -153,6 +169,7 @@ export const resetCourse = () => (dispatch: Dispatch) => {
 
 export const courseActions = {
   getCourses,
+  getAdminCourses,
   getCourseById,
   getCourseBySlug,
   createCourse,

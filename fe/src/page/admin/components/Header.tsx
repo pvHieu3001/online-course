@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 
-import { Badge, Button, List, Avatar, Drawer, Space, Flex } from 'antd'
+import { Badge, Button, List, Avatar, Drawer, Space, Flex, Menu, Dropdown } from 'antd'
 import { StarOutlined, LikeOutlined, MessageOutlined, HomeOutlined } from '@ant-design/icons'
 import { setMiniSidenav, setNotification } from '../../../app/slices/web.reducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { RootState } from '@/app/store'
+import { userActions } from '@/app/actions'
+import { AnyAction } from '@reduxjs/toolkit'
 
 function Header() {
   const { notification } = useSelector((state: RootState) => state.web)
@@ -25,6 +27,26 @@ function Header() {
       {React.createElement(icon)}
       {text}
     </Space>
+  )
+
+  const handleLogout = () => {
+    dispatch(userActions.logout() as unknown as AnyAction)
+  }
+
+  const menu = (
+    <Menu>
+      <Menu.Item key='0'>
+        <Link to='/admin/profile'>Thông tin cá nhân</Link>
+      </Menu.Item>
+      <Menu.Item key='1'>
+        <Link to='/admin/settings'>Cài đặt</Link>
+      </Menu.Item>
+      <Menu.Item key='2'>
+        <Button type='link' onClick={handleLogout}>
+          Đăng xuất
+        </Button>
+      </Menu.Item>
+    </Menu>
   )
 
   useEffect(() => {
@@ -92,7 +114,15 @@ function Header() {
             </a>
           </Badge>
           <Flex align='center' gap={10} justify='center' className='rounded-[999px]'>
-            <Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=1' className=' bg-gray-200 w-[28px] h-[28px]' />
+            <Dropdown overlay={menu} trigger={['click']}>
+              <Button type='text' className='flex items-center gap-2'>
+                <Avatar
+                  src='https://api.dicebear.com/7.x/miniavs/svg?seed=1'
+                  className=' bg-gray-200 w-[28px] h-[28px]'
+                />
+                <span className='hidden md:inline'>Xin chào, User</span>
+              </Button>
+            </Dropdown>
           </Flex>
           {showSidenav && (
             <Button type='link' className='sidebar-toggler' onClick={() => dispatch(setMiniSidenav(false))}>

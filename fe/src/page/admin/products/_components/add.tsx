@@ -25,7 +25,7 @@ function AddProduct() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    dispatch(categoryActions.getCategories('') as unknown as AnyAction)
+    dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
   }, [dispatch])
 
   const onFinish = async () => {
@@ -55,7 +55,7 @@ function AddProduct() {
     try {
       await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)
       await dispatch(
-        courseActions.getCourses(
+        courseActions.getAdminCourses(
           query.get('status') ?? '',
           query.get('search') ?? '',
           query.get('isHot') ?? ''

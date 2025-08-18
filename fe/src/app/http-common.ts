@@ -22,6 +22,7 @@ const onErrorInterceptorResponse = (error) => {
       }
       if (error.response.status === 403) {
         console.log('error 403')
+        goToWorkspace()
       }
     }
   } else if (error.request) {
