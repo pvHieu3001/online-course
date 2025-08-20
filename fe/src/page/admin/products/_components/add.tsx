@@ -183,7 +183,7 @@ function AddProduct() {
           <Card size='small' style={{ marginBottom: 24 }}>
             <Form.Item name='content' className='m-0' label={'Nội dung khoá học'}>
               <TextEditor
-                content={content}
+                content={content ?? ''}
                 onHandleChange={(value) => {
                   setContent(value)
                 }}
@@ -192,13 +192,13 @@ function AddProduct() {
           </Card>
           <Card size='small' style={{ marginBottom: 24 }}>
             <Form.Item name='description' label='Nhập mô tả' required>
-              <TextEditor content={detail} onHandleChange={(val) => setDetail(val)} />
+              <TextEditor content={detail ?? ''} onHandleChange={(val) => setDetail(val)} />
             </Form.Item>
           </Card>
           <Card size='small' style={{ marginBottom: 24 }}>
             <Form.Item name='courseBenefits' className='m-0' label={'Lợi ích khoá học'}>
               <TextEditor
-                content={courseBenefits}
+                content={courseBenefits ?? ''}
                 onHandleChange={(value) => {
                   setCourseBenefits(value)
                 }}

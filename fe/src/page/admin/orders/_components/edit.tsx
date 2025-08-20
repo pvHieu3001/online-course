@@ -287,7 +287,7 @@ function EditProduct() {
             <Divider orientation='left'>Nội dung chi tiết</Divider>
             <Card size='small' style={{ marginBottom: 24 }}>
               <Form.Item name='content' label='Nội dung'>
-                <TextEditor data={courseStore.data?.content} />
+                <TextEditor content={courseStore.data?.content ?? ''} onHandleChange={() => {}} />
               </Form.Item>
               <Form.Item name='detail' label='Mô tả chi tiết'>
                 <ReactQuill modules={modules} formats={formats} theme='snow' className='h-[200px]' />

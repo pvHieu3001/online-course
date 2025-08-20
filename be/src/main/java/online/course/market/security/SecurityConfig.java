@@ -24,7 +24,7 @@ public class SecurityConfig {
 			"/v3/api-docs", "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
 			"/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html" };
 	private static final String[] ADMIN_URL = { 
-			"/api/v1/admin/course/**", "/api/v1/admin/category/**" };
+			"/api/v1/admin/course/**", "/api/v1/admin/category/**", "/api/v1/admin/upload/**"};
 
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final AuthenticationProvider authenticationProvider;

@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -22,7 +20,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Query(value = """
         UPDATE categories c
         SET number_course = (
-            SELECT COUNT(*) FROM courses co WHERE co.category_id = c.id
+            SELECT COUNT(*) FROM courses co WHERE co.category_id = c.id and c.status = 'active'
         )
         WHERE c.id IN (:ids)
         """, nativeQuery = true)
