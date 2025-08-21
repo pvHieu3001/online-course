@@ -1,7 +1,8 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo} from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import http from '../../../../app/http-common'
+import {getImageUrl} from '@/utils/getImageUrl'
 
 interface TextEditorProps {
   content: string
@@ -35,19 +36,21 @@ export default function TextEditor({ content, onHandleChange }: TextEditorProps)
           }
         })
 
-        const imageUrl = res.data.url // URL trả về từ server
+        const imageUrl = res.data.data.fileName // URL trả về từ server
 
         // 👉 Dùng ref để insert ảnh
         const editor = childRef.current?.getEditor()
-        const range = editor?.getSelection()
-        if (range && editor) {
-          editor.insertEmbed(range.index, 'image', imageUrl)
+	if(!editor) return
+
+        const range = editor.getSelection()
+        if (range) {
+          editor.insertEmbed(range.index, 'image', getImageUrl(imageUrl))
         }
       }
     }
   }
 
-  const modules = {
+  const modules = useMemo(()=>({
     toolbar: {
       container: [
         [{ header: '1' }, { header: '2' }, { font: [] }],
@@ -64,7 +67,7 @@ export default function TextEditor({ content, onHandleChange }: TextEditorProps)
     clipboard: {
       matchVisual: false
     }
-  }
+  }),[])
 
   const formats = [
     'header',
