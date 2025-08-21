@@ -20,7 +20,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Query(value = """
         UPDATE categories c
         SET number_course = (
-            SELECT COUNT(*) FROM courses co WHERE co.category_id = c.id and c.status = 'active'
+            SELECT COUNT(*) FROM courses co WHERE co.category_id = c.id and co.status = 'active'
         )
         WHERE c.id IN (:ids)
         """, nativeQuery = true)
