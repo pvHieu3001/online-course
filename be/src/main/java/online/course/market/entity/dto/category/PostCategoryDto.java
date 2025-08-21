@@ -16,7 +16,7 @@ public class PostCategoryDto {
     private String content;
     private String description;
     private String slug;
-    private boolean status;
+    private Boolean status;
     private MultipartFile imageFile;
     private String image;
 } 

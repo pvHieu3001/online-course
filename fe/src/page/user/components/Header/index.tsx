@@ -31,10 +31,11 @@ const Header = () => {
 
   const menuItems = [
     { label: 'TRANG CHỦ', href: '/' },
-    { label: 'TẤT CẢ KHÓA HỌC', href: '/khoa-hoc-theo-chu-de/100-off-udemy-coupon' },
+    { label: 'KHÓA HỌC', href: '/khoa-hoc-theo-chu-de/100-off-udemy-coupon' },
     { label: 'CÔNG NGHỆ', href: '/term-of-use' },
+    { label: 'GAME', href: '/privacy-policy' },
     { label: 'TIỆN ÍCH', href: '/privacy-policy' },
-    { label: 'TIN TỨC MỚI NHẤT', href: '/copyright' }
+    { label: 'SƯU TẦM', href: '/copyright' }
   ]
 
   const handleDetail = (course: IProduct) => {

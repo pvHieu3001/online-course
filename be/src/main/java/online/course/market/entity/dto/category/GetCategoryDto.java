@@ -14,7 +14,7 @@ public class GetCategoryDto {
     private String content;
     private String description;
     private String slug;
-    private boolean status;
+    private Boolean status;
     private String image;
     private Integer numberCourse;
 } 
