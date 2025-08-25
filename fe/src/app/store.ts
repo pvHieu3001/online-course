@@ -5,6 +5,7 @@ import userReducer from './slices/user.reducer'
 import courseReducer from './slices/course.reducer'
 import alertReducer from './slices/alert.reducer'
 import orderSlice from './slices/order.reducer'
+import blogSlice from './slices/blog.reducer'
 export const store = configureStore({
   reducer: {
     category: categoryReducer,
@@ -12,7 +13,8 @@ export const store = configureStore({
     web: webReducer,
     alert: alertReducer,
     course: courseReducer,
-    order: orderSlice
+    order: orderSlice,
+    blog: blogSlice
   }
 })
 

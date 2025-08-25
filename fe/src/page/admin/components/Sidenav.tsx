@@ -36,6 +36,15 @@ function Sidenav() {
       {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <TagsOutlined className='text-[18px] text-[#344767]' />
+            <span className='label font-bold text-[#344767]'>Bài viết</span>
+          </Flex>
+        ),
+        link: '/admin/blogs'
+      },
+      {
+        label: (
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
             <UsergroupAddOutlined className='text-[18px] text-[#344767]' />
             <span className='label font-bold text-[#344767]'>Người dùng</span>
           </Flex>

@@ -1,5 +1,3 @@
-import { number } from "joi"
-
 export interface IProduct {
   isDisplayHot: string // blank: all, 0: false, 1: true
   id: string
@@ -83,4 +81,13 @@ export interface IError {
   data: string
   code: number
   message: number
+}
+
+export interface IBlog {
+  id: number
+  title: string
+  content: string
+  slug: string
+  status: boolean
+  type: string
 }

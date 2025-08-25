@@ -23,6 +23,9 @@ import PageCopyright from '../page/user/PageCopyright'
 import ProductOrdersManagement from '@/page/admin/orders'
 import SignUp from '@/page/auth/signup'
 import Login from '@/page/auth/login'
+import BlogManagement from '@/page/admin/blogs'
+import AddBlog from '@/page/admin/blogs/_components/add'
+import EditBlog from '@/page/admin/blogs/_components/edit'
 
 export default function Router() {
   return (
@@ -63,6 +66,11 @@ export default function Router() {
               <Route path='categories' element={<CategoryManagement />}>
                 <Route path='add' element={<AddCategory />} />
                 <Route path=':id' element={<EditCategory />} />
+              </Route>
+
+              <Route path='blogs' element={<BlogManagement />}>
+                <Route path='add' element={<AddBlog />} />
+                <Route path=':id' element={<EditBlog />} />
               </Route>
             </Route>
           </Route>
