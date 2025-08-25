@@ -31,32 +31,15 @@ import java.util.stream.Collectors;
 public class AdminBlogController {
     private final BlogService blogService;
     private final ModelMapper modelMapper;
-    private final String resourceFolder;
 
     private Path uploadDir;
 
     // Constructor injection with qualifier for the upload URL bean
-    public AdminBlogController(BlogService blogService, ModelMapper modelMapper,
-                               @Qualifier("uploadUrl") String resourceFolder) {
+    public AdminBlogController(BlogService blogService, ModelMapper modelMapper) {
         this.blogService = blogService;
         this.modelMapper = modelMapper;
-        this.resourceFolder = resourceFolder;
     }
-    
-    @PostConstruct
-    public void init() {
-        try {
-            uploadDir = Paths.get(resourceFolder);
-            // Create directory if it doesn't exist
-            if (!Files.exists(uploadDir)) {
-                Files.createDirectories(uploadDir);
-            }
-            log.info("Upload directory initialized: {}", uploadDir);
-        } catch (IOException e) {
-            log.error("Failed to initialize upload directory: {}", resourceFolder, e);
-            throw new RuntimeException("Failed to initialize upload directory: " + resourceFolder, e);
-        }
-    }
+
 
     private GetBlogDto toDto(Blog blog) {
         return modelMapper.map(blog, GetBlogDto.class);
