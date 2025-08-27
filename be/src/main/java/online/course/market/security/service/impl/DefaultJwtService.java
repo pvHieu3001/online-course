@@ -74,7 +74,7 @@ public class DefaultJwtService implements JwtService {
 				.builder()
 				.setClaims(extraClains)
 				.claim("authorities", roles)
-				.setSubject(String.valueOf(securityUser))
+				.setSubject(securityUser.getUsername())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis()+expiration))
 				.signWith(getSignInKey(), SignatureAlgorithm.HS256)
