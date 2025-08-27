@@ -36,7 +36,7 @@ function PageHome() {
           {!isLoading && !error_message && quickViews?.length === 0 && <p>Không tìm thấy khóa học phù hợp.</p>}
           {!isLoading && !error_message && (
             <>
-              {quickViews.map((item) => (
+              {quickViews?.map((item) => (
                 <div key={item.category.id}>
                   <h2 className={styles.courseListTitle}>Loại khóa học: {item.category.name}</h2>
                   <div className={styles.courses}>
