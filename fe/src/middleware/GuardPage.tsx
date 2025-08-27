@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { popupError } from '@/page/shared/Toast'
 import { Navigate, Outlet } from 'react-router-dom'
-import { LOCAL_STORAGE_TOKEN } from '@/app/constants'
+import { LOCAL_STORAGE_TOKEN } from '@/common/constants'
 
 export default function GuardPage() {
   const token = localStorage.getItem(LOCAL_STORAGE_TOKEN)

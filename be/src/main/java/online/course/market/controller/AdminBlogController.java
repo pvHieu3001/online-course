@@ -65,11 +65,11 @@ public class AdminBlogController {
     @PostMapping
     public ResponseEntity<ApiResponse<GetBlogDto>> create(@ModelAttribute PostBlogDto dto) {
         try {
-            log.info("Creating Blog with name: {}", dto.getTitle());
+            log.info("Creating Blog with title: {}", dto.getTitle());
             
             // Validate required fields
             if (dto.getTitle() == null || dto.getTitle().trim().isEmpty()) {
-                log.error("Blog name is null or empty");
+                log.error("Blog title is null or empty");
                 return ResponseEntity.badRequest()
                     .body(ApiResponse.error(400, "Blog title is required"));
             }
@@ -91,13 +91,13 @@ public class AdminBlogController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<GetBlogDto>> update(@Valid @ModelAttribute PutBlogDto dto, @PathVariable Integer id) {
         try {
-            log.info("Updating Blog with ID: {}, name: {}", id, dto.getTitle());
+            log.info("Updating Blog with ID: {}, title: {}", id, dto.getTitle());
             
             // Validate required fields
             if (dto.getTitle() == null || dto.getTitle().trim().isEmpty()) {
-                log.error("Blog name is null or empty");
+                log.error("Blog title is null or empty");
                 return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(400, "Blog name is required"));
+                    .body(ApiResponse.error(400, "Blog title is required"));
             }
 
             dto.setSlug(SlugUtils.toSlug(dto.getTitle()));

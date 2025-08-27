@@ -1,9 +1,9 @@
 package online.course.market.service;
 
+import online.course.market.entity.dto.course.GetQuickViewCourseDto;
 import online.course.market.entity.model.Course;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +18,5 @@ public interface CourseService {
 	List<Course> getByCategoryId(Integer categoryId);
     Course getBySlug(String slug);
 	List<Course> filterCourse(String status, String search, Boolean isDisplayHot);
+  List<GetQuickViewCourseDto> getQuickViewCourse();
 }

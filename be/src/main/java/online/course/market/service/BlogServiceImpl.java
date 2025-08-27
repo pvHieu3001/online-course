@@ -48,6 +48,7 @@ public class BlogServiceImpl implements BlogService {
         Blog blogDB = getById(id);
         blogDB.setContent(blog.getContent());
         blogDB.setTitle(blog.getTitle());
+        blogDB.setDescription(blog.getDescription());
         blogDB.setType(blog.getType());
         blogDB.setSlug(blog.getSlug());
         blogDB.setStatus(blog.getStatus());

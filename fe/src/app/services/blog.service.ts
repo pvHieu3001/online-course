@@ -14,13 +14,21 @@ function getBlogBySlug(slug: string) {
   return http.get(`/api/v1/user/blog/slug/${slug}`)
 }
 function updateBlog(id?: string, data?: FormData) {
-  return http.put(`/api/v1/admin/blog/${id}`, data)
+  return http.put(`/api/v1/admin/blog/${id}`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }
 function createBlog(data: FormData) {
-  return http.post(`/api/v1/admin/Blog`, data)
+  return http.post(`/api/v1/admin/blog`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }
 function deleteBlog(id: string) {
-  return http.delete(`/api/v1/admin/Blog/${id}`)
+  return http.delete(`/api/v1/admin/blog/${id}`)
 }
 function getPageBlog(page: string, size: string, sort: string) {
   return http.get(`/api/v1/user/blog/pageable/?page=${page}&size=${size}&sort=${sort}`)

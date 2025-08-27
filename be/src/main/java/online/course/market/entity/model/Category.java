@@ -20,7 +20,8 @@ public class Category extends BaseEntity {
     private String content;
     private String description;
     private String slug;
-    private boolean status;
+    private Boolean status;
+    private Boolean isQuickView;
     private String image;
     private Integer parentId;
     private Integer numberCourse;

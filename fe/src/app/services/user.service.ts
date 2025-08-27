@@ -1,6 +1,6 @@
 import http from '../http-common'
 import httpauth from '../http-auth'
-import { LOCAL_STORAGE_USER, LOCAL_STORAGE_TOKEN, DOMAIN_URL } from '../constants'
+import { LOCAL_STORAGE_USER, LOCAL_STORAGE_TOKEN, DOMAIN_URL } from '../../common/constants'
 import axs from '../http-common'
 import { ILogin, IRegister, IUser } from '@/common/types.interface'
 

@@ -26,6 +26,7 @@ import Login from '@/page/auth/login'
 import BlogManagement from '@/page/admin/blogs'
 import AddBlog from '@/page/admin/blogs/_components/add'
 import EditBlog from '@/page/admin/blogs/_components/edit'
+import PageSearch from '@/page/user/PageSearch'
 
 export default function Router() {
   return (
@@ -36,6 +37,7 @@ export default function Router() {
           <Route path='signup' element={<SignUp />} />
           <Route path='' element={<Base />}>
             <Route index element={<PageHome />} />
+            <Route path='tim-kiem' element={<PageSearch />} />
             <Route path='cart' element={<></>} />
             <Route path='chi-tiet-khoa-hoc/:slug' element={<ProductDetailPage />} />
             <Route path='khoa-hoc-theo-chu-de/:slug' element={<CategoryDetailPage />} />

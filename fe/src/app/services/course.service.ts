@@ -9,6 +9,9 @@ function getAdminCourses(status?: string, search?: string, isDisplayHot?: string
 function getRecommendCourses() {
   return http.get('/api/v1/user/course/recommend')
 }
+function getQuickViewCourses() {
+  return http.get('/api/v1/user/course/quick_view')
+}
 function getCourseById(id: string) {
   return http.get(`/api/v1/admin/course/${id}`)
 }
@@ -50,5 +53,6 @@ export const courseServices = {
   deleteCourse,
   getPageCourse,
   getCoursesByCategory,
-  getRecommendCourses
+  getRecommendCourses,
+  getQuickViewCourses
 }

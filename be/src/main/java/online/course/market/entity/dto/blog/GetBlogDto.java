@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class GetBlogDto {
     private Integer id;
     private String title;
+    private String description;
     private String content;
     private String slug;
     private Boolean status;

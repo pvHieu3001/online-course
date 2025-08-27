@@ -20,6 +20,7 @@ public class Blog extends BaseEntity {
     private Integer id;
     @Column(nullable = false, length = 255)
     private String title;
+    private String description;
     @Column(columnDefinition = "TEXT")
     private String content;
     private String slug;

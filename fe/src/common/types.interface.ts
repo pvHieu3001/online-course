@@ -32,7 +32,13 @@ export interface ICategory {
   content: string
   image: string
   status: boolean
+  isQuickView: boolean
   numberCourse: number
+}
+
+export interface IQuickViewCourse {
+  listCourse: IProduct[]
+  category: ICategory
 }
 
 export interface ILogin {
@@ -86,6 +92,7 @@ export interface IError {
 export interface IBlog {
   id: number
   title: string
+  description: string
   content: string
   slug: string
   status: boolean

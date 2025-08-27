@@ -10,6 +10,8 @@ import { IBlog } from '@/common/types.interface'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal, Spin } from 'antd'
 import { RootState } from '@/app/store'
+import TextEditor from '../../components/TextEditor/QuillEditor'
+import { typeOptions } from '@/common/constants'
 
 export default function EditBlog() {
   const params = useParams()
@@ -30,6 +32,7 @@ export default function EditBlog() {
 
       form.setFieldsValue({
         status: data.status,
+        description: data.description,
         name: data.title,
         type: data.type,
         content: data.content
@@ -63,12 +66,11 @@ export default function EditBlog() {
   }
 
   const handleSubmit = async () => {
-    const title = form.getFieldValue('title')
-    const active = form.getFieldValue('status')
     const formData = new FormData()
 
-    formData.append('title', title)
-    formData.append('status', active.toString())
+    formData.append('title', form.getFieldValue('title'))
+    formData.append('description', form.getFieldValue('description'))
+    formData.append('status', form.getFieldValue('status').toString())
     formData.append('content', form.getFieldValue('content'))
     formData.append('type', form.getFieldValue('type'))
 
@@ -92,19 +94,20 @@ export default function EditBlog() {
   }
   return (
     <Drawer
-      width='70%'
-      title={<span className='font-bold text-xl'>Chỉnh sửa bài viết</span>}
+      width='80%'
+      title={<div className='text-center font-bold text-2xl'>Chỉnh sửa bài viết</div>}
       onClose={handleCancel}
       open={true}
       bodyStyle={{ padding: 24, maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}
       footer={
-        <div style={{ textAlign: 'right' }}>
-          <Button onClick={handleCancel} style={{ marginRight: 8 }}>
-            Hủy
-          </Button>
-          <Button type='primary' htmlType='submit' form='Blog-form' loading={blogStore.isLoading}>
-            Cập nhật
-          </Button>
+        <div className='flex justify-between items-center px-4 py-2 border-t'>
+          <span className='text-sm text-gray-500'>* Kiểm tra kỹ nội dung trước khi cập nhật</span>
+          <div className='space-x-2'>
+            <Button onClick={handleCancel}>Hủy</Button>
+            <Button type='primary' htmlType='submit' form='Blog-form' loading={blogStore.isLoading}>
+              Cập nhật
+            </Button>
+          </div>
         </div>
       }
     >
@@ -117,73 +120,70 @@ export default function EditBlog() {
             layout='vertical'
             onFinish={handleSubmit}
             onValuesChange={onValuesChange}
-            initialValues={{}}
+            initialValues={blogStore.data}
           >
             <Row gutter={[24, 24]}>
-              {/* Cột trái: Ảnh và Cài đặt */}
+              {/* Cài đặt hiển thị */}
               <Col xs={24} md={8}>
-                <div
-                  className='border rounded-md bg-[#fafbfc] overflow-hidden'
-                  style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.05)' }}
-                >
-                  <div className='p-2'>
-                    <h2 className='font-semibold'>Cài đặt</h2>
-                  </div>
-                  <hr />
-                  <div className='flex justify-between items-center p-2'>
-                    <span>Kích hoạt hiển thị</span>
-                    <Form.Item className='m-0' label='' name='status' valuePropName='checked'>
-                      <Switch />
-                    </Form.Item>
-                  </div>
-                  <div className='text-xs text-gray-400 px-2 pb-2'>Bật để bài viết này hiển thị trên website.</div>
+                <div className='bg-white rounded-md shadow-sm p-4 space-y-4'>
+                  <h2 className='text-lg font-semibold text-gray-700'>Cài đặt hiển thị</h2>
+                  <Form.Item label='Kích hoạt' name='status' valuePropName='checked'>
+                    <Switch />
+                  </Form.Item>
+                  <p className='text-xs text-gray-500'>Bật để bài viết này hiển thị trên website.</p>
                 </div>
               </Col>
 
-              {/* Cột phải: Tổng quan */}
+              {/* Thông tin bài viết */}
               <Col xs={24} md={16}>
-                <div
-                  className='border p-6 rounded-md bg-[#fafbfc]'
-                  style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.03)' }}
-                >
-                  <h2 className='mb-5 font-bold text-[16px]'>Tổng quan</h2>
-                  <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={12}>
-                      <Form.Item
-                        name='name'
-                        label='Tiêu đề bài viết'
-                        rules={[
-                          { required: true, message: 'Vui lòng nhập tiêu đề bài viết!' },
-                          { max: 120, message: 'Tiêu đề không vượt quá 120 ký tự' },
-                          { whitespace: true, message: 'Tiêu đề bài viết không được để trống!' }
-                        ]}
-                      >
-                        <Input size='large' placeholder='Nhập tiêu đề bài viết...' />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={12}>
-                      <Form.Item name='type' label='Loại bài viết' className='w-full max-w-[250px]'>
-                        <Select
-                          showSearch
-                          style={{ width: '100%', height: 40 }}
-                          placeholder='Chọn bài viết cha (nếu có)'
-                          optionFilterProp='label'
-                          filterOption={(input, option) =>
-                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                          }
-                          options={[{ value: '', label: 'Không có' }, [{ value: 'news', label: 'Không có' }]]}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                      <Form.Item name='content' label='Nội dung chi tiết'>
-                        <Input.TextArea rows={6} placeholder='Nhập nội dung chi tiết...' size='large' />
-                      </Form.Item>
-                    </Col>
-                  </Row>
+                <div className='bg-white rounded-md shadow-sm p-6 space-y-4'>
+                  <h2 className='text-lg font-semibold text-gray-700'>Thông tin bài viết</h2>
+                  <Form.Item
+                    name='title'
+                    label='Tiêu đề bài viết'
+                    rules={[
+                      { required: true, message: 'Vui lòng nhập tiêu đề bài viết!' },
+                      { max: 120, message: 'Tiêu đề không vượt quá 120 ký tự' },
+                      { whitespace: true, message: 'Tiêu đề bài viết không được để trống!' }
+                    ]}
+                  >
+                    <Input size='large' placeholder='Nhập tiêu đề bài viết...' />
+                  </Form.Item>
+                  <Form.Item name='description' label='Mô tả bài viết'>
+                    <Input size='large' placeholder='Nhập mô tả bài viết...' />
+                  </Form.Item>
+
+                  <Form.Item name='type' label='Loại bài viết'>
+                    <Select
+                      showSearch
+                      placeholder='Chọn loại bài viết'
+                      optionFilterProp='label'
+                      filterOption={(input, option) =>
+                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                      }
+                      options={typeOptions}
+                    />
+                  </Form.Item>
+
+                  <Form.Item name='content' label='Nội dung chi tiết'>
+                    <TextEditor
+                      content={form.getFieldValue('content') ?? ''}
+                      onHandleChange={(value) => form.setFieldValue('content', value)}
+                      height={400}
+                    />
+                  </Form.Item>
                 </div>
               </Col>
             </Row>
+
+            {/* Xem trước nội dung */}
+            <div className='mt-6 bg-gray-50 rounded-md p-4 border'>
+              <h3 className='text-lg font-semibold mb-2'>Xem trước bài viết</h3>
+              <div className='prose max-w-none'>
+                <h1>{form.getFieldValue('name')}</h1>
+                <div dangerouslySetInnerHTML={{ __html: form.getFieldValue('content') || '' }} />
+              </div>
+            </div>
           </Form>
         )}
       </Spin>

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.category.GetCategoryDto;
 import online.course.market.entity.dto.course.GetCourseDto;
+import online.course.market.entity.dto.course.GetQuickViewCourseDto;
 import online.course.market.entity.model.Course;
 import online.course.market.service.LogService;
 import org.modelmapper.ModelMapper;
@@ -100,6 +101,13 @@ public class CourseController {
             .collect(Collectors.toList());
 
         return ResponseEntity.ok(ApiResponse.success(getCourseDtos));
+    }
+
+    @Operation(description = "Get by name endpoint for Course", summary = "This is a summary for Course get by name endpoint")
+    @GetMapping("/quick_view")
+    public ResponseEntity<ApiResponse<List<GetQuickViewCourseDto>>> GetQuickViewCourse() {
+        List<GetQuickViewCourseDto> quickViewCourse = courseService.getQuickViewCourse();
+        return ResponseEntity.ok(ApiResponse.success(quickViewCourse));
     }
 
     @Operation(description = "Get by name endpoint for Course", summary = "This is a summary for Course get by name endpoint")

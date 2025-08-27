@@ -47,7 +47,8 @@ public class CategoryServiceImpl implements CategoryService {
         categoryDb.setName(category.getName());
         categoryDb.setSlug(category.getSlug());
         categoryDb.setParentId(category.getParentId());
-        categoryDb.setStatus(category.isStatus());
+        categoryDb.setStatus(category.getStatus());
+        categoryDb.setIsQuickView(category.getIsQuickView());
         categoryDb.setImage(category.getImage());
         categoryDb.setContent(category.getContent());
         categoryDb.setDescription(category.getDescription());

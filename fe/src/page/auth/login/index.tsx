@@ -65,7 +65,7 @@ const Login = () => {
     try {
       await dispatch(userActions.login(data) as unknown as AnyAction)
       popupSuccess('Đăng nhập thành công')
-      navigate('/')
+      navigate('/admin')
     } catch (error) {
       popupError('Đăng nhập thất bại')
     }

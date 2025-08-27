@@ -5,11 +5,12 @@ import http from '../../../../app/http-common'
 import { getImageUrl } from '@/utils/getImageUrl'
 
 interface TextEditorProps {
+  height?: number
   content: string
   onHandleChange: (value: string) => void
 }
 
-export default function TextEditor({ content, onHandleChange }: TextEditorProps) {
+export default function TextEditor({ content, onHandleChange, height }: TextEditorProps) {
   const [value, setValue] = useState(content)
   const childRef = useRef<ReactQuill>(null)
 
@@ -90,7 +91,7 @@ export default function TextEditor({ content, onHandleChange }: TextEditorProps)
   ]
 
   return (
-    <div className='react-quill-wrapper'>
+    <div className='react-quill-wrapper' style={height ? { height:height+50 } : {}}>
       <ReactQuill
         ref={childRef}
         value={value}
@@ -98,6 +99,7 @@ export default function TextEditor({ content, onHandleChange }: TextEditorProps)
         formats={formats}
         theme='snow'
         className='custom-quill'
+        style={height ? { height } : {}}
         onChange={(val) => {
           setValue(val)
           onHandleChange(val)

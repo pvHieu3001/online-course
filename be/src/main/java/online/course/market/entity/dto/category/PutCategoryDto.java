@@ -17,6 +17,7 @@ public class PutCategoryDto {
     private String description;
     private String slug;
     private Boolean status;
+    private Boolean isQuickView;
     private MultipartFile imageFile;
     private String image;
 } 

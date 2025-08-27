@@ -1,15 +1,16 @@
 package online.course.market.service;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import online.course.market.entity.dto.category.GetCategoryDto;
+import online.course.market.entity.dto.course.GetCourseDto;
+import online.course.market.entity.dto.course.GetQuickViewCourseDto;
 import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
 import online.course.market.repository.CategoryRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,11 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
+
+    private GetCourseDto toDto(Course course) {
+        return modelMapper.map(course, GetCourseDto.class);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -118,6 +124,20 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> filterCourse(String status, String search, Boolean isDisplayHot) {
         return courseRepository.filterCourse(status, search, isDisplayHot);
+    }
+
+    @Override
+    public List<GetQuickViewCourseDto> getQuickViewCourse() {
+        List<GetQuickViewCourseDto> quickViewCourseDtoList = new ArrayList<>();
+        List<Category> categoryList =  categoryRepository.findByIsQuickViewTrueAndStatusTrue();
+        categoryList.forEach((item)->{
+            GetQuickViewCourseDto quickViewCourseDto = new GetQuickViewCourseDto();
+            quickViewCourseDto.setCategory(modelMapper.map(item, GetCategoryDto.class));
+            List<Course> courseList =  courseRepository.findByCategoryIdOrderByIdDesc(item.getId());
+            quickViewCourseDto.setListCourse(courseList.stream().map(this::toDto).toList());
+            quickViewCourseDtoList.add(quickViewCourseDto);
+        });
+        return quickViewCourseDtoList;
     }
 
     @Override

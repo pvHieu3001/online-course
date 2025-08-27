@@ -20,18 +20,19 @@ export default function EditCategory() {
   useEffect(() => {
     dispatch(categoryActions.getCategoryById(params.id ?? '0') as unknown as AnyAction)
     dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
-  }, [])
+  }, [dispatch, params.id])
 
   const navigate = useNavigate()
   const [form] = Form.useForm()
   const [isDirty, setIsDirty] = useState(false)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const dataCategories = Array.isArray(categoryStore.dataList)
     ? (categoryStore.dataList as ICategory[])
-        .filter((item) => item.id !== parseInt(params.id ?? '0')) // Loại bỏ chính nó
+        .filter((item) => item.id !== parseInt(params.id ?? '0'))
         .map((item) => ({
           label: item.name,
-          value: item.id.toString() // Convert to string to match form value
+          value: item.id.toString()
         }))
     : []
 
@@ -40,7 +41,7 @@ export default function EditCategory() {
 
   useEffect(() => {
     if (categoryStore.data) {
-      const data = categoryStore.data as ICategory & { image?: string; status?: number }
+      const data = categoryStore.data as ICategory
       if (data.image) setDisplayPic(getImageUrl(data.image))
 
       form.setFieldsValue({
@@ -48,10 +49,11 @@ export default function EditCategory() {
         status: data.status,
         name: data.name,
         description: data.description,
-        content: data.content
+        content: data.content,
+        isQuickView: data.isQuickView
       })
     }
-  }, [categoryStore, dataCategories])
+  }, [categoryStore, dataCategories, form])
 
   // Xác nhận khi rời nếu có thay đổi
   useEffect(() => {
@@ -86,6 +88,7 @@ export default function EditCategory() {
 
     formData.append('name', name)
     formData.append('status', active.toString())
+    formData.append('isQuickView', form.getFieldValue('isQuickView'))
     formData.append('content', form.getFieldValue('content'))
     formData.append('description', form.getFieldValue('description'))
     if (parent_id) {
@@ -224,6 +227,13 @@ export default function EditCategory() {
                     </Form.Item>
                   </div>
                   <div className='text-xs text-gray-400 px-2 pb-2'>Bật để danh mục này hiển thị trên website.</div>
+
+                  <div className='flex justify-between items-center p-2'>
+                    <span>Hiện thị trên trang chủ</span>
+                    <Form.Item className='m-0' label='' name='isQuickView' valuePropName='checked'>
+                      <Switch />
+                    </Form.Item>
+                  </div>
                 </div>
               </Col>
 

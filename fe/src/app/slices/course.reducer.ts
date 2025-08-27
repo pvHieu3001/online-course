@@ -1,4 +1,4 @@
-import { IProduct } from '@/common/types.interface'
+import { IProduct, IQuickViewCourse } from '@/common/types.interface'
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -8,7 +8,8 @@ const initialState = {
   error_message: '',
   data: <IProduct>(<unknown>null),
   dataList: <IProduct[]>(<unknown>null),
-  recommends: <IProduct[]>(<unknown>null)
+  recommends: <IProduct[]>(<unknown>null),
+  quickViews: <IQuickViewCourse[]>(<unknown>null)
 }
 
 const courseSlice = createSlice({
@@ -37,6 +38,12 @@ const courseSlice = createSlice({
     },
     getRecommendCoursesSuccessFully: (state, { payload }) => {
       state.recommends = payload.data
+      state.code = payload.code
+      state.message = payload.message
+      state.isLoading = false
+    },
+    getQuickViewCoursesSuccessFully: (state, { payload }) => {
+      state.quickViews = payload.data
       state.code = payload.code
       state.message = payload.message
       state.isLoading = false
@@ -113,6 +120,7 @@ export const {
   getCoursesByCategorySuccessFully,
   getCoursesByCategoryFailure,
   getRecommendCoursesSuccessFully,
+  getQuickViewCoursesSuccessFully,
   reset
 } = courseSlice.actions
 

@@ -9,6 +9,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { IBlog } from '@/common/types.interface'
 import { RootState } from '@/app/store'
+import { typeOptions } from '@/common/constants'
 
 export default function ListBlog() {
   const dispatch = useDispatch()
@@ -57,8 +58,11 @@ export default function ListBlog() {
       dataIndex: 'type',
       key: 'type',
       align: 'center',
-      width: 100,
-      render: (text) => <>{text ? text : 'không có'}</>
+      width: 120,
+      render: (text) => {
+        const matched = typeOptions.find((opt) => opt.value === text)
+        return <>{matched ? matched.label : 'Không có'}</>
+      }
     },
     {
       title: 'Trạng thái',

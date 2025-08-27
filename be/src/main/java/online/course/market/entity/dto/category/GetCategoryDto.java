@@ -15,6 +15,7 @@ public class GetCategoryDto {
     private String description;
     private String slug;
     private Boolean status;
+    private Boolean isQuickView;
     private String image;
     private Integer numberCourse;
 } 

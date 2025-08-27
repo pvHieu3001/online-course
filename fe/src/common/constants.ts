@@ -13,6 +13,13 @@ const TOKEN = {
   },
 };
 
+const typeOptions = [
+  { value: 'technology', label: 'Công Nghệ' },
+  { value: 'game', label: 'Game' },
+  { value: 'tool', label: 'Tiện Ích' },
+  { value: 'archive', label: 'Sưu Tầm' }
+]
+
 export {
   ADMIN_BASE_IMAGE_URL,
   EXTERNAL_BASE_API,
@@ -20,4 +27,5 @@ export {
   LOCAL_STORAGE_TOKEN,
   LOCAL_STORAGE_USER,
   TOKEN,
+  typeOptions
 };
