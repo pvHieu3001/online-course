@@ -218,7 +218,7 @@ jobs:
             if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker ps -a | grep -q ${DOCKER_CONTAINER_NAME}"; then
               echo "🛑 Stopping and removing current container..."
               ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker stop ${DOCKER_CONTAINER_NAME} || true"
-              ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker images | grep '<none>' | awk '{print $3}' | xargs -r docker rmi"
+              # ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker images | grep '<none>' | awk '{print $3}' | xargs -r docker rmi"
             fi
 
             # Remove old Docker image
