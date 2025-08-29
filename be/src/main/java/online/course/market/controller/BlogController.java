@@ -55,8 +55,15 @@ public class BlogController {
     public ResponseEntity<ApiResponse<GetBlogDto>> getBySlug(@PathVariable String slug) {
         Blog Blog = blogService.getBySlug(slug);
         if (Blog == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Danh mục không tồn tại"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Bài viết không tồn tại"));
         }
         return ResponseEntity.ok(ApiResponse.success(toDto(Blog)));
+    }
+
+    @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by type")
+    @GetMapping("/type/{type}")
+    public ResponseEntity<ApiResponse<List<GetBlogDto>>> getByType(@PathVariable String type) {
+        List<GetBlogDto> Blogs = blogService.getByType(type).stream().map(this::toDto).collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.success(Blogs));
     }
 } 

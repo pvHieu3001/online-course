@@ -4,7 +4,10 @@ import online.course.market.entity.model.Blog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, Integer> {
     Blog findBySlug(String slug);
+    List<Blog> findByType(String type);
 }

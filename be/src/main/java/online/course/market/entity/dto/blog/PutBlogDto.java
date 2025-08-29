@@ -14,6 +14,8 @@ public class PutBlogDto {
     private String title;
     private String description;
     private String content;
+    private String image;
+    private MultipartFile imageFile;
     private String slug;
     private Boolean status;
     private String type;

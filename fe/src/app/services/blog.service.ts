@@ -13,6 +13,9 @@ function getBlogById(id: string) {
 function getBlogBySlug(slug: string) {
   return http.get(`/api/v1/user/blog/slug/${slug}`)
 }
+function getBlogByType(type: string) {
+  return http.get(`/api/v1/user/blog/type/${type}`)
+}
 function updateBlog(id?: string, data?: FormData) {
   return http.put(`/api/v1/admin/blog/${id}`, data, {
     headers: {
@@ -42,5 +45,6 @@ export const blogServices = {
   updateBlog,
   createBlog,
   deleteBlog,
-  getPageBlog
+  getPageBlog,
+  getBlogByType
 }

@@ -6,8 +6,10 @@ import styles from './styles.module.css'
 import Header from './components/Header'
 import { Helmet } from 'react-helmet-async'
 import Footer from './components/Footer'
+import { useState } from 'react'
 
 function Base() {
+  const [isShowRecommendCourses, setIsShowRecommendCourses] = useState(true)
   return (
     <>
       <div className={styles.modules}>
@@ -20,8 +22,8 @@ function Base() {
         <Toaster />
         <ScrollToTop />
         <main className={styles.container}>
-          <Header />
-          <Outlet />
+          <Header isShowRecommendCourses= {isShowRecommendCourses}/>
+          <Outlet context={{setIsShowRecommendCourses}}/>
         </main>
       </div>
       <Footer />

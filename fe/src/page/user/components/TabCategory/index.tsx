@@ -35,8 +35,9 @@ function TabCategory() {
   }
 
   return (
-    <aside className='w-full lg:w-[20%] bg-white p-6 rounded-lg shadow-md' role='complementary'>
-      <div className='mb-8'>
+    <aside className='w-full lg:w-[20%] bg-white p-6 rounded-lg shadow-md space-y-8' role='complementary'>
+      {/* Tìm kiếm */}
+      <div>
         <h2 className='text-lg font-semibold text-gray-800 mb-3'>Tìm kiếm khóa học</h2>
         <form
           onSubmit={handleSearch}
@@ -59,7 +60,7 @@ function TabCategory() {
         </form>
       </div>
 
-      {/* Categories Box */}
+      {/* Loại khóa học */}
       <div>
         <h2 className='text-lg font-semibold text-gray-800 mb-3'>Loại khóa học</h2>
         <ul className='space-y-2' role='list'>
@@ -78,7 +79,9 @@ function TabCategory() {
               className='flex items-center justify-between px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500'
             >
               <span className='text-gray-700 font-medium text-base'>{category.name}</span>
-              <span className='text-sm text-gray-500 bg-white px-2 py-0.5 rounded-full border'>{category.numberCourse}</span>
+              <span className='text-sm text-gray-500 bg-white px-2 py-0.5 rounded-full border'>
+                {category.numberCourse}
+              </span>
             </li>
           ))}
         </ul>

@@ -36,6 +36,14 @@ const blogSlice = createSlice({
       state.message = payload
       state.isLoading = false
     },
+    getByTypeSuccessFully: (state, { payload }) => {
+      state.dataList = payload.data
+      state.isLoading = false
+    },
+    getByTypeSuccessFailure: (state, { payload }) => {
+      state.message = payload
+      state.isLoading = false
+    },
     createSuccessfully: (state, { payload }) => {
       state.data = payload.data
       state.message = 'Tạo Bài Viết Thành Công'
@@ -72,6 +80,8 @@ export const {
   getBlogSuccessFailure,
   getByIdSuccessFailure,
   getByIdSuccessFully,
+  getByTypeSuccessFailure,
+  getByTypeSuccessFully,
   createFailure,
   createSuccessfully,
   updateFailure,

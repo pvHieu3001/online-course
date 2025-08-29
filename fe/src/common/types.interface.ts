@@ -94,6 +94,7 @@ export interface IBlog {
   title: string
   description: string
   content: string
+  image: string
   slug: string
   status: boolean
   type: string

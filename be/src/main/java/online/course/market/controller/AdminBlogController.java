@@ -10,6 +10,7 @@ import online.course.market.entity.dto.blog.GetBlogDto;
 import online.course.market.entity.dto.blog.PostBlogDto;
 import online.course.market.entity.dto.blog.PutBlogDto;
 import online.course.market.entity.model.Blog;
+import online.course.market.entity.model.Category;
 import online.course.market.service.BlogService;
 import online.course.market.utils.SlugUtils;
 import org.modelmapper.ModelMapper;
@@ -21,7 +22,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,15 +34,30 @@ import java.util.stream.Collectors;
 public class AdminBlogController {
     private final BlogService blogService;
     private final ModelMapper modelMapper;
-
+    private final String resourceFolder;
     private Path uploadDir;
 
     // Constructor injection with qualifier for the upload URL bean
-    public AdminBlogController(BlogService blogService, ModelMapper modelMapper) {
+    public AdminBlogController(BlogService blogService, ModelMapper modelMapper, @Qualifier("uploadUrl") String resourceFolder) {
         this.blogService = blogService;
         this.modelMapper = modelMapper;
+        this.resourceFolder = resourceFolder;
     }
 
+    @PostConstruct
+    public void init() {
+        try {
+            uploadDir = Paths.get(resourceFolder);
+            // Create directory if it doesn't exist
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
+            log.info("Upload directory initialized: {}", uploadDir);
+        } catch (IOException e) {
+            log.error("Failed to initialize upload directory: {}", resourceFolder, e);
+            throw new RuntimeException("Failed to initialize upload directory: " + resourceFolder, e);
+        }
+    }
 
     private GetBlogDto toDto(Blog blog) {
         return modelMapper.map(blog, GetBlogDto.class);
@@ -74,6 +92,17 @@ public class AdminBlogController {
                     .body(ApiResponse.error(400, "Blog title is required"));
             }
 
+            String imageFilename = "";
+            if (dto.getImageFile() != null && !dto.getImageFile().isEmpty()) {
+                imageFilename = UUID.randomUUID() + "_" + dto.getImageFile().getOriginalFilename();
+                Path imagePath = uploadDir.resolve(imageFilename);
+                Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+                log.info("Image saved: {}", imageFilename);
+                dto.setImage(imageFilename);
+            } else {
+                dto.setImage(""); // No image uploaded
+            }
+
 
             dto.setSlug(SlugUtils.toSlug(dto.getTitle()));
             Blog Blog = modelMapper.map(dto, Blog.class);
@@ -81,6 +110,9 @@ public class AdminBlogController {
             
             log.info("Blog created successfully with ID: {}", saved.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(saved)));
+        } catch (IOException e) {
+            log.error("Failed to save image file", e);
+            throw new RuntimeException("Failed to save image file", e);
         } catch (Exception e) {
             log.error("Failed to create Blog", e);
             throw new RuntimeException("Failed to create Blog: " + e.getMessage(), e);
@@ -100,13 +132,31 @@ public class AdminBlogController {
                     .body(ApiResponse.error(400, "Blog title is required"));
             }
 
+            Blog existingBlog = blogService.getById(id);
+
+            String imageFilename = "";
+            if (dto.getImageFile() != null && !dto.getImageFile().isEmpty()) {
+                // New image uploaded
+                imageFilename = UUID.randomUUID() + "_" + dto.getImageFile().getOriginalFilename();
+                Path imagePath = uploadDir.resolve(imageFilename);
+                Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+                log.info("New image saved: {}", imageFilename);
+                dto.setImage(imageFilename);
+            } else {
+                // Keep existing image
+                dto.setImage(existingBlog.getImage());
+            }
+
             dto.setSlug(SlugUtils.toSlug(dto.getTitle()));
             Blog Blog = modelMapper.map(dto, Blog.class);
             Blog updated = blogService.update(Blog, id);
             
             log.info("Blog updated successfully with ID: {}", updated.getId());
             return ResponseEntity.ok(ApiResponse.success("Updated", toDto(updated)));
-        }catch (Exception e) {
+        } catch (IOException e) {
+            log.error("Failed to save image file", e);
+            throw new RuntimeException("Failed to save image file", e);
+        } catch (Exception e) {
             log.error("Failed to update Blog", e);
             throw new RuntimeException("Failed to update Blog: " + e.getMessage(), e);
         }

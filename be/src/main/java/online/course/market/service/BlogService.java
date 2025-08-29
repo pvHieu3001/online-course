@@ -14,4 +14,5 @@ public interface BlogService {
     Blog save(Blog blog);
     Blog update(Blog blog, Integer id);
     void deleteById(Integer id);
+    List<Blog> getByType(String type);
 }

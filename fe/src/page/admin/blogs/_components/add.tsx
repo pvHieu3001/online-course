@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ExclamationCircleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Form, Input, Modal, Button, Switch, Select, Drawer, Spin, Row, Col } from 'antd'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -16,6 +16,7 @@ export default function AddBlog() {
   const [content, setContent] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false) // giả lập loading nếu chưa có biến
   const dispatch = useDispatch()
+  const [imageUrl, setImageUrl] = useState<File>()
 
   // Xác nhận khi rời nếu có thay đổi
   useEffect(() => {
@@ -50,6 +51,9 @@ export default function AddBlog() {
     formData.append('type', form.getFieldValue('type'))
     formData.append('status', form.getFieldValue('status').toString())
     formData.append('content', content)
+    if (imageUrl) {
+      formData.append('imageFile', imageUrl)
+    }
 
     try {
       setIsLoading(true)
@@ -97,6 +101,56 @@ export default function AddBlog() {
           <Row gutter={[24, 24]}>
             {/* Cài đặt */}
             <Col xs={24} lg={8}>
+              <Form.Item
+                label={<span className='font-semibold'>Ảnh đại diện</span>}
+                className='border-[1px] p-[24px] rounded-md border-[#F1F1F4] bg-[#fafbfc]'
+                style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
+              >
+                <div className='flex flex-col items-center'>
+                  <label
+                    htmlFor='image-upload'
+                    className='flex flex-col items-center justify-center w-[180px] h-[180px] border rounded-md cursor-pointer bg-white hover:bg-gray-100'
+                  >
+                    {imageUrl ? (
+                      <div className='relative group w-[180px] h-[180px] mb-2'>
+                        <img
+                          src={URL.createObjectURL(imageUrl as Blob)}
+                          alt='Ảnh danh mục'
+                          className='object-cover w-full h-full rounded-md border border-gray-300 bg-white'
+                        />
+                        <Button
+                          type='text'
+                          danger
+                          icon={<DeleteOutlined />}
+                          className='absolute top-1 right-1 opacity-80 hover:opacity-100 bg-white/80 p-1'
+                          onClick={() => {
+                            setImageUrl(undefined)
+                            setIsDirty(true)
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <input
+                        id='image-upload'
+                        type='file'
+                        accept='image/*'
+                        name='image'
+                        className='hidden'
+                        style={{ display: 'none' }}
+                        onChange={(e) => {
+                          if (!e.target.files || e.target.files.length === 0) return
+                          const file = e.target.files[0]
+                          if (file.size > 2 * 1024 * 1024) {
+                            popupError('Ảnh phải nhỏ hơn 2MB')
+                            return
+                          }
+                          setImageUrl(file)
+                        }}
+                      />
+                    )}
+                  </label>
+                </div>
+              </Form.Item>
               <div className='bg-white rounded-md shadow-sm p-4 space-y-4'>
                 <h2 className='text-lg font-semibold text-gray-700'>Cài đặt hiển thị</h2>
                 <Form.Item label='Kích hoạt' name='status' valuePropName='checked'>

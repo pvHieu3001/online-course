@@ -23,6 +23,7 @@ public class Blog extends BaseEntity {
     private String description;
     @Column(columnDefinition = "TEXT")
     private String content;
+    private String image;
     private String slug;
     private Boolean status;
     private String type;

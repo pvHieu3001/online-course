@@ -12,7 +12,9 @@ import {
   deleteFailure,
   deleteSuccessfully,
   getByIdSuccessFailure,
-  getByIdSuccessFully
+  getByIdSuccessFully,
+  getByTypeSuccessFully,
+  getByTypeSuccessFailure
 } from '../slices/blog.reducer'
 
 export const getBlogs = (searchValue: string) => (dispatch: Dispatch) => {
@@ -79,6 +81,22 @@ export const getBlogBySlug = (slug: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const getBlogByType = (slug: string) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return blogServices
+    .getBlogByType(slug)
+    .then((res) => {
+      dispatch(getByTypeSuccessFully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getByTypeSuccessFailure(error.toString()))
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
 export const createBlog = (data: FormData) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
@@ -134,5 +152,6 @@ export const blogActions = {
   getBlogBySlug,
   createBlog,
   updateBlog,
-  deleteBlog
+  deleteBlog,
+  getBlogByType
 }

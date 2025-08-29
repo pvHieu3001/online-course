@@ -52,6 +52,7 @@ public class BlogServiceImpl implements BlogService {
         blogDB.setType(blog.getType());
         blogDB.setSlug(blog.getSlug());
         blogDB.setStatus(blog.getStatus());
+        blogDB.setImage(blog.getImage());
         return blogRepository.save(blogDB);
     }
 
@@ -60,6 +61,11 @@ public class BlogServiceImpl implements BlogService {
     public void deleteById(Integer id) {
         Blog categoryDb = getById(id);
         blogRepository.delete(categoryDb);
+    }
+
+    @Override
+    public List<Blog> getByType(String type) {
+        return blogRepository.findByType(type);
     }
 
 }

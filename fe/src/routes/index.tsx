@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Manager from '../page/admin/index'
 import Dashboard from '../page/admin/dashboard/Dashboard'
 import Layout from '../page'
-import NotPage from '../page/error/404'
 import Base from '../page/user'
 import PageHome from '../page/user/PageHome'
 import UserManagement from '../page/admin/user'
@@ -17,9 +16,9 @@ import EditProduct from '@/page/admin/products/_components/edit'
 import GuardPage from '@/middleware/GuardPage'
 import ProductDetailPage from '../page/user/ProductDetailPage/index'
 import CategoryDetailPage from '../page/user/CategoryDetailPage/index'
-import PagePolicy from '../page/user/PagePolicy'
-import PageTermOfUse from '../page/user/PageTermOfUse'
-import PageCopyright from '../page/user/PageCopyright'
+import PagePolicy from '../page/user/PageGame'
+import PageTermOfUse from '../page/user/PageTechnology'
+import PageTipAndTrick from '../page/user/PageTipAndTrick'
 import ProductOrdersManagement from '@/page/admin/orders'
 import SignUp from '@/page/auth/signup'
 import Login from '@/page/auth/login'
@@ -27,6 +26,9 @@ import BlogManagement from '@/page/admin/blogs'
 import AddBlog from '@/page/admin/blogs/_components/add'
 import EditBlog from '@/page/admin/blogs/_components/edit'
 import PageSearch from '@/page/user/PageSearch'
+import NetworkErrorPage from '@/page/error/NetworkErrorPage'
+import NotFoundPage from '@/page/error/NotFoundPage'
+import PageCourse from '@/page/user/PageCourse'
 
 export default function Router() {
   return (
@@ -38,12 +40,13 @@ export default function Router() {
           <Route path='' element={<Base />}>
             <Route index element={<PageHome />} />
             <Route path='tim-kiem' element={<PageSearch />} />
-            <Route path='cart' element={<></>} />
+            <Route path='tat-ca-khoa-hoc' element={<PageCourse />} />
             <Route path='chi-tiet-khoa-hoc/:slug' element={<ProductDetailPage />} />
             <Route path='khoa-hoc-theo-chu-de/:slug' element={<CategoryDetailPage />} />
-            <Route path='privacy-policy' element={<PagePolicy />} />
-            <Route path='term-of-use' element={<PageTermOfUse />} />
-            <Route path='copyright' element={<PageCopyright />} />
+            <Route path='game' element={<PagePolicy />} />
+            <Route path='san-pham-cong-nghe' element={<PageTermOfUse />} />
+            <Route path='thu-thuat-huu-ich' element={<PageTipAndTrick />} />
+            <Route path='suu-tam' element={<PageTipAndTrick />} />
           </Route>
           <Route element={<GuardPage />}>
             <Route path='admin' element={<Manager />}>
@@ -77,7 +80,8 @@ export default function Router() {
             </Route>
           </Route>
         </Route>
-        <Route path='*' element={<NotPage />} />
+        <Route path='*' element={<NotFoundPage />} />
+        <Route path='/network-error' element={<NetworkErrorPage />} />
       </Routes>
     </>
   )

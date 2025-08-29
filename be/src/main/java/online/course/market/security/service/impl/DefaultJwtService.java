@@ -30,6 +30,16 @@ public class DefaultJwtService implements JwtService {
 	public String extractUsernameFromToken(String token) {
 		return getClaim(token, Claims::getSubject);
 	}
+
+	public SecurityUser getUserFromToken(String token) {
+		Claims claims = extractAllClaims(token);
+		Map<String, Object> userMap = claims.get("user", Map.class);
+
+		SecurityUser user = new SecurityUser();
+		user.setUsername((String) userMap.get("username"));
+		user.setEmail((String) userMap.get("email"));
+		return user;
+	}
 	
 	public <T> T getClaim(String token, Function<Claims, T> clamsResolver) {
 		final Claims claims = extractAllClaims(token);
@@ -74,6 +84,7 @@ public class DefaultJwtService implements JwtService {
 				.builder()
 				.setClaims(extraClains)
 				.claim("authorities", roles)
+				.claim("user", securityUser)
 				.setSubject(securityUser.getUsername())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis()+expiration))
