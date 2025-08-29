@@ -10,7 +10,7 @@ type ContextType = {
   setIsShowRecommendCourses: (value: boolean) => void
 }
 
-function PageArchive() {
+function PageBlogArchive() {
   const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -42,8 +42,8 @@ function PageArchive() {
     setIsShowRecommendCourses(false)
   }, [dispatch, setIsShowRecommendCourses])
 
-  const handleDetail = (courseRelate: string) => {
-    navigate(`/chi-tiet-khoa-hoc/${courseRelate}`)
+  const handleDetail = (slug: string) => {
+    navigate(`/bai-viet/${slug}`)
   }
 
   return (
@@ -86,6 +86,7 @@ function PageArchive() {
           dataList.map((article, index) => (
             <div
               key={index}
+              onClick={() => handleDetail(article.slug)}
               className='bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer flex flex-col sm:flex-row'
             >
               <img
@@ -112,4 +113,4 @@ function PageArchive() {
   )
 }
 
-export default PageArchive
+export default PageBlogArchive

@@ -151,7 +151,14 @@ function CategoryDetailPage() {
                             <div className='text-lg font-semibold text-gray-800'>{course.name}</div>
                             <div
                               dangerouslySetInnerHTML={{ __html: shortDescription }}
-                              className='text-gray-600 text-base mt-1'
+                              className='text-gray-600 text-base mt-1 [&_p]:mb-4 
+                                [&_p]:text-xl
+                                [&_h1]:text-4xl 
+                                [&_h2]:text-3xl 
+                                [&_h3]:text-2xl 
+                                [&_ul]:list-disc 
+                                [&_ul]:pl-6 
+                                [&_a]:text-blue-600 [&_a:hover]:underline'
                             ></div>
                           </div>
                         </div>

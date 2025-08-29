@@ -1,16 +1,13 @@
 import { blogActions } from '@/app/actions'
 import { RootState } from '@/app/store'
+import { ContextType } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { AnyAction } from '@reduxjs/toolkit'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 
-type ContextType = {
-  setIsShowRecommendCourses: (value: boolean) => void
-}
-
-function PageTechnology() {
+function PageBlogTechnology() {
   const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -42,8 +39,8 @@ function PageTechnology() {
     setIsShowRecommendCourses(false)
   }, [dispatch, setIsShowRecommendCourses])
 
-  const handleDetail = (courseRelate: string) => {
-    navigate(`/chi-tiet-khoa-hoc/${courseRelate}`)
+  const handleDetail = (slug: string) => {
+    navigate(`/bai-viet/${slug}`)
   }
 
   return (
@@ -85,6 +82,7 @@ function PageTechnology() {
         {dataList && dataList.length > 0 ? (
           dataList.map((article, index) => (
             <div
+              onClick={() => handleDetail(article.slug)}
               key={index}
               className='bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer flex flex-col sm:flex-row'
             >
@@ -112,4 +110,4 @@ function PageTechnology() {
   )
 }
 
-export default PageTechnology
+export default PageBlogTechnology

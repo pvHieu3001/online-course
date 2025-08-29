@@ -10,7 +10,7 @@ type ContextType = {
   setIsShowRecommendCourses: (value: boolean) => void
 }
 
-function PageTipAndTrick() {
+function PageBlogGame() {
   const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -38,12 +38,12 @@ function PageTipAndTrick() {
   ]
 
   useEffect(() => {
-    dispatch(blogActions.getBlogByType('tool') as unknown as AnyAction)
+    dispatch(blogActions.getBlogByType('game') as unknown as AnyAction)
     setIsShowRecommendCourses(false)
   }, [dispatch, setIsShowRecommendCourses])
 
-  const handleDetail = (courseRelate: string) => {
-    navigate(`/chi-tiet-khoa-hoc/${courseRelate}`)
+  const handleDetail = (slug: string) => {
+    navigate(`/bai-viet/${slug}`)
   }
 
   return (
@@ -86,6 +86,7 @@ function PageTipAndTrick() {
           dataList.map((article, index) => (
             <div
               key={index}
+              onClick={() => handleDetail(article.slug)}
               className='bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer flex flex-col sm:flex-row'
             >
               <img
@@ -112,4 +113,4 @@ function PageTipAndTrick() {
   )
 }
 
-export default PageTipAndTrick
+export default PageBlogGame

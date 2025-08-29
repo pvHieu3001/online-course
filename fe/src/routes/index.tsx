@@ -16,9 +16,9 @@ import EditProduct from '@/page/admin/products/_components/edit'
 import GuardPage from '@/middleware/GuardPage'
 import ProductDetailPage from '../page/user/ProductDetailPage/index'
 import CategoryDetailPage from '../page/user/CategoryDetailPage/index'
-import PagePolicy from '../page/user/PageGame'
-import PageTermOfUse from '../page/user/PageTechnology'
-import PageTipAndTrick from '../page/user/PageTipAndTrick'
+import PagePolicy from '../page/user/PageBlogGame'
+import PageTermOfUse from '../page/user/PageBlogTechnology'
+import PageTipAndTrick from '../page/user/PageBlogTool'
 import ProductOrdersManagement from '@/page/admin/orders'
 import SignUp from '@/page/auth/signup'
 import Login from '@/page/auth/login'
@@ -29,7 +29,8 @@ import PageSearch from '@/page/user/PageSearch'
 import NetworkErrorPage from '@/page/error/NetworkErrorPage'
 import NotFoundPage from '@/page/error/NotFoundPage'
 import PageCourse from '@/page/user/PageCourse'
-import PageArchive from '@/page/user/PageArchive'
+import PageArchive from '@/page/user/PageBlogArchive'
+import BlogDetailPage from '@/page/user/BlogDetailPage'
 
 export default function Router() {
   return (
@@ -48,6 +49,7 @@ export default function Router() {
             <Route path='san-pham-cong-nghe' element={<PageTermOfUse />} />
             <Route path='thu-thuat-huu-ich' element={<PageTipAndTrick />} />
             <Route path='suu-tam' element={<PageArchive />} />
+            <Route path='bai-viet/:slug' element={<BlogDetailPage />} />
           </Route>
           <Route element={<GuardPage />}>
             <Route path='admin' element={<Manager />}>

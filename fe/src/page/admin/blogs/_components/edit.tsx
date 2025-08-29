@@ -249,7 +249,18 @@ export default function EditBlog() {
               <h3 className='text-lg font-semibold mb-2'>Xem trước bài viết</h3>
               <div className='prose max-w-none'>
                 <h1>{form.getFieldValue('name')}</h1>
-                <div dangerouslySetInnerHTML={{ __html: form.getFieldValue('content') || '' }} />
+                <div
+                  className='text-xl leading-8 text-gray-800 
+                [&_p]:mb-4 
+                [&_p]:text-xl
+                [&_h1]:text-4xl 
+                [&_h2]:text-3xl 
+                [&_h3]:text-2xl 
+                [&_ul]:list-disc 
+                [&_ul]:pl-6 
+                [&_a]:text-blue-600 [&_a:hover]:underline'
+                  dangerouslySetInnerHTML={{ __html: form.getFieldValue('content') || '' }}
+                />
               </div>
             </div>
           </Form>

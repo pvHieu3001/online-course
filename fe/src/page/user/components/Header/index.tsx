@@ -77,7 +77,7 @@ const Header = (props: Props) => {
       <div className='block sm:hidden bg-[#181818] text-white h-9 flex items-center justify-end px-5 text-sm'>
         {/* Toggle button for mobile */}
         <button
-          className='absolute left-2 top-2 z-50 bg-transparent border-none'
+          className='absolute left-4 top-2 z-50 bg-transparent border-none'
           aria-label='Mở menu'
           onClick={() => setMenuOpen(true)}
         >
@@ -88,7 +88,7 @@ const Header = (props: Props) => {
 
       {/* Banner */}
       <div className='w-full flex justify-center items-center bg-[#061d51]'>
-        <header className='max-w-[1300px] w-full flex items-center gap-3 px-2 py-2'>
+        <header className='max-w-5xl w-full flex items-center gap-3 px-4 py-2'>
           <svg
             width='32'
             height='32'
@@ -113,7 +113,7 @@ const Header = (props: Props) => {
       {/* Menu */}
       <div className='w-full bg-[#105ab2] flex justify-center relative'>
         {/* Main menu */}
-        <nav className='max-w-[1300px] w-full hidden sm:flex items-center gap-3 px-2 h-12 overflow-x-auto whitespace-nowrap'>
+        <nav className='max-w-5xl w-full hidden sm:flex items-center gap-3 px-2 h-12 overflow-x-auto whitespace-nowrap'>
           {menuItems.map((item, i) => (
             <a
               key={i}

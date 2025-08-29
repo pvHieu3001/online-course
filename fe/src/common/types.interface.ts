@@ -99,3 +99,7 @@ export interface IBlog {
   status: boolean
   type: string
 }
+
+export type ContextType = {
+  setIsShowRecommendCourses: (value: boolean) => void
+}
