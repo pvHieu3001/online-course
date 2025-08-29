@@ -33,7 +33,7 @@ function BlogDetailPage() {
 
   return (
     <div className='bg-white text-gray-800 font-sans leading-relaxed'>
-      <main className='max-w-5xl mx-auto px-4 py-10'>
+      <main className='max-w-[1300px] w-full mx-auto px-4 py-10'>
         <h1 className='text-4xl font-bold mb-4'>{blogData.title}</h1>
 
         <div className='text-sm text-gray-500 mb-6'>
