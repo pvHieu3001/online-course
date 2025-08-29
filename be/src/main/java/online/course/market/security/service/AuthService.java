@@ -2,6 +2,7 @@ package online.course.market.security.service;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import online.course.market.security.dto.AuthDto;
 import online.course.market.security.dto.LoginDto;
 import online.course.market.security.dto.RegisterDto;

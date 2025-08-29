@@ -1,9 +1,10 @@
 import React from 'react'
 import { ReloadOutlined, DisconnectOutlined } from '@ant-design/icons'
+import { DOMAIN_URL } from '@/common/constants'
 
 const NetworkErrorPage: React.FC = () => {
   const handleReload = () => {
-    window.location.reload()
+    window.location.href = `${DOMAIN_URL}`
   }
 
   return (

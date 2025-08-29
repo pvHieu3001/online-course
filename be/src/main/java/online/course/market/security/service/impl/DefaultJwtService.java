@@ -4,6 +4,10 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import online.course.market.security.dto.UserSecurityDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,13 +35,11 @@ public class DefaultJwtService implements JwtService {
 		return getClaim(token, Claims::getSubject);
 	}
 
-	public SecurityUser getUserFromToken(String token) {
+	public UserSecurityDto getUserFromToken(String token) throws JsonProcessingException {
 		Claims claims = extractAllClaims(token);
-		Map<String, Object> userMap = claims.get("user", Map.class);
-
-		SecurityUser user = new SecurityUser();
-		user.setUsername((String) userMap.get("username"));
-		user.setEmail((String) userMap.get("email"));
+		String userJson = claims.get("user", String.class);
+		ObjectMapper objectMapper = new ObjectMapper();
+		UserSecurityDto user = objectMapper.readValue(userJson, UserSecurityDto.class);
 		return user;
 	}
 	
@@ -61,30 +63,35 @@ public class DefaultJwtService implements JwtService {
 	}
 
 	@Override
-	public String getToken(SecurityUser securityUser) {
+	public String getToken(SecurityUser securityUser) throws JsonProcessingException {
 		return getToken(new HashMap<>(), securityUser, jwtExpiration);
 	}
 	
 	@Override
 	public String getRefreshToken(
 			SecurityUser securityUser
-	) {
+	) throws JsonProcessingException {
 	    return getToken(new HashMap<>(), securityUser, refreshExpiration);
 	}
 	
 	private String getToken(
 			Map<String, Object> extraClains, 
 			SecurityUser securityUser,
-			long expiration) {		
+			long expiration) throws JsonProcessingException {
 				List<String> roles = securityUser.getAuthorities()
 						.stream()
 						.map(GrantedAuthority::getAuthority)
 						.collect(Collectors.toList());
+		UserSecurityDto userSecurityDto = new UserSecurityDto(
+				securityUser.getUsername(), securityUser.getFirstname(),
+				securityUser.getLastname(), securityUser.getEmail());
+		ObjectMapper objectMapper = new ObjectMapper();
+		String userJson = objectMapper.writeValueAsString(userSecurityDto);
 		return Jwts
 				.builder()
 				.setClaims(extraClains)
 				.claim("authorities", roles)
-				.claim("user", securityUser)
+				.claim("user", userJson)
 				.setSubject(securityUser.getUsername())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis()+expiration))

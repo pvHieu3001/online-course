@@ -10,7 +10,7 @@ type ContextType = {
   setIsShowRecommendCourses: (value: boolean) => void
 }
 
-function PageTipAndTrick() {
+function PageArchive() {
   const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -38,7 +38,7 @@ function PageTipAndTrick() {
   ]
 
   useEffect(() => {
-    dispatch(blogActions.getBlogByType('tool') as unknown as AnyAction)
+    dispatch(blogActions.getBlogByType('archive') as unknown as AnyAction)
     setIsShowRecommendCourses(false)
   }, [dispatch, setIsShowRecommendCourses])
 
@@ -112,4 +112,4 @@ function PageTipAndTrick() {
   )
 }
 
-export default PageTipAndTrick
+export default PageArchive

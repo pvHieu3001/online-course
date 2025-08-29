@@ -29,6 +29,7 @@ import PageSearch from '@/page/user/PageSearch'
 import NetworkErrorPage from '@/page/error/NetworkErrorPage'
 import NotFoundPage from '@/page/error/NotFoundPage'
 import PageCourse from '@/page/user/PageCourse'
+import PageArchive from '@/page/user/PageArchive'
 
 export default function Router() {
   return (
@@ -46,7 +47,7 @@ export default function Router() {
             <Route path='game' element={<PagePolicy />} />
             <Route path='san-pham-cong-nghe' element={<PageTermOfUse />} />
             <Route path='thu-thuat-huu-ich' element={<PageTipAndTrick />} />
-            <Route path='suu-tam' element={<PageTipAndTrick />} />
+            <Route path='suu-tam' element={<PageArchive />} />
           </Route>
           <Route element={<GuardPage />}>
             <Route path='admin' element={<Manager />}>

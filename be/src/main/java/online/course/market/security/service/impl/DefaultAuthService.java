@@ -2,6 +2,7 @@ package online.course.market.security.service.impl;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,15 +40,21 @@ public class DefaultAuthService implements AuthService {
 
 	@Override
 	@Transactional
-	public AuthDto login(LoginDto dto) {
+	public AuthDto login(LoginDto dto){
 		
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
 		
 		SecurityUser user = securityUserRepository.findByUsername(dto.getUsername()).orElseThrow();
-		String token = jwtService.getToken(user);
-		String refreshtoken = jwtService.getRefreshToken(user);
-		
-		revokeAllUserTokens(user);
+		String token = null;
+        String refreshtoken = null;
+        try {
+			token = jwtService.getToken(user);
+            refreshtoken = jwtService.getRefreshToken(user);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        revokeAllUserTokens(user);
 		saveUserToken(user, token);
 		
 		return AuthDto.builder()
@@ -58,14 +65,20 @@ public class DefaultAuthService implements AuthService {
 
 	@Override
 	@Transactional
-	public AuthDto register(RegisterDto dto) {		
+	public AuthDto register(RegisterDto dto) {
 		
 		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 		SecurityUser user = modelMapper.map(dto, SecurityUser.class);
 		
 		SecurityUser userSaved = securityUserRepository.save(user);
-		String token = jwtService.getToken(user);
-		String refreshtoken = jwtService.getRefreshToken(user);
+        String token = null;
+		String refreshtoken = null;
+        try {
+            token = jwtService.getToken(user);
+			refreshtoken = jwtService.getRefreshToken(user);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 				
 		saveUserToken(userSaved, token);
 		

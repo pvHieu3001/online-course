@@ -177,7 +177,7 @@ const Header = (props: Props) => {
       {props.isShowRecommendCourses && (
         <div className='w-full flex justify-center items-center'>
           <section
-            className='max-w-[1300px] w-full flex items-center gap-5 px-5 py-6 overflow-x-auto'
+            className='max-w-[1300px] w-full flex items-center gap-2 px-5 py-6 overflow-x-auto'
             role='region'
             aria-label='Featured courses'
           >

@@ -51,7 +51,7 @@ export default function ListBlog() {
       key: 'title',
       align: 'center',
       width: 140,
-      render: (text) => <a>{text}</a>
+      render: (text) => <a title={text}>{text.length > 30 ? `${text.slice(0, 30)}...` : text}</a>
     },
     {
       title: 'Loại bài viết',
