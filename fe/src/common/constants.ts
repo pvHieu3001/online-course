@@ -16,7 +16,7 @@ const TOKEN = {
 const typeOptions = [
   { value: 'technology', label: 'Công Nghệ' },
   { value: 'game', label: 'Game' },
-  { value: 'tool', label: 'Tiện Ích' },
+  { value: 'tips', label: 'Tiện Ích' },
   { value: 'archive', label: 'Sưu Tầm' }
 ]
 

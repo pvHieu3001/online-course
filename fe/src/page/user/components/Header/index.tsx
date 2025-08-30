@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { MenuOutlined, CloseOutlined, SearchOutlined } from '@ant-design/icons'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { courseActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
@@ -88,7 +88,7 @@ const Header = (props: Props) => {
 
       {/* Banner */}
       <div className='w-full flex justify-center items-center bg-[#061d51]'>
-        <header className='max-w-[1300px] w-full flex items-center gap-3 px-2 py-2'>
+        <header className='max-w-[1300px] w-full flex items-center gap-3 px-2 sm:px-4 py-2'>
           <svg
             width='32'
             height='32'
@@ -113,19 +113,22 @@ const Header = (props: Props) => {
       {/* Menu */}
       <div className='w-full bg-[#105ab2] flex justify-center relative'>
         {/* Main menu */}
-        <nav className='max-w-[1300px] w-full hidden sm:flex items-center gap-3 px-2 h-12 overflow-x-auto whitespace-nowrap'>
-          {menuItems.map((item, i) => (
-            <a
-              key={i}
-              href={item.href}
-              className={`text-white font-semibold text-sm px-2 h-full flex items-center transition ${
-                currentPath === item.href ? 'bg-white bg-opacity-20' : 'hover:text-gray-800 hover:bg-white'
-              }`}
-              aria-current={currentPath === item.href ? 'page' : undefined}
-            >
-              {item.label}
-            </a>
-          ))}
+        <nav className='max-w-[1300px] w-full hidden sm:flex items-center gap-3 h-12 overflow-x-auto whitespace-nowrap'>
+          {menuItems.map((item) => {
+            const isActive = currentPath === item.href.replace(/\/$/, '')
+            return (
+              <Link
+                key={item.href}
+                to={item.href}
+                className={`text-white font-semibold text-sm px-2 h-full flex items-center transition ${
+                  isActive ? 'bg-white bg-opacity-20' : 'hover:text-gray-800 hover:bg-white'
+                }`}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
         </nav>
       </div>
 

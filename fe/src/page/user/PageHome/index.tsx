@@ -2,10 +2,10 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 import { courseActions } from '@/app/actions/course.actions'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import TabCategory from '../components/TabCategory'
 import { RootState } from '@/app/store'
-import { IProduct } from '@/common/types.interface'
+import { ContextType, IProduct } from '@/common/types.interface'
 import Description from './Description'
 import Link from 'antd/es/typography/Link'
 import { getImageUrl } from '@/utils/getImageUrl'
@@ -13,6 +13,8 @@ import { getImageUrl } from '@/utils/getImageUrl'
 function PageHome() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
+  setIsShowRecommendCourses(true)
 
   const { quickViews, isLoading, error_message } = useSelector((state: RootState) => state.course)
 

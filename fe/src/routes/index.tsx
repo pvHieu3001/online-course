@@ -16,9 +16,7 @@ import EditProduct from '@/page/admin/products/_components/edit'
 import GuardPage from '@/middleware/GuardPage'
 import ProductDetailPage from '../page/user/ProductDetailPage/index'
 import CategoryDetailPage from '../page/user/CategoryDetailPage/index'
-import PagePolicy from '../page/user/PageBlogGame'
-import PageTermOfUse from '../page/user/PageBlogTechnology'
-import PageTipAndTrick from '../page/user/PageBlogTool'
+import PageBlog from '../page/user/PageBlog'
 import ProductOrdersManagement from '@/page/admin/orders'
 import SignUp from '@/page/auth/signup'
 import Login from '@/page/auth/login'
@@ -29,7 +27,6 @@ import PageSearch from '@/page/user/PageSearch'
 import NetworkErrorPage from '@/page/error/NetworkErrorPage'
 import NotFoundPage from '@/page/error/NotFoundPage'
 import PageCourse from '@/page/user/PageCourse'
-import PageArchive from '@/page/user/PageBlogArchive'
 import BlogDetailPage from '@/page/user/BlogDetailPage'
 
 export default function Router() {
@@ -45,10 +42,10 @@ export default function Router() {
             <Route path='tat-ca-khoa-hoc' element={<PageCourse />} />
             <Route path='chi-tiet-khoa-hoc/:slug' element={<ProductDetailPage />} />
             <Route path='khoa-hoc-theo-chu-de/:slug' element={<CategoryDetailPage />} />
-            <Route path='game' element={<PagePolicy />} />
-            <Route path='san-pham-cong-nghe' element={<PageTermOfUse />} />
-            <Route path='thu-thuat-huu-ich' element={<PageTipAndTrick />} />
-            <Route path='suu-tam' element={<PageArchive />} />
+            <Route path='game' element={<PageBlog />} />
+            <Route path='san-pham-cong-nghe' element={<PageBlog />} />
+            <Route path='thu-thuat-huu-ich' element={<PageBlog />} />
+            <Route path='suu-tam' element={<PageBlog />} />
             <Route path='bai-viet/:slug' element={<BlogDetailPage />} />
           </Route>
           <Route element={<GuardPage />}>

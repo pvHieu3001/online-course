@@ -1,23 +1,21 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import TabCategory from '../components/TabCategory'
 import { courseActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
-import { IProduct } from '@/common/types.interface'
+import { ContextType, IProduct } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
-
-
 
 function PageCourse() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
   const [currentPage, setCurrentPage] = useState(1)
   const [coursesPerPage] = useState(6)
-
   const { dataList: courses, isLoading: coursesLoading } = useSelector((state: RootState) => state.course)
+  const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
+  setIsShowRecommendCourses(true)
 
   useEffect(() => {
     dispatch(courseActions.getCourses('active', '', '') as unknown as AnyAction)
