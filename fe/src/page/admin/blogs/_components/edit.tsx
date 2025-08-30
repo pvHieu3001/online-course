@@ -38,7 +38,8 @@ export default function EditBlog() {
         description: data.description,
         name: data.title,
         type: data.type,
-        content: data.content
+        content: data.content,
+        isDisplayHot: data.isDisplayHot
       })
     }
   }, [blogStore, form])
@@ -76,6 +77,7 @@ export default function EditBlog() {
     formData.append('status', form.getFieldValue('status').toString())
     formData.append('content', form.getFieldValue('content'))
     formData.append('type', form.getFieldValue('type'))
+    formData.append('isDisplayHot', form.getFieldValue('isDisplayHot'))
     if (imageUrl) {
       formData.append('imageFile', imageUrl)
     }
@@ -196,9 +198,12 @@ export default function EditBlog() {
                 <div className='bg-white rounded-md shadow-sm p-4 space-y-4'>
                   <h2 className='text-lg font-semibold text-gray-700'>Cài đặt hiển thị</h2>
                   <Form.Item label='Kích hoạt' name='status' valuePropName='checked'>
+                    <p className='text-xs text-gray-500'>Bật để bài viết này hiển thị trên website.</p>
                     <Switch />
                   </Form.Item>
-                  <p className='text-xs text-gray-500'>Bật để bài viết này hiển thị trên website.</p>
+                  <Form.Item name='isDisplayHot' label='Bài viết nổi bật' valuePropName='checked'>
+                    <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                  </Form.Item>
                 </div>
               </Col>
 

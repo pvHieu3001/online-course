@@ -23,6 +23,7 @@ public class GetBlogDto {
     private String slug;
     private Boolean status;
     private String type;
+    private Boolean isDisplayHot;
     private GetUserDto updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -17,7 +17,7 @@ import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
 import online.course.market.service.CategoryService;
 import online.course.market.service.LogService;
-import online.course.market.utils.SlugUtils;
+import online.course.market.utils.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -136,7 +136,7 @@ public class AdminCourseController {
                 Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            dto.setSlug(SlugUtils.toSlug(dto.getName()));
+            dto.setSlug(DataUtils.toSlug(dto.getName()));
             dto.setImageUrl(imageFilename);
             dto.setSourceUrl(sourceFilename);
             Course course = modelMapper.map(dto, Course.class);
@@ -173,7 +173,7 @@ public class AdminCourseController {
                 Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            dto.setSlug(SlugUtils.toSlug(dto.getName()));
+            dto.setSlug(DataUtils.toSlug(dto.getName()));
             dto.setImageUrl(imageFilename);
             dto.setSourceUrl(sourceFilename);
 

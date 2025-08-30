@@ -1,65 +1,39 @@
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { blogActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
-import { ContextType } from '@/common/types.interface'
+import { ContextType, IBlog } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { formatDateTimeString, getFullName } from '@/utils/formatDate'
 
 function BlogDetailPage() {
   const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
   const { slug } = useParams()
-  const dispatch = useDispatch()
-  const { data: blogData } = useSelector((state: RootState) => state.blog)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { data: blogData, relatedPosts: relatedDatas } = useSelector((state: RootState) => state.blog)
+  const [featuredPost, setFeaturedPost] = useState<IBlog>()
+  const [relatedBlogs, setRelatedBlogs] = useState<IBlog[]>()
 
   useEffect(() => {
     if (slug) {
       dispatch(blogActions.getBlogBySlug(slug) as unknown as AnyAction)
     }
     setIsShowRecommendCourses(false)
-  }, [slug])
+  }, [dispatch, setIsShowRecommendCourses, slug])
+
+  useEffect(() => {
+    if (relatedDatas.length > 0) {
+      setFeaturedPost(relatedDatas[0])
+      setRelatedBlogs(relatedDatas.slice())
+    }
+  }, [relatedDatas])
 
   const handleDetail = (slug: string) => {
     navigate(`/bai-viet/${slug}`)
   }
-
-  const featuredPost = {
-    title: 'Google’s nano banana AI đang gây sốt',
-    date: '30 Tháng 8, 2025',
-    link: '/blog/nano-banana',
-    excerpt: 'Khám phá công nghệ AI mới của Google có thể biến chuối thành tác phẩm nghệ thuật số.',
-    image: '/images/nano-banana.jpg'
-  }
-
-  const relatedPosts = [
-    {
-      title: 'Lịch sử phát triển của mật khẩu',
-      date: '10 Tháng 7, 2025',
-      link: '/blog/password-history',
-      image: '/images/nano-banana.jpg'
-    },
-    {
-      title: 'Xác thực 2 bước có còn đủ an toàn?',
-      date: '22 Tháng 6, 2025',
-      link: '/blog/2fa-security',
-      image: '/images/nano-banana.jpg'
-    },
-    {
-      title: 'Xác thực 2 bước có còn đủ an toàn?',
-      date: '22 Tháng 6, 2025',
-      link: '/blog/2fa-security',
-      image: '/images/nano-banana.jpg'
-    },
-    {
-      title: 'Xác thực 2 bước có còn đủ an toàn?',
-      date: '22 Tháng 6, 2025',
-      link: '/blog/2fa-security',
-      image: '/images/nano-banana.jpg'
-    }
-  ]
 
   if (!blogData) {
     return (
@@ -101,33 +75,42 @@ function BlogDetailPage() {
           <h3 className='text-xl font-semibold mb-6'>Bài viết liên quan</h3>
           <div className='grid grid-cols-1 lg:grid-cols-5 gap-6 lg:h-full'>
             {/* Cột 1 */}
-            <div className='lg:col-span-2 h-full'>
-              <div className='border rounded p-6 shadow hover:shadow-lg transition-shadow h-full flex flex-col'>
-                <img
-                  src={featuredPost.image}
-                  alt={featuredPost.title}
-                  className='w-full h-40 object-cover rounded mb-3'
-                />
-                <a href={featuredPost.link} className='text-2xl font-bold hover:text-blue-600 block mb-2'>
-                  {featuredPost.title}
-                </a>
-                <p className='text-sm text-gray-500 mb-2'>{featuredPost.date}</p>
-                <p className='text-base text-gray-700'>{featuredPost.excerpt}</p>
+            {featuredPost && (
+              <div
+                onClick={() => {
+                  handleDetail(featuredPost.slug)
+                }}
+                className='lg:col-span-2 h-full'
+              >
+                <div className='border rounded p-6 shadow hover:shadow-lg transition-shadow h-full flex flex-col'>
+                  <img
+                    src={getImageUrl(featuredPost.image)}
+                    alt={featuredPost.title}
+                    className='w-full h-40 object-cover rounded mb-3'
+                  />
+                  <p className='text-2xl font-bold hover:text-blue-600 block mb-2'>{featuredPost.title}</p>
+                  <p className='text-sm text-gray-500 mb-2'>{formatDateTimeString(featuredPost.updatedAt)}</p>
+                  <p className='text-base text-gray-700'>{featuredPost.description}</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Cột 2: 4 bài viết nhỏ */}
-            <div className='lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6 h-full'>
-              {relatedPosts.map((post, index) => (
-                <div key={index} className='border rounded p-4 hover:shadow transition-shadow h-full flex flex-col'>
-                  <img src={post.image} alt={post.title} className='w-full h-40 object-cover rounded mb-3' />
-                  <a href={post.link} className='text-lg font-medium hover:text-blue-600 block mb-1'>
-                    {post.title}
-                  </a>
-                  <p className='text-sm text-gray-500'>{post.date}</p>
-                </div>
-              ))}
-            </div>
+            {relatedBlogs && relatedBlogs.length > 0 && (
+              <div className='lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6 h-full'>
+                {relatedBlogs.map((post, index) => (
+                  <div key={index} className='border rounded p-4 hover:shadow transition-shadow h-full flex flex-col'>
+                    <img
+                      src={getImageUrl(post.image)}
+                      alt={post.title}
+                      className='w-full h-40 object-cover rounded mb-3'
+                    />
+                    <p className='text-lg font-medium hover:text-blue-600 block mb-1'>{post.title}</p>
+                    <p className='text-sm text-gray-500'>{formatDateTimeString(post.updatedAt)}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>

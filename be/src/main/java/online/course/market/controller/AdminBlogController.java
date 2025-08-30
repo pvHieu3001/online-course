@@ -10,9 +10,8 @@ import online.course.market.entity.dto.blog.GetBlogDto;
 import online.course.market.entity.dto.blog.PostBlogDto;
 import online.course.market.entity.dto.blog.PutBlogDto;
 import online.course.market.entity.model.Blog;
-import online.course.market.entity.model.Category;
 import online.course.market.service.BlogService;
-import online.course.market.utils.SlugUtils;
+import online.course.market.utils.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -65,8 +64,19 @@ public class AdminBlogController {
 
     @Operation(description = "Get all endpoint for Blog", summary = "Get all Blog")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<GetBlogDto>>> getAll(@RequestParam(required = false) String search) {
-        List<GetBlogDto> dtos = blogService.getAll().stream()
+    public ResponseEntity<ApiResponse<List<GetBlogDto>>> getAll(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String isDisplayHot) {
+        Boolean displayHot =
+                isDisplayHot == null || isDisplayHot.isBlank() ? null :
+                        "1".equals(isDisplayHot) ? Boolean.TRUE :
+                                "0".equals(isDisplayHot) ? Boolean.FALSE : null;
+        List<GetBlogDto> dtos = blogService.filterCourse(
+                !String.valueOf(status).isEmpty() ? DataUtils.convertStatus(status) : null,
+                !String.valueOf(search).isEmpty() ? search : null,
+                displayHot
+        ).stream()
                 .filter(blog -> search == null || search.isEmpty() || blog.getTitle().toLowerCase().contains(search.toLowerCase()))
                 .map(this::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(dtos));
@@ -104,7 +114,7 @@ public class AdminBlogController {
             }
 
 
-            dto.setSlug(SlugUtils.toSlug(dto.getTitle()));
+            dto.setSlug(DataUtils.toSlug(dto.getTitle()));
             Blog Blog = modelMapper.map(dto, Blog.class);
             Blog saved = blogService.save(Blog);
             
@@ -147,7 +157,7 @@ public class AdminBlogController {
                 dto.setImage(existingBlog.getImage());
             }
 
-            dto.setSlug(SlugUtils.toSlug(dto.getTitle()));
+            dto.setSlug(DataUtils.toSlug(dto.getTitle()));
             Blog Blog = modelMapper.map(dto, Blog.class);
             Blog updated = blogService.update(Blog, id);
             

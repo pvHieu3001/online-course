@@ -35,11 +35,11 @@ export const getBlogs = (searchValue: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const getAdminBlogs = (searchValue: string) => (dispatch: Dispatch) => {
+export const getAdminBlogs = (status: string, search: string, isDisplayHot: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return blogServices
-    .getAdminBlogs(searchValue)
+    .getAdminBlogs(status, search, isDisplayHot)
     .then((res) => {
       dispatch(getBlogSuccessFully(res.data))
       return res

@@ -100,6 +100,7 @@ export interface IBlog {
   type: string
   updatedAt: string
   updatedBy: IUser
+  isDisplayHot: string // blank: all, 0: false, 1: true
 }
 
 export type ContextType = {

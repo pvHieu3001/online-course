@@ -4,11 +4,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.category.GetCategoryDto;
-import online.course.market.entity.dto.category.PostCategoryDto;
-import online.course.market.entity.dto.category.PutCategoryDto;
 import online.course.market.entity.model.Category;
 import online.course.market.service.CategoryService;
-import online.course.market.utils.SlugUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -18,14 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j

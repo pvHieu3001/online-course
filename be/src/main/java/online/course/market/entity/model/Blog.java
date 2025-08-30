@@ -27,4 +27,5 @@ public class Blog extends BaseEntity {
     private String slug;
     private Boolean status;
     private String type;
+    private Boolean isDisplayHot;
 }

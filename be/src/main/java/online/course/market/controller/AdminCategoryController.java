@@ -8,11 +8,9 @@ import online.course.market.entity.dto.category.PostCategoryDto;
 import online.course.market.entity.dto.category.PutCategoryDto;
 import online.course.market.entity.model.Category;
 import online.course.market.service.CategoryService;
-import online.course.market.utils.SlugUtils;
+import online.course.market.utils.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -106,7 +104,7 @@ public class AdminCategoryController {
                 dto.setImage(""); // No image uploaded
             }
 
-            dto.setSlug(SlugUtils.toSlug(dto.getName()));
+            dto.setSlug(DataUtils.toSlug(dto.getName()));
             Category category = modelMapper.map(dto, Category.class);
             Category saved = categoryService.save(category);
             
@@ -150,7 +148,7 @@ public class AdminCategoryController {
                 dto.setImage(existingCategory.getImage());
             }
 
-            dto.setSlug(SlugUtils.toSlug(dto.getName()));
+            dto.setSlug(DataUtils.toSlug(dto.getName()));
             Category category = modelMapper.map(dto, Category.class);
             Category updated = categoryService.update(category, id);
             

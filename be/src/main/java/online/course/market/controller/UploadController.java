@@ -3,21 +3,8 @@ package online.course.market.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import online.course.market.entity.dto.ApiResponse;
-import online.course.market.entity.dto.category.GetCategoryDto;
-import online.course.market.entity.dto.course.GetCourseDto;
-import online.course.market.entity.dto.course.PostCourseDto;
-import online.course.market.entity.dto.course.PutCourseDto;
 import online.course.market.entity.dto.upload.FileUploadResponse;
-import online.course.market.entity.model.Category;
-import online.course.market.entity.model.Course;
-import online.course.market.service.CategoryService;
-import online.course.market.service.CourseService;
-import online.course.market.service.LogService;
-import online.course.market.utils.SlugUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,13 +18,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static online.course.market.utils.Constant.*;
 
 @RestController
 @RequestMapping("api/v1/admin/upload")

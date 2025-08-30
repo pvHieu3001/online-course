@@ -4,6 +4,7 @@ import online.course.market.entity.model.Blog;
 import online.course.market.entity.model.Category;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -15,4 +16,5 @@ public interface BlogService {
     Blog update(Blog blog, Integer id);
     void deleteById(Integer id);
     List<Blog> getByType(String type);
+    List<Blog> filterCourse(Boolean status, String search, Boolean isDisplayHot);
 }

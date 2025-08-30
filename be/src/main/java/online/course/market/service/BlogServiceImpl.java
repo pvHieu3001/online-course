@@ -52,6 +52,7 @@ public class BlogServiceImpl implements BlogService {
         blogDB.setType(blog.getType());
         blogDB.setSlug(blog.getSlug());
         blogDB.setStatus(blog.getStatus());
+        blogDB.setIsDisplayHot(blog.getIsDisplayHot());
         blogDB.setImage(blog.getImage());
         return blogRepository.save(blogDB);
     }
@@ -65,7 +66,12 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<Blog> getByType(String type) {
-        return blogRepository.findByType(type);
+        return blogRepository.findByTypeAndStatus(type, true);
+    }
+
+    @Override
+    public List<Blog> filterCourse(Boolean status, String search, Boolean isDisplayHot) {
+        return blogRepository.filterBlog(status, search, isDisplayHot);
     }
 
 }

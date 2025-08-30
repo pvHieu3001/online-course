@@ -18,5 +18,6 @@ public class PostBlogDto {
     private MultipartFile imageFile;
     private String slug;
     private Boolean status;
+    private Boolean isDisplayHot;
     private String type;
 } 

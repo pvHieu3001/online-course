@@ -50,6 +50,7 @@ export default function AddBlog() {
     formData.append('description', form.getFieldValue('description'))
     formData.append('type', form.getFieldValue('type'))
     formData.append('status', form.getFieldValue('status').toString())
+    formData.append('isDisplayHot', form.getFieldValue('isDisplayHot'))
     formData.append('content', content)
     if (imageUrl) {
       formData.append('imageFile', imageUrl)
@@ -153,10 +154,13 @@ export default function AddBlog() {
               </Form.Item>
               <div className='bg-white rounded-md shadow-sm p-4 space-y-4'>
                 <h2 className='text-lg font-semibold text-gray-700'>Cài đặt hiển thị</h2>
+                <p className='text-xs text-gray-500'>Bật để bài viết hiển thị trên website.</p>
                 <Form.Item label='Kích hoạt' name='status' valuePropName='checked'>
                   <Switch />
                 </Form.Item>
-                <p className='text-xs text-gray-500'>Bật để bài viết hiển thị trên website.</p>
+                <Form.Item name='isDisplayHot' label='Khóa học nổi bật' valuePropName='checked'>
+                  <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                </Form.Item>
               </div>
             </Col>
 
