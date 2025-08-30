@@ -14,7 +14,9 @@ import {
   getByIdSuccessFailure,
   getByIdSuccessFully,
   getByTypeSuccessFully,
-  getByTypeSuccessFailure
+  getByTypeSuccessFailure,
+  getBySlugSuccessFully,
+  getBySlugSuccessFailure
 } from '../slices/blog.reducer'
 
 export const getBlogs = (searchValue: string) => (dispatch: Dispatch) => {
@@ -71,11 +73,11 @@ export const getBlogBySlug = (slug: string) => (dispatch: Dispatch) => {
   return blogServices
     .getBlogBySlug(slug)
     .then((res) => {
-      dispatch(getByIdSuccessFully(res.data))
+      dispatch(getBySlugSuccessFully(res.data))
       return res
     })
     .catch((error) => {
-      dispatch(getByIdSuccessFailure(error.toString()))
+      dispatch(getBySlugSuccessFailure(error.toString()))
       throw error
     })
     .finally(() => dispatch(fetchedDone()))

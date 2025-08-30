@@ -7,7 +7,8 @@ const initialState = {
   message: '',
   error_message: '',
   data: <IBlog>(<unknown>null),
-  dataList: <IBlog[]>(<unknown>null)
+  dataList: <IBlog[]>(<unknown>null),
+  relatedPosts: <IBlog[]>(<unknown>null)
 }
 
 const blogSlice = createSlice({
@@ -33,6 +34,15 @@ const blogSlice = createSlice({
       state.isLoading = false
     },
     getByIdSuccessFailure: (state, { payload }) => {
+      state.message = payload
+      state.isLoading = false
+    },
+    getBySlugSuccessFully: (state, { payload }) => {
+      state.data = payload.data.blog
+      state.relatedPosts = payload.data.relatedBlogs
+      state.isLoading = false
+    },
+    getBySlugSuccessFailure: (state, { payload }) => {
       state.message = payload
       state.isLoading = false
     },
@@ -80,6 +90,8 @@ export const {
   getBlogSuccessFailure,
   getByIdSuccessFailure,
   getByIdSuccessFully,
+  getBySlugSuccessFailure,
+  getBySlugSuccessFully,
   getByTypeSuccessFailure,
   getByTypeSuccessFully,
   createFailure,

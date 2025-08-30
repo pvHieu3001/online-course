@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IBlog } from '@/common/types.interface'
 import { RootState } from '@/app/store'
 import { typeOptions } from '@/common/constants'
+import { EyeOutlined } from '@ant-design/icons'
 
 export default function ListBlog() {
   const dispatch = useDispatch()
@@ -85,6 +86,9 @@ export default function ListBlog() {
       fixed: 'right',
       render: (record) => (
         <Space size={'middle'}>
+          <Link to={`/bai-viet/${record.slug}`}>
+            <Button icon={<EyeOutlined />} />
+          </Link>
           <Link to={'' + record.id}>
             <Button type='primary'>Sửa </Button>
           </Link>

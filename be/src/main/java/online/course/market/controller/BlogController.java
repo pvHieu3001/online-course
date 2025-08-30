@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.ApiResponse;
+import online.course.market.entity.dto.blog.GetBlogBySlugResponse;
 import online.course.market.entity.dto.blog.GetBlogDto;
+import online.course.market.entity.dto.user.GetUserDto;
 import online.course.market.entity.model.Blog;
 import online.course.market.service.BlogService;
 import org.modelmapper.ModelMapper;
@@ -52,18 +54,30 @@ public class BlogController {
 
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by slug")
     @GetMapping("/slug/{slug}")
-    public ResponseEntity<ApiResponse<GetBlogDto>> getBySlug(@PathVariable String slug) {
-        Blog Blog = blogService.getBySlug(slug);
-        if (Blog == null) {
+    public ResponseEntity<ApiResponse<GetBlogBySlugResponse>> getBySlug(@PathVariable String slug) {
+        GetBlogBySlugResponse response = new GetBlogBySlugResponse();
+        Blog blog = blogService.getBySlug(slug);
+        if (blog == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Bài viết không tồn tại"));
         }
-        return ResponseEntity.ok(ApiResponse.success(toDto(Blog)));
+
+        List<GetBlogDto> blogs = blogService.getByType(blog.getType()).stream().filter(b -> !b.getSlug().equals(slug)).map(this::toDto).toList();
+        response.setBlog(modelMapper.map(blog, GetBlogDto.class));
+        response.setRelatedBlogs(blogs);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by type")
     @GetMapping("/type/{type}")
     public ResponseEntity<ApiResponse<List<GetBlogDto>>> getByType(@PathVariable String type) {
-        List<GetBlogDto> Blogs = blogService.getByType(type).stream().map(this::toDto).collect(Collectors.toList());
+        List<GetBlogDto> Blogs = blogService.getByType(type).stream().map((blog)->{
+            GetBlogDto blogDto = modelMapper.map(blog, GetBlogDto.class);
+            if(blog.getUpdatedBy()!= null){
+                GetUserDto userDto = modelMapper.map(blog.getUpdatedBy(), GetUserDto.class);
+                blogDto.setUpdatedBy(userDto);
+            }
+            return blogDto;
+        }).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(Blogs));
     }
 } 

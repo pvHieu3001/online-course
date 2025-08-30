@@ -98,6 +98,8 @@ export interface IBlog {
   slug: string
   status: boolean
   type: string
+  updatedAt: string
+  updatedBy: IUser
 }
 
 export type ContextType = {

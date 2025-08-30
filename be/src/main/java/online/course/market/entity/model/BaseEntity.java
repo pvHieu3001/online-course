@@ -1,8 +1,6 @@
 package online.course.market.entity.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,11 +22,13 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
     @CreatedBy
-    @Column(nullable = false, updatable = false)
-    protected Long createdBy;
+    @OneToOne
+    @JoinColumn(name = "created_by", nullable = true)
+    protected UserModel createdBy;
     @LastModifiedBy
-    @Column(nullable = false)
-    protected Long updatedBy;
+    @OneToOne
+    @JoinColumn(name = "updated_by", nullable = true)
+    protected UserModel updatedBy;
     @CreatedDate
     @Column(nullable = false, updatable = false)
     protected LocalDateTime  createdAt;

@@ -1,6 +1,7 @@
 import { blogActions } from '@/app/actions'
 import { RootState } from '@/app/store'
 import { ContextType } from '@/common/types.interface'
+import { formatDateTimeString, getFullName } from '@/utils/formatDate'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { AnyAction } from '@reduxjs/toolkit'
 import { useEffect, useRef, useState } from 'react'
@@ -132,7 +133,8 @@ function PageBlog() {
                   {article?.title || 'Tiêu đề chưa có'}
                 </h2>
                 <p className='text-sm text-gray-500'>
-                  ✍️ {article?.author || 'Tác giả ẩn danh'} • 🗓️ {article?.date || 'Chưa cập nhật'}
+                  ✍️ {getFullName(article?.updatedBy.firstname, article?.updatedBy.lastname) || 'Tác giả ẩn danh'} • 🗓️{' '}
+                  {formatDateTimeString(article?.updatedAt) || 'Chưa cập nhật'}
                 </p>
               </div>
             </div>
