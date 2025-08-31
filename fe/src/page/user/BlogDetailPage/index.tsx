@@ -25,7 +25,7 @@ function BlogDetailPage() {
   }, [dispatch, setIsShowRecommendCourses, slug])
 
   useEffect(() => {
-    if (relatedDatas.length > 0) {
+    if (relatedDatas && relatedDatas.length > 0) {
       setFeaturedPost(relatedDatas[0])
       setRelatedBlogs(relatedDatas.slice())
     }
