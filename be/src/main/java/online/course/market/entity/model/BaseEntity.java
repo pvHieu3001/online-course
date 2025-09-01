@@ -30,9 +30,9 @@ public class BaseEntity {
     @JoinColumn(name = "updated_by", nullable = true)
     protected UserModel updatedBy;
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = true, updatable = false)
     protected LocalDateTime  createdAt;
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(nullable = true)
     protected LocalDateTime updatedAt;
 }
