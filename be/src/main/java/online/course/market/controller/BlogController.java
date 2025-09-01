@@ -4,9 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.ApiResponse;
-import online.course.market.entity.dto.blog.GetBlogBySlugResponse;
-import online.course.market.entity.dto.blog.GetBlogDto;
-import online.course.market.entity.dto.user.GetUserDto;
+import online.course.market.entity.dto.blog.BlogGetBySlugResponse;
+import online.course.market.entity.dto.blog.BlogDto;
+import online.course.market.entity.dto.blog.BlogGetByTypeResponse;
+import online.course.market.entity.dto.user.UserDto;
 import online.course.market.entity.model.Blog;
 import online.course.market.service.BlogService;
 import org.modelmapper.ModelMapper;
@@ -31,22 +32,22 @@ public class BlogController {
         this.modelMapper = modelMapper;
     }
 
-    private GetBlogDto toDto(Blog Blog) {
-        return modelMapper.map(Blog, GetBlogDto.class);
+    private BlogDto toDto(Blog Blog) {
+        return modelMapper.map(Blog, BlogDto.class);
     }
 
     @Operation(description = "Get pageable endpoint for Blog", summary = "Get pageable Blog")
     @GetMapping("/pageable")
-    public ResponseEntity<ApiResponse<Page<GetBlogDto>>> getPageable(Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<BlogDto>>> getPageable(Pageable pageable) {
         Page<Blog> page = blogService.getAll() instanceof Page ? (Page<Blog>) blogService.getAll() : Page.empty();
-        Page<GetBlogDto> pageDto = page.map(this::toDto);
+        Page<BlogDto> pageDto = page.map(this::toDto);
         return ResponseEntity.ok(ApiResponse.success(pageDto));
     }
 
     @Operation(description = "Get all endpoint for Blog", summary = "Get all Blog")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<GetBlogDto>>> getAll(@RequestParam(required = false) String search) {
-        List<GetBlogDto> dtos = blogService.getAll().stream()
+    public ResponseEntity<ApiResponse<List<BlogDto>>> getAll(@RequestParam(required = false) String search) {
+        List<BlogDto> dtos = blogService.getAll().stream()
                 .filter(Blog -> search == null || search.isEmpty() || Blog.getTitle().toLowerCase().contains(search.toLowerCase()))
                 .map(this::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(dtos));
@@ -54,30 +55,36 @@ public class BlogController {
 
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by slug")
     @GetMapping("/slug/{slug}")
-    public ResponseEntity<ApiResponse<GetBlogBySlugResponse>> getBySlug(@PathVariable String slug) {
-        GetBlogBySlugResponse response = new GetBlogBySlugResponse();
+    public ResponseEntity<ApiResponse<BlogGetBySlugResponse>> getBySlug(@PathVariable String slug) {
+        BlogGetBySlugResponse response = new BlogGetBySlugResponse();
         Blog blog = blogService.getBySlug(slug);
         if (blog == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Bài viết không tồn tại"));
         }
 
-        List<GetBlogDto> blogs = blogService.getByType(blog.getType()).stream().filter(b -> !b.getSlug().equals(slug)).map(this::toDto).toList();
-        response.setBlog(modelMapper.map(blog, GetBlogDto.class));
+        List<BlogDto> blogs = blogService.getByType(blog.getType()).stream().filter(b -> !b.getSlug().equals(slug)).map(this::toDto).toList();
+        response.setBlog(modelMapper.map(blog, BlogDto.class));
         response.setRelatedBlogs(blogs);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by type")
     @GetMapping("/type/{type}")
-    public ResponseEntity<ApiResponse<List<GetBlogDto>>> getByType(@PathVariable String type) {
-        List<GetBlogDto> Blogs = blogService.getByType(type).stream().map((blog)->{
-            GetBlogDto blogDto = modelMapper.map(blog, GetBlogDto.class);
+    public ResponseEntity<ApiResponse<BlogGetByTypeResponse>> getByType(@PathVariable String type) {
+        List<BlogDto> blogList = blogService.getByType(type).stream().map((blog)->{
+            BlogDto blogDto = modelMapper.map(blog, BlogDto.class);
             if(blog.getUpdatedBy()!= null){
-                GetUserDto userDto = modelMapper.map(blog.getUpdatedBy(), GetUserDto.class);
+                UserDto userDto = modelMapper.map(blog.getUpdatedBy(), UserDto.class);
                 blogDto.setUpdatedBy(userDto);
             }
             return blogDto;
         }).collect(Collectors.toList());
-        return ResponseEntity.ok(ApiResponse.success(Blogs));
+        BlogGetByTypeResponse blogGetByTypeResponse = new BlogGetByTypeResponse();
+        blogGetByTypeResponse.setBlogList(blogList);
+
+        List<BlogDto> blogRecommendList = blogService.getRecommendBlog(type).stream().map(this::toDto).toList();
+        blogGetByTypeResponse.setBlogRecommendList(blogRecommendList);
+
+        return ResponseEntity.ok(ApiResponse.success(blogGetByTypeResponse));
     }
 } 

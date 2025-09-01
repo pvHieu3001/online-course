@@ -3,21 +3,19 @@ package online.course.market.controller;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import jakarta.servlet.http.HttpServletRequest;
 import online.course.market.entity.dto.ApiResponse;
-import online.course.market.entity.dto.category.GetCategoryDto;
-import online.course.market.entity.dto.course.GetCourseDto;
-import online.course.market.entity.dto.course.GetQuickViewCourseDto;
+import online.course.market.entity.dto.category.CategoryDto;
+import online.course.market.entity.dto.course.CourseDto;
+import online.course.market.entity.dto.course.QuickViewCourseGetResponse;
 import online.course.market.entity.model.Course;
 import online.course.market.service.LogService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import online.course.market.service.CourseService;
@@ -63,21 +61,21 @@ public class CourseController {
     }
 
     // Helper: map Course sang GetCourseDto
-    private GetCourseDto toDto(Course course) {
-        return modelMapper.map(course, GetCourseDto.class);
+    private CourseDto toDto(Course course) {
+        return modelMapper.map(course, CourseDto.class);
     }
 
     @Operation(description = "Get pageable endpoint for Course", summary = "This is a summary for Course get pageable endpoint")
     @GetMapping("/pageable")
-    public ResponseEntity<ApiResponse<Page<GetCourseDto>>> getPageable(Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<CourseDto>>> getPageable(Pageable pageable) {
         Page<Course> coursePage = courseService.finadAll(pageable);
-        Page<GetCourseDto> coursePageDto = coursePage.map(this::toDto);
+        Page<CourseDto> coursePageDto = coursePage.map(this::toDto);
         return ResponseEntity.ok(ApiResponse.success(coursePageDto));
     }
 
     @Operation(description = "Get all endpoint for Course", summary = "This is a summary for Course get all endpoint")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<GetCourseDto>>> getAll(
+    public ResponseEntity<ApiResponse<List<CourseDto>>> getAll(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String isDisplayHot,
@@ -87,15 +85,15 @@ public class CourseController {
                 isDisplayHot == null || isDisplayHot.isBlank() ? null :
                         "1".equals(isDisplayHot) ? Boolean.TRUE :
                                 "0".equals(isDisplayHot) ? Boolean.FALSE : null;
-        List<GetCourseDto> getCourseDtos = courseService.filterCourse(
+        List<CourseDto> getCourseDtos = courseService.filterCourse(
                 !String.valueOf(status).isEmpty() ? status : null,
                 !String.valueOf(search).isEmpty() ? search : null,
                         displayHot
             )
                 .stream().map(course -> {
-                GetCourseDto courseDto = toDto(course);
+                CourseDto courseDto = toDto(course);
                 Optional.ofNullable(course.getCategory())
-                        .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, GetCategoryDto.class)));
+                        .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, CategoryDto.class)));
                 return courseDto;
             })
             .collect(Collectors.toList());
@@ -105,21 +103,21 @@ public class CourseController {
 
     @Operation(description = "Get by name endpoint for Course", summary = "This is a summary for Course get by name endpoint")
     @GetMapping("/quick_view")
-    public ResponseEntity<ApiResponse<List<GetQuickViewCourseDto>>> GetQuickViewCourse() {
-        List<GetQuickViewCourseDto> quickViewCourse = courseService.getQuickViewCourse();
+    public ResponseEntity<ApiResponse<List<QuickViewCourseGetResponse>>> GetQuickViewCourse() {
+        List<QuickViewCourseGetResponse> quickViewCourse = courseService.getQuickViewCourse();
         return ResponseEntity.ok(ApiResponse.success(quickViewCourse));
     }
 
     @Operation(description = "Get by name endpoint for Course", summary = "This is a summary for Course get by name endpoint")
     @GetMapping("/recommend")
-    public ResponseEntity<ApiResponse<List<GetCourseDto>>> getRecommendCourse() {
-        List<GetCourseDto> recommendCourse = courseService.getRecommendCourse().stream().map(this::toDto).toList();
+    public ResponseEntity<ApiResponse<List<CourseDto>>> getRecommendCourse() {
+        List<CourseDto> recommendCourse = courseService.getRecommendCourse().stream().map(this::toDto).toList();
         return ResponseEntity.ok(ApiResponse.success(recommendCourse));
     }
 
     @Operation(description = "Get by slug endpoint for Course", summary = "This is a summary for Course get by id endpoint")
     @GetMapping("/slug/{slug}")
-    public ResponseEntity<ApiResponse<GetCourseDto>> getById(@PathVariable String slug, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<CourseDto>> getById(@PathVariable String slug, HttpServletRequest request) {
         Course course = courseService.getBySlug(slug);
         logService.save(env, request, 1, course.getId(), LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE);
         return ResponseEntity.ok(ApiResponse.success(toDto(course)));
@@ -127,8 +125,8 @@ public class CourseController {
 
     @Operation(description = "Get courses by category endpoint", summary = "This is a summary for Course get by category endpoint")
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<ApiResponse<List<GetCourseDto>>> getByCategoryId(@PathVariable Integer categoryId) {
-        List<GetCourseDto> getCourseDtos = courseService.getByCategoryId(categoryId).stream()
+    public ResponseEntity<ApiResponse<List<CourseDto>>> getByCategoryId(@PathVariable Integer categoryId) {
+        List<CourseDto> getCourseDtos = courseService.getByCategoryId(categoryId).stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(getCourseDtos));

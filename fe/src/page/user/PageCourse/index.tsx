@@ -15,8 +15,11 @@ function PageCourse() {
   const [coursesPerPage] = useState(6)
   const { dataList: courses, isLoading: coursesLoading } = useSelector((state: RootState) => state.course)
   const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
-  setIsShowRecommendCourses(true)
 
+  useEffect(() => {
+    setIsShowRecommendCourses(true)
+  }, [setIsShowRecommendCourses])
+  
   useEffect(() => {
     dispatch(courseActions.getCourses('active', '', '') as unknown as AnyAction)
   }, [dispatch])

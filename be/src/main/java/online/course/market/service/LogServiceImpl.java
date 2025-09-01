@@ -2,16 +2,13 @@ package online.course.market.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import online.course.market.entity.dto.log.LogRequestDto;
+import online.course.market.entity.dto.log.LogDto;
 import online.course.market.entity.model.Log;
 import online.course.market.repository.LogRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
-
-import static online.course.market.utils.Constant.LOG_ACTION_GET_ALL_COURSE;
-import static online.course.market.utils.Constant.LOG_VIEW_COURSE;
 
 @Service
 @AllArgsConstructor
@@ -37,7 +34,7 @@ public class LogServiceImpl implements LogService {
                 ipAddress = request.getRemoteAddr();
             }
             String userAgent = request.getHeader("User-Agent");
-            LogRequestDto dto = new LogRequestDto(userId, courseId, name, action, ipAddress, userAgent);
+            LogDto dto = new LogDto(userId, courseId, name, action, ipAddress, userAgent);
             Log log = modelMapper.map(dto, Log.class);
             logRepository.save(log);
         }

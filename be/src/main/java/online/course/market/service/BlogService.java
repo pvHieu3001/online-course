@@ -17,4 +17,5 @@ public interface BlogService {
     void deleteById(Integer id);
     List<Blog> getByType(String type);
     List<Blog> filterCourse(Boolean status, String search, Boolean isDisplayHot);
+    List<Blog> getRecommendBlog(String type);
 }

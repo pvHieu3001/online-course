@@ -1,7 +1,6 @@
 package online.course.market.entity.dto.course;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
@@ -12,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PutCourseDto {
+public class CoursePutRequest {
     MultipartFile imageFile;
     MultipartFile sourceFile;
     String imageUrl;

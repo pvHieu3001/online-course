@@ -20,4 +20,12 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
     List<Blog> filterBlog(@Param("status") Boolean status,
                               @Param("search") String search,
                               @Param("isDisplayHot") Boolean isDisplayHot);
+
+    @Query("SELECT c FROM Blog c " +
+            "WHERE c.status = true " +
+            "AND c.type = :type " +
+            "AND c.isDisplayHot = true " +
+            "ORDER BY createdAt DESC " +
+            "LIMIT 4")
+    List<Blog> getRecommendBlog(@Param("type") String type);
 }

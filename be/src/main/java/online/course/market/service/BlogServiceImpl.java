@@ -74,4 +74,9 @@ public class BlogServiceImpl implements BlogService {
         return blogRepository.filterBlog(status, search, isDisplayHot);
     }
 
+    @Override
+    public List<Blog> getRecommendBlog(String type) {
+        return blogRepository.getRecommendBlog(type);
+    }
+
 }

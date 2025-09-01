@@ -1,23 +1,26 @@
 package online.course.market.entity.dto.blog;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
+import online.course.market.entity.dto.user.UserDto;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PutBlogDto {
-    @NotBlank(message = "Title is required")
+public class BlogDto {
+    private Integer id;
     private String title;
     private String description;
     private String content;
     private String image;
-    private MultipartFile imageFile;
     private String slug;
     private Boolean status;
-    private Boolean isDisplayHot;
     private String type;
+    private Boolean isDisplayHot;
+    private UserDto updatedBy;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 } 

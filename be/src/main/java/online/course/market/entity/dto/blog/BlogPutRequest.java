@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostBlogDto {
+public class BlogPutRequest {
     @NotBlank(message = "Title is required")
     private String title;
     private String description;

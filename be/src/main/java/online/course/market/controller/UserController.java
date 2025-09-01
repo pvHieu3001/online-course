@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import online.course.market.entity.dto.user.GetUserDto;
-import online.course.market.entity.dto.user.PostUserDto;
-import online.course.market.entity.dto.user.PutUserDto;
+import online.course.market.entity.dto.user.UserDto;
+import online.course.market.entity.dto.user.UserPostRequest;
+import online.course.market.entity.dto.user.UserPutRequest;
 import online.course.market.entity.model.UserModel;
 import online.course.market.exception.CJNotFoundException;
 import online.course.market.service.UserService;
@@ -42,61 +42,61 @@ public class UserController {
 
 	@Operation(description = "Get pageable endpoint for user", summary = "This is a summary for user get pageable endpoint")
 	@GetMapping(value = "/pageable")
-	public ResponseEntity<Page<GetUserDto>> getPageable(Pageable pageable) {
+	public ResponseEntity<Page<UserDto>> getPageable(Pageable pageable) {
 		Page<UserModel> userPage = userService.finadAll(pageable);
-		Page<GetUserDto> userPageDto = userPage.map(user -> modelMapper.map(user, GetUserDto.class));
+		Page<UserDto> userPageDto = userPage.map(user -> modelMapper.map(user, UserDto.class));
 		return ResponseEntity.status(HttpStatus.OK).body(userPageDto);
 	}
 
 	@Operation(description = "Get all endpoint for user", summary = "This is a summary for user get all endpoint")
 	@GetMapping
-	public ResponseEntity<List<GetUserDto>> getAll() {
+	public ResponseEntity<List<UserDto>> getAll() {
 		// Get All user for user services
 		List<UserModel> user = userService.getAll();
 		// Map user model to DTO objects
-		List<GetUserDto> getUserDtos = user.stream().map(userModel -> modelMapper.map(userModel, GetUserDto.class))
+		List<UserDto> userDtos = user.stream().map(userModel -> modelMapper.map(userModel, UserDto.class))
 				.collect(Collectors.toList());
 		// return endpoint
-		return ResponseEntity.status(HttpStatus.OK).body(getUserDtos);
+		return ResponseEntity.status(HttpStatus.OK).body(userDtos);
 	}
 
 	@Operation(description = "Get by name endpoint for user", summary = "This is a summary for user get by name endpoint")
 	@GetMapping("/{name}/name")
-	public ResponseEntity<GetUserDto> getUserByName(@PathVariable String name) {
+	public ResponseEntity<UserDto> getUserByName(@PathVariable String name) {
 		UserModel userDb = userService.getByName(name);
 		if(ObjectUtils.isEmpty(userDb))
 			throw new CJNotFoundException(CustomCodeException.CODE_400, "user not found with name "+name);
-		GetUserDto getUserDto = modelMapper.map(userDb, GetUserDto.class);
-		return ResponseEntity.status(HttpStatus.OK).body(getUserDto);
+		UserDto userDto = modelMapper.map(userDb, UserDto.class);
+		return ResponseEntity.status(HttpStatus.OK).body(userDto);
 	}
 
 	@Operation(description = "Save  endpoint for user", summary = "This is a summary for user save endpoint")
 	@PostMapping
-	public ResponseEntity<GetUserDto> saveUser(@Valid @RequestBody PostUserDto dto) {
+	public ResponseEntity<UserDto> saveUser(@Valid @RequestBody UserPostRequest dto) {
 		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 		UserModel user = modelMapper.map(dto, UserModel.class);
 		UserModel userDb = userService.save(user);
-		GetUserDto getUserDto = modelMapper.map(userDb, GetUserDto.class);
-		return ResponseEntity.status(HttpStatus.CREATED).body(getUserDto);
+		UserDto userDto = modelMapper.map(userDb, UserDto.class);
+		return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
 	}
 
 	@Operation(description = "Update  endpoint for user", summary = "This is a summary for user update endpoint")
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<GetUserDto> updateUser(@Valid @RequestBody PutUserDto dto,
-			@PathVariable(name = "id") Long id) {
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserPutRequest dto,
+											  @PathVariable(name = "id") Long id) {
 		// Map DTO to Model object for service
 		UserModel user = modelMapper.map(dto, UserModel.class);
 		// Send object to update service
 		UserModel userDb = userService.update(user, id);
 		// Map Model to DTO object for return endpoint
-		GetUserDto getUserDto = modelMapper.map(userDb, GetUserDto.class);
+		UserDto userDto = modelMapper.map(userDb, UserDto.class);
 		// Return endpoint
-		return ResponseEntity.status(HttpStatus.OK).body(getUserDto);
+		return ResponseEntity.status(HttpStatus.OK).body(userDto);
 	}
 
 	@Operation(description = "Delete  endpoint for user", summary = "This is a summary for user delete endpoint")
 	@DeleteMapping(value = "{id}")
-	public ResponseEntity<GetUserDto> deleteUser(@PathVariable(name = "id") Long id) {
+	public ResponseEntity<UserDto> deleteUser(@PathVariable(name = "id") Long id) {
 		// Send id to delete service
 		userService.deleteById(id);
 		// return endpoint

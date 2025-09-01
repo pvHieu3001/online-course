@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PostCourseDto {
+public class CoursePostRequest {
     MultipartFile imageFile;
     MultipartFile sourceFile;
     String imageUrl;

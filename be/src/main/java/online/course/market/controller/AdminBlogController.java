@@ -6,9 +6,9 @@ import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.ApiResponse;
-import online.course.market.entity.dto.blog.GetBlogDto;
-import online.course.market.entity.dto.blog.PostBlogDto;
-import online.course.market.entity.dto.blog.PutBlogDto;
+import online.course.market.entity.dto.blog.BlogDto;
+import online.course.market.entity.dto.blog.BlogPostRequest;
+import online.course.market.entity.dto.blog.BlogPutRequest;
 import online.course.market.entity.model.Blog;
 import online.course.market.service.BlogService;
 import online.course.market.utils.DataUtils;
@@ -58,13 +58,13 @@ public class AdminBlogController {
         }
     }
 
-    private GetBlogDto toDto(Blog blog) {
-        return modelMapper.map(blog, GetBlogDto.class);
+    private BlogDto toDto(Blog blog) {
+        return modelMapper.map(blog, BlogDto.class);
     }
 
     @Operation(description = "Get all endpoint for Blog", summary = "Get all Blog")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<GetBlogDto>>> getAll(
+    public ResponseEntity<ApiResponse<List<BlogDto>>> getAll(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String isDisplayHot) {
@@ -72,7 +72,7 @@ public class AdminBlogController {
                 isDisplayHot == null || isDisplayHot.isBlank() ? null :
                         "1".equals(isDisplayHot) ? Boolean.TRUE :
                                 "0".equals(isDisplayHot) ? Boolean.FALSE : null;
-        List<GetBlogDto> dtos = blogService.filterCourse(
+        List<BlogDto> dtos = blogService.filterCourse(
                 !String.valueOf(status).isEmpty() ? DataUtils.convertStatus(status) : null,
                 !String.valueOf(search).isEmpty() ? search : null,
                 displayHot
@@ -84,14 +84,14 @@ public class AdminBlogController {
 
     @Operation(description = "Get by id endpoint for Blog", summary = "Get Blog by id")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<GetBlogDto>> getById(@PathVariable Integer id) {
+    public ResponseEntity<ApiResponse<BlogDto>> getById(@PathVariable Integer id) {
         Blog Blog = blogService.getById(id);
         return ResponseEntity.ok(ApiResponse.success(toDto(Blog)));
     }
 
     @Operation(description = "Create Blog", summary = "Create Blog")
     @PostMapping
-    public ResponseEntity<ApiResponse<GetBlogDto>> create(@ModelAttribute PostBlogDto dto) {
+    public ResponseEntity<ApiResponse<BlogDto>> create(@ModelAttribute BlogPostRequest dto) {
         try {
             log.info("Creating Blog with title: {}", dto.getTitle());
             
@@ -131,7 +131,7 @@ public class AdminBlogController {
 
     @Operation(description = "Update Blog", summary = "Update Blog")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<GetBlogDto>> update(@Valid @ModelAttribute PutBlogDto dto, @PathVariable Integer id) {
+    public ResponseEntity<ApiResponse<BlogDto>> update(@Valid @ModelAttribute BlogPutRequest dto, @PathVariable Integer id) {
         try {
             log.info("Updating Blog with ID: {}, title: {}", id, dto.getTitle());
             

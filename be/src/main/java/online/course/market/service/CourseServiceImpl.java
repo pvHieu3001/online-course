@@ -4,9 +4,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import online.course.market.entity.dto.category.GetCategoryDto;
-import online.course.market.entity.dto.course.GetCourseDto;
-import online.course.market.entity.dto.course.GetQuickViewCourseDto;
+import online.course.market.entity.dto.category.CategoryDto;
+import online.course.market.entity.dto.course.CourseDto;
+import online.course.market.entity.dto.course.QuickViewCourseGetResponse;
 import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
 import online.course.market.repository.CategoryRepository;
@@ -23,8 +23,6 @@ import online.course.market.utils.CustomCodeException;
 
 import lombok.AllArgsConstructor;
 
-import static java.util.stream.Collectors.toList;
-
 @Service
 @AllArgsConstructor
 public class CourseServiceImpl implements CourseService {
@@ -33,8 +31,8 @@ public class CourseServiceImpl implements CourseService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
-    private GetCourseDto toDto(Course course) {
-        return modelMapper.map(course, GetCourseDto.class);
+    private CourseDto toDto(Course course) {
+        return modelMapper.map(course, CourseDto.class);
     }
 
     @Override
@@ -127,12 +125,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<GetQuickViewCourseDto> getQuickViewCourse() {
-        List<GetQuickViewCourseDto> quickViewCourseDtoList = new ArrayList<>();
+    public List<QuickViewCourseGetResponse> getQuickViewCourse() {
+        List<QuickViewCourseGetResponse> quickViewCourseDtoList = new ArrayList<>();
         List<Category> categoryList =  categoryRepository.findByIsQuickViewTrueAndStatusTrue();
         categoryList.forEach((item)->{
-            GetQuickViewCourseDto quickViewCourseDto = new GetQuickViewCourseDto();
-            quickViewCourseDto.setCategory(modelMapper.map(item, GetCategoryDto.class));
+            QuickViewCourseGetResponse quickViewCourseDto = new QuickViewCourseGetResponse();
+            quickViewCourseDto.setCategory(modelMapper.map(item, CategoryDto.class));
             List<Course> courseList =  courseRepository.findByCategoryIdOrderByIdDesc(item.getId());
             quickViewCourseDto.setListCourse(courseList.stream().map(this::toDto).toList());
             quickViewCourseDtoList.add(quickViewCourseDto);

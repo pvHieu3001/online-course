@@ -3,7 +3,7 @@ package online.course.market.controller;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.ApiResponse;
-import online.course.market.entity.dto.category.GetCategoryDto;
+import online.course.market.entity.dto.category.CategoryDto;
 import online.course.market.entity.model.Category;
 import online.course.market.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -57,22 +57,22 @@ public class CategoryController {
         }
     }
 
-    private GetCategoryDto toDto(Category category) {
-        return modelMapper.map(category, GetCategoryDto.class);
+    private CategoryDto toDto(Category category) {
+        return modelMapper.map(category, CategoryDto.class);
     }
 
     @Operation(description = "Get pageable endpoint for Category", summary = "Get pageable Category")
     @GetMapping("/pageable")
-    public ResponseEntity<ApiResponse<Page<GetCategoryDto>>> getPageable(Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<CategoryDto>>> getPageable(Pageable pageable) {
         Page<Category> page = categoryService.getAll() instanceof Page ? (Page<Category>) categoryService.getAll() : Page.empty();
-        Page<GetCategoryDto> pageDto = page.map(this::toDto);
+        Page<CategoryDto> pageDto = page.map(this::toDto);
         return ResponseEntity.ok(ApiResponse.success(pageDto));
     }
 
     @Operation(description = "Get all endpoint for Category", summary = "Get all Category")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<GetCategoryDto>>> getAll(@RequestParam(required = false) String search) {
-        List<GetCategoryDto> dtos = categoryService.getAll().stream()
+    public ResponseEntity<ApiResponse<List<CategoryDto>>> getAll(@RequestParam(required = false) String search) {
+        List<CategoryDto> dtos = categoryService.getAll().stream()
                 .filter(category -> search == null || search.isEmpty() || category.getName().toLowerCase().contains(search.toLowerCase()))
                 .map(this::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(dtos));
@@ -80,7 +80,7 @@ public class CategoryController {
 
     @Operation(description = "Get by slug endpoint for Category", summary = "Get Category by slug")
     @GetMapping("/slug/{slug}")
-    public ResponseEntity<ApiResponse<GetCategoryDto>> getBySlug(@PathVariable String slug) {
+    public ResponseEntity<ApiResponse<CategoryDto>> getBySlug(@PathVariable String slug) {
         Category category = categoryService.getBySlug(slug);
         if (category == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Danh mục không tồn tại"));

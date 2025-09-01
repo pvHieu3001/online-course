@@ -3,14 +3,14 @@ package online.course.market.entity.dto.course;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import online.course.market.entity.dto.category.GetCategoryDto;
+import online.course.market.entity.dto.category.CategoryDto;
 
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class GetCourseDto {
+public class CourseDto {
     private Integer id;
     private String imageUrl;
     private String name;
@@ -30,7 +30,7 @@ public class GetCourseDto {
     protected LocalDateTime createdAt;
     protected LocalDateTime updatedAt;
 
-    protected GetCategoryDto category;
+    protected CategoryDto category;
     protected String userCreate;
     protected String userUpdate;
 }

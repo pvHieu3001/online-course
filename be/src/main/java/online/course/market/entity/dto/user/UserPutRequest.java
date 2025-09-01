@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PutUserDto {
+public class UserPutRequest {
 	@NotBlank(message = "{name.notblank}")
 	@Size(min = 2, max=32, message="{name.size}")
 	String firstname;

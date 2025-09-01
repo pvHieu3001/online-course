@@ -7,7 +7,8 @@ import lombok.AllArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LogRequestDto {
+public class LogGetResponse {
+    private Integer id;
     private Integer userId;
     private Integer courseId;
     private String name;

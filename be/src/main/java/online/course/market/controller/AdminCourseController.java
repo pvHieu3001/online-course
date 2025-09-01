@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import online.course.market.entity.dto.ApiResponse;
-import online.course.market.entity.dto.category.GetCategoryDto;
-import online.course.market.entity.dto.course.GetCourseDto;
-import online.course.market.entity.dto.course.PostCourseDto;
-import online.course.market.entity.dto.course.PutCourseDto;
+import online.course.market.entity.dto.category.CategoryDto;
+import online.course.market.entity.dto.course.CourseDto;
+import online.course.market.entity.dto.course.CoursePostRequest;
+import online.course.market.entity.dto.course.CoursePutRequest;
 import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
 import online.course.market.service.CategoryService;
@@ -70,13 +70,13 @@ public class AdminCourseController {
     }
 
     // Helper: map Course sang GetCourseDto
-    private GetCourseDto toDto(Course course) {
-        return modelMapper.map(course, GetCourseDto.class);
+    private CourseDto toDto(Course course) {
+        return modelMapper.map(course, CourseDto.class);
     }
 
     @Operation(description = "Get all endpoint for Course", summary = "This is a summary for Course get all endpoint")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<GetCourseDto>>> getAll(
+    public ResponseEntity<ApiResponse<List<CourseDto>>> getAll(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String isDisplayHot,
@@ -86,15 +86,15 @@ public class AdminCourseController {
                 isDisplayHot == null || isDisplayHot.isBlank() ? null :
                         "1".equals(isDisplayHot) ? Boolean.TRUE :
                                 "0".equals(isDisplayHot) ? Boolean.FALSE : null;
-        List<GetCourseDto> getCourseDtos = courseService.filterCourse(
+        List<CourseDto> getCourseDtos = courseService.filterCourse(
                 !String.valueOf(status).isEmpty() ? status : null,
                 !String.valueOf(search).isEmpty() ? search : null,
                         displayHot
             )
                 .stream().map(course -> {
-                GetCourseDto courseDto = toDto(course);
+                CourseDto courseDto = toDto(course);
                 Optional.ofNullable(course.getCategory())
-                        .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, GetCategoryDto.class)));
+                        .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, CategoryDto.class)));
                 return courseDto;
             })
             .collect(Collectors.toList());
@@ -104,7 +104,7 @@ public class AdminCourseController {
 
     @Operation(description = "Get by id endpoint for Course", summary = "This is a summary for Course get by id endpoint")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<GetCourseDto>> getById(@PathVariable Integer id, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<CourseDto>> getById(@PathVariable Integer id, HttpServletRequest request) {
         logService.save(env, request, 1, null, LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE);
 
         Course course = courseService.getById(id);
@@ -116,7 +116,7 @@ public class AdminCourseController {
 
     @Operation(description = "Save endpoint for Course", summary = "This is a summary for Course save endpoint")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<GetCourseDto>> saveCourse(@Valid @ModelAttribute PostCourseDto dto, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<CourseDto>> saveCourse(@Valid @ModelAttribute CoursePostRequest dto, HttpServletRequest request) {
         try {
             if(!Files.exists(uploadDir)){
                 Files.createDirectories(uploadDir);
@@ -152,8 +152,8 @@ public class AdminCourseController {
 
     @Operation(description = "Update endpoint for Course", summary = "This is a summary for Course update endpoint")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<GetCourseDto>> updateCourse(@Valid @ModelAttribute PutCourseDto dto,
-                                                                  @PathVariable Integer id, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<CourseDto>> updateCourse(@Valid @ModelAttribute CoursePutRequest dto,
+                                                               @PathVariable Integer id, HttpServletRequest request) {
         try {
             if(!Files.exists(uploadDir)){
                 Files.createDirectories(uploadDir);

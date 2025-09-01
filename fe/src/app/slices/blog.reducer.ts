@@ -8,7 +8,8 @@ const initialState = {
   error_message: '',
   data: <IBlog>(<unknown>null),
   dataList: <IBlog[]>(<unknown>null),
-  relatedPosts: <IBlog[]>(<unknown>null)
+  relatedPosts: <IBlog[]>(<unknown>null),
+  recommendList: <IBlog[]>(<unknown>null)
 }
 
 const blogSlice = createSlice({
@@ -47,7 +48,8 @@ const blogSlice = createSlice({
       state.isLoading = false
     },
     getByTypeSuccessFully: (state, { payload }) => {
-      state.dataList = payload.data
+      state.recommendList = payload.data.blogRecommendList
+      state.dataList = payload.data.blogList
       state.isLoading = false
     },
     getByTypeSuccessFailure: (state, { payload }) => {

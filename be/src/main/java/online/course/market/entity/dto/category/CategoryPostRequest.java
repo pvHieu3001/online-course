@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostCategoryDto {
+public class CategoryPostRequest {
     private Integer parentId;
     @NotBlank(message = "Name is required")
     private String name;

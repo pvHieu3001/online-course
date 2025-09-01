@@ -3,9 +3,9 @@ package online.course.market.controller;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.ApiResponse;
-import online.course.market.entity.dto.category.GetCategoryDto;
-import online.course.market.entity.dto.category.PostCategoryDto;
-import online.course.market.entity.dto.category.PutCategoryDto;
+import online.course.market.entity.dto.category.CategoryDto;
+import online.course.market.entity.dto.category.CategoryPostRequest;
+import online.course.market.entity.dto.category.CategoryPutRequest;
 import online.course.market.entity.model.Category;
 import online.course.market.service.CategoryService;
 import online.course.market.utils.DataUtils;
@@ -60,14 +60,14 @@ public class AdminCategoryController {
         }
     }
 
-    private GetCategoryDto toDto(Category category) {
-        return modelMapper.map(category, GetCategoryDto.class);
+    private CategoryDto toDto(Category category) {
+        return modelMapper.map(category, CategoryDto.class);
     }
 
     @Operation(description = "Get all endpoint for Category", summary = "Get all Category")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<GetCategoryDto>>> getAll(@RequestParam(required = false) String search) {
-        List<GetCategoryDto> dtos = categoryService.getAll().stream()
+    public ResponseEntity<ApiResponse<List<CategoryDto>>> getAll(@RequestParam(required = false) String search) {
+        List<CategoryDto> dtos = categoryService.getAll().stream()
                 .filter(category -> search == null || search.isEmpty() || category.getName().toLowerCase().contains(search.toLowerCase()))
                 .map(this::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(dtos));
@@ -75,14 +75,14 @@ public class AdminCategoryController {
 
     @Operation(description = "Get by id endpoint for Category", summary = "Get Category by id")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<GetCategoryDto>> getById(@PathVariable Integer id) {
+    public ResponseEntity<ApiResponse<CategoryDto>> getById(@PathVariable Integer id) {
         Category category = categoryService.getById(id);
         return ResponseEntity.ok(ApiResponse.success(toDto(category)));
     }
 
     @Operation(description = "Create Category", summary = "Create Category")
     @PostMapping
-    public ResponseEntity<ApiResponse<GetCategoryDto>> create(@ModelAttribute PostCategoryDto dto) {
+    public ResponseEntity<ApiResponse<CategoryDto>> create(@ModelAttribute CategoryPostRequest dto) {
         try {
             log.info("Creating category with name: {}, parentId: {}", dto.getName(), dto.getParentId());
             
@@ -121,7 +121,7 @@ public class AdminCategoryController {
 
     @Operation(description = "Update Category", summary = "Update Category")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<GetCategoryDto>> update(@Valid @ModelAttribute PutCategoryDto dto, @PathVariable Integer id) {
+    public ResponseEntity<ApiResponse<CategoryDto>> update(@Valid @ModelAttribute CategoryPutRequest dto, @PathVariable Integer id) {
         try {
             log.info("Updating category with ID: {}, name: {}", id, dto.getName());
             
