@@ -36,7 +36,7 @@ export default function EditBlog() {
       form.setFieldsValue({
         status: data.status,
         description: data.description,
-        name: data.title,
+        title: data.title,
         type: data.type,
         content: data.content,
         isDisplayHot: data.isDisplayHot
@@ -74,17 +74,17 @@ export default function EditBlog() {
 
     formData.append('title', form.getFieldValue('title'))
     formData.append('description', form.getFieldValue('description'))
-    formData.append('status', form.getFieldValue('status').toString())
+    formData.append('status', form.getFieldValue('status'))
     formData.append('content', form.getFieldValue('content'))
     formData.append('type', form.getFieldValue('type'))
-    formData.append('isDisplayHot', form.getFieldValue('isDisplayHot'))
+    formData.append('isDisplayHot', form.getFieldValue('isDisplayHot') || false)
     if (imageUrl) {
       formData.append('imageFile', imageUrl)
     }
 
     try {
       await dispatch(blogActions.updateBlog(params.id, formData) as unknown as AnyAction)
-      await dispatch(blogActions.getAdminBlogs('') as unknown as AnyAction)
+      await dispatch(blogActions.getAdminBlogs('', '', '') as unknown as AnyAction)
       popupSuccess('Cập nhật bài viết thành công')
       setIsDirty(false)
       navigate('..')
@@ -128,7 +128,6 @@ export default function EditBlog() {
             layout='vertical'
             onFinish={handleSubmit}
             onValuesChange={onValuesChange}
-            initialValues={blogStore.data}
           >
             <Row gutter={[24, 24]}>
               {/* Cài đặt hiển thị */}
@@ -198,9 +197,10 @@ export default function EditBlog() {
                 <div className='bg-white rounded-md shadow-sm p-4 space-y-4'>
                   <h2 className='text-lg font-semibold text-gray-700'>Cài đặt hiển thị</h2>
                   <Form.Item label='Kích hoạt' name='status' valuePropName='checked'>
-                    <p className='text-xs text-gray-500'>Bật để bài viết này hiển thị trên website.</p>
                     <Switch />
                   </Form.Item>
+                  <p className='text-xs text-gray-500'>Bật để bài viết này hiển thị trên website.</p>
+
                   <Form.Item name='isDisplayHot' label='Bài viết nổi bật' valuePropName='checked'>
                     <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                   </Form.Item>

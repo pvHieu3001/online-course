@@ -1,19 +1,20 @@
 package online.course.market.config;
 
+import online.course.market.entity.model.UserModel;
 import online.course.market.security.entity.SecurityUser;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
-public class SpringSecurityAuditorAware implements AuditorAware<Long> {
+public class SpringSecurityAuditorAware implements AuditorAware<UserModel> {
     @Override
-    public Optional<Long> getCurrentAuditor() {
+    public Optional<UserModel> getCurrentAuditor() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = 0L;
-        if (principal instanceof SecurityUser) {
-            userId = ((SecurityUser)principal).getId();
+        UserModel userModel = null;
+        if (principal instanceof UserModel) {
+            userModel = ((UserModel)principal);
         }
-        return userId.describeConstable();
+        return Optional.ofNullable(userModel);
     }
 }
