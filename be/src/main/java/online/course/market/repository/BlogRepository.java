@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, Integer> {
-    Blog findBySlug(String slug);
+    Blog findBySlugAndStatus(String slug, Boolean status);
     List<Blog> findByTypeAndStatus(String type, Boolean status);
     @Query("SELECT c FROM Blog c " +
             "WHERE (:status IS NULL OR c.status = :status) " +

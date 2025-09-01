@@ -50,7 +50,7 @@ export default function AddBlog() {
     formData.append('description', form.getFieldValue('description'))
     formData.append('type', form.getFieldValue('type'))
     formData.append('status', form.getFieldValue('status').toString())
-    formData.append('isDisplayHot', form.getFieldValue('isDisplayHot'))
+    formData.append('isDisplayHot', form.getFieldValue('isDisplayHot') || false)
     formData.append('content', content)
     if (imageUrl) {
       formData.append('imageFile', imageUrl)
@@ -59,7 +59,7 @@ export default function AddBlog() {
     try {
       setIsLoading(true)
       await dispatch(blogActions.createBlog(formData) as unknown as AnyAction)
-      await dispatch(blogActions.getAdminBlogs('') as unknown as AnyAction)
+      await dispatch(blogActions.getAdminBlogs('', '', '') as unknown as AnyAction)
       popupSuccess('Thêm bài viết thành công')
       setIsDirty(false)
       navigate('..')
@@ -158,7 +158,7 @@ export default function AddBlog() {
                 <Form.Item label='Kích hoạt' name='status' valuePropName='checked'>
                   <Switch />
                 </Form.Item>
-                <Form.Item name='isDisplayHot' label='Khóa học nổi bật' valuePropName='checked'>
+                <Form.Item name='isDisplayHot' label='Bài viết nổi bật' valuePropName='checked'>
                   <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                 </Form.Item>
               </div>

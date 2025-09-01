@@ -27,7 +27,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     @Transactional(readOnly = true)
     public Blog getBySlug(String slug) {
-        return blogRepository.findBySlug(slug);
+        return blogRepository.findBySlugAndStatus(slug, true);
     }
 
     @Override
