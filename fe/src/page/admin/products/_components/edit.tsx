@@ -33,7 +33,7 @@ function EditProduct() {
       dispatch(courseActions.getCourseById(flug) as unknown as AnyAction)
     }
     dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction) // Lấy danh sách danh mục
-  }, [flug])
+  }, [dispatch, flug])
 
   useEffect(() => {
     setDescription(courseStore.data?.description ?? '')

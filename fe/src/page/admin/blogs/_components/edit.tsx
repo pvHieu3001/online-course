@@ -22,7 +22,6 @@ export default function EditBlog() {
   const blogStore = useSelector((state: RootState) => state.blog)
   useEffect(() => {
     dispatch(blogActions.getBlogById(params.id ?? '0') as unknown as AnyAction)
-    dispatch(blogActions.getAdminBlogs('') as unknown as AnyAction)
   }, [dispatch, params.id])
 
   const navigate = useNavigate()
