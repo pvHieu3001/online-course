@@ -2,6 +2,7 @@ package online.course.market.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.blog.BlogGetBySlugResponse;
@@ -10,6 +11,7 @@ import online.course.market.entity.dto.blog.BlogGetByTypeResponse;
 import online.course.market.entity.dto.user.UserDto;
 import online.course.market.entity.model.Blog;
 import online.course.market.service.BlogService;
+import online.course.market.service.LogService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static online.course.market.utils.Constant.*;
+
 @Slf4j
 @RestController
 @RequestMapping("api/v1/user/blog")
@@ -26,10 +30,14 @@ import java.util.stream.Collectors;
 public class BlogController {
     private final BlogService blogService;
     private final ModelMapper modelMapper;
+    private final LogService logService;
+    private final String env;
 
-    public BlogController(BlogService blogService, ModelMapper modelMapper) {
+    public BlogController(BlogService blogService, ModelMapper modelMapper, LogService logService, String env) {
         this.blogService = blogService;
         this.modelMapper = modelMapper;
+        this.logService = logService;
+        this.env = env;
     }
 
     private BlogDto toDto(Blog Blog) {
@@ -46,7 +54,8 @@ public class BlogController {
 
     @Operation(description = "Get all endpoint for Blog", summary = "Get all Blog")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<BlogDto>>> getAll(@RequestParam(required = false) String search) {
+    public ResponseEntity<ApiResponse<List<BlogDto>>> getAll(@RequestParam(required = false) String search, HttpServletRequest request) {
+        logService.save(env, request, 1, null, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG);
         List<BlogDto> dtos = blogService.getAll().stream()
                 .filter(Blog -> search == null || search.isEmpty() || Blog.getTitle().toLowerCase().contains(search.toLowerCase()))
                 .map(this::toDto).collect(Collectors.toList());
@@ -55,7 +64,8 @@ public class BlogController {
 
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by slug")
     @GetMapping("/slug/{slug}")
-    public ResponseEntity<ApiResponse<BlogGetBySlugResponse>> getBySlug(@PathVariable String slug) {
+    public ResponseEntity<ApiResponse<BlogGetBySlugResponse>> getBySlug(@PathVariable String slug, HttpServletRequest request) {
+        logService.save(env, request, 1, null, LOG_VIEW_BLOG, LOG_ACTION_GET_DETAIL_BLOG);
         BlogGetBySlugResponse response = new BlogGetBySlugResponse();
         Blog blog = blogService.getBySlug(slug);
         if (blog == null) {
@@ -70,7 +80,8 @@ public class BlogController {
 
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by type")
     @GetMapping("/type/{type}")
-    public ResponseEntity<ApiResponse<BlogGetByTypeResponse>> getByType(@PathVariable String type) {
+    public ResponseEntity<ApiResponse<BlogGetByTypeResponse>> getByType(@PathVariable String type, HttpServletRequest request) {
+        logService.save(env, request, 1, null, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG);
         List<BlogDto> blogList = blogService.getByType(type).stream().map((blog)->{
             BlogDto blogDto = modelMapper.map(blog, BlogDto.class);
             if(blog.getUpdatedBy()!= null){

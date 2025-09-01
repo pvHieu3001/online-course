@@ -21,4 +21,15 @@ public final class Constant {
 	public static final String LOG_ACTION_CREATE_NEW_COURSE = "create_new_course";
 	public static final String LOG_ACTION_UPDATE_COURSE = "action_update_course";
 	public static final String LOG_ACTION_DELETE_COURSE = "action_delete_course";
+
+	public static final String LOG_VIEW_BLOG = "view_blog";
+	public static final String LOG_CREATE_BLOG = "create_blog";
+	public static final String LOG_UPDATE_BLOG = "update_blog";
+	public static final String LOG_DETAIL_BLOG = "detail_blog";
+	public static final String LOG_DELETE_BLOG = "delete_blog";
+	public static final String LOG_ACTION_GET_ALL_BLOG = "get_all_blog";
+	public static final String LOG_ACTION_GET_DETAIL_BLOG = "get_detail_blog";
+	public static final String LOG_ACTION_CREATE_NEW_BLOG = "create_new_blog";
+	public static final String LOG_ACTION_UPDATE_BLOG = "action_update_blog";
+	public static final String LOG_ACTION_DELETE_BLOG = "action_delete_blog";
 }

@@ -36,8 +36,6 @@ public class CourseController {
     private final String resourceFolder;
     private final String env;
 
-    private Path uploadDir;
-
     public CourseController(LogService logService, CourseService courseService, ModelMapper modelMapper,
                             @Qualifier("uploadUrl") String resourceFolder, @Qualifier("env") String environment) {
         this.logService = logService;
@@ -50,7 +48,7 @@ public class CourseController {
     @PostConstruct
     public void init() {
         try {
-            uploadDir = Paths.get(resourceFolder);
+            Path uploadDir = Paths.get(resourceFolder);
             // Create directory if it doesn't exist
             if (!Files.exists(uploadDir)) {
                 Files.createDirectories(uploadDir);

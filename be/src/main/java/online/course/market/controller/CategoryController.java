@@ -32,8 +32,6 @@ public class CategoryController {
     private final ModelMapper modelMapper;
     private final String resourceFolder;
 
-    private Path uploadDir;
-    
     // Constructor injection with qualifier for the upload URL bean
     public CategoryController(CategoryService categoryService, ModelMapper modelMapper, 
                             @Qualifier("uploadUrl") String resourceFolder) {
@@ -45,7 +43,7 @@ public class CategoryController {
     @PostConstruct
     public void init() {
         try {
-            uploadDir = Paths.get(resourceFolder);
+            Path uploadDir = Paths.get(resourceFolder);
             // Create directory if it doesn't exist
             if (!Files.exists(uploadDir)) {
                 Files.createDirectories(uploadDir);
