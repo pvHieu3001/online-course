@@ -1,11 +1,11 @@
 FROM openjdk:17-jdk-slim
 
-WORKDIR /app
+WORKDIR /app/online-course
 
 COPY target/online-course-0.0.1-SNAPSHOT.jar app.jar
 
 # Tạo thư mục uploads
-RUN mkdir -p /app/uploads
+RUN mkdir -p /app/online-course/uploads
 
 EXPOSE 8080
 
