@@ -1,22 +1,22 @@
 version: 2.1
 
 executors:
-  node-executor:
+  course-node-executor:
     docker:
       - image: cimg/node:20.19.0
-    working_directory: ~/project
-  java-executor:
+    working_directory: ~/project/online-course
+  course-java-executor:
     docker:
       - image: cimg/openjdk:17.0
-    working_directory: ~/project
-  docker-executor:
+    working_directory: ~/project/online-course
+  course-docker-executor:
     docker:
       - image: docker:24.0.2
-    working_directory: ~/project
+    working_directory: ~/project/online-course
 
 jobs:
   build-fe:
-    executor: node-executor
+    executor: course-node-executor
     steps:
       - checkout
       - restore_cache:
@@ -45,7 +45,7 @@ jobs:
           paths:
             - dist
   test-fe:
-    executor: node-executor
+    executor: course-node-executor
     steps:
       - checkout
       - restore_cache:
@@ -65,7 +65,7 @@ jobs:
           name: Test FE
           command: cd fe && npm test || true
   build-be:
-    executor: java-executor
+    executor: course-java-executor
     steps:
       - checkout
       - run:
@@ -83,7 +83,7 @@ jobs:
             - pom.xml
             - src
   test-be:
-    executor: java-executor
+    executor: course-java-executor
     steps:
       - checkout
       - run:
@@ -93,7 +93,7 @@ jobs:
           name: Test BE
           command: cd be && ./mvnw test
   deploy-fe:
-    executor: node-executor
+    executor: course-node-executor
     steps:
       - checkout
       - attach_workspace:
@@ -152,7 +152,7 @@ jobs:
             chmod +x deploy-fe.sh
             ./deploy-fe.sh
   deploy-be:
-    executor: java-executor
+    executor: course-java-executor
     steps:
       - checkout
       - attach_workspace:
