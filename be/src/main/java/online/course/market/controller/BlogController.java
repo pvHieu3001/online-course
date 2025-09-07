@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.ApiResponse;
-import online.course.market.entity.dto.blog.BlogGetBySlugResponse;
 import online.course.market.entity.dto.blog.BlogDto;
+import online.course.market.entity.dto.blog.BlogGetBySlugResponse;
 import online.course.market.entity.dto.blog.BlogGetByTypeResponse;
 import online.course.market.entity.dto.user.UserDto;
 import online.course.market.entity.model.Blog;
@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,9 +81,9 @@ public class BlogController {
 
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by type")
     @GetMapping("/type/{type}")
-    public ResponseEntity<ApiResponse<BlogGetByTypeResponse>> getByType(@PathVariable String type, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<BlogGetByTypeResponse>> filterBlog(@PathVariable String type, @RequestParam(required = false) String search, HttpServletRequest request) {
         logService.save(env, request, 1, null, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG);
-        List<BlogDto> blogList = blogService.getByType(type).stream().map((blog)->{
+        List<BlogDto> blogList = blogService.filterBlog(type, true, search, null).stream().map((blog)->{
             BlogDto blogDto = modelMapper.map(blog, BlogDto.class);
             if(blog.getUpdatedBy()!= null){
                 UserDto userDto = modelMapper.map(blog.getUpdatedBy(), UserDto.class);

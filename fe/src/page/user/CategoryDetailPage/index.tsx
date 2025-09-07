@@ -16,7 +16,7 @@ function CategoryDetailPage() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
-  const [coursesPerPage] = useState(6)
+  const [coursesPerPage] = useState(15)
 
   // Get data from Redux store
   const { dataList: courses, isLoading: coursesLoading } = useSelector((state: RootState) => state.course)
@@ -56,7 +56,7 @@ function CategoryDetailPage() {
   // Generate page numbers
   const getPageNumbers = () => {
     const pageNumbers = []
-    const maxVisiblePages = 5
+    const maxVisiblePages = 15
 
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {

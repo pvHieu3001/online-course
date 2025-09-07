@@ -4,6 +4,7 @@ import { ContextType } from '@/common/types.interface'
 import { formatDateTimeString, getFullName } from '@/utils/formatDate'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { AnyAction } from '@reduxjs/toolkit'
+import { Input } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom'
@@ -12,6 +13,7 @@ function PageBlog() {
   const location = useLocation()
   const prevContent = useRef('')
   const [title, setTitle] = useState('Văn Hóa Công Nghệ')
+  const [searchQuery, setSearchQuery] = useState('')
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -31,11 +33,11 @@ function PageBlog() {
     switch (path) {
       case 'game':
         type = 'game'
-        title = 'Chính Sách Game'
+        title = 'Game Hot'
         break
       case 'san-pham-cong-nghe':
         type = 'technology'
-        title = 'Sản Phẩm Công Nghệ'
+        title = 'Trending'
         break
       case 'thu-thuat-huu-ich':
         type = 'tips'
@@ -43,7 +45,7 @@ function PageBlog() {
         break
       case 'suu-tam':
         type = 'archive'
-        title = 'Bài Viết Sưu Tầm'
+        title = 'Sưu Tầm'
         break
     }
 
@@ -51,9 +53,13 @@ function PageBlog() {
 
     if (prevContent.current !== type) {
       prevContent.current = type
-      dispatch(blogActions.getBlogByType(type) as unknown as AnyAction)
+      dispatch(blogActions.getBlogByType(type, searchQuery) as unknown as AnyAction)
     }
-  }, [location.pathname, dispatch])
+  }, [location.pathname, dispatch, searchQuery])
+
+  useEffect(() => {
+    dispatch(blogActions.getBlogByType(prevContent.current, searchQuery) as unknown as AnyAction)
+  }, [location.pathname, dispatch, searchQuery])
 
   const handleDetail = (slug: string) => {
     navigate(`/bai-viet/${slug}`)
@@ -61,9 +67,20 @@ function PageBlog() {
 
   return (
     <div className='bg-gray-100 min-h-screen'>
-      <div className='bg-[#2e7551] text-white py-6'>
+      <div className='bg-[#2e7551] text-white py-2'>
         <div className='max-w-7xl mx-auto pl-2 pr-2 sm:pl-4 sm:pr-4 lg:pl-0 lg:pr-4'>
-          <h1 className='text-2xl sm:text-3xl font-bold mb-4'>{title || 'Bài Viết'}</h1>
+          <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4 mb-2'>
+            <h1 className='text-xl sm:text-2xl font-bold'>{title || 'Bài Viết'}</h1>
+            <Input
+              placeholder='Tìm kiếm bài viết...'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className='text-lg px-5 w-full sm:w-64 rounded-full text-sm'
+              allowClear
+              size='small'
+            />
+            <span></span>
+          </div>
           <section>
             <div className='border-t border-white/30 mt-4 overflow-x-auto'>
               {Array.isArray(recommendList) && recommendList.length > 0 ? (
@@ -102,33 +119,35 @@ function PageBlog() {
         </div>
       </div>
 
-      <div className='max-w-7xl mx-auto pl-2 pr-2 sm:pl-4 sm:pr-4 lg:pl-0 lg:pr-4 py-10 flex flex-col gap-10'>
-        <h2 className='text-2xl font-bold text-gray-800 mb-4'>Danh sách bài viết nổi bật</h2>
+      <div className='max-w-7xl mx-auto pl-2 pr-2 sm:pl-4 sm:pr-4 lg:pl-0 lg:pr-4 py-5 flex flex-col gap-4'>
+        <h2 className='text-2xl font-bold text-gray-800'>Bài Viết Nổi Bật</h2>
 
         {dataList && dataList.length > 0 ? (
-          dataList.map((article, index) => (
-            <div
-              onClick={() => handleDetail(article.slug)}
-              key={index}
-              className='bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer flex flex-col sm:flex-row'
-            >
-              <img
-                src={getImageUrl(article?.image || '/default-image.jpg')}
-                alt={article?.title || 'Không có tiêu đề'}
-                className='w-full sm:w-1/3 h-48 object-cover rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none'
-                loading='lazy'
-              />
-              <div className='p-5 flex-1'>
-                <h2 className='text-xl font-semibold text-black mb-2 hover:underline'>
-                  {article?.title || 'Tiêu đề chưa có'}
-                </h2>
-                <p className='text-sm text-gray-500'>
-                  ✍️ {getFullName(article?.updatedBy.firstname, article?.updatedBy.lastname) || 'Tác giả ẩn danh'} • 🗓️{' '}
-                  {formatDateTimeString(article?.updatedAt) || 'Chưa cập nhật'}
-                </p>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+            {dataList.map((article, index) => (
+              <div
+                onClick={() => handleDetail(article.slug)}
+                key={index}
+                className='bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer flex flex-col sm:flex-row'
+              >
+                <img
+                  src={getImageUrl(article?.image || '/default-image.jpg')}
+                  alt={article?.title || 'Không có tiêu đề'}
+                  className='w-full sm:w-1/3 h-48 object-cover rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none'
+                  loading='lazy'
+                />
+                <div className='p-5 flex-1'>
+                  <h2 className='text-xl font-semibold text-black mb-2 hover:underline'>
+                    {article?.title || 'Tiêu đề chưa có'}
+                  </h2>
+                  <p className='text-sm text-gray-500'>
+                    ✍️ {getFullName(article?.updatedBy.firstname, article?.updatedBy.lastname) || 'Tác giả ẩn danh'} •
+                    🗓️ {formatDateTimeString(article?.updatedAt) || 'Chưa cập nhật'}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         ) : (
           <p className='text-gray-500 italic'>Không có bài viết nào để hiển thị.</p>
         )}

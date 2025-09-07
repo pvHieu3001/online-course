@@ -70,13 +70,12 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Blog> filterCourse(Boolean status, String search, Boolean isDisplayHot) {
-        return blogRepository.filterBlog(status, search, isDisplayHot);
+    public List<Blog> filterBlog(String type, Boolean status, String search, Boolean isDisplayHot) {
+        return blogRepository.filterBlog(type, status, search, isDisplayHot);
     }
 
     @Override
     public List<Blog> getRecommendBlog(String type) {
         return blogRepository.getRecommendBlog(type);
     }
-
 }

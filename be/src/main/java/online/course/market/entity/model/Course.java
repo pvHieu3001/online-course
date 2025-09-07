@@ -31,7 +31,7 @@ public class Course extends BaseEntity {
     private String status;
     private Boolean isDisplayHot;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 

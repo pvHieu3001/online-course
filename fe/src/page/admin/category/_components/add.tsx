@@ -64,6 +64,7 @@ export default function AddCategory() {
 
     formData.append('name', name)
     formData.append('status', active.toString())
+    formData.append('isQuickView', form.getFieldValue('isQuickView') ?? false)
     if (parent_id) {
       formData.append('parentId', parent_id.toString())
     }
@@ -185,6 +186,12 @@ export default function AddCategory() {
                   </Form.Item>
                 </div>
                 <div className='text-xs text-gray-400 px-2 pb-2'>Bật để danh mục này hiển thị trên website.</div>
+                <div className='flex justify-between items-center p-2'>
+                  <span>Hiện thị trên trang chủ</span>
+                  <Form.Item className='m-0' label='' name='isQuickView' valuePropName='checked'>
+                    <Switch />
+                  </Form.Item>
+                </div>
               </div>
             </Col>
 

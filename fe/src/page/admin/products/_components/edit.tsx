@@ -70,7 +70,7 @@ function EditProduct() {
     formdata.append('level', level)
     formdata.append('price', price ?? 0)
     formdata.append('status', status ? 'active' : 'inactive')
-    formdata.append('isDisplayHot', isDisplayHot)
+    formdata.append('isDisplayHot', isDisplayHot ?? false)
 
     try {
       await dispatch(courseActions.updateCourse(id as string, formdata) as unknown as AnyAction)
@@ -137,7 +137,7 @@ function EditProduct() {
               slug: courseStore.data?.slug,
               sourceUrl: courseStore.data?.sourceUrl,
               status: courseStore.data?.status == 'active' ? true : false,
-              isDisplayHot: courseStore.data?.isDisplayHot,
+              isDisplayHot: courseStore.data?.isDisplayHot ?? false,
               totalRating: courseStore.data?.totalRating,
               totalStudents: courseStore.data?.totalStudents
             }}

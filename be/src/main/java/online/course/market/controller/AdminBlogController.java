@@ -72,7 +72,8 @@ public class AdminBlogController {
                 isDisplayHot == null || isDisplayHot.isBlank() ? null :
                         "1".equals(isDisplayHot) ? Boolean.TRUE :
                                 "0".equals(isDisplayHot) ? Boolean.FALSE : null;
-        List<BlogDto> dtos = blogService.filterCourse(
+        List<BlogDto> dtos = blogService.filterBlog(
+                null,
                 !String.valueOf(status).isEmpty() ? DataUtils.convertStatus(status) : null,
                 !String.valueOf(search).isEmpty() ? search : null,
                 displayHot

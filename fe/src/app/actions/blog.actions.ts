@@ -83,11 +83,11 @@ export const getBlogBySlug = (slug: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const getBlogByType = (slug: string) => (dispatch: Dispatch) => {
+export const getBlogByType = (slug: string, searchQuery: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return blogServices
-    .getBlogByType(slug)
+    .getBlogByType(slug, searchQuery)
     .then((res) => {
       dispatch(getByTypeSuccessFully(res.data))
       return res
