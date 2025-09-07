@@ -69,17 +69,16 @@ function PageBlog() {
     <div className='bg-gray-100 min-h-screen'>
       <div className='bg-[#2e7551] text-white py-2'>
         <div className='max-w-7xl mx-auto pl-2 pr-2 sm:pl-4 sm:pr-4 lg:pl-0 lg:pr-4'>
-          <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4 mb-2'>
+          <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-1'>
             <h1 className='text-xl sm:text-2xl font-bold'>{title || 'Bài Viết'}</h1>
             <Input
               placeholder='Tìm kiếm bài viết...'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className='text-lg px-5 w-full sm:w-64 rounded-full text-sm'
+              className='w-full sm:w-64 text-base sm:text-sm px-4 py-1 rounded-full'
               allowClear
-              size='small'
+              size='middle'
             />
-            <span></span>
           </div>
           <section>
             <div className='border-t border-white/30 mt-4 overflow-x-auto'>
