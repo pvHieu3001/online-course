@@ -16,6 +16,6 @@ public interface CourseService {
 	Course getById(Integer id);
 	List<Course> getByCategoryId(Integer categoryId);
     Course getBySlug(String slug);
-	List<Course> filterCourse(String status, String search, Boolean isDisplayHot);
+	Page<Course> filterCourse(String status, String search, Boolean isDisplayHot, Pageable pageable);
   List<QuickViewCourseGetResponse> getQuickViewCourse();
 }

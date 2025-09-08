@@ -19,10 +19,12 @@ public class Log extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer userId;
-    private Integer courseId;
+    private String pageId;
     private String name;
     private String action;
     private String ipAddress;
     private String userAgent;
+    private String referrer;
+    private String device;
+    private String url;
 }

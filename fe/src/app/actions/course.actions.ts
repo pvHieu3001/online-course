@@ -20,11 +20,11 @@ import {
   getQuickViewCoursesSuccessFully
 } from '../slices/course.reducer'
 
-export const getCourses = (status?: string, search?: string, isDisplayHot?: string) => (dispatch: Dispatch) => {
+export const getCourses = (status?: string, search?: string, isDisplayHot?: string, currentPage?: number, coursesPerPage?: number) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return courseServices
-    .getCourses(status, search, isDisplayHot)
+    .getCourses(status, search, isDisplayHot, currentPage, coursesPerPage)
     .then((res) => {
       dispatch(getCoursesSuccessFully(res.data))
       return res

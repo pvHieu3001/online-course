@@ -16,6 +16,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import online.course.market.service.CourseService;
@@ -73,30 +75,30 @@ public class CourseController {
 
     @Operation(description = "Get all endpoint for Course", summary = "This is a summary for Course get all endpoint")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CourseDto>>> getAll(
+    public ResponseEntity<ApiResponse<Page<CourseDto>>> getAll(
+            @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String isDisplayHot,
             HttpServletRequest request) {
-        logService.save(env, request, 1, null, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE);
+        logService.save(env, request, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE);
         Boolean displayHot =
                 isDisplayHot == null || isDisplayHot.isBlank() ? null :
                         "1".equals(isDisplayHot) ? Boolean.TRUE :
                                 "0".equals(isDisplayHot) ? Boolean.FALSE : null;
-        List<CourseDto> getCourseDtos = courseService.filterCourse(
-                !String.valueOf(status).isEmpty() ? status : null,
-                !String.valueOf(search).isEmpty() ? search : null,
-                        displayHot
-            )
-                .stream().map(course -> {
-                CourseDto courseDto = toDto(course);
-                Optional.ofNullable(course.getCategory())
-                        .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, CategoryDto.class)));
-                return courseDto;
-            })
-            .collect(Collectors.toList());
+        Page<CourseDto> courseDtos = courseService.filterCourse(
+                (status != null && !status.toString().isBlank()) ? status : null,
+                (search != null && !search.toString().isBlank()) ? search : null,
+                displayHot,
+                pageable
+        ).map(course -> {
+            CourseDto courseDto = toDto(course);
+            Optional.ofNullable(course.getCategory())
+                    .ifPresent(category -> courseDto.setCategory(modelMapper.map(category, CategoryDto.class)));
+            return courseDto;
+        });
 
-        return ResponseEntity.ok(ApiResponse.success(getCourseDtos));
+        return ResponseEntity.ok(ApiResponse.success(courseDtos));
     }
 
     @Operation(description = "Get by name endpoint for Course", summary = "This is a summary for Course get by name endpoint")
@@ -117,7 +119,7 @@ public class CourseController {
     @GetMapping("/slug/{slug}")
     public ResponseEntity<ApiResponse<CourseDto>> getById(@PathVariable String slug, HttpServletRequest request) {
         Course course = courseService.getBySlug(slug);
-        logService.save(env, request, 1, course.getId(), LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE);
+        logService.save(env, request, LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE);
         return ResponseEntity.ok(ApiResponse.success(toDto(course)));
     }
 

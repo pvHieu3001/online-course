@@ -120,8 +120,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> filterCourse(String status, String search, Boolean isDisplayHot) {
-        return courseRepository.filterCourse(status, search, isDisplayHot);
+    public Page<Course> filterCourse(String status, String search, Boolean isDisplayHot, Pageable pageable) {
+        return courseRepository.filterCourse(status, search, isDisplayHot, pageable);
     }
 
     @Override

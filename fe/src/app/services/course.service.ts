@@ -1,7 +1,26 @@
 import http from '../http-common'
 
-function getCourses(status?: string, search?: string, isDisplayHot?: string) {
-  return http.get('/api/v1/user/course?status=' + status + '&search=' + search + '&isDisplayHot=' + isDisplayHot)
+function getCourses(
+  status?: string,
+  search?: string,
+  isDisplayHot?: string,
+  currentPage?: number,
+  coursesPerPage?: number
+) {
+  currentPage = currentPage ?? 0
+  coursesPerPage = coursesPerPage ?? 15
+  return http.get(
+    '/api/v1/user/course?status=' +
+      status +
+      '&search=' +
+      search +
+      '&isDisplayHot=' +
+      isDisplayHot +
+      '&page=' +
+      currentPage.toString() +
+      '&size=' +
+      coursesPerPage.toString()
+  )
 }
 function getAdminCourses(status?: string, search?: string, isDisplayHot?: string) {
   return http.get('/api/v1/admin/course?status=' + status + '&search=' + search + '&isDisplayHot=' + isDisplayHot)

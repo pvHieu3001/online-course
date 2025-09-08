@@ -20,6 +20,9 @@ import online.course.market.service.LogService;
 import online.course.market.utils.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -77,11 +80,12 @@ public class AdminCourseController {
     @Operation(description = "Get all endpoint for Course", summary = "This is a summary for Course get all endpoint")
     @GetMapping
     public ResponseEntity<ApiResponse<List<CourseDto>>> getAll(
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String isDisplayHot,
             HttpServletRequest request) {
-        logService.save(env, request, 1, null, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE);
+        logService.save(env, request, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE);
         Boolean displayHot =
                 isDisplayHot == null || isDisplayHot.isBlank() ? null :
                         "1".equals(isDisplayHot) ? Boolean.TRUE :
@@ -89,7 +93,7 @@ public class AdminCourseController {
         List<CourseDto> getCourseDtos = courseService.filterCourse(
                 !String.valueOf(status).isEmpty() ? status : null,
                 !String.valueOf(search).isEmpty() ? search : null,
-                        displayHot
+                        displayHot, pageable
             )
                 .stream().map(course -> {
                 CourseDto courseDto = toDto(course);
@@ -105,7 +109,7 @@ public class AdminCourseController {
     @Operation(description = "Get by id endpoint for Course", summary = "This is a summary for Course get by id endpoint")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CourseDto>> getById(@PathVariable Integer id, HttpServletRequest request) {
-        logService.save(env, request, 1, null, LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE);
+        logService.save(env, request, LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE);
 
         Course course = courseService.getById(id);
         if (course == null) {
@@ -143,7 +147,7 @@ public class AdminCourseController {
             Category category = categoryService.getById(dto.getCategoryId());
             course.setCategory(category);
             Course courseDb = courseService.save(course);
-            logService.save(env, request, 1, courseDb.getId(), LOG_CREATE_COURSE, LOG_ACTION_CREATE_NEW_COURSE);
+            logService.save(env, request, LOG_CREATE_COURSE, LOG_ACTION_CREATE_NEW_COURSE);
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(courseDb)));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -179,7 +183,7 @@ public class AdminCourseController {
 
             Course course = modelMapper.map(dto, Course.class);
             Course courseDb = courseService.update(course, id, dto.getCategoryId());
-            logService.save(env, request, 1, courseDb.getId(), LOG_UPDATE_COURSE, LOG_ACTION_UPDATE_COURSE);
+            logService.save(env, request, LOG_UPDATE_COURSE, LOG_ACTION_UPDATE_COURSE);
             return ResponseEntity.ok(ApiResponse.success("Updated", toDto(courseDb)));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -190,7 +194,7 @@ public class AdminCourseController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable Integer id, HttpServletRequest request) {
         courseService.deleteById(id);
-        logService.save(env, request, 1, id, LOG_DELETE_COURSE, LOG_ACTION_DELETE_COURSE);
+        logService.save(env, request, LOG_DELETE_COURSE, LOG_ACTION_DELETE_COURSE);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("Deleted", null));
     }
 }

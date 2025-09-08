@@ -7,8 +7,12 @@ import online.course.market.entity.model.Log;
 import online.course.market.repository.LogRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static online.course.market.utils.Constant.DEVICE_ATTRIBUTE;
 
 @Service
 @AllArgsConstructor
@@ -27,14 +31,20 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public void save(String env, HttpServletRequest request, Integer userId, Integer courseId, String name, String action) {
+    public void save(String env, HttpServletRequest request, String name, String action) {
         if(!env.equals("dev")){
+            String device = (String) request.getAttribute(DEVICE_ATTRIBUTE);
             String ipAddress = request.getHeader("X-Forwarded-For");
             if (ipAddress == null || ipAddress.isEmpty()) {
                 ipAddress = request.getRemoteAddr();
             }
             String userAgent = request.getHeader("User-Agent");
-            LogDto dto = new LogDto(userId, courseId, name, action, ipAddress, userAgent);
+            String referrer = request.getHeader("referrer");
+            StringBuffer pageId = request.getRequestURL();
+            String queryString = request.getQueryString();
+            String url = queryString == null ? pageId.toString() : pageId.append('?').append(queryString).toString();
+
+            LogDto dto = new LogDto(pageId.toString(), name, action, ipAddress, userAgent, referrer, device, url);
             Log log = modelMapper.map(dto, Log.class);
             logRepository.save(log);
         }
@@ -45,7 +55,6 @@ public class LogServiceImpl implements LogService {
         Optional<Log> optionalLog = logRepository.findById(id);
         if (optionalLog.isPresent()) {
             Log existing = optionalLog.get();
-            existing.setUserId(log.getUserId());
             existing.setName(log.getName());
             existing.setAction(log.getAction());
             existing.setIpAddress(log.getIpAddress());
@@ -67,6 +76,6 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public List<Log> getByCourseId(Integer courseId) {
-        return logRepository.findByCourseId(courseId);
+        return new ArrayList<>();
     }
 } 

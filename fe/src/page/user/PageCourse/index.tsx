@@ -1,6 +1,7 @@
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Pagination } from 'antd' // <-- import Pagination của antd
 import TabCategory from '../components/TabCategory'
 import { courseActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
@@ -11,9 +12,13 @@ import { getImageUrl } from '@/utils/getImageUrl'
 function PageCourse() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [currentPage, setCurrentPage] = useState(1)
-  const [coursesPerPage] = useState(6)
-  const { dataList: courses, isLoading: coursesLoading } = useSelector((state: RootState) => state.course)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [coursesPerPage] = useState(15)
+  const {
+    dataList: courses,
+    isLoading: coursesLoading,
+    totalElements
+  } = useSelector((state: RootState) => state.course)
   const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
 
   useEffect(() => {
@@ -21,57 +26,17 @@ function PageCourse() {
   }, [setIsShowRecommendCourses])
 
   useEffect(() => {
-    dispatch(courseActions.getCourses('active', '', '') as unknown as AnyAction)
-  }, [dispatch])
+    dispatch(courseActions.getCourses('active', '', '', currentPage-1, coursesPerPage) as unknown as AnyAction)
+  }, [dispatch, currentPage, coursesPerPage])
 
   // Handle course item click
   const handleCourseClick = (course: IProduct) => {
     navigate(`/chi-tiet-khoa-hoc/${course.slug}`)
   }
 
-  const indexOfLastCourse = currentPage * coursesPerPage
-  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage
-  const currentCourses = courses ? courses.slice(indexOfFirstCourse, indexOfLastCourse) : []
-  const totalPages = courses ? Math.ceil(courses.length / coursesPerPage) : 0
-
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const getPageNumbers = () => {
-    const pageNumbers = []
-    const maxVisiblePages = 5
-
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageNumbers.push(i)
-      }
-    } else {
-      if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) {
-          pageNumbers.push(i)
-        }
-        pageNumbers.push('...')
-        pageNumbers.push(totalPages)
-      } else if (currentPage >= totalPages - 2) {
-        pageNumbers.push(1)
-        pageNumbers.push('...')
-        for (let i = totalPages - 3; i <= totalPages; i++) {
-          pageNumbers.push(i)
-        }
-      } else {
-        pageNumbers.push(1)
-        pageNumbers.push('...')
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pageNumbers.push(i)
-        }
-        pageNumbers.push('...')
-        pageNumbers.push(totalPages)
-      }
-    }
-
-    return pageNumbers
   }
 
   return (
@@ -87,11 +52,11 @@ function PageCourse() {
             <div>
               {coursesLoading ? (
                 <div className='text-center text-gray-500'>Đang tải khóa học...</div>
-              ) : currentCourses && currentCourses.length > 0 ? (
+              ) : courses && courses.length > 0 ? (
                 <>
                   <div className='flex flex-col gap-6 mb-6'>
-                    {currentCourses.map((course) => {
-                      const stripHtml = (html) => {
+                    {courses.map((course) => {
+                      const stripHtml = (html: string) => {
                         const tmp = document.createElement('div')
                         tmp.innerHTML = html
                         return tmp.textContent || tmp.innerText || ''
@@ -129,38 +94,16 @@ function PageCourse() {
                     })}
                   </div>
 
-                  {totalPages > 1 && (
-                    <div className='flex justify-center items-center space-x-2'>
-                      <button
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className='px-3 py-1 bg-white border rounded hover:bg-gray-100 disabled:opacity-50'
-                      >
-                        Trước
-                      </button>
-
-                      {getPageNumbers().map((pageNumber, index) => (
-                        <button
-                          key={index}
-                          onClick={() => (typeof pageNumber === 'number' ? handlePageChange(pageNumber) : null)}
-                          disabled={pageNumber === '...'}
-                          className={`px-3 py-1 border rounded ${
-                            pageNumber === currentPage ? 'bg-indigo-500 text-white' : 'bg-white hover:bg-gray-100'
-                          } ${pageNumber === '...' ? 'cursor-default text-gray-400' : ''}`}
-                        >
-                          {pageNumber}
-                        </button>
-                      ))}
-
-                      <button
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className='px-3 py-1 bg-white border rounded hover:bg-gray-100 disabled:opacity-50'
-                      >
-                        Tiếp
-                      </button>
-                    </div>
-                  )}
+                  {/* Sử dụng Pagination của Ant Design */}
+                  <div className='flex justify-center'>
+                    <Pagination
+                      current={currentPage}
+                      pageSize={coursesPerPage}
+                      total={totalElements}
+                      onChange={handlePageChange}
+                      showSizeChanger={false}
+                    />
+                  </div>
                 </>
               ) : (
                 <div className='text-center text-gray-500'>Không tìm thấy khóa học nào trong danh mục này</div>

@@ -9,10 +9,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class LogGetResponse {
     private Integer id;
-    private Integer userId;
-    private Integer courseId;
+    private String pageId;
     private String name;
     private String action;
     private String ipAddress;
     private String userAgent;
+    private String referrer;
+    private String device;
+    private String url;
 } 

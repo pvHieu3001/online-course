@@ -56,7 +56,7 @@ public class BlogController {
     @Operation(description = "Get all endpoint for Blog", summary = "Get all Blog")
     @GetMapping
     public ResponseEntity<ApiResponse<List<BlogDto>>> getAll(@RequestParam(required = false) String search, HttpServletRequest request) {
-        logService.save(env, request, 1, null, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG);
+        logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG);
         List<BlogDto> dtos = blogService.getAll().stream()
                 .filter(Blog -> search == null || search.isEmpty() || Blog.getTitle().toLowerCase().contains(search.toLowerCase()))
                 .map(this::toDto).collect(Collectors.toList());
@@ -66,7 +66,7 @@ public class BlogController {
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by slug")
     @GetMapping("/slug/{slug}")
     public ResponseEntity<ApiResponse<BlogGetBySlugResponse>> getBySlug(@PathVariable String slug, HttpServletRequest request) {
-        logService.save(env, request, 1, null, LOG_VIEW_BLOG, LOG_ACTION_GET_DETAIL_BLOG);
+        logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_DETAIL_BLOG);
         BlogGetBySlugResponse response = new BlogGetBySlugResponse();
         Blog blog = blogService.getBySlug(slug);
         if (blog == null) {
@@ -82,7 +82,7 @@ public class BlogController {
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by type")
     @GetMapping("/type/{type}")
     public ResponseEntity<ApiResponse<BlogGetByTypeResponse>> filterBlog(@PathVariable String type, @RequestParam(required = false) String search, HttpServletRequest request) {
-        logService.save(env, request, 1, null, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG);
+        logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG);
         List<BlogDto> blogList = blogService.filterBlog(type, true, search, null).stream().map((blog)->{
             BlogDto blogDto = modelMapper.map(blog, BlogDto.class);
             if(blog.getUpdatedBy()!= null){

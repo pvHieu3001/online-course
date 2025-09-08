@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import online.course.market.entity.model.Course;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,9 +23,10 @@ public interface CourseRepository extends JpaRepository<Course, Integer>{
             "WHERE (:status IS NULL OR c.status = :status) " +
             "AND (:search IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%'))) " +
             "AND (:isDisplayHot IS NULL OR c.isDisplayHot = :isDisplayHot)")
-    List<Course> filterCourse(@Param("status") String status,
+    Page<Course> filterCourse(@Param("status") String status,
                               @Param("search") String search,
-                              @Param("isDisplayHot") Boolean isDisplayHot);
+                              @Param("isDisplayHot") Boolean isDisplayHot,
+                              Pageable pageable);
 
     @Query("SELECT c FROM Course c WHERE c.isDisplayHot = true")
     List<Course> getRecommendCourse();
