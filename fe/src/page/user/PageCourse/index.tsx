@@ -19,7 +19,7 @@ function PageCourse() {
   useEffect(() => {
     setIsShowRecommendCourses(true)
   }, [setIsShowRecommendCourses])
-  
+
   useEffect(() => {
     dispatch(courseActions.getCourses('active', '', '') as unknown as AnyAction)
   }, [dispatch])
@@ -102,7 +102,7 @@ function PageCourse() {
                         <div
                           key={course.id}
                           onClick={() => handleCourseClick(course)}
-                          className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition flex items-center space-x-4'
+                          className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4'
                         >
                           <img
                             src={getImageUrl(course.imageUrl)}
