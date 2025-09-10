@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.affiliate.link.AffiliateLinkDto;
+import online.course.market.entity.dto.affiliate.link.AffiliateLinkPostRequest;
+import online.course.market.entity.dto.affiliate.link.AffiliateLinkPutRequest;
 import online.course.market.entity.dto.blog.BlogDto;
 import online.course.market.entity.dto.blog.BlogGetBySlugResponse;
 import online.course.market.entity.dto.blog.BlogGetByTypeResponse;
