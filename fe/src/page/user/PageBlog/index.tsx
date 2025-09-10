@@ -111,7 +111,7 @@ function PageBlog() {
                   ))}
                 </div>
               ) : (
-                <div className='text-white py-4'>Đang cập nhật!</div>
+                <div className='text-white py-4'></div>
               )}
             </div>
           </section>

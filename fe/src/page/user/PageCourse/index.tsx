@@ -40,7 +40,7 @@ function PageCourse() {
   }
 
   return (
-    <div className='bg-gray-100 px-4'>
+    <div className='bg-gray-100 min-h-screen px-4'>
       <div className='max-w-7xl mx-auto'>
         <div className='flex flex-col lg:flex-row gap-8'>
           {/* Nội dung chính bên trái */}
