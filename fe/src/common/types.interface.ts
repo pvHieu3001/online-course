@@ -21,6 +21,7 @@ export interface IProduct {
   status: string
   totalRating: number
   totalStudents: number
+  tags: ITag[]
 }
 
 export interface ICategory {
@@ -101,6 +102,11 @@ export interface IBlog {
   updatedAt: string
   updatedBy: IUser
   isDisplayHot: string // blank: all, 0: false, 1: true
+}
+
+export interface ITag {
+  id: number
+  name: string
 }
 
 export type ContextType = {

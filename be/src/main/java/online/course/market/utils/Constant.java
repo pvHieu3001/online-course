@@ -34,4 +34,6 @@ public final class Constant {
 	public static final String LOG_ACTION_CREATE_NEW_BLOG = "create_new_blog";
 	public static final String LOG_ACTION_UPDATE_BLOG = "action_update_blog";
 	public static final String LOG_ACTION_DELETE_BLOG = "action_delete_blog";
+	public static final String LOG_ACTION_GET_ALL_TAG = "get_all_tag";
+	public static final String LOG_VIEW_TAG= "view_tag";
 }

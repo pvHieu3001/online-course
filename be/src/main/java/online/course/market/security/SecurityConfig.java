@@ -19,12 +19,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private static final String[] WHITE_LIST_URL = { 
-			"/api/v1/auth/**", "/api/v1/user/course/**", "/api/v1/user/category/**", "/api/v1/user/blog/**", "/v2/api-docs",
+	private static final String[] WHITE_LIST_URL = {
+			"/api/v1/user/tag/**", "/api/v1/auth/**", "/api/v1/user/course/**", "/api/v1/user/category/**", "/api/v1/user/blog/**", "/v2/api-docs",
 			"/v3/api-docs", "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
 			"/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html" };
-	private static final String[] ADMIN_URL = { 
-			"/api/v1/admin/course/**", "/api/v1/admin/category/**", "/api/v1/admin/upload/**", "/api/v1/admin/blog/**"};
+	private static final String[] ADMIN_URL = {
+			"/api/v1/admin/tag/**", "/api/v1/admin/course/**", "/api/v1/admin/category/**", "/api/v1/admin/upload/**", "/api/v1/admin/blog/**"};
 
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final AuthenticationProvider authenticationProvider;

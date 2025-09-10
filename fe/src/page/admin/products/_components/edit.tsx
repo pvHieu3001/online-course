@@ -13,6 +13,7 @@ import { RootState } from '@/app/store'
 import { ICategory } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { useQuery } from '@/utils/useQuery'
+import { tagActions } from '@/app/actions'
 
 function EditProduct() {
   const navigator = useNavigate()
@@ -21,11 +22,13 @@ function EditProduct() {
   const dispatch = useDispatch()
   const courseStore = useSelector((state: RootState) => state.course)
   const categoryStore = useSelector((state: RootState) => state.category)
+  const tagStore = useSelector((state: RootState) => state.tag)
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [description, setDescription] = useState<string>('')
   const [content, setContent] = useState<string>('')
   const [courseBenefits, setCourseBenefits] = useState<string>('')
+  const [selectedTags, setSelectedTags] = useState<string>('')
   const [displayPic, setDisplayPic] = useState<string>()
 
   useEffect(() => {
@@ -33,6 +36,7 @@ function EditProduct() {
       dispatch(courseActions.getCourseById(flug) as unknown as AnyAction)
     }
     dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction) // Lấy danh sách danh mục
+    dispatch(tagActions.getTags() as unknown as AnyAction)
   }, [dispatch, flug])
 
   useEffect(() => {
@@ -71,6 +75,7 @@ function EditProduct() {
     formdata.append('price', price ?? 0)
     formdata.append('status', status ? 'active' : 'inactive')
     formdata.append('isDisplayHot', isDisplayHot ?? false)
+    formdata.append('tagStr', selectedTags)
 
     try {
       await dispatch(courseActions.updateCourse(id as string, formdata) as unknown as AnyAction)
@@ -139,7 +144,8 @@ function EditProduct() {
               status: courseStore.data?.status == 'active' ? true : false,
               isDisplayHot: courseStore.data?.isDisplayHot ?? false,
               totalRating: courseStore.data?.totalRating,
-              totalStudents: courseStore.data?.totalStudents
+              totalStudents: courseStore.data?.totalStudents,
+              tagStr: courseStore.data.tags.flatMap((item)=> item.id)
             }}
           >
             <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
@@ -217,6 +223,19 @@ function EditProduct() {
                   )}
                   <Form.Item name='sourceUrl' label='Nguồn video'>
                     <Input placeholder='Nhập URL nguồn video' size='large' />
+                  </Form.Item>
+                  <Form.Item name='tagStr' label='Tags'>
+                    <Select
+                      mode='tags'
+                      placeholder='Nhập hoặc chọn tag'
+                      size='large'
+                      className='w-full'
+                      options={tagStore.dataList?.map((tag) => ({
+                        value: tag.id,
+                        label: tag.name
+                      }))}
+                      onChange={(value) => setSelectedTags(value)}
+                    />
                   </Form.Item>
                 </Col>
 

@@ -31,7 +31,7 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public void save(String env, HttpServletRequest request, String name, String action) {
+    public void save(String env, HttpServletRequest request, String name, String action, String method) {
         if(!env.equals("dev")){
             String device = (String) request.getAttribute(DEVICE_ATTRIBUTE);
             String ipAddress = request.getHeader("X-Forwarded-For");
@@ -39,12 +39,12 @@ public class LogServiceImpl implements LogService {
                 ipAddress = request.getRemoteAddr();
             }
             String userAgent = request.getHeader("User-Agent");
-            String referrer = request.getHeader("referrer");
+            String referer = request.getHeader("Referer");
             StringBuffer pageId = request.getRequestURL();
             String queryString = request.getQueryString();
             String url = queryString == null ? pageId.toString() : pageId.append('?').append(queryString).toString();
 
-            LogDto dto = new LogDto(pageId.toString(), name, action, ipAddress, userAgent, referrer, device, url);
+            LogDto dto = new LogDto(pageId.toString(), name, action, ipAddress, userAgent, referer, device, url, method);
             Log log = modelMapper.map(dto, Log.class);
             logRepository.save(log);
         }

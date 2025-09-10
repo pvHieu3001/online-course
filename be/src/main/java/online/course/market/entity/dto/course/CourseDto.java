@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import online.course.market.entity.dto.category.CategoryDto;
+import online.course.market.entity.dto.tag.TagDto;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,10 +29,9 @@ public class CourseDto {
     private Double rating;
     private Integer totalStudents;
     private Integer totalRating;
-    protected LocalDateTime createdAt;
-    protected LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Set<TagDto> tags;
+    private CategoryDto category;
 
-    protected CategoryDto category;
-    protected String userCreate;
-    protected String userUpdate;
 }

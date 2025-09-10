@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import online.course.market.service.CourseService;
@@ -81,7 +82,7 @@ public class CourseController {
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String isDisplayHot,
             HttpServletRequest request) {
-        logService.save(env, request, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE);
+        logService.save(env, request, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE, HttpMethod.GET.name());
         Boolean displayHot =
                 isDisplayHot == null || isDisplayHot.isBlank() ? null :
                         "1".equals(isDisplayHot) ? Boolean.TRUE :
@@ -119,7 +120,7 @@ public class CourseController {
     @GetMapping("/slug/{slug}")
     public ResponseEntity<ApiResponse<CourseDto>> getById(@PathVariable String slug, HttpServletRequest request) {
         Course course = courseService.getBySlug(slug);
-        logService.save(env, request, LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE);
+        logService.save(env, request, LOG_DETAIL_COURSE, LOG_ACTION_GET_DETAIL_COURSE, HttpMethod.GET.name());
         return ResponseEntity.ok(ApiResponse.success(toDto(course)));
     }
 

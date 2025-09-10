@@ -10,22 +10,26 @@ import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
 import { ICategory } from '@/common/types.interface'
 import { useQuery } from '@/utils/useQuery'
+import { tagActions } from '@/app/actions'
 
 function AddProduct() {
   const query = useQuery()
   const dispatch = useDispatch()
   const categoryStore = useSelector((state: RootState) => state.category)
   const courseStore = useSelector((state: RootState) => state.course)
+  const tagStore = useSelector((state: RootState) => state.tag)
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [displayPic, setDisplayPic] = useState<string>()
   const [detail, setDetail] = useState<string>('')
   const [content, setContent] = useState<string>('')
   const [courseBenefits, setCourseBenefits] = useState<string>('')
+  const [selectedTags, setSelectedTags] = useState<string>('')
   const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
+    dispatch(tagActions.getTags() as unknown as AnyAction)
   }, [dispatch])
 
   const onFinish = async () => {
@@ -50,6 +54,7 @@ function AddProduct() {
     formdata.append('sourceUrl', sourceUrl)
     formdata.append('status', status ? 'active' : 'inactive')
     formdata.append('isDisplayHot', isDisplayHot ?? false)
+    formdata.append('tagStr', selectedTags)
     if (imageUrl) {
       formdata.append('imageFile', imageUrl as Blob)
     }
@@ -146,13 +151,13 @@ function AddProduct() {
                 <Row gutter={[16, 16]}>
                   <Col xs={24} sm={12} md={8}>
                     <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
-                      <Switch className='w-20' checkedChildren='Active' unCheckedChildren='Inactive' />
+                      <Switch className='w-full sm:w-20' checkedChildren='Active' unCheckedChildren='Inactive' />
                     </Form.Item>
                   </Col>
 
                   <Col xs={24} sm={12} md={8}>
                     <Form.Item name='isDisplayHot' label='Khóa học nổi bật' valuePropName='checked'>
-                      <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                      <Switch className='w-full sm:w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -178,6 +183,19 @@ function AddProduct() {
 
                 <Form.Item name='price' label='Giá'>
                   <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
+                </Form.Item>
+                <Form.Item name='tagStr' label='Tags'>
+                  <Select
+                    mode='tags'
+                    placeholder='Nhập hoặc chọn tag'
+                    size='large'
+                    className='w-full'
+                    options={tagStore.dataList?.map((tag) => ({
+                      value: tag.id,
+                      label: tag.name
+                    }))}
+                    onChange={(value) => setSelectedTags(value)}
+                  />
                 </Form.Item>
               </Col>
             </Row>

@@ -1,7 +1,6 @@
 package online.course.market.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +9,9 @@ import online.course.market.entity.dto.blog.BlogDto;
 import online.course.market.entity.dto.blog.BlogPostRequest;
 import online.course.market.entity.dto.blog.BlogPutRequest;
 import online.course.market.entity.model.Blog;
+import online.course.market.entity.model.Tag;
 import online.course.market.service.BlogService;
+import online.course.market.service.TagService;
 import online.course.market.utils.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +23,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,16 +32,18 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("api/v1/admin/blog")
-@Tag(name = "Blog", description = "Blog controller")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Blog", description = "Blog controller")
 public class AdminBlogController {
     private final BlogService blogService;
+    private final TagService tagService;
     private final ModelMapper modelMapper;
     private final String resourceFolder;
     private Path uploadDir;
 
     // Constructor injection with qualifier for the upload URL bean
-    public AdminBlogController(BlogService blogService, ModelMapper modelMapper, @Qualifier("uploadUrl") String resourceFolder) {
+    public AdminBlogController(BlogService blogService, TagService tagService, ModelMapper modelMapper, @Qualifier("uploadUrl") String resourceFolder) {
         this.blogService = blogService;
+        this.tagService = tagService;
         this.modelMapper = modelMapper;
         this.resourceFolder = resourceFolder;
     }
@@ -116,8 +121,25 @@ public class AdminBlogController {
 
 
             dto.setSlug(DataUtils.toSlug(dto.getTitle()));
-            Blog Blog = modelMapper.map(dto, Blog.class);
-            Blog saved = blogService.save(Blog);
+            Blog blog = modelMapper.map(dto, Blog.class);
+
+            List<Tag> resolvedTags = new ArrayList<>();
+            List<String> tagArray = List.of(dto.getTagStr().split(","));
+            tagArray.forEach((tagValue)->{
+                if (DataUtils.isNumeric(tagValue)) {
+                    tagService.findById(Integer.parseInt(tagValue)).ifPresent(resolvedTags::add);
+                } else if (tagValue != null) {
+                    Tag tag = tagService.findByName(tagValue).orElseGet(() -> {
+                        Tag newTag = new Tag();
+                        newTag.setName(tagValue);
+                        return tagService.save(newTag);
+                    });
+                    resolvedTags.add(tag);
+                }
+            });
+            blog.setTags(new HashSet<>(resolvedTags));
+
+            Blog saved = blogService.save(blog);
             
             log.info("Blog created successfully with ID: {}", saved.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(saved)));
@@ -159,8 +181,25 @@ public class AdminBlogController {
             }
 
             dto.setSlug(DataUtils.toSlug(dto.getTitle()));
-            Blog Blog = modelMapper.map(dto, Blog.class);
-            Blog updated = blogService.update(Blog, id);
+            Blog blog = modelMapper.map(dto, Blog.class);
+
+            List<Tag> resolvedTags = new ArrayList<>();
+            List<String> tagArray = List.of(dto.getTagStr().split(","));
+            tagArray.forEach((tagValue)->{
+                if (DataUtils.isNumeric(tagValue)) {
+                    tagService.findById(Integer.parseInt(tagValue)).ifPresent(resolvedTags::add);
+                } else if (tagValue != null) {
+                    Tag tag = tagService.findByName(tagValue).orElseGet(() -> {
+                        Tag newTag = new Tag();
+                        newTag.setName(tagValue);
+                        return tagService.save(newTag);
+                    });
+                    resolvedTags.add(tag);
+                }
+            });
+            blog.setTags(new HashSet<>(resolvedTags));
+
+            Blog updated = blogService.update(blog, id);
             
             log.info("Blog updated successfully with ID: {}", updated.getId());
             return ResponseEntity.ok(ApiResponse.success("Updated", toDto(updated)));

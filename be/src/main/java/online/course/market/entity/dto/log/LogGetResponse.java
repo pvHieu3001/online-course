@@ -14,7 +14,8 @@ public class LogGetResponse {
     private String action;
     private String ipAddress;
     private String userAgent;
-    private String referrer;
+    private String referer;
     private String device;
     private String url;
+    private String method;
 } 

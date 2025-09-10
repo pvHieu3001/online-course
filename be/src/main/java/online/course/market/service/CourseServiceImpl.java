@@ -1,15 +1,16 @@
 package online.course.market.service;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import lombok.AllArgsConstructor;
 import online.course.market.entity.dto.category.CategoryDto;
 import online.course.market.entity.dto.course.CourseDto;
 import online.course.market.entity.dto.course.QuickViewCourseGetResponse;
 import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
+import online.course.market.entity.model.Tag;
+import online.course.market.exception.CJNotFoundException;
 import online.course.market.repository.CategoryRepository;
+import online.course.market.repository.CourseRepository;
+import online.course.market.utils.CustomCodeException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import online.course.market.exception.CJNotFoundException;
-import online.course.market.repository.CourseRepository;
-import online.course.market.utils.CustomCodeException;
-
-import lombok.AllArgsConstructor;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -57,7 +56,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public Course update(Course course, Integer id, Integer catId) {
+    public Course update(Course course, Integer id, Integer catId, List<Tag> resolvedTags) {
 
         Assert.notNull(id, "id cannot be null");
         Assert.notNull(course, "course cannot be null");
@@ -81,6 +80,7 @@ public class CourseServiceImpl implements CourseService {
         courseDb.setSourceUrl(course.getSourceUrl());
         courseDb.setImageUrl(course.getImageUrl() != null && course.getImageUrl() != "" ? course.getImageUrl() : courseDb.getImageUrl());
         courseDb.setIsDisplayHot(course.getIsDisplayHot());
+        courseDb.setTags(new HashSet<>(resolvedTags));
         Course newCourse = courseRepository.save(courseDb);
 
 
@@ -110,7 +110,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional(readOnly = true)
     public Course getById(Integer id) {
-        return courseRepository.findById(id).orElse(null);
+        return courseRepository.findById(id).orElseThrow();
     }
 
     @Override
@@ -120,6 +120,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Course> filterCourse(String status, String search, Boolean isDisplayHot, Pageable pageable) {
         return courseRepository.filterCourse(status, search, isDisplayHot, pageable);
     }

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 /**
  * HAQ Answer
  */
@@ -28,4 +30,12 @@ public class Blog extends BaseEntity {
     private Boolean status;
     private String type;
     private Boolean isDisplayHot;
+
+    @ManyToMany
+    @JoinTable(
+        name = "blog_tag",
+        joinColumns = @JoinColumn(name = "blog_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags;
 }

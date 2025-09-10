@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -30,6 +30,14 @@ public class Course extends BaseEntity {
     private String language;
     private String status;
     private Boolean isDisplayHot;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "course_tag",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags;
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")

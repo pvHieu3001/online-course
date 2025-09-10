@@ -3,9 +3,11 @@ package online.course.market.entity.dto.blog;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import online.course.market.entity.dto.tag.TagDto;
 import online.course.market.entity.dto.user.UserDto;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -23,4 +25,5 @@ public class BlogDto {
     private UserDto updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Set<TagDto> tags;
 } 

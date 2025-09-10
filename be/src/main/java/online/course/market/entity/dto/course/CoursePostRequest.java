@@ -11,24 +11,25 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @Data
 public class CoursePostRequest {
-    MultipartFile imageFile;
-    MultipartFile sourceFile;
-    String imageUrl;
-    String sourceUrl;
+    private MultipartFile imageFile;
+    private MultipartFile sourceFile;
+    private String imageUrl;
+    private String sourceUrl;
     @NotBlank(message = "Name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
-    String name;
+    private String name;
     private String content;
-    String description;
-    String courseBenefits;
-    String slug;
-    Integer price;
-    String level;
-    String language;
-    String status;
-    Boolean isDisplayHot;
-    Integer categoryId;
-    Double rating;
-    Integer totalStudents;
-    Integer totalRating;
+    private String description;
+    private String courseBenefits;
+    private String slug;
+    private Integer price;
+    private String level;
+    private String language;
+    private String status;
+    private Boolean isDisplayHot;
+    private Integer categoryId;
+    private Double rating;
+    private Integer totalStudents;
+    private Integer totalRating;
+    private String tagStr;
 }

@@ -20,4 +20,5 @@ public class BlogPostRequest {
     private Boolean status;
     private Boolean isDisplayHot;
     private String type;
+    private String tagStr;
 } 

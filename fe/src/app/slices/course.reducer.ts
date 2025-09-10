@@ -10,7 +10,7 @@ const initialState = {
   dataList: <IProduct[]>(<unknown>null),
   recommends: <IProduct[]>(<unknown>null),
   quickViews: <IQuickViewCourse[]>(<unknown>null),
-  totalElements: 0,
+  totalElements: 0
 }
 
 const courseSlice = createSlice({
@@ -32,7 +32,7 @@ const courseSlice = createSlice({
       state.dataList = []
     },
     getCoursesSuccessFully: (state, { payload }) => {
-      state.dataList = payload.data.content
+      state.dataList = payload.data.content ?? payload.data
       state.totalElements = payload.data.totalElements
       state.code = payload.code
       state.message = payload.message
