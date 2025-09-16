@@ -22,6 +22,7 @@ export interface IProduct {
   totalRating: number
   totalStudents: number
   tags: ITag[]
+  urls: IUrl[]
 }
 
 export interface ICategory {
@@ -107,6 +108,12 @@ export interface IBlog {
 export interface ITag {
   id: number
   name: string
+}
+
+export interface IUrl {
+  id: number
+  link: string
+  seqNo: number
 }
 
 export type ContextType = {

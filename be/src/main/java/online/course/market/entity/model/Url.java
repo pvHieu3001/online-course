@@ -6,37 +6,33 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * HAQ Answer
  */
 @Data
 @Entity
-@Table(name = "tags")
+@Table(name = "urls")
 @NoArgsConstructor
-public class Tag {
+public class Url {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String link;
 
-    @JsonIgnoreProperties("blogs")
-    @ManyToMany(mappedBy = "tags")
-    private Set<Blog> blogs= new HashSet<>();
+    private Integer seqNo;
 
     @JsonIgnoreProperties("courses")
-    @ManyToMany(mappedBy = "tags")
-    private Set<Course> courses = new HashSet<>();
+    @ManyToMany(mappedBy = "urls")
+    private List<Course> courses = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Tag tag)) return false;
-        return Objects.equals(id, tag.id);
+        if (!(o instanceof Url url)) return false;
+        return Objects.equals(id, url.id);
     }
 
     @Override

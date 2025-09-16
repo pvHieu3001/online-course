@@ -5,8 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import online.course.market.entity.dto.category.CategoryDto;
 import online.course.market.entity.dto.tag.TagDto;
+import online.course.market.entity.dto.url.UrlDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -32,6 +34,7 @@ public class CourseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Set<TagDto> tags;
+    private List<UrlDto> urls;
     private CategoryDto category;
 
 }

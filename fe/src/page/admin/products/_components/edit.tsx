@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select, Switch } from 'antd'
+import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select, Switch, Space } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
@@ -14,6 +14,14 @@ import { ICategory } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { useQuery } from '@/utils/useQuery'
 import { tagActions } from '@/app/actions'
+import { ReactSortable } from 'react-sortablejs'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+
+type urlProps = {
+  id: number | string
+  value: string
+  seqNo: number
+}
 
 function EditProduct() {
   const navigator = useNavigate()
@@ -30,6 +38,7 @@ function EditProduct() {
   const [courseBenefits, setCourseBenefits] = useState<string>('')
   const [selectedTags, setSelectedTags] = useState<string>('')
   const [displayPic, setDisplayPic] = useState<string>()
+  const [urlItems, setUrlItems] = useState<urlProps[]>([])
 
   useEffect(() => {
     if (flug) {
@@ -40,11 +49,19 @@ function EditProduct() {
   }, [dispatch, flug])
 
   useEffect(() => {
-    setDescription(courseStore.data?.description ?? '')
-    setContent(courseStore.data?.content ?? '')
-    setCourseBenefits(courseStore.data?.courseBenefits ?? '')
-    if (courseStore.data?.imageUrl) {
-      setDisplayPic(getImageUrl(courseStore.data.imageUrl))
+    if (courseStore.data) {
+      setDescription(courseStore.data.description ?? '')
+      setContent(courseStore.data.content ?? '')
+      setCourseBenefits(courseStore.data.courseBenefits ?? '')
+      if (courseStore.data?.imageUrl) {
+        setDisplayPic(getImageUrl(courseStore.data.imageUrl))
+      }
+      const dataUrl = courseStore.data.urls?.map((item) => ({
+        id: item.id,
+        value: item.link,
+        seqNo: item.seqNo
+      }))
+      setUrlItems(dataUrl)
     }
   }, [courseStore])
 
@@ -58,6 +75,13 @@ function EditProduct() {
     const sourceUrl = form.getFieldValue('sourceUrl')
     const status = form.getFieldValue('status')
     const isDisplayHot = form.getFieldValue('isDisplayHot')
+
+    const urlForms = form.getFieldValue('urls') || []
+    const urls = urlItems.map((item, index) => ({
+      id: item.id,
+      link: urlForms[index]?.value || '',
+      seqNo: item.seqNo
+    }))
 
     const formdata = new FormData()
     formdata.append('id', id as string)
@@ -76,6 +100,7 @@ function EditProduct() {
     formdata.append('status', status ? 'active' : 'inactive')
     formdata.append('isDisplayHot', isDisplayHot ?? false)
     formdata.append('tagStr', selectedTags)
+    formdata.append('urlsJson', JSON.stringify(urls))
 
     try {
       await dispatch(courseActions.updateCourse(id as string, formdata) as unknown as AnyAction)
@@ -95,6 +120,14 @@ function EditProduct() {
 
   const handleCancel = () => {
     navigator('..')
+  }
+
+  const updateSeqNo = (newList: urlProps[]) => {
+    const updated = newList.map((item, index) => ({
+      ...item,
+      seqNo: index + 1
+    }))
+    setUrlItems(updated)
   }
 
   return (
@@ -145,7 +178,7 @@ function EditProduct() {
               isDisplayHot: courseStore.data?.isDisplayHot ?? false,
               totalRating: courseStore.data?.totalRating,
               totalStudents: courseStore.data?.totalStudents,
-              tagStr: courseStore.data.tags.flatMap((item)=> item.id)
+              tagStr: courseStore.data.tags.flatMap((item) => item.id)
             }}
           >
             <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
@@ -277,6 +310,61 @@ function EditProduct() {
                   </Row>
                 </Col>
               </Row>
+            </Card>
+            <Card size='small' style={{ marginBottom: 24 }}>
+              <Form.Item label='Danh sách URL'>
+                <ReactSortable list={Array.isArray(urlItems) ? urlItems : []} setList={updateSeqNo} animation={200}>
+                  <Form.List name='urls'>
+                    {(fields, { add, remove }) => (
+                      <>
+                        {fields.map((field, index) => (
+                          <Space key={field.key} align='baseline' style={{ display: 'flex', marginBottom: 8 }}>
+                            <span style={{ width: 40, textAlign: 'center' }}>Section {urlItems[index]?.seqNo}</span>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, 'value']}
+                              rules={[{ required: true, message: 'Vui lòng nhập URL' }]}
+                            >
+                              <Input
+                                className='w-full'
+                                size='large'
+                                placeholder={`URL ${urlItems[index]?.seqNo || index + 1}`}
+                              />
+                            </Form.Item>
+
+                            <MinusCircleOutlined
+                              onClick={() => {
+                                remove(field.name)
+                                const updated = urlItems?.filter((_, i) => i !== index)
+                                updateSeqNo(updated)
+                              }}
+                            />
+                          </Space>
+                        ))}
+
+                        <Form.Item>
+                          <Button
+                            type='dashed'
+                            onClick={() => {
+                              const newItem = {
+                                id: '',
+                                value: '',
+                                seqNo: urlItems.length + 1
+                              }
+                              add({ value: '' })
+                              setUrlItems([...urlItems, newItem])
+                            }}
+                            icon={<PlusOutlined />}
+                            block
+                          >
+                            Thêm URL
+                          </Button>
+                        </Form.Item>
+                      </>
+                    )}
+                  </Form.List>
+                </ReactSortable>
+              </Form.Item>
             </Card>
             <Card size='small' style={{ marginBottom: 24 }}>
               <Form.Item name='content' className='m-0' label={'Nội dung khoá học'}>

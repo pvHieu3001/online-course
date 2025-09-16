@@ -81,6 +81,7 @@ public class CourseServiceImpl implements CourseService {
         courseDb.setImageUrl(course.getImageUrl() != null && course.getImageUrl() != "" ? course.getImageUrl() : courseDb.getImageUrl());
         courseDb.setIsDisplayHot(course.getIsDisplayHot());
         courseDb.setTags(new HashSet<>(resolvedTags));
+        courseDb.setUrls(course.getUrls());
         Course newCourse = courseRepository.save(courseDb);
 
 

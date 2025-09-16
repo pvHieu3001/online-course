@@ -1,5 +1,7 @@
 package online.course.market.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,9 +12,13 @@ import online.course.market.entity.dto.course.CourseDto;
 import online.course.market.entity.dto.course.CoursePostRequest;
 import online.course.market.entity.dto.course.CoursePutRequest;
 import online.course.market.entity.dto.tag.TagDto;
+import online.course.market.entity.dto.url.UrlDto;
 import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
 import online.course.market.entity.model.Tag;
+import online.course.market.entity.model.Url;
+import online.course.market.repository.TagRepository;
+import online.course.market.repository.UrlRepository;
 import online.course.market.service.CategoryService;
 import online.course.market.service.CourseService;
 import online.course.market.service.LogService;
@@ -46,18 +52,20 @@ public class AdminCourseController {
     private final CourseService courseService;
     private final CategoryService categoryService;
     private final TagService tagService;
+    private final UrlRepository urlRepository;
     private final ModelMapper modelMapper;
     private final String resourceFolder;
     private final String env;
 
     private Path uploadDir;
 
-    public AdminCourseController(LogService logService, CourseService courseService, CategoryService categoryService, TagService tagService, ModelMapper modelMapper,
+    public AdminCourseController(LogService logService, CourseService courseService, CategoryService categoryService, TagService tagService, UrlRepository urlRepository, ModelMapper modelMapper,
                                  @Qualifier("uploadUrl") String resourceFolder, @Qualifier("env") String environment) {
         this.logService = logService;
         this.courseService = courseService;
         this.categoryService = categoryService;
         this.tagService = tagService;
+        this.urlRepository = urlRepository;
         this.modelMapper = modelMapper;
         this.resourceFolder = resourceFolder;
         this.env = environment;
@@ -171,6 +179,30 @@ public class AdminCourseController {
                     resolvedTags.add(tag);
                 }
             });
+
+            ObjectMapper mapper = new ObjectMapper();
+            List<Url> newUrls = new ArrayList<>();
+            List<UrlDto> urls = mapper.readValue(dto.getUrlsJson(), new TypeReference<>() {});
+
+            for (UrlDto urlDto : urls) {
+                Url url;
+
+                if (urlDto.getId() != null && urlRepository.existsById(urlDto.getId())) {
+                    url = urlRepository.findById(urlDto.getId()).get();
+                    url.setLink(urlDto.getLink());
+                    url.setSeqNo(urlDto.getSeqNo());
+                } else {
+                    url = new Url();
+                    url.setLink(urlDto.getLink());
+                    url.setSeqNo(urlDto.getSeqNo());
+                }
+
+                newUrls.add(url);
+            }
+
+            List<Url> savedUrls = urlRepository.saveAll(newUrls);
+
+            course.setUrls(savedUrls);
             course.setTags(new HashSet<>(resolvedTags));
 
             Course courseDb = courseService.save(course);
@@ -224,6 +256,49 @@ public class AdminCourseController {
             });
 
             Course course = modelMapper.map(dto, Course.class);
+
+            ObjectMapper mapper = new ObjectMapper();
+            List<Url> newUrls = new ArrayList<>();
+            List<UrlDto> urls = mapper.readValue(dto.getUrlsJson(), new TypeReference<>() {});
+            for (UrlDto urlDto : urls) {
+                Url url;
+                if (urlDto.getId() != null && urlRepository.existsById(urlDto.getId())) {
+                    url = urlRepository.findById(urlDto.getId()).get();
+                    url.setLink(urlDto.getLink());
+                    url.setSeqNo(urlDto.getSeqNo());
+                } else {
+                    url = new Url();
+                    url.setLink(urlDto.getLink());
+                    url.setSeqNo(urlDto.getSeqNo());
+                }
+
+                newUrls.add(url);
+            }
+            List<Url> savedUrls = urlRepository.saveAll(newUrls);
+
+            Course courseDB = courseService.getById(id);
+
+            List<Url> oldUrls = new ArrayList<>(courseDB.getUrls());
+
+            Set<Long> newUrlIds = savedUrls.stream()
+                    .filter(url -> url.getId() != null)
+                    .map(Url::getId)
+                    .collect(Collectors.toSet());
+
+            List<Url> toRemove = oldUrls.stream()
+                    .filter(url -> url.getId() != null && !newUrlIds.contains(url.getId()))
+                    .toList();
+
+            for (Url url : toRemove) {
+                course.getUrls().remove(url);
+                url.getCourses().remove(course);
+
+                if (url.getCourses().isEmpty()) {
+                    urlRepository.delete(url);
+                }
+            }
+
+            course.setUrls(savedUrls);
             Course courseDb = courseService.update(course, id, dto.getCategoryId(), resolvedTags);
             logService.save(env, request, LOG_UPDATE_COURSE, LOG_ACTION_UPDATE_COURSE, HttpMethod.PUT.name());
             return ResponseEntity.ok(ApiResponse.success("Updated", toDto(courseDb)));

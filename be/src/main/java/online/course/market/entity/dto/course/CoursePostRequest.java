@@ -5,7 +5,10 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import online.course.market.entity.dto.url.UrlDto;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,4 +35,5 @@ public class CoursePostRequest {
     private Integer totalStudents;
     private Integer totalRating;
     private String tagStr;
+    private String urlsJson;
 }
