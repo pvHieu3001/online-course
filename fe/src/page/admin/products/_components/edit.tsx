@@ -49,21 +49,49 @@ function EditProduct() {
   }, [dispatch, flug])
 
   useEffect(() => {
-    if (courseStore.data) {
+    if (courseStore.data && !courseStore.isLoading) {
+      const dataUrl =
+        courseStore.data.urls?.map((item) => ({
+          id: item.id,
+          value: item.link,
+          seqNo: item.seqNo
+        })) || []
+
+      setUrlItems(dataUrl)
+
+      form.resetFields()
+      form.setFieldsValue({
+        createdAt: formatDate(courseStore.data.createdAt ? new Date(courseStore.data?.createdAt) : new Date()),
+        createdBy: courseStore.data.createdBy,
+        updatedAt: formatDate(courseStore.data?.updatedAt ? new Date(courseStore.data?.updatedAt) : new Date()),
+        updatedBy: courseStore.data.updatedBy,
+        categoryId: courseStore.data.category?.id,
+        content: courseStore.data.content,
+        description: courseStore.data.description,
+        courseBenefits: courseStore.data.courseBenefits,
+        language: courseStore.data.language,
+        level: courseStore.data.level,
+        name: courseStore.data.name,
+        price: courseStore.data.price,
+        rating: courseStore.data.rating,
+        slug: courseStore.data.slug,
+        sourceUrl: courseStore.data.sourceUrl,
+        status: courseStore.data.status === 'active',
+        isDisplayHot: courseStore.data.isDisplayHot ?? false,
+        totalRating: courseStore.data.totalRating,
+        totalStudents: courseStore.data.totalStudents,
+        tagStr: courseStore.data.tags.flatMap((item) => item.id),
+        urls: dataUrl.map((item) => ({ value: item.value }))
+      })
       setDescription(courseStore.data.description ?? '')
       setContent(courseStore.data.content ?? '')
       setCourseBenefits(courseStore.data.courseBenefits ?? '')
+      setSelectedTags(courseStore.data?.tags?.map((tag) => tag.id).join(',') || '')
       if (courseStore.data?.imageUrl) {
         setDisplayPic(getImageUrl(courseStore.data.imageUrl))
       }
-      const dataUrl = courseStore.data.urls?.map((item) => ({
-        id: item.id,
-        value: item.link,
-        seqNo: item.seqNo
-      }))
-      setUrlItems(dataUrl)
     }
-  }, [courseStore])
+  }, [courseStore.data, courseStore.isLoading, form])
 
   const onFinish = async () => {
     const id = courseStore.data?.id
@@ -77,11 +105,13 @@ function EditProduct() {
     const isDisplayHot = form.getFieldValue('isDisplayHot')
 
     const urlForms = form.getFieldValue('urls') || []
-    const urls = urlItems.map((item, index) => ({
-      id: item.id,
-      link: urlForms[index]?.value || '',
-      seqNo: item.seqNo
-    }))
+    const urls = urlItems
+      .map((item, index) => ({
+        id: item.id,
+        link: urlForms[index]?.value || '',
+        seqNo: item.seqNo
+      }))
+      .filter((item) => item.link.trim() !== '')
 
     const formdata = new FormData()
     formdata.append('id', id as string)
@@ -128,12 +158,17 @@ function EditProduct() {
       seqNo: index + 1
     }))
     setUrlItems(updated)
+    form.setFieldsValue({
+      urls: updated.map((item) => ({ value: item.value }))
+    })
   }
 
+  console.log('courseStore.data:', courseStore.data)
   return (
     <>
       {courseStore.data && !courseStore.isLoading && (
         <Drawer
+          key={courseStore.data?.id}
           open={true}
           title={
             <>
@@ -158,27 +193,7 @@ function EditProduct() {
             onFinish={onFinish}
             className='p-10 relative'
             initialValues={{
-              id: courseStore.data?.id,
-              createdAt: formatDate(courseStore.data?.createdAt ? new Date(courseStore.data?.createdAt) : new Date()),
-              createdBy: courseStore.data?.createdBy,
-              updatedAt: formatDate(courseStore.data?.updatedAt ? new Date(courseStore.data?.updatedAt) : new Date()),
-              updatedBy: courseStore.data?.updatedBy,
-              categoryId: courseStore.data?.category?.id,
-              content: courseStore.data?.content,
-              description: courseStore.data?.description,
-              courseBenefits: courseStore.data?.courseBenefits,
-              language: courseStore.data?.language,
-              level: courseStore.data?.level,
-              name: courseStore.data?.name,
-              price: courseStore.data?.price,
-              rating: courseStore.data?.rating,
-              slug: courseStore.data?.slug,
-              sourceUrl: courseStore.data?.sourceUrl,
-              status: courseStore.data?.status == 'active' ? true : false,
-              isDisplayHot: courseStore.data?.isDisplayHot ?? false,
-              totalRating: courseStore.data?.totalRating,
-              totalStudents: courseStore.data?.totalStudents,
-              tagStr: courseStore.data.tags.flatMap((item) => item.id)
+              id: courseStore.data?.id
             }}
           >
             <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
@@ -254,9 +269,6 @@ function EditProduct() {
                       </Select>
                     </Form.Item>
                   )}
-                  <Form.Item name='sourceUrl' label='Nguồn video'>
-                    <Input placeholder='Nhập URL nguồn video' size='large' />
-                  </Form.Item>
                   <Form.Item name='tagStr' label='Tags'>
                     <Select
                       mode='tags'
@@ -298,7 +310,7 @@ function EditProduct() {
 
                     <Col xs={24} sm={12} md={8}>
                       <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
-                        <Switch className='w-20' checkedChildren='Active' unCheckedChildren='Inactive' />
+                        <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                       </Form.Item>
                     </Col>
 
@@ -312,34 +324,48 @@ function EditProduct() {
               </Row>
             </Card>
             <Card size='small' style={{ marginBottom: 24 }}>
-              <Form.Item label='Danh sách URL'>
+              <Form.Item label='Nguồn tài liệu'>
                 <ReactSortable list={Array.isArray(urlItems) ? urlItems : []} setList={updateSeqNo} animation={200}>
                   <Form.List name='urls'>
                     {(fields, { add, remove }) => (
                       <>
                         {fields.map((field, index) => (
-                          <Space key={field.key} align='baseline' style={{ display: 'flex', marginBottom: 8 }}>
-                            <span style={{ width: 40, textAlign: 'center' }}>Section {urlItems[index]?.seqNo}</span>
-                            <Form.Item
-                              {...field}
-                              name={[field.name, 'value']}
-                              rules={[{ required: true, message: 'Vui lòng nhập URL' }]}
-                            >
-                              <Input
-                                className='w-full'
-                                size='large'
-                                placeholder={`URL ${urlItems[index]?.seqNo || index + 1}`}
-                              />
-                            </Form.Item>
+                          <Row
+                            key={field.key}
+                            gutter={[8, 8]}
+                            justify='center'
+                            align='middle'
+                            style={{ marginBottom: 8 }}
+                          >
+                            <Col xs={24} sm={4} style={{ textAlign: 'center' }}>
+                              <span>Phần {urlItems[index]?.seqNo}</span>
+                            </Col>
 
-                            <MinusCircleOutlined
-                              onClick={() => {
-                                remove(field.name)
-                                const updated = urlItems?.filter((_, i) => i !== index)
-                                updateSeqNo(updated)
-                              }}
-                            />
-                          </Space>
+                            <Col xs={24} sm={18} style={{ textAlign: 'center' }}>
+                              <Form.Item
+                                key={field.key}
+                                name={[field.name, 'value']}
+                                rules={[{ required: true, message: 'Vui lòng nhập URL' }]}
+                              >
+                                <Input size='large' placeholder={`URL ${urlItems[index]?.seqNo || index + 1}`} />
+                              </Form.Item>
+                            </Col>
+
+                            <Col xs={24} sm={2} style={{ textAlign: 'center' }}>
+                              <MinusCircleOutlined
+                                onClick={() => {
+                                  remove(field.name)
+                                  const updated = urlItems.filter((_, i) => i !== index)
+                                  const reSeq = updated.map((item, idx) => ({
+                                    ...item,
+                                    seqNo: idx + 1
+                                  }))
+                                  setUrlItems(reSeq)
+                                }}
+                                style={{ fontSize: 20, color: '#ff4d4f', cursor: 'pointer' }}
+                              />
+                            </Col>
+                          </Row>
                         ))}
 
                         <Form.Item>

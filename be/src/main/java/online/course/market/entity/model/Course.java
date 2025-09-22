@@ -59,4 +59,9 @@ public class Course extends BaseEntity {
     private Double rating;
     private Integer totalStudents;
     private Integer totalRating;
+
+    @Override
+    public String toString() {
+        return "Course{id=" + id + ", name='" + name + "', price=" + price + "}";
+    }
 }

@@ -1,5 +1,6 @@
 package online.course.market.entity.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class UserModel extends BaseEntity{
 	private String firstname;
 	private String lastname;
 	private String username;
+	@JsonIgnore
 	private String password;	
 	private String email;
 	@Enumerated(EnumType.STRING)

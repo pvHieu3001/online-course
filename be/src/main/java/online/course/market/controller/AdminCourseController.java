@@ -240,66 +240,7 @@ public class AdminCourseController {
             dto.setImageUrl(imageFilename);
             dto.setSourceUrl(sourceFilename);
 
-            List<Tag> resolvedTags = new ArrayList<>();
-            List<String> tagArray = List.of(dto.getTagStr().split(","));
-            tagArray.forEach((tagValue)->{
-                if (DataUtils.isNumeric(tagValue)) {
-                    tagService.findById(Integer.parseInt(tagValue)).ifPresent(resolvedTags::add);
-                } else if (tagValue != null) {
-                    Tag tag = tagService.findByName(tagValue).orElseGet(() -> {
-                        Tag newTag = new Tag();
-                        newTag.setName(tagValue);
-                        return tagService.save(newTag);
-                    });
-                    resolvedTags.add(tag);
-                }
-            });
-
-            Course course = modelMapper.map(dto, Course.class);
-
-            ObjectMapper mapper = new ObjectMapper();
-            List<Url> newUrls = new ArrayList<>();
-            List<UrlDto> urls = mapper.readValue(dto.getUrlsJson(), new TypeReference<>() {});
-            for (UrlDto urlDto : urls) {
-                Url url;
-                if (urlDto.getId() != null && urlRepository.existsById(urlDto.getId())) {
-                    url = urlRepository.findById(urlDto.getId()).get();
-                    url.setLink(urlDto.getLink());
-                    url.setSeqNo(urlDto.getSeqNo());
-                } else {
-                    url = new Url();
-                    url.setLink(urlDto.getLink());
-                    url.setSeqNo(urlDto.getSeqNo());
-                }
-
-                newUrls.add(url);
-            }
-            List<Url> savedUrls = urlRepository.saveAll(newUrls);
-
-            Course courseDB = courseService.getById(id);
-
-            List<Url> oldUrls = new ArrayList<>(courseDB.getUrls());
-
-            Set<Long> newUrlIds = savedUrls.stream()
-                    .filter(url -> url.getId() != null)
-                    .map(Url::getId)
-                    .collect(Collectors.toSet());
-
-            List<Url> toRemove = oldUrls.stream()
-                    .filter(url -> url.getId() != null && !newUrlIds.contains(url.getId()))
-                    .toList();
-
-            for (Url url : toRemove) {
-                course.getUrls().remove(url);
-                url.getCourses().remove(course);
-
-                if (url.getCourses().isEmpty()) {
-                    urlRepository.delete(url);
-                }
-            }
-
-            course.setUrls(savedUrls);
-            Course courseDb = courseService.update(course, id, dto.getCategoryId(), resolvedTags);
+            Course courseDb = courseService.update(dto, id);
             logService.save(env, request, LOG_UPDATE_COURSE, LOG_ACTION_UPDATE_COURSE, HttpMethod.PUT.name());
             return ResponseEntity.ok(ApiResponse.success("Updated", toDto(courseDb)));
         } catch (IOException e) {
