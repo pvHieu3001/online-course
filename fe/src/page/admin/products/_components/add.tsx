@@ -23,9 +23,7 @@ function AddProduct() {
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [displayPic, setDisplayPic] = useState<string>()
-  const [detail, setDetail] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  const [courseBenefits, setCourseBenefits] = useState<string>('')
   const [selectedTags, setSelectedTags] = useState<string>('')
   const navigate = useNavigate()
 
@@ -55,8 +53,6 @@ function AddProduct() {
     formdata.append('name', name)
     formdata.append('categoryId', categoryId)
     formdata.append('content', content)
-    formdata.append('description', detail)
-    formdata.append('courseBenefits', courseBenefits)
     formdata.append('language', language)
     formdata.append('level', level)
     formdata.append('price', price ?? 0)
@@ -274,21 +270,7 @@ function AddProduct() {
                 onHandleChange={(value) => {
                   setContent(value)
                 }}
-              />
-            </Form.Item>
-          </Card>
-          <Card size='small' style={{ marginBottom: 24 }}>
-            <Form.Item name='description' label='Nhập mô tả' required>
-              <TextEditor content={detail ?? ''} onHandleChange={(val) => setDetail(val)} />
-            </Form.Item>
-          </Card>
-          <Card size='small' style={{ marginBottom: 24 }}>
-            <Form.Item name='courseBenefits' className='m-0' label={'Lợi ích khoá học'}>
-              <TextEditor
-                content={courseBenefits ?? ''}
-                onHandleChange={(value) => {
-                  setCourseBenefits(value)
-                }}
+                height={400}
               />
             </Form.Item>
           </Card>

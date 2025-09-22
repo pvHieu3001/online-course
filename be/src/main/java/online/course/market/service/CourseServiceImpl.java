@@ -137,8 +137,6 @@ public class CourseServiceImpl implements CourseService {
                     .orElseThrow(() -> new RuntimeException("Danh mục không tồn tại"));
             courseDB.setName(dto.getName());
             courseDB.setContent(dto.getContent());
-            courseDB.setDescription(dto.getDescription());
-            courseDB.setCourseBenefits(dto.getCourseBenefits());
             courseDB.setLanguage(dto.getLanguage());
             courseDB.setLevel(dto.getLevel());
             courseDB.setPrice(dto.getPrice());

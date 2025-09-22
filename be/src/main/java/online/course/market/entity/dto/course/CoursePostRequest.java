@@ -20,8 +20,6 @@ public class CoursePostRequest {
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     private String name;
     private String content;
-    private String description;
-    private String courseBenefits;
     private String slug;
     private Integer price;
     private String level;

@@ -52,7 +52,7 @@ function ProductDetailPage() {
             </section>
 
             <section className='mt-10'>
-              <h2 className='text-2xl font-semibold mb-4'>Nội Dung Bạn Sẽ Được Đào Tạo</h2>
+              <h2 className='text-2xl font-semibold mb-4'>Nội Dung Khóa Học</h2>
               {course.content ? (
                 <div
                   className='text-xl leading-8 text-gray-800 
@@ -71,56 +71,24 @@ function ProductDetailPage() {
               )}
             </section>
 
-            <section className='mt-10'>
-              <h2 className='text-2xl font-semibold mb-4'>Giới Thiệu Khóa Học</h2>
-              {course.description ? (
-                <div
-                  className='text-xl leading-8 text-gray-800 
-                [&_p]:mb-4
-                [&_p]:text-xl
-                [&_h1]:text-4xl 
-                [&_h2]:text-3xl 
-                [&_h3]:text-2xl 
-                [&_ul]:list-disc 
-                [&_ul]:pl-6 
-                [&_a]:text-blue-600 [&_a:hover]:underline'
-                  dangerouslySetInnerHTML={{ __html: course.description }}
-                />
-              ) : (
-                <p className='text-gray-500 italic'>Chưa có mô tả khóa học.</p>
-              )}
-            </section>
-
-            <section className='mt-10'>
-              <h2 className='text-xl font-semibold mb-4'>Lý Do Bạn Nên Chọn Khóa Học Này</h2>
-              {course.courseBenefits ? (
-                <div
-                  className='text-xl leading-8 text-gray-800 
-                [&_p]:mb-4 
-                [&_p]:text-xl
-                [&_h1]:text-4xl 
-                [&_h2]:text-3xl 
-                [&_h3]:text-2xl 
-                [&_ul]:list-disc 
-                [&_ul]:pl-6 
-                [&_a]:text-blue-600 [&_a:hover]:underline'
-                  dangerouslySetInnerHTML={{ __html: course.courseBenefits }}
-                />
-              ) : (
-                <p className='text-gray-500 italic'>Thông tin lợi ích chưa được cập nhật.</p>
-              )}
-            </section>
-
             <section className='mt-10 text-center'>
-              {course.sourceUrl ? (
-                <a
-                  href={course.sourceUrl}
-                  download
-                  target='_blank'
-                  className='inline-block bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition'
-                >
-                  Tải Xuống
-                </a>
+              <h2 className='text-2xl font-semibold mb-4'>Link tải khóa học</h2>
+              {course.urls && course.urls.length > 0 ? (
+                <div className='flex flex-col items-center gap-4'>
+                  {[...course.urls]
+                    .sort((a, b) => a.seqNo - b.seqNo)
+                    .map((urlItem, index) => (
+                      <a
+                        key={urlItem.id || index}
+                        href={urlItem.link}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='inline-block bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition w-full max-w-md'
+                      >
+                        Tải Phần {urlItem.seqNo || index + 1}
+                      </a>
+                    ))}
+                </div>
               ) : (
                 <p className='text-gray-400 italic'>Tài liệu chưa sẵn sàng để tải.</p>
               )}

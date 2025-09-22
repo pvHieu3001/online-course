@@ -374,26 +374,7 @@ function EditProduct() {
                   onHandleChange={(value) => {
                     setContent(value)
                   }}
-                />
-              </Form.Item>
-            </Card>
-            <Card size='small' style={{ marginBottom: 24 }}>
-              <Form.Item name='description' className='m-0' label={'Mô tả chi tiết khoá học'}>
-                <TextEditor
-                  content={description ?? ''}
-                  onHandleChange={(value) => {
-                    setDescription(value)
-                  }}
-                />
-              </Form.Item>
-            </Card>
-            <Card size='small' style={{ marginBottom: 24 }}>
-              <Form.Item name='courseBenefits' className='m-0' label={'Lợi ích khoá học'}>
-                <TextEditor
-                  content={courseBenefits ?? ''}
-                  onHandleChange={(value) => {
-                    setCourseBenefits(value)
-                  }}
+                  height={400}
                 />
               </Form.Item>
             </Card>
