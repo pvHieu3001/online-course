@@ -8,9 +8,11 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { useNavigate } from 'react-router-dom'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
-import { ICategory } from '@/common/types.interface'
+import { ICategory, IUrl } from '@/common/types.interface'
 import { useQuery } from '@/utils/useQuery'
 import { tagActions } from '@/app/actions'
+import { ReactSortable } from 'react-sortablejs'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 
 function AddProduct() {
   const query = useQuery()
@@ -38,9 +40,16 @@ function AddProduct() {
     const language = form.getFieldValue('language')
     const level = form.getFieldValue('level')
     const price = form.getFieldValue('price')
-    const sourceUrl = form.getFieldValue('sourceUrl')
     const status = form.getFieldValue('status')
     const isDisplayHot = form.getFieldValue('isDisplayHot')
+    const urlForms = form.getFieldValue('urls') || []
+    const urls = urlForms
+      .map((item: IUrl, index: number) => ({
+        id: item.id || null,
+        link: item.link || '',
+        seqNo: index + 1
+      }))
+      .filter((item: IUrl) => item.link && item.link.trim() !== '')
 
     const formdata = new FormData()
     formdata.append('name', name)
@@ -51,10 +60,10 @@ function AddProduct() {
     formdata.append('language', language)
     formdata.append('level', level)
     formdata.append('price', price ?? 0)
-    formdata.append('sourceUrl', sourceUrl)
     formdata.append('status', status ? 'active' : 'inactive')
     formdata.append('isDisplayHot', isDisplayHot ?? false)
-    formdata.append('tagStr', selectedTags)
+    formdata.append('tagStr', selectedTags ?? null)
+    formdata.append('urlsJson', JSON.stringify(urls))
     if (imageUrl) {
       formdata.append('imageFile', imageUrl as Blob)
     }
@@ -143,11 +152,20 @@ function AddProduct() {
                   </Select>
                 </Form.Item>
 
-                <Form.Item name='sourceUrl' label='Nguồn video'>
-                  <Input placeholder='Nhập URL nguồn video' size='large' />
+                <Form.Item name='tagStr' label='Tags'>
+                  <Select
+                    mode='tags'
+                    placeholder='Nhập hoặc chọn tag'
+                    size='large'
+                    className='w-full'
+                    options={tagStore.dataList?.map((tag) => ({
+                      value: tag.id,
+                      label: tag.name
+                    }))}
+                    onChange={(value) => setSelectedTags(value)}
+                  />
                 </Form.Item>
 
-                {/* Row chứa switch */}
                 <Row gutter={[16, 16]}>
                   <Col xs={24} sm={12} md={8}>
                     <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
@@ -184,21 +202,70 @@ function AddProduct() {
                 <Form.Item name='price' label='Giá'>
                   <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
                 </Form.Item>
-                <Form.Item name='tagStr' label='Tags'>
-                  <Select
-                    mode='tags'
-                    placeholder='Nhập hoặc chọn tag'
-                    size='large'
-                    className='w-full'
-                    options={tagStore.dataList?.map((tag) => ({
-                      value: tag.id,
-                      label: tag.name
-                    }))}
-                    onChange={(value) => setSelectedTags(value)}
-                  />
-                </Form.Item>
               </Col>
             </Row>
+          </Card>
+          <Card size='small' style={{ marginBottom: 24 }}>
+            <Form.Item label='Nguồn tài liệu'>
+              <Form.List name='urls'>
+                {(fields, { add, remove, move }) => (
+                  <>
+                    <ReactSortable
+                      list={fields}
+                      setList={() => {}}
+                      onEnd={(evt) => {
+                        if (evt.oldIndex !== undefined && evt.newIndex !== undefined) {
+                          move(evt.oldIndex, evt.newIndex)
+                        }
+                      }}
+                      animation={200}
+                    >
+                      {fields.map((field, index) => (
+                        <Row
+                          key={field.key}
+                          gutter={[8, 8]}
+                          justify='center'
+                          align='middle'
+                          style={{ marginBottom: 8, cursor: 'grab' }}
+                        >
+                          <Col xs={24} sm={4} style={{ textAlign: 'center' }}>
+                            <span>Phần {index + 1}</span>
+                          </Col>
+
+                          <Col xs={24} sm={18} style={{ textAlign: 'center' }}>
+                            <Form.Item
+                              {...field}
+                              name={[field.name, 'link']}
+                              fieldKey={[field.fieldKey, 'link']}
+                              rules={[{ required: true, message: 'Vui lòng nhập URL' }]}
+                              noStyle
+                            >
+                              <Input size='large' placeholder={`URL phần ${index + 1}`} />
+                            </Form.Item>
+                            <Form.Item {...field} name={[field.name, 'id']} noStyle hidden>
+                              <Input />
+                            </Form.Item>
+                          </Col>
+
+                          <Col xs={24} sm={2} style={{ textAlign: 'center' }}>
+                            <MinusCircleOutlined
+                              onClick={() => remove(field.name)}
+                              style={{ fontSize: 20, color: '#ff4d4f', cursor: 'pointer' }}
+                            />
+                          </Col>
+                        </Row>
+                      ))}
+                    </ReactSortable>
+
+                    <Form.Item>
+                      <Button type='dashed' onClick={() => add({ id: '', link: '' })} icon={<PlusOutlined />} block>
+                        Thêm URL
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </Form.Item>
           </Card>
           <Card size='small' style={{ marginBottom: 24 }}>
             <Form.Item name='content' className='m-0' label={'Nội dung khoá học'}>

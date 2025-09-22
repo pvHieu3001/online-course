@@ -27,7 +27,6 @@ public class Course extends BaseEntity {
     private String description;
     @Column(columnDefinition = "TEXT")
     private String courseBenefits;
-    private String sourceUrl;
     private String slug;
     private Integer price;
     private String level;

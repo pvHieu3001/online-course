@@ -151,59 +151,51 @@ public class AdminCourseController {
                 Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            String sourceFilename="";
-            if(dto.getSourceFile() != null){
-                sourceFilename = UUID.randomUUID()+"_"+dto.getSourceFile().getOriginalFilename();
-                Path sourcePath = uploadDir.resolve(sourceFilename);
-                Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
-            }
-
             dto.setSlug(DataUtils.toSlug(dto.getName()));
             dto.setImageUrl(imageFilename);
-            dto.setSourceUrl(sourceFilename);
             Course course = modelMapper.map(dto, Course.class);
             Category category = categoryService.getById(dto.getCategoryId());
             course.setCategory(category);
 
-            List<Tag> resolvedTags = new ArrayList<>();
-            List<String> tagArray = List.of(dto.getTagStr().split(","));
-            tagArray.forEach((tagValue)->{
-                if (DataUtils.isNumeric(tagValue)) {
-                    tagService.findById(Integer.parseInt(tagValue)).ifPresent(resolvedTags::add);
-                } else if (tagValue != null) {
-                    Tag tag = tagService.findByName(tagValue).orElseGet(() -> {
-                        Tag newTag = new Tag();
-                        newTag.setName(tagValue);
-                        return tagService.save(newTag);
-                    });
-                    resolvedTags.add(tag);
-                }
-            });
-
-            ObjectMapper mapper = new ObjectMapper();
-            List<Url> newUrls = new ArrayList<>();
-            List<UrlDto> urls = mapper.readValue(dto.getUrlsJson(), new TypeReference<>() {});
-
-            for (UrlDto urlDto : urls) {
-                Url url;
-
-                if (urlDto.getId() != null && urlRepository.existsById(urlDto.getId())) {
-                    url = urlRepository.findById(urlDto.getId()).get();
-                    url.setLink(urlDto.getLink());
-                    url.setSeqNo(urlDto.getSeqNo());
-                } else {
-                    url = new Url();
-                    url.setLink(urlDto.getLink());
-                    url.setSeqNo(urlDto.getSeqNo());
-                }
-
-                newUrls.add(url);
+            if(dto.getTagStr()!=null && !dto.getTagStr().isEmpty()) {
+                List<Tag> resolvedTags = new ArrayList<>();
+                List<String> tagArray = List.of(dto.getTagStr().split(","));
+                tagArray.forEach((tagValue) -> {
+                    if (DataUtils.isNumeric(tagValue)) {
+                        tagService.findById(Integer.parseInt(tagValue)).ifPresent(resolvedTags::add);
+                    } else if (tagValue != null) {
+                        Tag tag = tagService.findByName(tagValue).orElseGet(() -> {
+                            Tag newTag = new Tag();
+                            newTag.setName(tagValue);
+                            return tagService.save(newTag);
+                        });
+                        resolvedTags.add(tag);
+                    }
+                });
+                course.setTags(new HashSet<>(resolvedTags));
             }
 
-            List<Url> savedUrls = urlRepository.saveAll(newUrls);
+            if(dto.getUrlsJson()!=null){
+                ObjectMapper mapper = new ObjectMapper();
+                List<Url> newUrls = new ArrayList<>();
+                List<UrlDto> urls = mapper.readValue(dto.getUrlsJson(), new TypeReference<>() {});
+                for (UrlDto urlDto : urls) {
+                    Url url;
+                    if (urlDto.getId() != null && urlRepository.existsById(urlDto.getId())) {
+                        url = urlRepository.findById(urlDto.getId()).get();
+                        url.setLink(urlDto.getLink());
+                        url.setSeqNo(urlDto.getSeqNo());
+                    } else {
+                        url = new Url();
+                        url.setLink(urlDto.getLink());
+                        url.setSeqNo(urlDto.getSeqNo());
+                    }
+                    newUrls.add(url);
+                }
+                List<Url> savedUrls = urlRepository.saveAll(newUrls);
+                course.setUrls(savedUrls);
+            }
 
-            course.setUrls(savedUrls);
-            course.setTags(new HashSet<>(resolvedTags));
 
             Course courseDb = courseService.save(course);
             logService.save(env, request, LOG_CREATE_COURSE, LOG_ACTION_CREATE_NEW_COURSE, HttpMethod.POST.name());
@@ -229,16 +221,8 @@ public class AdminCourseController {
                 Files.copy(dto.getImageFile().getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            String sourceFilename = dto.getSourceUrl();
-            if(dto.getSourceFile() != null){
-                sourceFilename = UUID.randomUUID()+"_"+dto.getSourceFile().getOriginalFilename();
-                Path sourcePath = uploadDir.resolve(sourceFilename);
-                Files.copy(dto.getSourceFile().getInputStream(), sourcePath, StandardCopyOption.REPLACE_EXISTING);
-            }
-
             dto.setSlug(DataUtils.toSlug(dto.getName()));
             dto.setImageUrl(imageFilename);
-            dto.setSourceUrl(sourceFilename);
 
             Course courseDb = courseService.update(dto, id);
             logService.save(env, request, LOG_UPDATE_COURSE, LOG_ACTION_UPDATE_COURSE, HttpMethod.PUT.name());

@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select, Switch, Space } from 'antd'
+import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select, Switch } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
@@ -10,18 +10,12 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { formatDate } from '@/utils/formatDate'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
-import { ICategory } from '@/common/types.interface'
+import { ICategory, IUrl } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { useQuery } from '@/utils/useQuery'
 import { tagActions } from '@/app/actions'
 import { ReactSortable } from 'react-sortablejs'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-
-type urlProps = {
-  id: number | string
-  value: string
-  seqNo: number
-}
 
 function EditProduct() {
   const navigator = useNavigate()
@@ -38,7 +32,6 @@ function EditProduct() {
   const [courseBenefits, setCourseBenefits] = useState<string>('')
   const [selectedTags, setSelectedTags] = useState<string>('')
   const [displayPic, setDisplayPic] = useState<string>()
-  const [urlItems, setUrlItems] = useState<urlProps[]>([])
 
   useEffect(() => {
     if (flug) {
@@ -53,11 +46,11 @@ function EditProduct() {
       const dataUrl =
         courseStore.data.urls?.map((item) => ({
           id: item.id,
-          value: item.link,
+          link: item.link,
           seqNo: item.seqNo
         })) || []
 
-      setUrlItems(dataUrl)
+      dataUrl.sort((a, b) => a.seqNo - b.seqNo)
 
       form.resetFields()
       form.setFieldsValue({
@@ -80,8 +73,8 @@ function EditProduct() {
         isDisplayHot: courseStore.data.isDisplayHot ?? false,
         totalRating: courseStore.data.totalRating,
         totalStudents: courseStore.data.totalStudents,
-        tagStr: courseStore.data.tags.flatMap((item) => item.id),
-        urls: dataUrl.map((item) => ({ value: item.value }))
+        tagStr: courseStore.data.tags?.flatMap((item) => item.id),
+        urls: dataUrl.map((item) => ({ id: item.id, link: item.link, seqNo: item.seqNo }))
       })
       setDescription(courseStore.data.description ?? '')
       setContent(courseStore.data.content ?? '')
@@ -105,13 +98,13 @@ function EditProduct() {
     const isDisplayHot = form.getFieldValue('isDisplayHot')
 
     const urlForms = form.getFieldValue('urls') || []
-    const urls = urlItems
-      .map((item, index) => ({
-        id: item.id,
-        link: urlForms[index]?.value || '',
-        seqNo: item.seqNo
+    const urls = urlForms
+      .map((item: IUrl, index: number) => ({
+        id: item.id || null,
+        link: item.link || '',
+        seqNo: index + 1
       }))
-      .filter((item) => item.link.trim() !== '')
+      .filter((item: IUrl) => item.link && item.link.trim() !== '')
 
     const formdata = new FormData()
     formdata.append('id', id as string)
@@ -150,17 +143,6 @@ function EditProduct() {
 
   const handleCancel = () => {
     navigator('..')
-  }
-
-  const updateSeqNo = (newList: urlProps[]) => {
-    const updated = newList.map((item, index) => ({
-      ...item,
-      seqNo: index + 1
-    }))
-    setUrlItems(updated)
-    form.setFieldsValue({
-      urls: updated.map((item) => ({ value: item.value }))
-    })
   }
 
   console.log('courseStore.data:', courseStore.data)
@@ -325,71 +307,64 @@ function EditProduct() {
             </Card>
             <Card size='small' style={{ marginBottom: 24 }}>
               <Form.Item label='Nguồn tài liệu'>
-                <ReactSortable list={Array.isArray(urlItems) ? urlItems : []} setList={updateSeqNo} animation={200}>
-                  <Form.List name='urls'>
-                    {(fields, { add, remove }) => (
-                      <>
+                <Form.List name='urls'>
+                  {(fields, { add, remove, move }) => (
+                    <>
+                      <ReactSortable
+                        list={fields}
+                        setList={() => {}}
+                        onEnd={(evt) => {
+                          if (evt.oldIndex !== undefined && evt.newIndex !== undefined) {
+                            move(evt.oldIndex, evt.newIndex)
+                          }
+                        }}
+                        animation={200}
+                      >
                         {fields.map((field, index) => (
                           <Row
                             key={field.key}
                             gutter={[8, 8]}
                             justify='center'
                             align='middle'
-                            style={{ marginBottom: 8 }}
+                            style={{ marginBottom: 8, cursor: 'grab' }}
                           >
                             <Col xs={24} sm={4} style={{ textAlign: 'center' }}>
-                              <span>Phần {urlItems[index]?.seqNo}</span>
+                              <span>Phần {index + 1}</span>
                             </Col>
 
                             <Col xs={24} sm={18} style={{ textAlign: 'center' }}>
                               <Form.Item
-                                key={field.key}
-                                name={[field.name, 'value']}
+                                {...field}
+                                name={[field.name, 'link']}
+                                fieldKey={[field.fieldKey, 'link']}
                                 rules={[{ required: true, message: 'Vui lòng nhập URL' }]}
+                                noStyle
                               >
-                                <Input size='large' placeholder={`URL ${urlItems[index]?.seqNo || index + 1}`} />
+                                <Input size='large' placeholder={`URL phần ${index + 1}`} />
+                              </Form.Item>
+                              <Form.Item {...field} name={[field.name, 'id']} noStyle hidden>
+                                <Input />
                               </Form.Item>
                             </Col>
 
                             <Col xs={24} sm={2} style={{ textAlign: 'center' }}>
                               <MinusCircleOutlined
-                                onClick={() => {
-                                  remove(field.name)
-                                  const updated = urlItems.filter((_, i) => i !== index)
-                                  const reSeq = updated.map((item, idx) => ({
-                                    ...item,
-                                    seqNo: idx + 1
-                                  }))
-                                  setUrlItems(reSeq)
-                                }}
+                                onClick={() => remove(field.name)}
                                 style={{ fontSize: 20, color: '#ff4d4f', cursor: 'pointer' }}
                               />
                             </Col>
                           </Row>
                         ))}
+                      </ReactSortable>
 
-                        <Form.Item>
-                          <Button
-                            type='dashed'
-                            onClick={() => {
-                              const newItem = {
-                                id: '',
-                                value: '',
-                                seqNo: urlItems.length + 1
-                              }
-                              add({ value: '' })
-                              setUrlItems([...urlItems, newItem])
-                            }}
-                            icon={<PlusOutlined />}
-                            block
-                          >
-                            Thêm URL
-                          </Button>
-                        </Form.Item>
-                      </>
-                    )}
-                  </Form.List>
-                </ReactSortable>
+                      <Form.Item>
+                        <Button type='dashed' onClick={() => add({ id: '', link: '' })} icon={<PlusOutlined />} block>
+                          Thêm URL
+                        </Button>
+                      </Form.Item>
+                    </>
+                  )}
+                </Form.List>
               </Form.Item>
             </Card>
             <Card size='small' style={{ marginBottom: 24 }}>

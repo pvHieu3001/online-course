@@ -146,7 +146,6 @@ public class CourseServiceImpl implements CourseService {
             courseDB.setRating(dto.getRating());
             courseDB.setStatus(dto.getStatus());
             courseDB.setCategory(category);
-            courseDB.setSourceUrl(dto.getSourceUrl());
             courseDB.setImageUrl(dto.getImageUrl() != null && !dto.getImageUrl().isEmpty() ? dto.getImageUrl() : courseDB.getImageUrl());
             courseDB.setIsDisplayHot(dto.getIsDisplayHot());
             courseDB.setTags(new HashSet<>(resolvedTags));

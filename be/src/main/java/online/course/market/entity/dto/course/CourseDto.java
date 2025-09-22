@@ -21,7 +21,6 @@ public class CourseDto {
     private String content;
     private String description;
     private String courseBenefits;
-    private String sourceUrl;
     private String slug;
     private Integer price;
     private String level;

@@ -18,7 +18,6 @@ public class CoursePutRequest {
     private MultipartFile imageFile;
     private MultipartFile sourceFile;
     private String imageUrl;
-    private String sourceUrl;
     @NotBlank(message = "Name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     private String name;
