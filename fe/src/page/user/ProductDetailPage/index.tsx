@@ -37,10 +37,10 @@ function ProductDetailPage() {
         {course ? (
           <>
             <header className='mt-8'>
-              <p className='text-sm uppercase tracking-wide text-blue-500'>
+              <p className='text-sm uppercase tracking-wide text-[#008000]'>
                 {course.category?.name || 'Danh mục chưa xác định'}
               </p>
-              <h1 className='text-3xl font-bold mt-2'>{course.name || 'Tên khóa học chưa có'}</h1>
+              <h1 className='text-2xl text-[#464646] font-bold mt-2'>{course.name || 'Tên khóa học chưa có'}</h1>
             </header>
 
             <section className='mt-8'>
@@ -52,18 +52,18 @@ function ProductDetailPage() {
             </section>
 
             <section className='mt-10'>
-              <h2 className='text-2xl font-semibold mb-4'>Nội Dung Khóa Học</h2>
+              <h2 className='text-xl text-[#464646] font-arial mb-4'>Lời giới thiệu</h2>
               {course.content ? (
                 <div
-                  className='text-xl leading-8 text-gray-800 
+                  className='text-xl leading-8 text-gray-800 font-arial
                 [&_p]:mb-4 
-                [&_p]:text-xl
-                [&_h1]:text-4xl 
-                [&_h2]:text-3xl 
-                [&_h3]:text-2xl 
+                [&_p]:text-base
+                [&_h1]:text-3xl 
+                [&_h2]:text-2xl 
+                [&_h3]:text-xl 
                 [&_ul]:list-disc 
                 [&_ul]:pl-6 
-                [&_a]:text-blue-600 [&_a:hover]:underline'
+                [&_a]:text-blue-600 [&_a:hover]:underline text-base'
                   dangerouslySetInnerHTML={{ __html: course.content }}
                 />
               ) : (
@@ -72,9 +72,9 @@ function ProductDetailPage() {
             </section>
 
             <section className='mt-10 text-center'>
-              <h2 className='text-2xl font-semibold mb-4'>Link tải khóa học</h2>
+              <h2 className='text-xl text-[#464646] font-arial mb-4'>Link tải khóa học</h2>
               {course.urls && course.urls.length > 0 ? (
-                <div className='flex flex-col items-center gap-4'>
+                <div className='flex flex-row justify-center items-center  gap-4'>
                   {[...course.urls]
                     .sort((a, b) => a.seqNo - b.seqNo)
                     .map((urlItem, index) => (
@@ -83,7 +83,7 @@ function ProductDetailPage() {
                         href={urlItem.link}
                         target='_blank'
                         rel='noopener noreferrer'
-                        className='inline-block bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition w-full max-w-md'
+                        className='inline-block bg-blue-600 text-white px-6 py-2 rounded-full text-lg font-arial hover:bg-blue-700 transition max-w-md'
                       >
                         Tải Phần {urlItem.seqNo || index + 1}
                       </a>

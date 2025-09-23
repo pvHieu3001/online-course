@@ -29,6 +29,7 @@ export default {
       }
     },
     fontFamily: {
+      arial: ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
       display: ['var(--font-display)', ...defaultTheme.fontFamily.sans],
       body: ['var(--font-body)', ...defaultTheme.fontFamily.sans]
     },

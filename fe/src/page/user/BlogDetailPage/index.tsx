@@ -59,14 +59,15 @@ function BlogDetailPage() {
         <img src={getImageUrl(blogData.image)} alt={blogData.title} className='w-full rounded-lg mb-8 shadow' />
 
         <article
-          className='prose prose-lg max-w-none [&_p]:mb-4 
-                [&_p]:text-xl
-                [&_h1]:text-4xl 
-                [&_h2]:text-3xl 
-                [&_h3]:text-2xl 
+          className='prose prose-lg max-w-none font-arial
+                [&_p]:mb-4 
+                [&_p]:text-base
+                [&_h1]:text-3xl 
+                [&_h2]:text-2xl 
+                [&_h3]:text-xl 
                 [&_ul]:list-disc 
                 [&_ul]:pl-6 
-                [&_a]:text-blue-600 [&_a:hover]:underline'
+                [&_a]:text-blue-600 [&_a:hover]:underline text-base'
           dangerouslySetInnerHTML={{ __html: blogData.content || '' }}
         ></article>
 
