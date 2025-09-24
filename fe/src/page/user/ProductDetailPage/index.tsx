@@ -31,9 +31,41 @@ function ProductDetailPage() {
     navigate(`/chi-tiet-khoa-hoc/${courseRelate.slug}`)
   }
 
+  const breadcrumbs = [
+    { name: 'Trang chủ', href: '/' },
+    { name: 'Khóa học', href: '/tat-ca-khoa-hoc' },
+    { name: course?.name, href: `/chi-tiet-khoa-hoc/${slug}` }
+  ]
+
   return (
     <div className='max-w-7xl mx-auto mt-8 px-4 flex flex-col lg:flex-row gap-8'>
       <div className='lg:w-[80%] w-full'>
+        <nav aria-label='Breadcrumb' className='mt-6'>
+          <ol className='flex items-center space-x-2 text-sm text-gray-500'>
+            {breadcrumbs.map((crumb, index) => (
+              <li key={crumb.name} className='flex items-center'>
+                {index > 0 && (
+                  <svg
+                    className='h-5 w-5 flex-shrink-0 text-gray-300'
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='currentColor'
+                    viewBox='0 0 20 20'
+                    aria-hidden='true'
+                  >
+                    <path d='M5.555 17.776l8-16 .894.448-8 16-.894-.448z' />
+                  </svg>
+                )}
+                {index < breadcrumbs.length - 1 ? (
+                  <a href={crumb.href} className='hover:text-gray-700 hover:underline'>
+                    {crumb.name}
+                  </a>
+                ) : (
+                  <span className='ml-2 font-semibold text-gray-700'>{crumb.name}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
         {course ? (
           <>
             <header className='mt-8'>
@@ -42,7 +74,16 @@ function ProductDetailPage() {
               </p>
               <h1 className='text-2xl text-[#464646] font-bold mt-2'>{course.name || 'Tên khóa học chưa có'}</h1>
             </header>
-
+            <div className='mt-4 flex flex-wrap items-center gap-2'>
+              {course.tags?.map((tag) => (
+                <span
+                  key={tag.id}
+                  className='cursor-pointer rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-300'
+                >
+                  {tag.name}
+                </span>
+              ))}
+            </div>
             <section className='mt-8'>
               <img
                 src={getImageUrl(course.imageUrl)}
