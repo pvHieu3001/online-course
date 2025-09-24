@@ -6,8 +6,8 @@ import { useDispatch } from 'react-redux'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { blogActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
-import TextEditor from '../../components/TextEditor/QuillEditor'
 import { typeOptions } from '@/common/constants'
+import AddTextEditor from '../../components/AddTextEditor/AddQuillEditor'
 
 export default function AddBlog() {
   const navigate = useNavigate()
@@ -178,8 +178,7 @@ export default function AddBlog() {
                   <Select placeholder='Chọn loại' options={typeOptions} />
                 </Form.Item>
                 <Form.Item name='content' label='Nội dung chi tiết'>
-                  <TextEditor
-                    content={content ?? ''}
+                  <AddTextEditor
                     onHandleChange={(value) => {
                       setContent(value)
                     }}

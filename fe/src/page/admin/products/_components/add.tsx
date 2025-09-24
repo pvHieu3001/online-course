@@ -6,13 +6,13 @@ import { courseActions } from '@/app/actions/course.actions'
 import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { useNavigate } from 'react-router-dom'
-import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
 import { ICategory, IUrl } from '@/common/types.interface'
 import { useQuery } from '@/utils/useQuery'
 import { tagActions } from '@/app/actions'
 import { ReactSortable } from 'react-sortablejs'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import AddTextEditor from '../../components/AddTextEditor/AddQuillEditor'
 
 function AddProduct() {
   const query = useQuery()
@@ -265,8 +265,7 @@ function AddProduct() {
           </Card>
           <Card size='small' style={{ marginBottom: 24 }}>
             <Form.Item name='content' className='m-0' label={'Nội dung khoá học'}>
-              <TextEditor
-                content={content ?? ''}
+              <AddTextEditor
                 onHandleChange={(value) => {
                   setContent(value)
                 }}
