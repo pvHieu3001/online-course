@@ -28,8 +28,8 @@ function PageHome() {
 
   return (
     <div className='bg-gray-100 min-h-screen pb-16'>
-      <main className='flex flex-col lg:flex-row gap-6 max-w-[1300px] mx-auto px-5 py-6 bg-white'>
-        <section className='w-full lg:w-[80%]' aria-label='Course listings'>
+      <main className='flex flex-col lg:flex-row gap-6 max-w-[1300px] mx-auto'>
+        <section className='min-h-screen w-full lg:w-[80%] bg-white flex-1 bg-white rounded-lg shadow-md p-6' aria-label='Course listings'>
           {isLoading && <p>Đang tải khóa học...</p>}
           {!isLoading && error_message && (
             <p className='text-red-500 font-medium'>Đã xảy ra lỗi khi tải khóa học. Vui lòng thử lại sau.</p>
@@ -72,11 +72,8 @@ function PageHome() {
             </>
           )}
         </section>
-
         <TabCategory />
       </main>
-
-      {/* PHẦN GIỚI THIỆU */}
       <Description />
     </div>
   )

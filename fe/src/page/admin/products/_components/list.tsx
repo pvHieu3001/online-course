@@ -35,7 +35,8 @@ export default function ListProduct() {
 
   const handlerDeleteProduct = async (id: string) => {
     try {
-      dispatch(courseActions.deleteCourse(id) as unknown as AnyAction)
+      await dispatch(courseActions.deleteCourse(id) as unknown as AnyAction)
+      await dispatch(courseActions.getAdminCourses(active, searchValue, isHot) as unknown as AnyAction)
       message.success('Xoá khóa học thành công!')
     } catch (error) {
       message.error('Xoá khóa học thất bại!')

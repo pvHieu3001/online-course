@@ -92,21 +92,19 @@ export default function TextEditor({ content, onHandleChange, height }: TextEdit
 
   return (
     <div className='react-quill-wrapper' style={height ? { height: height + 50 } : {}}>
-      {value && (
-        <ReactQuill
-          ref={childRef}
-          value={value}
-          modules={modules}
-          formats={formats}
-          theme='snow'
-          className='custom-quill'
-          style={height ? { height } : {}}
-          onChange={(val) => {
-            setValue(val)
-            onHandleChange(val)
-          }}
-        />
-      )}
+      <ReactQuill
+        ref={childRef}
+        value={value}
+        modules={modules}
+        formats={formats}
+        theme='snow'
+        className='custom-quill'
+        style={height ? { height } : {}}
+        onChange={(val) => {
+          setValue(val)
+          onHandleChange(val)
+        }}
+      />
     </div>
   )
 }

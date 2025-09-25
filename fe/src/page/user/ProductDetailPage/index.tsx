@@ -38,7 +38,7 @@ function ProductDetailPage() {
   ]
 
   return (
-    <div className='max-w-7xl mx-auto mt-8 px-4 flex flex-col lg:flex-row gap-8'>
+    <div className='min-h-screen max-w-7xl mx-auto mt-8 px-4 flex flex-col lg:flex-row gap-8'>
       <div className='lg:w-[80%] w-full'>
         <nav aria-label='Breadcrumb' className='mt-6'>
           <ol className='flex items-center space-x-2 text-sm text-gray-500'>

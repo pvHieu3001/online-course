@@ -7,7 +7,7 @@ import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { blogActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { typeOptions } from '@/common/constants'
-import AddTextEditor from '../../components/AddTextEditor/AddQuillEditor'
+import TextEditor from '../../components/TextEditor/QuillEditor'
 
 export default function AddBlog() {
   const navigate = useNavigate()
@@ -178,7 +178,8 @@ export default function AddBlog() {
                   <Select placeholder='Chọn loại' options={typeOptions} />
                 </Form.Item>
                 <Form.Item name='content' label='Nội dung chi tiết'>
-                  <AddTextEditor
+                  <TextEditor
+                    content={content}
                     onHandleChange={(value) => {
                       setContent(value)
                     }}

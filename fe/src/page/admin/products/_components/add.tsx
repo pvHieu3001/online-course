@@ -12,7 +12,7 @@ import { useQuery } from '@/utils/useQuery'
 import { tagActions } from '@/app/actions'
 import { ReactSortable } from 'react-sortablejs'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import AddTextEditor from '../../components/AddTextEditor/AddQuillEditor'
+import TextEditor from '../../components/TextEditor/QuillEditor'
 
 function AddProduct() {
   const query = useQuery()
@@ -80,8 +80,16 @@ function AddProduct() {
     }
   }
 
-  const handleCancel = () => {
-    window.location.href = '/admin/products'
+  const handleCancel = async () => {
+    dispatch(courseActions.resetCourse() as unknown as AnyAction)
+    await dispatch(
+      courseActions.getAdminCourses(
+        query.get('status') ?? '',
+        query.get('search') ?? '',
+        query.get('isHot') ?? ''
+      ) as unknown as AnyAction
+    )
+    navigate('..')
   }
 
   // Xử lý chọn ảnh đại diện (giống bên edit)
@@ -114,7 +122,16 @@ function AddProduct() {
         }}
         onClose={handleCancel}
       >
-        <Form layout='vertical' form={form} name='nest-messages' onFinish={onFinish} className='p-10 relative'>
+        <Form
+          layout='vertical'
+          form={form}
+          name='nest-messages'
+          onFinish={onFinish}
+          initialValues={{
+            status: true
+          }}
+          className='p-10 relative'
+        >
           <Card title='Thông tin khoá học' size='small' style={{ marginBottom: 24 }}>
             <Row gutter={[16, 16]}>
               {/* Cột trái */}
@@ -265,7 +282,8 @@ function AddProduct() {
           </Card>
           <Card size='small' style={{ marginBottom: 24 }}>
             <Form.Item name='content' className='m-0' label={'Nội dung khoá học'}>
-              <AddTextEditor
+              <TextEditor
+                content={content}
                 onHandleChange={(value) => {
                   setContent(value)
                 }}
@@ -278,6 +296,7 @@ function AddProduct() {
               name='imageFile'
               className='p-[30px] sm:rounded-lg border-[#F1F1F4] m-0'
               style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 1rem' }}
+              rules={[{ required: true, message: 'Vui lòng chọn ảnh khóa học!' }]}
             >
               <Flex vertical gap={20}>
                 <h2 className='font-bold text-[16px]'>Ảnh đại diện</h2>

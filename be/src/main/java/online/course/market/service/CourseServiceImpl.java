@@ -71,6 +71,8 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public Course save(Course course) {
         Assert.notNull(course, "course cannot be null");
+        categoryRepository.updateNumberCourseByIds(Stream.of(course.getCategory().getId())
+                .collect(Collectors.toSet()));
         return courseRepository.save(course);
     }
 
@@ -167,6 +169,8 @@ public class CourseServiceImpl implements CourseService {
         Assert.notNull(id, "id cannot be null");
         Course courseDb = courseRepository.findById(id)
                 .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "course not found"));
+        categoryRepository.updateNumberCourseByIds(Stream.of(courseDb.getCategory().getId())
+                .collect(Collectors.toSet()));
         courseRepository.delete(courseDb);
     }
 

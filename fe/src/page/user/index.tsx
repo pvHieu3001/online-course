@@ -22,8 +22,8 @@ function Base() {
         <Toaster />
         <ScrollToTop />
         <main className={styles.container}>
-          <Header isShowRecommendCourses= {isShowRecommendCourses}/>
-          <Outlet context={{setIsShowRecommendCourses}}/>
+          <Header isShowRecommendCourses={isShowRecommendCourses} />
+          <Outlet context={{ setIsShowRecommendCourses }} />
         </main>
       </div>
       <Footer />

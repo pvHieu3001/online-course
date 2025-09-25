@@ -37,7 +37,7 @@ function EditProduct() {
     if (flug) {
       dispatch(courseActions.getCourseById(flug) as unknown as AnyAction)
     }
-    dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction) // Lấy danh sách danh mục
+    dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
     dispatch(tagActions.getTags() as unknown as AnyAction)
   }, [dispatch, flug])
 
@@ -141,11 +141,18 @@ function EditProduct() {
     }
   }
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
+    dispatch(courseActions.resetCourse() as unknown as AnyAction)
+    await dispatch(
+      courseActions.getAdminCourses(
+        query.get('status') ?? '',
+        query.get('search') ?? '',
+        query.get('isHot') ?? ''
+      ) as unknown as AnyAction
+    )
     navigator('..')
   }
 
-  console.log('courseStore.data:', courseStore.data)
   return (
     <>
       {courseStore.data && !courseStore.isLoading && (
