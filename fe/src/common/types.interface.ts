@@ -103,6 +103,7 @@ export interface IBlog {
   updatedAt: string
   updatedBy: IUser
   isDisplayHot: string // blank: all, 0: false, 1: true
+  tags: ITag[]
 }
 
 export interface ITag {

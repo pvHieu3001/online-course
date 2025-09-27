@@ -5,6 +5,7 @@ import {
   getBlogSuccessFully,
   getBlogSuccessFailure,
   isFetching,
+  reset,
   createFailure,
   createSuccessfully,
   updateFailure,
@@ -147,6 +148,10 @@ export const deleteBlog = (id: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const resetBlog = () => (dispatch: Dispatch) => {
+  dispatch(reset())
+}
+
 export const blogActions = {
   getBlogs,
   getAdminBlogs,
@@ -155,5 +160,6 @@ export const blogActions = {
   createBlog,
   updateBlog,
   deleteBlog,
-  getBlogByType
+  getBlogByType,
+  resetBlog
 }

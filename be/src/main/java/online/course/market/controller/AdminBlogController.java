@@ -123,21 +123,23 @@ public class AdminBlogController {
             dto.setSlug(DataUtils.toSlug(dto.getTitle()));
             Blog blog = modelMapper.map(dto, Blog.class);
 
-            List<Tag> resolvedTags = new ArrayList<>();
-            List<String> tagArray = List.of(dto.getTagStr().split(","));
-            tagArray.forEach((tagValue)->{
-                if (DataUtils.isNumeric(tagValue)) {
-                    tagService.findById(Integer.parseInt(tagValue)).ifPresent(resolvedTags::add);
-                } else if (tagValue != null) {
-                    Tag tag = tagService.findByName(tagValue).orElseGet(() -> {
-                        Tag newTag = new Tag();
-                        newTag.setName(tagValue);
-                        return tagService.save(newTag);
-                    });
-                    resolvedTags.add(tag);
-                }
-            });
-            blog.setTags(new HashSet<>(resolvedTags));
+            if(dto.getTagStr()!=null && !dto.getTagStr().isEmpty()) {
+                List<Tag> resolvedTags = new ArrayList<>();
+                List<String> tagArray = List.of(dto.getTagStr().split(","));
+                tagArray.forEach((tagValue) -> {
+                    if (DataUtils.isNumeric(tagValue)) {
+                        tagService.findById(Integer.parseInt(tagValue)).ifPresent(resolvedTags::add);
+                    } else if (tagValue != null) {
+                        Tag tag = tagService.findByName(tagValue).orElseGet(() -> {
+                            Tag newTag = new Tag();
+                            newTag.setName(tagValue);
+                            return tagService.save(newTag);
+                        });
+                        resolvedTags.add(tag);
+                    }
+                });
+                blog.setTags(new HashSet<>(resolvedTags));
+            }
 
             Blog saved = blogService.save(blog);
             

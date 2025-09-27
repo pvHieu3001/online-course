@@ -2,23 +2,29 @@ import { useNavigate } from 'react-router-dom'
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { Form, Input, Modal, Button, Switch, Select, Drawer, Spin, Row, Col } from 'antd'
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
-import { blogActions } from '@/app/actions'
+import { blogActions, tagActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { typeOptions } from '@/common/constants'
 import TextEditor from '../../components/TextEditor/QuillEditor'
+import { RootState } from '@/app/store'
 
 export default function AddBlog() {
   const navigate = useNavigate()
   const [form] = Form.useForm()
   const [isDirty, setIsDirty] = useState(false)
   const [content, setContent] = useState<string>('')
-  const [isLoading, setIsLoading] = useState(false) // giả lập loading nếu chưa có biến
+  const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
   const [imageUrl, setImageUrl] = useState<File>()
+  const [selectedTags, setSelectedTags] = useState<string>('')
+  const tagStore = useSelector((state: RootState) => state.tag)
 
-  // Xác nhận khi rời nếu có thay đổi
+  useEffect(() => {
+    dispatch(tagActions.getTags() as unknown as AnyAction)
+  }, [dispatch])
+
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (isDirty) {
@@ -52,6 +58,7 @@ export default function AddBlog() {
     formData.append('status', form.getFieldValue('status').toString())
     formData.append('isDisplayHot', form.getFieldValue('isDisplayHot') || false)
     formData.append('content', content)
+    formData.append('tagStr', selectedTags ?? null)
     if (imageUrl) {
       formData.append('imageFile', imageUrl)
     }
@@ -106,6 +113,7 @@ export default function AddBlog() {
                 label={<span className='font-semibold'>Ảnh đại diện</span>}
                 className='border-[1px] p-[24px] rounded-md border-[#F1F1F4] bg-[#fafbfc]'
                 style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
+                rules={[{ required: true, message: 'Vui lòng chọn ảnh bài viết!' }]}
               >
                 <div className='flex flex-col items-center'>
                   <label
@@ -176,6 +184,19 @@ export default function AddBlog() {
                 </Form.Item>
                 <Form.Item name='type' label='Loại bài viết'>
                   <Select placeholder='Chọn loại' options={typeOptions} />
+                </Form.Item>
+                <Form.Item name='tagStr' label='Tags'>
+                  <Select
+                    mode='tags'
+                    placeholder='Nhập hoặc chọn tag'
+                    size='large'
+                    className='w-full'
+                    options={tagStore.dataList?.map((tag) => ({
+                      value: tag.id,
+                      label: tag.name
+                    }))}
+                    onChange={(value) => setSelectedTags(value)}
+                  />
                 </Form.Item>
                 <Form.Item name='content' label='Nội dung chi tiết'>
                   <TextEditor

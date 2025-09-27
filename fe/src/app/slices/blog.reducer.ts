@@ -19,6 +19,14 @@ const blogSlice = createSlice({
     isFetching: (state) => {
       state.isLoading = true
     },
+    reset: (state) => {
+      state.isLoading = true
+      state.code = ''
+      state.message = ''
+      state.error_message = ''
+      state.data = null as unknown as IBlog
+      state.dataList = []
+    },
     fetchedDone: (state) => {
       state.isLoading = false
     },
@@ -87,6 +95,7 @@ const blogSlice = createSlice({
 
 export const {
   isFetching,
+  reset,
   fetchedDone,
   getBlogSuccessFully,
   getBlogSuccessFailure,

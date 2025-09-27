@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ErrorLoad from '../../components/util/ErrorLoad'
 import { useDispatch, useSelector } from 'react-redux'
-import { blogActions } from '@/app/actions'
+import { blogActions, tagActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { IBlog } from '@/common/types.interface'
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
@@ -19,9 +19,13 @@ export default function EditBlog() {
   const dispatch = useDispatch()
   const [imageUrl, setImageUrl] = useState<File>()
   const [displayPic, setDisplayPic] = useState<string>()
+  const [selectedTags, setSelectedTags] = useState<string>('')
   const blogStore = useSelector((state: RootState) => state.blog)
+  const tagStore = useSelector((state: RootState) => state.tag)
+
   useEffect(() => {
     dispatch(blogActions.getBlogById(params.id ?? '0') as unknown as AnyAction)
+    dispatch(tagActions.getTags() as unknown as AnyAction)
   }, [dispatch, params.id])
 
   const navigate = useNavigate()
@@ -38,12 +42,13 @@ export default function EditBlog() {
         title: data.title,
         type: data.type,
         content: data.content,
-        isDisplayHot: data.isDisplayHot
+        isDisplayHot: data.isDisplayHot,
+        tagStr: data.tags?.flatMap((item) => item.id)
       })
+      setSelectedTags(data?.tags?.map((tag) => tag.id).join(',') || '')
     }
   }, [blogStore, form])
 
-  // Xác nhận khi rời nếu có thay đổi
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (isDirty) {
@@ -55,7 +60,7 @@ export default function EditBlog() {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [isDirty])
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
     if (isDirty) {
       Modal.confirm({
         title: 'Bạn có chắc muốn rời khỏi trang?',
@@ -64,6 +69,8 @@ export default function EditBlog() {
         onOk: () => navigate('..')
       })
     } else {
+      dispatch(blogActions.resetBlog() as unknown as AnyAction)
+      await dispatch(blogActions.getAdminBlogs('', '', '') as unknown as AnyAction)
       navigate('..')
     }
   }
@@ -77,6 +84,7 @@ export default function EditBlog() {
     formData.append('content', form.getFieldValue('content'))
     formData.append('type', form.getFieldValue('type'))
     formData.append('isDisplayHot', form.getFieldValue('isDisplayHot') || false)
+    formData.append('tagStr', selectedTags)
     if (imageUrl) {
       formData.append('imageFile', imageUrl)
     }
@@ -93,7 +101,6 @@ export default function EditBlog() {
     }
   }
 
-  // Đánh dấu form đã thay đổi
   const onValuesChange = () => setIsDirty(true)
 
   if (blogStore.error_message) {
@@ -234,6 +241,20 @@ export default function EditBlog() {
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                       }
                       options={typeOptions}
+                    />
+                  </Form.Item>
+
+                  <Form.Item name='tagStr' label='Tags'>
+                    <Select
+                      mode='tags'
+                      placeholder='Nhập hoặc chọn tag'
+                      size='large'
+                      className='w-full'
+                      options={tagStore.dataList?.map((tag) => ({
+                        value: tag.id,
+                        label: tag.name
+                      }))}
+                      onChange={(value) => setSelectedTags(value)}
                     />
                   </Form.Item>
 
