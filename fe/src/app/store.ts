@@ -7,6 +7,7 @@ import alertReducer from './slices/alert.reducer'
 import orderSlice from './slices/order.reducer'
 import blogSlice from './slices/blog.reducer'
 import tagSlice from './slices/tag.reducer'
+import dashboardSlice from './slices/dashboard.reducer'
 export const store = configureStore({
   reducer: {
     category: categoryReducer,
@@ -16,7 +17,8 @@ export const store = configureStore({
     course: courseReducer,
     order: orderSlice,
     blog: blogSlice,
-    tag: tagSlice
+    tag: tagSlice,
+    dashboard: dashboardSlice
   }
 })
 

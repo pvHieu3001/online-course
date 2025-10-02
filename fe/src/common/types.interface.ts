@@ -117,6 +117,13 @@ export interface IUrl {
   seqNo: number
 }
 
+export interface IDashboard {
+  numberCourse: number
+  numberPost: string
+  numberUser: number
+  numberDownload: number
+}
+
 export type ContextType = {
   setIsShowRecommendCourses: (value: boolean) => void
 }

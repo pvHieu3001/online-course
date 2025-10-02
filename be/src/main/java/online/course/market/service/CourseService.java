@@ -21,4 +21,5 @@ public interface CourseService {
     Course getBySlug(String slug);
 	Page<Course> filterCourse(String status, String search, Boolean isDisplayHot, Pageable pageable);
 	List<QuickViewCourseGetResponse> getQuickViewCourse();
+	Long count();
 }

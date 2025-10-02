@@ -213,6 +213,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public Long count() {
+        return courseRepository.count();
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Course> getByCategoryId(Integer categoryId) {
         Assert.notNull(categoryId, "categoryId cannot be null");

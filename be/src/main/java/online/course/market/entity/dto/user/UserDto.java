@@ -13,8 +13,7 @@ public class UserDto {
 		Long id;		
 		String firstname;		
 		String username;		
-		String password;		
-		String lastname;	
+		String lastname;
 		String email;
 		Date createAt;
 

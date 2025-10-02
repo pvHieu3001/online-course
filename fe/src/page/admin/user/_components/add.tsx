@@ -1,12 +1,9 @@
-import { Modal, Switch, Upload } from 'antd'
+import { Modal } from 'antd'
 import { Button, Form, Input } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { Select } from 'antd'
-import type { SelectProps } from 'antd'
 import ErrorLoad from '../../components/util/ErrorLoad'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { popupSuccess, popupError } from '@/page/shared/Toast'
-import { UploadOutlined } from '@ant-design/icons'
 import Loading from '@/page/Loading'
 const layout = {
   labelCol: { span: 8 },
@@ -39,9 +36,7 @@ export default function AddUser() {
     onSuccess('Upload successful', file)
   }
 
-  const [createUser, { isLoading: loadingCreateUser }] = useCreateUserMutation()
   const [form] = Form.useForm()
-  const [optionsDistrict, setOptionDistrict] = useState<SelectProps['options']>([])
 
   const onFinish = async (values: Iuser | any) => {
     const formData = new FormData()
@@ -69,41 +64,6 @@ export default function AddUser() {
     }
   }
 
-  const [getDistrict, { data: dataDistricts, isLoading: districtLoading }] = useLazyGetDistrictsQuery()
-
-  useEffect(() => {
-    setOptionDistrict(() => {
-      return dataDistricts?.data.map((item: { id: number; name: string }) => {
-        return {
-          value: `${item.name}`,
-          label: item.name
-        }
-      })
-    })
-  }, [dataDistricts])
-
-  const options: SelectProps['options'] = []
-
-  const { data: provinces, isLoading, isError } = useGetProvincesQuery({})
-
-  provinces?.data.forEach((item: { id: number; name: string }) => {
-    options.push({
-      value: `${item.name}-${item.id}`,
-      label: item.name
-    })
-  })
-
-  const onChangeProvince = async (value: string) => {
-    form.resetFields(['district'])
-    if (value) {
-      const splitStr = value.split(/-(\d+)/)
-      const provinceId = splitStr[1]
-
-      await getDistrict(provinceId)
-    } else {
-      setOptionDistrict([])
-    }
-  }
   const navigate = useNavigate()
 
   const handleCancel = () => {
@@ -132,61 +92,6 @@ export default function AddUser() {
 
           <Form.Item name='password' label='Password' rules={[{ required: true, min: 8, max: 30 }]}>
             <Input type='password' placeholder='*******' />
-          </Form.Item>
-
-          <Form.Item
-            name='image'
-            label='Image'
-            valuePropName='fileList'
-            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
-            rules={[{ required: true }]}
-          >
-            <Upload name='image' listType='picture' customRequest={handleUpload}>
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
-          </Form.Item>
-
-          <Form.Item name='phone' label='Phone' rules={[{ required: true }]}>
-            <Input type='text' placeholder='Enter phone number' />
-          </Form.Item>
-
-          <Form.Item name='address' label='Address' rules={[{ required: true }]}>
-            <Input type='text' placeholder='Enter your address ' />
-          </Form.Item>
-
-          <Form.Item name='county' label='County' rules={[{ required: true }]}>
-            <Select style={{ width: '100%' }} options={[{ value: 'Việt Nam', label: 'VietNam' }]} />
-          </Form.Item>
-
-          <Form.Item name='city' label='Pronvinces' rules={[{ required: true }]}>
-            <Select
-              style={{ width: '100%' }}
-              placeholder='Enter name province'
-              options={options}
-              onChange={(value) => onChangeProvince(value)}
-            />
-          </Form.Item>
-
-          <Form.Item name='district' label='District' rules={[{ required: true }]}>
-            <Select
-              loading={districtLoading}
-              style={{ width: '100%' }}
-              placeholder='Enter name district'
-              options={optionsDistrict}
-            />
-          </Form.Item>
-
-          <Form.Item name='role_id' label='Role' rules={[{ required: true }]}>
-            <Select
-              style={{ width: '100%' }}
-              options={[
-                { value: '1', label: 'Admin' },
-                { value: '2', label: 'Guest' }
-              ]}
-            />
-          </Form.Item>
-          <Form.Item className='m-0' label='Active' name='is_active' valuePropName='checked'>
-            <Switch />
           </Form.Item>
 
           <Form.Item className='mt-3' wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>

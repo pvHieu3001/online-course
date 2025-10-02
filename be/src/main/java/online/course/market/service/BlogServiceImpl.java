@@ -62,8 +62,8 @@ public class BlogServiceImpl implements BlogService {
     @Override
     @Transactional
     public void deleteById(Integer id) {
-        Blog categoryDb = getById(id);
-        blogRepository.delete(categoryDb);
+        Blog blog = getById(id);
+        blogRepository.delete(blog);
     }
 
     @Override
@@ -79,5 +79,10 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<Blog> getRecommendBlog(String type) {
         return blogRepository.getRecommendBlog(type);
+    }
+
+    @Override
+    public Long count() {
+        return blogRepository.count();
     }
 }

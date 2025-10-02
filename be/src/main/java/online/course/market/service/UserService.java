@@ -13,4 +13,5 @@ public interface UserService {
 	UserModel update(final UserModel user, final Long id);
 	void deleteById(final Long id);
 	Page<UserModel> finadAll(Pageable pageable);
+	Long count();
 }

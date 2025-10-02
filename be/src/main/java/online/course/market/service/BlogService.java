@@ -18,4 +18,5 @@ public interface BlogService {
     List<Blog> getByType(String type);
     List<Blog> filterBlog(String type, Boolean status, String search, Boolean isDisplayHot);
     List<Blog> getRecommendBlog(String type);
+    Long count();
 }

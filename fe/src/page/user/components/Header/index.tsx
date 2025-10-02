@@ -180,24 +180,26 @@ const Header = (props: Props) => {
       {props.isShowRecommendCourses && (
         <div className='w-full flex justify-center items-center'>
           <section
-            className='max-w-[1300px] w-full flex items-center gap-2 px-5 py-6 overflow-x-auto'
+            className='max-w-[1300px] w-full flex items-center gap-2 px-5 overflow-x-auto h-24'
             role='region'
             aria-label='Featured courses'
           >
-            {courses.recommends?.map((course, i) => (
+            {courses.recommends?.map((course) => (
               <div
-                key={i}
+                key={course.id}
                 onClick={() => handleDetail(course)}
                 role='button'
                 tabIndex={0}
-                className='flex items-center gap-2 max-w-[200px] flex-shrink-0 cursor-pointer'
+                className='flex items-center gap-3 max-w-[220px] flex-shrink-0 cursor-pointer p-2 rounded-lg hover:bg-gray-200 transition-colors'
               >
                 <img
                   src={getImageUrl(course.imageUrl)}
                   alt={`${course.name} thumbnail`}
-                  className='w-12 h-12 rounded-full object-cover border-2 border-white shadow-md'
+                  className='w-14 h-14 rounded-full object-cover border-2 border-white shadow-md'
                 />
-                <span className='text-sm text-gray-600 hover:text-black'>{course.name}</span>
+                <span className='text-sm font-medium text-gray-700 group-hover:text-black line-clamp-3'>
+                  {course.name}
+                </span>
               </div>
             ))}
           </section>

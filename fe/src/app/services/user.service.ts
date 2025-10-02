@@ -5,7 +5,7 @@ import axs from '../http-common'
 import { ILogin, IRegister, IUser } from '@/common/types.interface'
 
 function getUsers() {
-  return http.get(`/api/v1/user`)
+  return http.get(`/api/v1/admin/user`)
 }
 
 async function login(data: ILogin) {
@@ -34,19 +34,19 @@ function logout() {
 }
 
 function getUserById(id: string) {
-  return http.get(`/api/v1/user/${id}`)
+  return http.get(`/api/v1/admin/user/${id}`)
 }
 function updateUser(id: string, data: IUser) {
-  return http.put(`/api/v1/user/${id}`, data)
+  return http.put(`/api/v1/admin/user/${id}`, data)
 }
 function createUser(data: IUser) {
-  return http.post(`/api/v1/user`, data)
+  return http.post(`/api/v1/admin/user`, data)
 }
 function deleteUser(id: string) {
-  return http.delete(`/api/v1/user/${id}`)
+  return http.delete(`/api/v1/admin/user/${id}`)
 }
 function getPageUser(page: string, size: string, sort: string) {
-  return http.get(`/api/v1/user/pageable/?page=${page}&size=${size}&sort=${sort}`)
+  return http.get(`/api/v1/admin/user/pageable/?page=${page}&size=${size}&sort=${sort}`)
 }
 
 export const userService = {

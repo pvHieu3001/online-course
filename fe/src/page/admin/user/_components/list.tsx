@@ -8,27 +8,23 @@ import { userActions } from '@/app/actions'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
-
-type User = {
-  id: number | string
-  username: string
-  email: string
-  image?: string
-  role_id: string
-  is_active: number
-}
+import { IUser } from '@/common/types.interface'
 
 export default function ListUser() {
   const [id, setId] = useState<number | string>()
   const [searchValue, setSearchValue] = useState('')
   const dispatch = useDispatch()
   const userStore = useSelector((state: RootState) => state.user)
-  const { dataList, isLoading } = userStore
-  const isDeleting = isLoading
+  const [dataTable, setDataTable] = useState<(IUser & { key: number })[]>([])
 
   useEffect(() => {
     dispatch(userActions.getUsers() as unknown as AnyAction)
   }, [dispatch])
+
+  useEffect(() => {
+    console.log('userStore', userStore.dataList)
+    setDataTable(userStore.dataList?.map((item: IUser, index: number) => ({ ...item, key: index + 1 })))
+  }, [userStore])
 
   const confirm = async (id: number | string) => {
     setId(id)
@@ -43,12 +39,7 @@ export default function ListUser() {
     }
   }
 
-  const dataItem =
-    Array.isArray(dataList) && dataList.every((i) => typeof i === 'object' && i !== null)
-      ? (dataList as User[]).map((item, key) => ({ ...item, key: key + 1 }))
-      : []
-
-  const columns: TableProps<User>['columns'] = [
+  const columns: TableProps<IUser>['columns'] = [
     {
       title: '#',
       dataIndex: 'key',
@@ -69,58 +60,48 @@ export default function ListUser() {
       key: 'email',
       align: 'center'
     },
-    {
-      title: 'Ảnh',
-      dataIndex: 'image',
-      key: 'image',
-      align: 'center',
-      render: (image) => (image ? <img src={image} alt='' width={60} style={{ borderRadius: 8 }} /> : null)
-    },
-    {
-      title: 'Vai trò',
-      key: 'role_id',
-      dataIndex: 'role_id',
-      align: 'center',
-      render: (_, { role_id }) => (
-        <Tag color={role_id == '1' ? 'geekblue' : 'green'}>{role_id == '1' ? 'Admin' : 'Guest'}</Tag>
-      ),
-      filters: [
-        { text: 'Admin', value: '1' },
-        { text: 'Guest', value: '2' }
-      ],
-      onFilter: (value, record) => record.role_id.startsWith(value as string),
-      filterSearch: true
-    },
-    {
-      title: 'Trạng thái',
-      key: 'is_active',
-      dataIndex: 'is_active',
-      align: 'center',
-      render: (_, { is_active }) => (
-        <Tag color={is_active == 1 ? 'green' : 'red'}>{is_active == 1 ? 'Đang hoạt động' : 'Không hoạt động'}</Tag>
-      )
-    },
+    // {
+    //   title: 'Vai trò',
+    //   key: 'role_id',
+    //   dataIndex: 'role_id',
+    //   align: 'center',
+    //   render: (_, { role_id }) => (
+    //     <Tag color={role_id == '1' ? 'geekblue' : 'green'}>{role_id == '1' ? 'Admin' : 'Guest'}</Tag>
+    //   ),
+    //   filters: [
+    //     { text: 'Admin', value: '1' },
+    //     { text: 'Guest', value: '2' }
+    //   ],
+    //   onFilter: (value, record) => record.role_id.startsWith(value as string),
+    //   filterSearch: true
+    // },
+    // {
+    //   title: 'Trạng thái',
+    //   key: 'is_active',
+    //   dataIndex: 'is_active',
+    //   align: 'center',
+    //   render: (_, { is_active }) => (
+    //     <Tag color={is_active == 1 ? 'green' : 'red'}>{is_active == 1 ? 'Đang hoạt động' : 'Không hoạt động'}</Tag>
+    //   )
+    // },
     {
       title: 'Hành động',
       key: 'action',
       align: 'center',
-      render: (data: User) => (
+      render: (data: IUser) => (
         <Space size='middle'>
-          <Link to={'privilege/' + String(data?.id)}>
-            <Button danger>Privilege</Button>
-          </Link>
           <Link to={String(data?.id)}>
             <Button type='primary'>Sửa</Button>
           </Link>
           <Popconfirm
-            disabled={isDeleting}
+            disabled={userStore.isLoading}
             title='Xóa người dùng'
             description={`Bạn có chắc muốn xóa "${data.username}"?`}
             onConfirm={() => confirm(String(data.id))}
             okText='Đồng ý'
             cancelText='Hủy bỏ'
           >
-            <Button danger loading={isDeleting && data.id == id}>
+            <Button danger loading={userStore.isLoading && data.id == id}>
               Xóa
             </Button>
           </Popconfirm>
@@ -132,7 +113,7 @@ export default function ListUser() {
   return (
     <>
       <div className='flex items-center justify-between my-2'>
-        <Typography.Title editable level={2} style={{ margin: 0 }}>
+        <Typography.Title level={2} style={{ margin: 0 }}>
           Danh sách người dùng
         </Typography.Title>
       </div>
@@ -165,10 +146,8 @@ export default function ListUser() {
         }}
         columns={columns}
         sticky={{ offsetHeader: 0 }}
-        dataSource={dataItem.filter((item) =>
-          searchValue ? item.username.toLowerCase().includes(searchValue.toLowerCase()) : true
-        )}
-        loading={isLoading}
+        dataSource={dataTable}
+        loading={userStore.isLoading}
       />
     </>
   )

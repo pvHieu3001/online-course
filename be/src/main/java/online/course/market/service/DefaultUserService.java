@@ -75,4 +75,9 @@ public class DefaultUserService implements UserService {
 		return userRepository.findAll(pageable);
 	}
 
+	@Override
+	public Long count() {
+		return userRepository.count();
+	}
+
 }

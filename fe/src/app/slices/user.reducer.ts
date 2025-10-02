@@ -21,11 +21,7 @@ const userSlice = createSlice({
       state.isLoading = false
     },
     getUsersSuccess: (state, { payload }) => {
-      state.data = payload
-      state.isLoading = false
-    },
-    postCourseSuccess: (state, { payload }) => {
-      state.dataList.push(payload) 
+      state.dataList = payload.data.data
       state.isLoading = false
     },
     getUsersFailure: (state, { payload }) => {

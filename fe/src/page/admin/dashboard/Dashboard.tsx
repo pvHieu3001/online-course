@@ -6,38 +6,49 @@ import heart from './components/icon/Heart'
 import dollor from './components/icon/Dollor'
 import profile from './components/icon/Profile'
 import Overview from './components/Overview'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/app/store'
+import { AnyAction } from '@reduxjs/toolkit'
+import { useEffect } from 'react'
+import { dashboardActions } from '@/app/actions/dashboard.actions'
 
 export default function Dashboard() {
+  const dispatch = useDispatch()
   const { Title } = Typography
   const { backgroundColor } = useSelector((state: RootState) => state.web)
+
+  const dashboard = useSelector((state: RootState) => state.dashboard)
+
+  useEffect(() => {
+    dispatch(dashboardActions.getDashboard() as unknown as AnyAction)
+  }, [dispatch])
+
   const count = [
     {
-      today: 'Today’s Sales',
-      title: '$53,000',
-      persent: '+30%',
+      today: 'Tổng Số Khóa Học',
+      title: `${dashboard.data?.numberCourse || 0}`,
+      persent: '',
       icon: dollor,
       bnb: 'bnb2'
     },
     {
-      today: 'Today’s Users',
-      title: '3,200',
-      persent: '+20%',
-      icon: profile,
+      today: 'Tổng Số Bài Viết',
+      title: `${dashboard.data?.numberPost || 0}`,
+      persent: '',
+      icon: heart,
       bnb: 'bnb2'
     },
     {
-      today: 'New Clients',
-      title: '+1,200',
-      persent: '-20%',
-      icon: heart,
+      today: 'Tổng Số Người Dùng',
+      title: `${dashboard.data?.numberUser || 0}`,
+      persent: '',
+      icon: profile,
       bnb: 'redtext'
     },
     {
-      today: 'New Orders',
-      title: '$13,200',
-      persent: '10%',
+      today: 'Lượt Tải Xuống',
+      title: `${dashboard.data?.numberDownload || 0}`,
+      persent: '',
       icon: cart,
       bnb: 'bnb2'
     }

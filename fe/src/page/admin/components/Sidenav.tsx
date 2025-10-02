@@ -51,15 +51,15 @@ function Sidenav() {
         ),
         link: '/admin/users'
       },
-      {
-        label: (
-          <Flex align='center' gap={10} justify='center' className='children-menu'>
-            <ShoppingCartOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Order</span>
-          </Flex>
-        ),
-        link: '/admin/orders'
-      },
+      // {
+      //   label: (
+      //     <Flex align='center' gap={10} justify='center' className='children-menu'>
+      //       <ShoppingCartOutlined className='text-[18px] text-[#344767]' />
+      //       <span className='label font-bold text-[#344767]'>Order</span>
+      //     </Flex>
+      //   ),
+      //   link: '/admin/orders'
+      // },
       {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>

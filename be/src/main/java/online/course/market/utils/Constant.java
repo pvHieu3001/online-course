@@ -36,4 +36,7 @@ public final class Constant {
 	public static final String LOG_ACTION_DELETE_BLOG = "action_delete_blog";
 	public static final String LOG_ACTION_GET_ALL_TAG = "get_all_tag";
 	public static final String LOG_VIEW_TAG= "view_tag";
+
+	public static final String LOG_VIEW_DASHBOARD = "view_dashboard";
+	public static final String LOG_ACTION_GET_ALL_DASHBOARD = "get_all_dashboard";
 }

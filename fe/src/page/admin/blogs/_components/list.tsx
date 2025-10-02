@@ -25,7 +25,7 @@ export default function ListBlog() {
 
   const handlerDistableBlog = async (id: string) => {
     try {
-      dispatch(blogActions.deleteBlog(id) as unknown as AnyAction)
+      await dispatch(blogActions.deleteBlog(id) as unknown as AnyAction)
       dispatch(blogActions.getAdminBlogs(active, searchValue, isHot) as unknown as AnyAction)
       message.success('Vô hiệu hoá bài viết thành công!')
     } catch (error) {

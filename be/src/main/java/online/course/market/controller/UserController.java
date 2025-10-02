@@ -3,6 +3,7 @@ package online.course.market.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import online.course.market.entity.dto.ApiResponse;
 import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("api/v1/admin/user")
 @Tag(name = "User",description = "User controller")
 public class UserController {
 
@@ -50,39 +51,36 @@ public class UserController {
 
 	@Operation(description = "Get all endpoint for user", summary = "This is a summary for user get all endpoint")
 	@GetMapping
-	public ResponseEntity<List<UserDto>> getAll() {
-		// Get All user for user services
+	public ResponseEntity<ApiResponse<List<UserDto>>> getAll() {
 		List<UserModel> user = userService.getAll();
-		// Map user model to DTO objects
 		List<UserDto> userDtos = user.stream().map(userModel -> modelMapper.map(userModel, UserDto.class))
 				.collect(Collectors.toList());
-		// return endpoint
-		return ResponseEntity.status(HttpStatus.OK).body(userDtos);
+		return ResponseEntity.ok(ApiResponse.success(userDtos));
 	}
 
 	@Operation(description = "Get by name endpoint for user", summary = "This is a summary for user get by name endpoint")
 	@GetMapping("/{name}/name")
-	public ResponseEntity<UserDto> getUserByName(@PathVariable String name) {
+	public ResponseEntity<ApiResponse<UserDto>> getUserByName(@PathVariable String name) {
 		UserModel userDb = userService.getByName(name);
 		if(ObjectUtils.isEmpty(userDb))
 			throw new CJNotFoundException(CustomCodeException.CODE_400, "user not found with name "+name);
 		UserDto userDto = modelMapper.map(userDb, UserDto.class);
-		return ResponseEntity.status(HttpStatus.OK).body(userDto);
+		return ResponseEntity.ok(ApiResponse.success(userDto));
 	}
 
 	@Operation(description = "Save  endpoint for user", summary = "This is a summary for user save endpoint")
 	@PostMapping
-	public ResponseEntity<UserDto> saveUser(@Valid @RequestBody UserPostRequest dto) {
+	public ResponseEntity<ApiResponse<UserDto>> saveUser(@Valid @RequestBody UserPostRequest dto) {
 		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 		UserModel user = modelMapper.map(dto, UserModel.class);
 		UserModel userDb = userService.save(user);
 		UserDto userDto = modelMapper.map(userDb, UserDto.class);
-		return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+		return ResponseEntity.ok(ApiResponse.success(userDto));
 	}
 
 	@Operation(description = "Update  endpoint for user", summary = "This is a summary for user update endpoint")
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserPutRequest dto,
+	public ResponseEntity<ApiResponse<UserDto>> updateUser(@Valid @RequestBody UserPutRequest dto,
 											  @PathVariable(name = "id") Long id) {
 		// Map DTO to Model object for service
 		UserModel user = modelMapper.map(dto, UserModel.class);
@@ -90,16 +88,13 @@ public class UserController {
 		UserModel userDb = userService.update(user, id);
 		// Map Model to DTO object for return endpoint
 		UserDto userDto = modelMapper.map(userDb, UserDto.class);
-		// Return endpoint
-		return ResponseEntity.status(HttpStatus.OK).body(userDto);
+		return ResponseEntity.ok(ApiResponse.success(userDto));
 	}
 
 	@Operation(description = "Delete  endpoint for user", summary = "This is a summary for user delete endpoint")
 	@DeleteMapping(value = "{id}")
-	public ResponseEntity<UserDto> deleteUser(@PathVariable(name = "id") Long id) {
-		// Send id to delete service
+	public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable(name = "id") Long id) {
 		userService.deleteById(id);
-		// return endpoint
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("Deleted", null));
 	}
 }
