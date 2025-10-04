@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://dogohiephong.com/sitemap.xml
+Sitemap: https://hocfree.vn/sitemap.xml
 
 # Disallow admin pages
 Disallow: /admin/

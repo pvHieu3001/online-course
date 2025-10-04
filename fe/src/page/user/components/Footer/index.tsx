@@ -8,12 +8,12 @@ const Footer = () => {
         <div className={styles.copyrightBar}>
           Copyright © 2025. Created by &nbsp;
           <a
-            href='https://chiasekhoahoc.com'
+            href='https://hocfree.vn'
             target='_blank'
             rel='noopener noreferrer'
             className={styles.copyrightLink}
           >
-            chiasekhoahoc.com
+            hocfree.vn
           </a>
           .
         </div>
