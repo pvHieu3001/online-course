@@ -28,6 +28,9 @@ import NetworkErrorPage from '@/page/error/NetworkErrorPage'
 import NotFoundPage from '@/page/error/NotFoundPage'
 import PageCourse from '@/page/user/PageCourse'
 import BlogDetailPage from '@/page/user/BlogDetailPage'
+import AffiliateManagement from '@/page/admin/affiliate'
+import AddAffiliate from '@/page/admin/affiliate/_components/add'
+import EditAffiliate from '@/page/admin/affiliate/_components/edit'
 
 export default function Router() {
   return (
@@ -76,6 +79,11 @@ export default function Router() {
               <Route path='blogs' element={<BlogManagement />}>
                 <Route path='add' element={<AddBlog />} />
                 <Route path=':id' element={<EditBlog />} />
+              </Route>
+
+              <Route path='affiliate' element={<AffiliateManagement />}>
+                <Route path='add' element={<AddAffiliate />} />
+                <Route path=':id' element={<EditAffiliate />} />
               </Route>
             </Route>
           </Route>

@@ -124,6 +124,19 @@ export interface IDashboard {
   numberDownload: number
 }
 
+export interface IAffiliate {
+  id: number
+  name: string
+  targetUrl: string
+  clickCount: number
+  status: boolean
+  price: string
+  originalPrice: string
+  image: string
+  updatedAt: string
+  updatedBy: IUser
+}
+
 export type ContextType = {
   setIsShowRecommendCourses: (value: boolean) => void
 }

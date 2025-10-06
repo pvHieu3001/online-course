@@ -4,5 +4,14 @@ import { courseServices } from './course.service'
 import { blogServices } from './blog.service'
 import { tagServices } from './tag.service'
 import { dashboardServices } from './dashboard.service'
+import { affiliateServices } from './affiliate.service'
 
-export { userService, categoryServices, courseServices, blogServices, tagServices, dashboardServices}
+export {
+  userService,
+  categoryServices,
+  courseServices,
+  blogServices,
+  tagServices,
+  dashboardServices,
+  affiliateServices
+}

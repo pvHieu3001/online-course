@@ -5,14 +5,13 @@ import online.course.market.entity.dto.affiliate.link.AffiliateLinkPutRequest;
 import online.course.market.entity.model.AffiliateLink;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface AffiliateService {
-     AffiliateLink createAffiliateLink(Long userId, Long productId, String targetUrl) ;
-     void recordClick(String affiliateCode) ;
-     void recordConversion(String affiliateCode) ;
+     void recordClick(Long id) ;
      List<AffiliateLink> getAllAffiliateLinks();
-     Optional<AffiliateLink> getRandomAffiliateLink();
+     AffiliateLink getRandomAffiliateLink();
+     AffiliateLink getAffiliateLinkById(Long id);
      AffiliateLink createAffiliateLink(AffiliateLinkPostRequest request);
      AffiliateLink updateAffiliateLink(Long id, AffiliateLinkPutRequest request);
+     void deleteById(Long id);
 }

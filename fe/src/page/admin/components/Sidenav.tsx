@@ -2,13 +2,8 @@ import { Menu, Flex } from 'antd'
 import UseSidenav from '../../../utils/UseSidenav'
 import { useEffect, useState } from 'react'
 import type { MenuProps } from 'antd'
-import {
-  ReadOutlined,
-  TagsOutlined,
-  UsergroupAddOutlined,
-  ShoppingCartOutlined,
-  DashboardOutlined
-} from '@ant-design/icons'
+import ShopeeLogo from '@/assets/images/shopee_v2.png'
+import { ReadOutlined, TagsOutlined, UsergroupAddOutlined, DashboardOutlined } from '@ant-design/icons'
 
 function Sidenav() {
   const [stateOpenKeys, setStateOpenKeys] = useState<string[]>([])
@@ -51,15 +46,15 @@ function Sidenav() {
         ),
         link: '/admin/users'
       },
-      // {
-      //   label: (
-      //     <Flex align='center' gap={10} justify='center' className='children-menu'>
-      //       <ShoppingCartOutlined className='text-[18px] text-[#344767]' />
-      //       <span className='label font-bold text-[#344767]'>Order</span>
-      //     </Flex>
-      //   ),
-      //   link: '/admin/orders'
-      // },
+      {
+        label: (
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <img src={ShopeeLogo} alt='Logo Shopee' className='w-4 h-auto mr-2' />
+            <span className='label font-bold text-[#344767]'>Shopee</span>
+          </Flex>
+        ),
+        link: '/admin/affiliate'
+      },
       {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
