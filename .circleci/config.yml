@@ -230,7 +230,7 @@ jobs:
               fi
             "
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
-              cd ${UPLOAD_GIT_PATH} && \\ 
+              cd ${BACKEND_PATH} && \\ 
               git add . && \\ 
               if ! git diff-index --quiet HEAD; then
                 git commit -m \"${COMMIT_MESSAGE}\" && \\
