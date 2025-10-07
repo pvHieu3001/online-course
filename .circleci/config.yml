@@ -124,7 +124,6 @@ jobs:
             # Backup uploads directory
             if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "[ -d ${FRONTEND_PATH} ]"; then
               echo "📦 Creating backup of current frontend..."
-              ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "cp -av ${UPLOAD_PATH}/* ${UPLOAD_GIT_PATH}/ "
               ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
                 cd ${UPLOAD_GIT_PATH} && \\ 
                 git pull && \\

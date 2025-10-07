@@ -10,7 +10,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     volumes:
-      - /var/www/uploads:/app/uploads
+      - /var/www/html/online-course/uploads:/app/uploads
     networks:
       - app-network
 networks:
