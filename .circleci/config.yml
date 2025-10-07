@@ -126,7 +126,6 @@ jobs:
               echo "📦 Creating backup of current frontend..."
               ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
                 cd ${UPLOAD_GIT_PATH} && \\ 
-                git pull && \\
                 git add . && \\ 
                 if ! git diff-index --quiet HEAD; then
                   git commit -m \"${COMMIT_MESSAGE}\" && \\
@@ -189,18 +188,16 @@ jobs:
             SERVER_HOST="${SERVER_HOST:-your-server.com}"
             SERVER_USER="${SERVER_USER:-deploy}"
             BACKEND_PATH="${BACKEND_PATH:-/home/deploy/online-course/be}"
-            BACKUP_PATH="${BACKUP_PATH:-/var/www/backups}"
+            DATABASE_PATH="/var/www/html/online-course/database/"
             DOCKER_IMAGE_NAME="${DOCKER_IMAGE_NAME:-online-course-backend}"
             DOCKER_IMAGE_TAG="${DOCKER_IMAGE_TAG:-v1.0.0}"
             DOCKER_CONTAINER_NAME="${DOCKER_CONTAINER_NAME:-online-course-backend}"
 
             echo "🚀 Starting backend deployment to ${SERVER_HOST}..."
 
-            # Create backup directory if it doesn't exist
-            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p ${BACKUP_PATH}"
+            # Create database directory if it doesn't exist
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p ${DATABASE_PATH}"
 
-            # Create timestamp for backup
-            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
             # Find the JAR file (fix path)
             JAR_FILE=$(find be/target -name "*.jar" -not -name "*sources.jar" -not -name "*javadoc.jar" | head -1)
@@ -217,7 +214,7 @@ jobs:
             # Create backend directory if it doesn't exist
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p ${BACKEND_PATH}"
 
-            # Backup current Docker image if it exists
+            # Backup database
             #if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker images | grep -q ${DOCKER_IMAGE_NAME}"; then
             #  echo "📦 Creating backup of current Docker image..."
             #  ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker save ${DOCKER_IMAGE_NAME}:latest | gzip > ${BACKUP_PATH}/backend_docker_backup_${TIMESTAMP}.tar.gz"
