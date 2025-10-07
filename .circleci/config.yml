@@ -116,7 +116,7 @@ jobs:
             FRONTEND_PATH="${FRONTEND_PATH:-/var/www/frontend}"
             UPLOAD_PATH="/var/www/uploads"
             UPLOAD_GIT_PATH="/var/www/html/online-course/uploads"
-            COMMIT_MESSAGE="Deploy: Cập nhật code ngày $(date +'%Y-%m-%d %H:%M:%S')"
+            COMMIT_MESSAGE="Deploy: Cập nhật ảnh ngày $(date +'%Y-%m-%d %H:%M:%S')"
             BRANCH_NAME="master"
 
             echo "🚀 Starting frontend deployment to ${SERVER_HOST}..."
@@ -192,6 +192,11 @@ jobs:
             DOCKER_IMAGE_NAME="${DOCKER_IMAGE_NAME:-online-course-backend}"
             DOCKER_IMAGE_TAG="${DOCKER_IMAGE_TAG:-v1.0.0}"
             DOCKER_CONTAINER_NAME="${DOCKER_CONTAINER_NAME:-online-course-backend}"
+            DB_NAME="${DB_NAME:-online_course}"
+            DB_USER="${DB_USER:-user}"
+            DB_PASSWORD="${DB_PASSWORD:-password}"
+            COMMIT_MESSAGE="Deploy: Backup db ngày $(date +'%Y-%m-%d %H:%M:%S')"
+            BRANCH_NAME="master"
 
             echo "🚀 Starting backend deployment to ${SERVER_HOST}..."
 
@@ -215,10 +220,26 @@ jobs:
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p ${BACKEND_PATH}"
 
             # Backup database
-            #if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker images | grep -q ${DOCKER_IMAGE_NAME}"; then
-            #  echo "📦 Creating backup of current Docker image..."
-            #  ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker save ${DOCKER_IMAGE_NAME}:latest | gzip > ${BACKUP_PATH}/backend_docker_backup_${TIMESTAMP}.tar.gz"
-            #fi
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
+              if systemctl is-active --quiet mysql; then
+                echo '✅ MySQL service is running. Creating backup...'
+                mysqldump -u\${DB_USER} -p\${DB_PASSWORD} \${DB_NAME} | gzip > \${DATABASE_PATH}/db_backup.sql.gz
+                echo '✅ Database backup completed successfully.'
+              else
+                echo '🤔 MySQL service is not running or not found. Skipping backup.'
+              fi
+            "
+            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
+              cd ${UPLOAD_GIT_PATH} && \\ 
+              git add . && \\ 
+              if ! git diff-index --quiet HEAD; then
+                git commit -m \"${COMMIT_MESSAGE}\" && \\
+                git push origin ${BRANCH_NAME} && \\
+                echo '✅ Commit và push thành công.'
+              else
+                echo '👌 Không có thay đổi nào để commit.'
+              fi
+            "
 
             # Stop and remove current container if it exists
             if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker ps -a | grep -q ${DOCKER_CONTAINER_NAME}"; then
