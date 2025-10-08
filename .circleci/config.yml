@@ -229,17 +229,17 @@ jobs:
                 echo '🤔 MySQL service is not running or not found. Skipping backup.'
               fi
             "
-            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
-              cd ${DATABASE_PATH} && \\ 
-              git add . && \\ 
-              if ! git diff-index --quiet HEAD; then
-                git commit -m \"${COMMIT_MESSAGE}\" && \\
-                git push origin ${BRANCH_NAME} && \\
-                echo '✅ Commit và push thành công.'
-              else
-                echo '👌 Không có thay đổi nào để commit.'
-              fi
-            "
+            # ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
+            #   cd ${DATABASE_PATH} && \\ 
+            #   git add . && \\ 
+            #   if ! git diff-index --quiet HEAD; then
+            #     git commit -m \"${COMMIT_MESSAGE}\" && \\
+            #     git push origin ${BRANCH_NAME} && \\
+            #     echo '✅ Commit và push thành công.'
+            #   else
+            #     echo '👌 Không có thay đổi nào để commit.'
+            #   fi
+            # "
 
             # Stop and remove current container if it exists
             if ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "docker ps -a | grep -q ${DOCKER_CONTAINER_NAME}"; then
