@@ -5,6 +5,9 @@ cd /var/www/html/online-course || { echo "Lỗi: Không tìm thấy thư mục r
 
 echo "====================Bắt đầu backup online-course lúc $(date)=========================="
 
+# Xóa các image Docker không còn tag nào để giải phóng không gian
+docker images | grep '<none>' | awk '{print $3}' | xargs -r docker rmi
+
 # (Quan trọng) Cập nhật trạng thái từ remote trước khi push để tránh lỗi
 git pull origin
 
