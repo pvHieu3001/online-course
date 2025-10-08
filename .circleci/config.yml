@@ -223,7 +223,8 @@ jobs:
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
               if systemctl is-active --quiet mysql; then
                 echo '✅ MySQL service is running. Creating backup...'
-                mysqldump -u\"${DB_USER}\" -p\"${DB_PASSWORD}\" \"${DB_NAME}\" | gzip > \${DATABASE_PATH}/db_backup.sql.gz
+                mysqldump -u\"root\" -p\"1qazXSW@\" \"online_course\" | gzip > /var/www/html/online-course/database/db_backup.sql.gz
+                # mysqldump -u\"${DB_USER}\" -p\"${DB_PASSWORD}\" \"${DB_NAME}\" | gzip > ${DATABASE_PATH}/db_backup.sql.gz
                 echo '✅ Database backup completed successfully.'
               else
                 echo '🤔 MySQL service is not running or not found. Skipping backup.'
