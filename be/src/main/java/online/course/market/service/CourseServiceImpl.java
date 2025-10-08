@@ -71,9 +71,10 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public Course save(Course course) {
         Assert.notNull(course, "course cannot be null");
-        categoryRepository.updateNumberCourseByIds(Stream.of(course.getCategory().getId())
+        Course courseDb =  courseRepository.save(course);
+        categoryRepository.updateNumberCourseByIds(Stream.of(courseDb.getCategory().getId())
                 .collect(Collectors.toSet()));
-        return courseRepository.save(course);
+        return courseDb;
     }
 
     @Override
