@@ -170,9 +170,9 @@ public class CourseServiceImpl implements CourseService {
         Assert.notNull(id, "id cannot be null");
         Course courseDb = courseRepository.findById(id)
                 .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "course not found"));
+        courseRepository.delete(courseDb);
         categoryRepository.updateNumberCourseByIds(Stream.of(courseDb.getCategory().getId())
                 .collect(Collectors.toSet()));
-        courseRepository.delete(courseDb);
     }
 
     @Override
