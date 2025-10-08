@@ -19,6 +19,7 @@ public class Course extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
     private String name;
     @Column(columnDefinition = "TEXT")

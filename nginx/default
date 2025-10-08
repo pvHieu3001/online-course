@@ -17,7 +17,7 @@ server {
 	ssl_certificate /etc/nginx/ssl/bundle.crt;
   ssl_certificate_key /etc/nginx/ssl/dogohiephong.key;
     
-	root /var/www/html/online-wooden/fe;
+	root /var/www/html/online-wooden/fe/dist;
 
 	index index.html index.htm index.nginx-debian.html;
 
@@ -89,6 +89,12 @@ server {
 		proxy_redirect		off;
 		proxy_http_version	1.1;
 	}
+
+	location /uploads/ {
+			root /var/www/html/online-course/;
+			autoindex on;  # Optional: shows directory listing
+			add_header Cache-Control "public, max-age=3600";
+	}
 }
 
 server {
@@ -132,7 +138,7 @@ server {
 	listen [::]:9200 default_server;
 
     
-	root /var/www/html/online-wooden/fe;
+	root /var/www/html/online-wooden/fe/dist;
 
 	
 	index index.html index.htm index.nginx-debian.html;

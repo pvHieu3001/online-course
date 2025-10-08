@@ -22,6 +22,7 @@ public class Category extends BaseEntity {
     private String slug;
     private Boolean status;
     private Boolean isQuickView;
+    @Column(columnDefinition = "TEXT")
     private String image;
     private Integer parentId;
     private Integer numberCourse;
