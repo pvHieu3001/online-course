@@ -124,7 +124,7 @@ function Sidenav() {
           <path d='M11 12.83L3.26 9.26 2 9.91l9 4.09 9-4.09-1.26-.65L13 12.83V20h-2v-7.17z' />
         </svg>
 
-        <span className='text-black font-semibold text-lg'>Chia Sẻ Khóa Học</span>
+        <span className='text-black font-semibold text-lg'>Học Free</span>
       </Flex>
 
       <Menu

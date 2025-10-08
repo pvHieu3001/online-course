@@ -13,12 +13,12 @@ import io.swagger.v3.oas.annotations.servers.Server;
 @OpenAPIDefinition(
 		info= @Info(
 				contact = @Contact(
-							name = "chiasekhoahoc.com",
-							email = "chiasekhoahoc@contact.com",
-							url = "https://chiasekhoahoc.com/course"
+							name = "hocfree.vn",
+							email = "hocfree@contact.com",
+							url = "https://hocfree.vn/course"
 						),
-				description = "OpenApi documentation for chiasekhoahoc.com ",
-				title = "OpenApi Core chiasekhoahoc.com",
+				description = "OpenApi documentation for hocfree.vn ",
+				title = "OpenApi Core hocfree.vn",
 				version = "1.0",
 				license = @License(
 							name = "Licence Name",

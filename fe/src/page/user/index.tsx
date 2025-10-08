@@ -14,8 +14,8 @@ function Base() {
     <>
       <div className={styles.modules}>
         <Helmet>
-          <title>Chia Sẻ Khóa Học</title>
-          <meta name='description' content='Chia Sẻ Khóa Học' />
+          <title>Học Free</title>
+          <meta name='description' content='Học Free' />
           <meta name='google-site-verification' content='T9IaRbRYVAYLaOMteD3gLMso6FUu62Kkyu7ORBpDrqw' />
         </Helmet>
 
