@@ -60,7 +60,7 @@ function PageCourse() {
                       return tmp.textContent || tmp.innerText || ''
                     }
 
-                    const shortDescription = stripHtml(course.description).slice(0, 200) + '...'
+                    const shortDescription = stripHtml(course.description).slice(0, 200) ?? ''
                     return (
                       <div
                         key={course.id}
