@@ -60,7 +60,7 @@ function PageCourse() {
                       return tmp.textContent || tmp.innerText || ''
                     }
 
-                    const shortDescription = stripHtml(course.description).slice(0, 200) ?? ''
+                    const shortDescription = course.description ? stripHtml(course.description).slice(0, 200) : ''
                     return (
                       <div
                         key={course.id}
@@ -75,10 +75,9 @@ function PageCourse() {
                         <div>
                           <div className='text-sm text-indigo-500 font-medium'>{course.category?.name}</div>
                           <div className='text-lg font-semibold text-gray-800'>{course.name}</div>
-                          {shortDescription && (
-                            <div
-                              dangerouslySetInnerHTML={{ __html: shortDescription }}
-                              className='text-gray-600 text-base mt-1 [&_p]:mb-4 
+                          <div
+                            dangerouslySetInnerHTML={{ __html: shortDescription }}
+                            className='text-gray-600 text-base mt-1 [&_p]:mb-4 
                                 [&_p]:text-xl
                                 [&_h1]:text-4xl 
                                 [&_h2]:text-3xl 
@@ -86,8 +85,7 @@ function PageCourse() {
                                 [&_ul]:list-disc 
                                 [&_ul]:pl-6 
                                 [&_a]:text-blue-600 [&_a:hover]:underline'
-                            ></div>
-                          )}
+                          ></div>
                         </div>
                       </div>
                     )
