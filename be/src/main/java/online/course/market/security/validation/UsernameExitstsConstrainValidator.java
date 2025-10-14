@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
 import online.course.market.security.annotation.UsernameExistsConstraint;
-import online.course.market.security.service.AuthService;
+import online.course.market.service.AuthService;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

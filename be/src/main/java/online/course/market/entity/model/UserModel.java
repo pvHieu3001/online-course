@@ -7,7 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -16,7 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @SuperBuilder
 @Table(name = "users")
-public class UserModel extends BaseEntity{
+public class UserModel  extends BaseEntity implements UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +34,35 @@ public class UserModel extends BaseEntity{
 	private String email;
 	@Enumerated(EnumType.STRING)
 	protected Role role = Role.USER;
+
+	private static final long serialVersionUID = 1L;
+
+	@OneToMany(mappedBy = "user")
+	private List<Token> tokens;
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.name()));
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }
 

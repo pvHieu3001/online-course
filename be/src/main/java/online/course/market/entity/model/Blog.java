@@ -22,9 +22,11 @@ public class Blog extends BaseEntity {
     private Integer id;
     @Column(nullable = false, length = 255)
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @Column(columnDefinition = "TEXT")
     private String content;
+    @Column(columnDefinition = "TEXT")
     private String image;
     private String slug;
     private Boolean status;

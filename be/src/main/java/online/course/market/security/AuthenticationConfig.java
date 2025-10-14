@@ -1,5 +1,6 @@
 package online.course.market.security;
 
+import online.course.market.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,19 +12,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import online.course.market.security.repository.SecurityUserRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
 public class AuthenticationConfig {
 	
-	private final SecurityUserRepository securityUserRepository;
+	private final UserRepository userRepository;
 	
 	@Bean
 	UserDetailsService userDetailService() {
-		return username -> securityUserRepository.findByUsername(username)
+		return username -> userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}	
 	

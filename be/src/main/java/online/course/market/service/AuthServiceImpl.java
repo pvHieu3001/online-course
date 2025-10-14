@@ -1,8 +1,10 @@
-package online.course.market.security.service.impl;
+package online.course.market.service;
 
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import online.course.market.entity.model.UserModel;
+import online.course.market.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,16 +13,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import online.course.market.security.dto.AuthDto;
-import online.course.market.security.dto.LoginDto;
-import online.course.market.security.dto.RegisterDto;
-import online.course.market.security.entity.SecurityUser;
-import online.course.market.security.entity.Token;
-import online.course.market.security.entity.TokenType;
-import online.course.market.security.repository.SecurityUserRepository;
-import online.course.market.security.repository.TokenRepository;
-import online.course.market.security.service.AuthService;
-import online.course.market.security.service.JwtService;
+import online.course.market.entity.dto.user.AuthDto;
+import online.course.market.entity.dto.user.LoginDto;
+import online.course.market.entity.dto.user.RegisterDto;
+import online.course.market.entity.model.Token;
+import online.course.market.entity.model.TokenType;
+import online.course.market.repository.TokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,9 +27,9 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultAuthService implements AuthService {
+public class AuthServiceImpl implements AuthService {
 	
-	private final SecurityUserRepository securityUserRepository;
+	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
 	private final JwtService jwtService;
 	private final PasswordEncoder passwordEncoder;
@@ -44,7 +42,7 @@ public class DefaultAuthService implements AuthService {
 		
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
 		
-		SecurityUser user = securityUserRepository.findByUsername(dto.getUsername()).orElseThrow();
+		UserModel user = userRepository.findByUsername(dto.getUsername()).orElseThrow();
 		String token = null;
         String refreshtoken = null;
         try {
@@ -68,9 +66,9 @@ public class DefaultAuthService implements AuthService {
 	public AuthDto register(RegisterDto dto) {
 		
 		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-		SecurityUser user = modelMapper.map(dto, SecurityUser.class);
+		UserModel user = modelMapper.map(dto, UserModel.class);
 		
-		SecurityUser userSaved = securityUserRepository.save(user);
+		UserModel userSaved = userRepository.save(user);
         String token = null;
 		String refreshtoken = null;
         try {
@@ -88,7 +86,7 @@ public class DefaultAuthService implements AuthService {
 				.build();
 	}
 	
-	private void saveUserToken(SecurityUser user, String jwtToken) {
+	private void saveUserToken(UserModel user, String jwtToken) {
 	    Token token = Token.builder()
 	        .user(user)
 	        .token(jwtToken)
@@ -99,7 +97,7 @@ public class DefaultAuthService implements AuthService {
 	    tokenRepository.save(token);
 	  }
 	
-	private void revokeAllUserTokens(SecurityUser user) {
+	private void revokeAllUserTokens(UserModel user) {
 	    var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
 	    if (validUserTokens.isEmpty()) {
 	    	return;	
@@ -123,7 +121,7 @@ public class DefaultAuthService implements AuthService {
 	    refreshToken = authHeader.substring(7);
 	    username = jwtService.extractUsernameFromToken(refreshToken);
 	    if (username != null) {
-	      SecurityUser user = securityUserRepository.findByUsername(username)
+	      UserModel user = userRepository.findByUsername(username)
 	              .orElseThrow();
 	      if (jwtService.isTokenValid(refreshToken, user)) {
 	        var accessToken = jwtService.getToken(user);
@@ -142,7 +140,7 @@ public class DefaultAuthService implements AuthService {
 	@Override
 	@Transactional(readOnly = true)
 	public boolean isUsernameValid(String username) {		
-		return !securityUserRepository.existsSecurityUserByUsername(username);
+		return !userRepository.existsUserModelByUsername(username);
 	}
 
 }

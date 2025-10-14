@@ -1,11 +1,10 @@
-package online.course.market.security.service;
+package online.course.market.service;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import online.course.market.security.dto.AuthDto;
-import online.course.market.security.dto.LoginDto;
-import online.course.market.security.dto.RegisterDto;
+import online.course.market.entity.dto.user.AuthDto;
+import online.course.market.entity.dto.user.LoginDto;
+import online.course.market.entity.dto.user.RegisterDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

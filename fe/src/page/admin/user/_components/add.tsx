@@ -1,14 +1,11 @@
-import { Modal } from 'antd'
-import { Button, Form, Input } from 'antd'
+import { Modal, Select } from 'antd'
+import { Form, Input } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import ErrorLoad from '../../components/util/ErrorLoad'
-import { useState } from 'react'
 import { popupSuccess, popupError } from '@/page/shared/Toast'
-import Loading from '@/page/Loading'
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
-}
+import { useDispatch } from 'react-redux'
+import { AnyAction } from '@reduxjs/toolkit'
+import { userActions } from '@/app/actions'
+import { roleOptions } from '@/common/constants'
 
 const validateMessages = {
   required: '${label} là bắt buộc!',
@@ -20,43 +17,24 @@ const validateMessages = {
     range: '${label} must be between ${min} and ${max}'
   }
 }
-/* eslint-enable no-template-curly-in-string */
 
 export default function AddUser() {
-  const [file, setFile] = useState({
-    data: {},
-    loading: false
-  })
-  const handleUpload = async (options: any) => {
-    const { onSuccess, file } = options
-    setFile({
-      data: file,
-      loading: false
-    })
-    onSuccess('Upload successful', file)
-  }
-
+  const dispatch = useDispatch()
   const [form] = Form.useForm()
+  const navigate = useNavigate()
 
-  const onFinish = async (values: Iuser | any) => {
-    const formData = new FormData()
-    for (const key in values) {
-      if (String(key) == 'image') {
-        formData.append(key, values[key][0].originFileObj)
-        continue
-      }
-      if (String(key) == 'is_active') {
-        if (values[key]) {
-          formData.append(key, '1')
-        } else {
-          formData.append(key, '0')
-        }
-        continue
-      }
-      formData.append(key, values[key])
-    }
+  const onFinish = async () => {
+    const formdata = new FormData()
+    formdata.append('firstname', form.getFieldValue('firstname'))
+    formdata.append('lastname', form.getFieldValue('lastname'))
+    formdata.append('username', form.getFieldValue('username'))
+    formdata.append('email', form.getFieldValue('email'))
+    formdata.append('password', form.getFieldValue('password'))
+    formdata.append('role', form.getFieldValue('role'))
+
     try {
-      await createUser(formData).unwrap()
+      await dispatch(userActions.createUser(formdata) as unknown as AnyAction)
+      await dispatch(userActions.getUsers() as unknown as AnyAction)
       popupSuccess('Add user success')
       handleCancel()
     } catch (error) {
@@ -64,48 +42,45 @@ export default function AddUser() {
     }
   }
 
-  const navigate = useNavigate()
-
   const handleCancel = () => {
     navigate('..')
   }
 
-  if (isLoading) return <Loading />
-  if (isError) return <ErrorLoad />
   return (
-    <>
-      <Modal okButtonProps={{ hidden: true }} title='Add user' open={true} onCancel={handleCancel}>
-        <Form
-          form={form}
-          {...layout}
-          name='nest-messages'
-          onFinish={onFinish}
-          style={{ maxWidth: 600 }}
-          validateMessages={validateMessages}
-        >
-          <Form.Item name='username' label='Username' rules={[{ required: true }]}>
-            <Input type='text' placeholder='Enter your username' />
-          </Form.Item>
-          <Form.Item name='email' label='Email' rules={[{ required: true, type: 'email' }]}>
-            <Input type='email' placeholder='Enter your email' />
-          </Form.Item>
+    <Modal
+      title='Thêm người dùng'
+      open={true}
+      onCancel={handleCancel}
+      width={620}
+      okText='Tạo'
+      cancelText='Hủy'
+      onOk={() => form.submit()}
+    >
+      <Form form={form} name='add-user-form' layout='vertical' onFinish={onFinish} validateMessages={validateMessages}>
+        <Form.Item name='firstname' label='Tên' rules={[{ required: true }]}>
+          <Input type='text' placeholder='Nhập tên' />
+        </Form.Item>
 
-          <Form.Item name='password' label='Password' rules={[{ required: true, min: 8, max: 30 }]}>
-            <Input type='password' placeholder='*******' />
-          </Form.Item>
+        <Form.Item name='lastname' label='Họ' rules={[{ required: true }]}>
+          <Input type='text' placeholder='Nhập họ' />
+        </Form.Item>
 
-          <Form.Item className='mt-3' wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-            <Button
-              loading={loadingCreateUser || file.loading}
-              disabled={loadingCreateUser}
-              type='primary'
-              htmlType='submit'
-            >
-              Create
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </>
+        <Form.Item name='username' label='Tên đăng nhập' rules={[{ required: true }]}>
+          <Input type='text' placeholder='Nhập tên đăng nhập' />
+        </Form.Item>
+
+        <Form.Item name='email' label='Email' rules={[{ required: true, type: 'email' }]}>
+          <Input type='email' placeholder='Nhập email' />
+        </Form.Item>
+
+        <Form.Item name='password' label='Mật khẩu' rules={[{ required: true, min: 8, max: 30 }]}>
+          <Input.Password placeholder='Nhập mật khẩu' />
+        </Form.Item>
+
+        <Form.Item name='role' label='Vai trò' rules={[{ required: true, message: 'Vui lòng chọn vai trò!' }]}>
+          <Select placeholder='Chọn vai trò' options={roleOptions} />
+        </Form.Item>
+      </Form>
+    </Modal>
   )
 }

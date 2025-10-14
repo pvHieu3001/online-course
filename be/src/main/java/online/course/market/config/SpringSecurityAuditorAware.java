@@ -1,7 +1,6 @@
 package online.course.market.config;
 
 import online.course.market.entity.model.UserModel;
-import online.course.market.security.entity.SecurityUser;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 

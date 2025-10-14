@@ -64,6 +64,7 @@ export interface IUser {
   lastname: string
   email: string
   createAt: string
+  role: string
 }
 
 export interface IOrder {

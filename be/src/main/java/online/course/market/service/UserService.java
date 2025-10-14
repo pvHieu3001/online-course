@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import online.course.market.entity.model.UserModel;
 
 public interface UserService {
-	UserModel getByName(final String name);
+	UserModel getById(final Long id);
 	List<UserModel> getAll();
 	UserModel save(final UserModel user);
 	UserModel update(final UserModel user, final Long id);

@@ -1,8 +1,11 @@
 package online.course.market.service;
 
 import java.util.List;
+import java.util.Objects;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -16,16 +19,16 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class DefaultUserService implements UserService {
+public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional(readOnly = true)
-	public UserModel getByName(String name) {
-		Assert.notNull(name, "name cannot be null");
-		return userRepository.findByFirstname(name).orElseThrow(
-				() -> new CJNotFoundException(CustomCodeException.CODE_400, "user not found with name "+name));
+	public UserModel getById(Long id) {
+		return userRepository.findById(id).orElseThrow(
+				() -> new CJNotFoundException(CustomCodeException.CODE_400, "user not found with id "+id));
 	}
 
 	@Override
@@ -38,6 +41,7 @@ public class DefaultUserService implements UserService {
 	@Transactional
 	public UserModel save(UserModel user) {
 		Assert.notNull(user, "user cannot be null");
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
 	}
 
@@ -45,17 +49,17 @@ public class DefaultUserService implements UserService {
 	@Transactional
 	public UserModel update(UserModel user, Long id) {
 
-		Assert.notNull(id, "id cannot be null");
-		Assert.notNull(user, "user cannot be null");
-
 		UserModel userDb = userRepository.findById(id)
 				.orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "user not found"));
 
 		userDb.setUsername(user.getUsername());
 		userDb.setFirstname(user.getFirstname());
 		userDb.setLastname(user.getLastname());
-		userDb.setPassword(user.getPassword());
-		userDb.setEmail(user.getEmail());		
+		if(!Objects.equals(user.getPassword(), "")){
+			userDb.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
+		userDb.setEmail(user.getEmail());
+		userDb.setRole(user.getRole());
 
 		return userRepository.save(userDb);
 	}

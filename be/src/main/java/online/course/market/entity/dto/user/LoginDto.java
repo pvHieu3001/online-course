@@ -1,4 +1,4 @@
-package online.course.market.security.dto;
+package online.course.market.entity.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

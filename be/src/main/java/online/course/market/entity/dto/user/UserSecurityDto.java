@@ -1,20 +1,16 @@
-package online.course.market.security.dto;
-
-import online.course.market.security.annotation.UsernameExistsConstraint;
+package online.course.market.entity.dto.user;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterDto {
-	@UsernameExistsConstraint
+public class UserSecurityDto implements Serializable {
 	private String username;
-	private String password;
 	private String firstname;
 	private String lastname;
 	private String email;

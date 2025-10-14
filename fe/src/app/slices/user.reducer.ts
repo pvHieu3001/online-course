@@ -29,7 +29,7 @@ const userSlice = createSlice({
       state.isLoading = false
     },
     getByIdSuccess: (state, { payload }) => {
-      state.data = payload
+      state.data = payload.data.data
       state.isLoading = false
     },
     getByIdFailure: (state, { payload }) => {

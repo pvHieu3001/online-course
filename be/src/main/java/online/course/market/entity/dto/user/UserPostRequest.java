@@ -1,5 +1,6 @@
 package online.course.market.entity.dto.user;
 
+import online.course.market.entity.model.Role;
 import online.course.market.utils.Constant;
 
 import jakarta.validation.constraints.Email;
@@ -28,5 +29,6 @@ public class UserPostRequest {
 		String lastname;
 		@NotEmpty(message = "{email.notempty}")
 		@Email(message = "{email.notformat}",  regexp = Constant.EMAIL_REGEXP)
-		String email;		
+		String email;
+		Role role = Role.USER;
 }

@@ -1,4 +1,4 @@
-package online.course.market.security.controller;
+package online.course.market.controller;
 
 import java.io.IOException;
 
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import online.course.market.security.dto.AuthDto;
-import online.course.market.security.dto.LoginDto;
-import online.course.market.security.dto.RegisterDto;
-import online.course.market.security.service.AuthService;
+import online.course.market.entity.dto.user.AuthDto;
+import online.course.market.entity.dto.user.LoginDto;
+import online.course.market.entity.dto.user.RegisterDto;
+import online.course.market.service.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

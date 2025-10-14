@@ -1,4 +1,4 @@
-package online.course.market.security.dto;
+package online.course.market.entity.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

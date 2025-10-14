@@ -1,15 +1,14 @@
 import { Modal } from 'antd'
-import { Button, Form, Input } from 'antd'
+import { Form, Input } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Select } from 'antd'
-import ErrorLoad from '../../components/util/ErrorLoad'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { popupSuccess, popupError } from '@/page/shared/Toast'
-import Loading from '@/page/Loading'
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
-}
+import { userActions } from '@/app/actions'
+import { AnyAction } from '@reduxjs/toolkit'
+import { RootState } from '@/app/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { roleOptions } from '@/common/constants'
 
 const validateMessages = {
   required: '${label} is required!',
@@ -23,109 +22,93 @@ const validateMessages = {
 }
 
 export default function EditUser() {
-  const [file, setFile] = useState({
-    data: {},
-    loading: false
-  })
-  const handleUpload = async (options: any) => {
-    const { onSuccess, file } = options
-    setFile({
-      data: file,
-      loading: false
-    })
-    onSuccess('Upload successful', file)
-  }
-  const params = useParams()
-
+  const navigator = useNavigate()
+  const { id } = useParams()
+  const dispatch = useDispatch()
+  const userStore = useSelector((state: RootState) => state.user)
   const [form] = Form.useForm()
 
-  const onFinish = async (values: Iuser | any) => {
-    const formData = new FormData()
-    for (const key in values) {
-      if (String(key) == 'upload') {
-        if (values[key]) {
-          formData.append('image', values[key][0].originFileObj)
-        }
-
-        continue
-      }
-      if (String(key) == 'is_active') {
-        if (values[key]) {
-          formData.append(key, '1')
-        } else {
-          formData.append(key, '0')
-        }
-        continue
-      }
-      formData.append(key, values[key])
+  useEffect(() => {
+    if (id) {
+      dispatch(userActions.getUserById(id) as unknown as AnyAction)
     }
+  }, [dispatch, id])
+
+  useEffect(() => {
+    if (userStore.data && !userStore.isLoading) {
+      console.log('userStore.data', userStore.data)
+      form.resetFields()
+      form.setFieldsValue({
+        firstname: userStore.data.firstname,
+        lastname: userStore.data.lastname,
+        username: userStore.data.username,
+        email: userStore.data.email,
+        password: userStore.data.password,
+        role: userStore.data.role
+      })
+    }
+  }, [userStore.data, userStore.isLoading, form])
+
+  const onFinish = async () => {
+    const id = userStore.data?.id
+
+    const formdata = new FormData()
+    formdata.append('firstname', form.getFieldValue('firstname'))
+    formdata.append('lastname', form.getFieldValue('lastname'))
+    formdata.append('username', form.getFieldValue('username'))
+    formdata.append('email', form.getFieldValue('email'))
+    formdata.append('password', form.getFieldValue('password'))
+    formdata.append('role', form.getFieldValue('role'))
 
     try {
-      const payload = {
-        id: params.id,
-        data: formData
-      }
-      await updateUser(payload).unwrap()
-      popupSuccess('Update user success')
-      handleCancel()
+      dispatch(userActions.updateUser(id as unknown as string, formdata) as unknown as AnyAction)
+      await dispatch(userActions.getUsers() as unknown as AnyAction)
+      popupSuccess('Cập nhật người dùng thành công')
+      navigator('..')
     } catch (error) {
-      popupError('Update user error')
+      popupError('Cập nhật người dùng thất bại')
     }
   }
 
-  const navigate = useNavigate()
-
   const handleCancel = () => {
-    navigate('..')
+    dispatch(userActions.getUsers() as unknown as AnyAction)
+    navigator('..')
   }
-
-  if (isLoading || dataLoading) return <Loading />
-  if (isError) return <ErrorLoad />
   return (
-    <>
-      <Modal okButtonProps={{ hidden: true }} title='Edit user' open={true} onCancel={handleCancel}>
-        <Form
-          initialValues={dataItem.data}
-          form={form}
-          {...layout}
-          name='nest-messages'
-          onFinish={onFinish}
-          style={{ maxWidth: 600 }}
-          validateMessages={validateMessages}
-        >
-          <Form.Item name='username' label='Username' rules={[{ required: true }]}>
-            <Input type='text' placeholder='Enter your username' />
-          </Form.Item>
-          <Form.Item name='email' label='Email' rules={[{ required: true, type: 'email' }]}>
-            <Input type='email' placeholder='Enter your email' />
-          </Form.Item>
+    <Modal
+      title='Cập nhật người dùng'
+      open={true}
+      onCancel={handleCancel}
+      width={620}
+      okText='Cập nhật'
+      cancelText='Hủy'
+      onOk={() => form.submit()}
+    >
+      <Form form={form} name='add-user-form' layout='vertical' onFinish={onFinish} validateMessages={validateMessages}>
+        <Form.Item name='firstname' label='Tên' rules={[{ required: true }]}>
+          <Input type='text' placeholder='Nhập tên' />
+        </Form.Item>
 
-          <Form.Item name='password' label='Password' rules={[{ required: true }]}>
-            <Input type='password' placeholder='*******' />
-          </Form.Item>
+        <Form.Item name='lastname' label='Họ' rules={[{ required: true }]}>
+          <Input type='text' placeholder='Nhập họ' />
+        </Form.Item>
 
-          <Form.Item name='role_id' label='Role' rules={[{ required: true }]}>
-            <Select
-              style={{ width: '100%' }}
-              options={[
-                { value: 1, label: 'Admin' },
-                { value: 2, label: 'Guest' }
-              ]}
-            />
-          </Form.Item>
+        <Form.Item name='username' label='Tên đăng nhập' rules={[{ required: true }]}>
+          <Input type='text' placeholder='Nhập tên đăng nhập' />
+        </Form.Item>
 
-          <Form.Item className='mt-3' wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-            <Button
-              loading={loadingUpdateUser || file.loading}
-              disabled={loadingUpdateUser || file.loading}
-              type='primary'
-              htmlType='submit'
-            >
-              Update
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </>
+        <Form.Item name='email' label='Email' rules={[{ required: true, type: 'email' }]}>
+          <Input type='email' placeholder='Nhập email' />
+        </Form.Item>
+
+        <Form.Item name='password' label='Mật khẩu'>
+          <Input.Password placeholder='Nhập mật khẩu' />
+        </Form.Item>
+
+        <Form.Item name='role' label='Vai trò' rules={[{ required: true, message: 'Vui lòng chọn vai trò!' }]}>
+          <Select placeholder='Chọn vai trò' options={roleOptions} />
+        </Form.Item>
+      </Form>
+    </Modal>
   )
 }

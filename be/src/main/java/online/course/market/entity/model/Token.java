@@ -1,4 +1,4 @@
-package online.course.market.security.entity;
+package online.course.market.entity.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,5 +39,5 @@ public class Token {
 
 	  @ManyToOne(fetch = FetchType.LAZY)
 	  @JoinColumn(name = "user_id")
-	  public SecurityUser user;
+	  public UserModel user;
 }

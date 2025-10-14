@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import online.course.market.entity.dto.ApiResponse;
+import online.course.market.service.AuthService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -38,6 +39,7 @@ import lombok.AllArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
+	private final AuthService authService;
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
 
@@ -58,12 +60,12 @@ public class UserController {
 		return ResponseEntity.ok(ApiResponse.success(userDtos));
 	}
 
-	@Operation(description = "Get by name endpoint for user", summary = "This is a summary for user get by name endpoint")
-	@GetMapping("/{name}/name")
-	public ResponseEntity<ApiResponse<UserDto>> getUserByName(@PathVariable String name) {
-		UserModel userDb = userService.getByName(name);
+	@Operation(description = "Get by id endpoint for user", summary = "This is a summary for user get by id endpoint")
+	@GetMapping("/{id}")
+	public ResponseEntity<ApiResponse<UserDto>> getUserByName(@PathVariable Long id) {
+		UserModel userDb = userService.getById(id);
 		if(ObjectUtils.isEmpty(userDb))
-			throw new CJNotFoundException(CustomCodeException.CODE_400, "user not found with name "+name);
+			throw new CJNotFoundException(CustomCodeException.CODE_400, "user not found with name "+id);
 		UserDto userDto = modelMapper.map(userDb, UserDto.class);
 		return ResponseEntity.ok(ApiResponse.success(userDto));
 	}
@@ -71,7 +73,6 @@ public class UserController {
 	@Operation(description = "Save  endpoint for user", summary = "This is a summary for user save endpoint")
 	@PostMapping
 	public ResponseEntity<ApiResponse<UserDto>> saveUser(@Valid @RequestBody UserPostRequest dto) {
-		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 		UserModel user = modelMapper.map(dto, UserModel.class);
 		UserModel userDb = userService.save(user);
 		UserDto userDto = modelMapper.map(userDb, UserDto.class);
@@ -82,11 +83,8 @@ public class UserController {
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<ApiResponse<UserDto>> updateUser(@Valid @RequestBody UserPutRequest dto,
 											  @PathVariable(name = "id") Long id) {
-		// Map DTO to Model object for service
 		UserModel user = modelMapper.map(dto, UserModel.class);
-		// Send object to update service
 		UserModel userDb = userService.update(user, id);
-		// Map Model to DTO object for return endpoint
 		UserDto userDto = modelMapper.map(userDb, UserDto.class);
 		return ResponseEntity.ok(ApiResponse.success(userDto));
 	}

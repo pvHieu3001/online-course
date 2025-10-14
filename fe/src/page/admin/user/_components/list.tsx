@@ -22,13 +22,13 @@ export default function ListUser() {
   }, [dispatch])
 
   useEffect(() => {
-    console.log('userStore', userStore.dataList)
     setDataTable(userStore.dataList?.map((item: IUser, index: number) => ({ ...item, key: index + 1 })))
   }, [userStore])
 
   const confirm = async (id: number | string) => {
     setId(id)
     await dispatch(userActions.deleteUser(String(id)) as unknown as AnyAction)
+    dispatch(userActions.getUsers() as unknown as AnyAction)
     popupSuccess('Delete user success')
   }
 

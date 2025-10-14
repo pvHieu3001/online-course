@@ -2,7 +2,7 @@ import http from '../http-common'
 import httpauth from '../http-auth'
 import { LOCAL_STORAGE_USER, LOCAL_STORAGE_TOKEN, DOMAIN_URL } from '../../common/constants'
 import axs from '../http-common'
-import { ILogin, IRegister, IUser } from '@/common/types.interface'
+import { ILogin, IRegister } from '@/common/types.interface'
 
 function getUsers() {
   return http.get(`/api/v1/admin/user`)
@@ -36,10 +36,10 @@ function logout() {
 function getUserById(id: string) {
   return http.get(`/api/v1/admin/user/${id}`)
 }
-function updateUser(id: string, data: IUser) {
+function updateUser(id: string, data: FormData) {
   return http.put(`/api/v1/admin/user/${id}`, data)
 }
-function createUser(data: IUser) {
+function createUser(data: FormData) {
   return http.post(`/api/v1/admin/user`, data)
 }
 function deleteUser(id: string) {

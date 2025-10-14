@@ -1,4 +1,4 @@
-package online.course.market.security.service.impl;
+package online.course.market.service;
 
 import java.util.*;
 import java.util.function.Function;
@@ -7,13 +7,12 @@ import javax.crypto.SecretKey;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import online.course.market.security.dto.UserSecurityDto;
+import online.course.market.entity.dto.user.UserSecurityDto;
+import online.course.market.entity.model.UserModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import online.course.market.security.entity.SecurityUser;
-import online.course.market.security.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,7 +20,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 @Service
-public class DefaultJwtService implements JwtService {
+public class JwtServiceImpl implements JwtService {
 	
 	@Value("${application.security.jwt.secret-key}")
 	  private String SECRET_KEY;
@@ -63,28 +62,28 @@ public class DefaultJwtService implements JwtService {
 	}
 
 	@Override
-	public String getToken(SecurityUser securityUser) throws JsonProcessingException {
-		return getToken(new HashMap<>(), securityUser, jwtExpiration);
+	public String getToken(UserModel userModel) throws JsonProcessingException {
+		return getToken(new HashMap<>(), userModel, jwtExpiration);
 	}
 	
 	@Override
 	public String getRefreshToken(
-			SecurityUser securityUser
+			UserModel userModel
 	) throws JsonProcessingException {
-	    return getToken(new HashMap<>(), securityUser, refreshExpiration);
+	    return getToken(new HashMap<>(), userModel, refreshExpiration);
 	}
 	
 	private String getToken(
-			Map<String, Object> extraClains, 
-			SecurityUser securityUser,
+			Map<String, Object> extraClains,
+			UserModel userModel,
 			long expiration) throws JsonProcessingException {
-				List<String> roles = securityUser.getAuthorities()
+				List<String> roles = userModel.getAuthorities()
 						.stream()
 						.map(GrantedAuthority::getAuthority)
 						.collect(Collectors.toList());
 		UserSecurityDto userSecurityDto = new UserSecurityDto(
-				securityUser.getUsername(), securityUser.getFirstname(),
-				securityUser.getLastname(), securityUser.getEmail());
+				userModel.getUsername(), userModel.getFirstname(),
+				userModel.getLastname(), userModel.getEmail());
 		ObjectMapper objectMapper = new ObjectMapper();
 		String userJson = objectMapper.writeValueAsString(userSecurityDto);
 		return Jwts
@@ -92,7 +91,7 @@ public class DefaultJwtService implements JwtService {
 				.setClaims(extraClains)
 				.claim("authorities", roles)
 				.claim("user", userJson)
-				.setSubject(securityUser.getUsername())
+				.setSubject(userModel.getUsername())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis()+expiration))
 				.signWith(getSignInKey(), SignatureAlgorithm.HS256)
