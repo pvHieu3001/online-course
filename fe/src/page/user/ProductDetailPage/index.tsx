@@ -7,6 +7,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
+import { Helmet } from 'react-helmet-async'
 
 function ProductDetailPage() {
   const { slug } = useParams()
@@ -39,6 +40,9 @@ function ProductDetailPage() {
 
   return (
     <div className='min-h-screen max-w-7xl mx-auto mt-8 px-4 flex flex-col lg:flex-row gap-8'>
+      <Helmet>
+        <title>Học Free || Chi Tiết</title>
+      </Helmet>
       <div className='lg:w-[80%] w-full'>
         <nav aria-label='Breadcrumb' className='mt-6'>
           <ol className='flex items-center space-x-2 text-sm text-gray-500'>

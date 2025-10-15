@@ -8,6 +8,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
+import { Helmet } from 'react-helmet-async'
 
 function CategoryDetailPage() {
   const { slug } = useParams()
@@ -112,6 +113,9 @@ function CategoryDetailPage() {
 
   return (
     <div className='bg-gray-100 py-8 px-4'>
+      <Helmet>
+        <title>Học Free || {category.name}</title>
+      </Helmet>
       <div className='max-w-7xl mx-auto'>
         <div className='flex flex-col lg:flex-row gap-8'>
           {/* Nội dung chính bên trái */}
@@ -134,7 +138,7 @@ function CategoryDetailPage() {
                         return tmp.textContent || tmp.innerText || ''
                       }
 
-                      const shortDescription = stripHtml(course.description).slice(0, 200) + '...'
+                      const shortDescription = course.description ? stripHtml(course.description).slice(0, 200) : ''
                       return (
                         <div
                           key={course.id}

@@ -10,6 +10,7 @@ import { IProduct } from '@/common/types.interface'
 import { useQuery } from '@/utils/useQuery'
 import Link from 'antd/es/typography/Link'
 import { getImageUrl } from '@/utils/getImageUrl'
+import { Helmet } from 'react-helmet-async'
 
 function PageSearch() {
   const query = useQuery()
@@ -21,7 +22,7 @@ function PageSearch() {
 
   useEffect(() => {
     dispatch(courseActions.getCourses('active', search, '') as unknown as AnyAction)
-  }, [search])
+  }, [dispatch, search])
 
   const handleDetail = (slug: string) => {
     const course = dataList.find((c: IProduct) => c.slug === slug)
@@ -32,6 +33,9 @@ function PageSearch() {
 
   return (
     <div className={styles.bg}>
+      <Helmet>
+        <title>Học Free || Tìm Kiếm</title>
+      </Helmet>
       <main className={styles.mainContent} role='main'>
         <section className={styles.coursesWrapper} aria-label='Course listings'>
           <h2 className={styles.courseListTitle}>Kết quả tìm kiếm</h2>

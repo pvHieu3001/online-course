@@ -6,6 +6,7 @@ import { getImageUrl } from '@/utils/getImageUrl'
 import { AnyAction } from '@reduxjs/toolkit'
 import { Input } from 'antd'
 import { useEffect, useRef, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 
@@ -37,7 +38,7 @@ function PageBlog() {
         break
       case 'san-pham-cong-nghe':
         type = 'technology'
-        title = 'Trending'
+        title = 'Sản Phẩm Công Nghệ'
         break
       case 'thu-thuat-huu-ich':
         type = 'tips'
@@ -67,6 +68,9 @@ function PageBlog() {
 
   return (
     <div className='bg-gray-100 min-h-screen'>
+      <Helmet>
+        <title>Học Free || {title}</title>
+      </Helmet>
       {Array.isArray(recommendList) && recommendList.length > 0 && (
         <div className='w-full flex justify-center items-center'>
           <section
@@ -129,8 +133,8 @@ function PageBlog() {
                         {article?.title || 'Tiêu đề chưa có'}
                       </h2>
                       <p className='text-sm text-gray-500'>
-                        ✍️ {getFullName(article?.updatedBy?.firstname, article?.updatedBy?.lastname)}{' '}
-                        • 🗓️ {formatDateTimeString(article?.updatedAt) || 'Chưa cập nhật'}
+                        ✍️ {getFullName(article?.updatedBy?.firstname, article?.updatedBy?.lastname)} • 🗓️{' '}
+                        {formatDateTimeString(article?.updatedAt) || 'Chưa cập nhật'}
                       </p>
                     </div>
                   </div>

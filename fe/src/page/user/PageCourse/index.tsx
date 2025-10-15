@@ -8,6 +8,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { ContextType, IProduct } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
+import { Helmet } from 'react-helmet-async'
 
 function PageCourse() {
   const navigate = useNavigate()
@@ -41,6 +42,9 @@ function PageCourse() {
 
   return (
     <div className='bg-gray-100 min-h-screen pb-16'>
+      <Helmet>
+        <title>Học Free || Tất cả khóa học</title>
+      </Helmet>
       <div className='flex flex-col lg:flex-row gap-6 max-w-[1300px] mx-auto'>
         <div className='min-h-screen w-full lg:w-[80%] bg-white flex-1 bg-white rounded-lg shadow-md p-6'>
           <div>
