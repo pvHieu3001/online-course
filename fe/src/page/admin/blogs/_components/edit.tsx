@@ -189,10 +189,6 @@ export default function EditBlog() {
                           onChange={(e) => {
                             if (!e.target.files || e.target.files.length === 0) return
                             const file = e.target.files[0]
-                            if (file.size > 2 * 1024 * 1024) {
-                              popupError('Ảnh phải nhỏ hơn 2MB')
-                              return
-                            }
                             setImageUrl(file)
                           }}
                         />
