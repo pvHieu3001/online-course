@@ -10,6 +10,23 @@ interface TextEditorProps {
   onHandleChange: (value: string) => void
 }
 
+function dataURLtoFile(dataurl: string, filename: string): File | null {
+  const arr = dataurl.split(',')
+  if (arr.length < 2) return null
+
+  const mimeMatch = arr[0].match(/:(.*?);/)
+  if (!mimeMatch) return null
+
+  const mime = mimeMatch[1]
+  const bstr = atob(arr[1])
+  let n = bstr.length
+  const u8arr = new Uint8Array(n)
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n)
+  }
+  return new File([u8arr], filename, { type: mime })
+}
+
 export default function TextEditor({ content, onHandleChange, height }: TextEditorProps) {
   const [value, setValue] = useState(content)
   const childRef = useRef<ReactQuill>(null)
@@ -17,6 +34,33 @@ export default function TextEditor({ content, onHandleChange, height }: TextEdit
   useEffect(() => {
     setValue(content)
   }, [content])
+
+  const uploadFile = async (file: File) => {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const res = await http.post(`/api/v1/admin/upload`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return res.data.data.fileName
+  }
+
+  const uploadAndInsertImage = async (file: File) => {
+    try {
+      const editor = childRef.current?.getEditor()
+      if (!editor) return
+
+      const range = editor.getSelection(true)
+
+      const imageUrl = await uploadFile(file)
+
+      editor.insertEmbed(range.index, 'image', getImageUrl(imageUrl))
+    } catch (error) {
+      console.error('Lỗi khi upload ảnh:', error)
+    }
+  }
 
   const imageHandler = () => {
     const input = document.createElement('input')
@@ -27,29 +71,30 @@ export default function TextEditor({ content, onHandleChange, height }: TextEdit
     input.onchange = async () => {
       const file = input.files?.[0]
       if (file) {
-        const formData = new FormData()
-        formData.append('file', file)
-
-        // 👉 Gọi API upload ảnh
-        const res = await http.post(`/api/v1/admin/upload`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-
-        const imageUrl = res.data.data.fileName // URL trả về từ server
-
-        // 👉 Dùng ref để insert ảnh
-        const editor = childRef.current?.getEditor()
-        if (!editor) return
-
-        const range = editor.getSelection()
-        if (range) {
-          editor.insertEmbed(range.index, 'image', getImageUrl(imageUrl))
-        }
+        await uploadAndInsertImage(file)
       }
     }
   }
+
+  useEffect(() => {
+    const editor = childRef.current?.getEditor()
+    if (!editor) return
+
+    editor.clipboard.addMatcher('img', (node, delta) => {
+      const src = node.getAttribute('src')
+
+      if (src && src.startsWith('data:image/')) {
+        const file = dataURLtoFile(src, `pasted_image_${Date.now()}.png`)
+        if (file) {
+          setTimeout(async () => {
+            await uploadAndInsertImage(file)
+          }, 0)
+        }
+        return delta.slice(delta.length()) // Trả về delta rỗng để loại bỏ ảnh base64
+      }
+      return delta
+    })
+  }, [childRef])
 
   const modules = useMemo(
     () => ({

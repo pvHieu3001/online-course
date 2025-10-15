@@ -36,7 +36,7 @@ function Header() {
   const menu = (
     <Menu>
       <Menu.Item key='0'>
-        <Link to='/admin/profile'>Thông tin cá nhân</Link>
+        <Link to='/admin/account'>Thông tin cá nhân</Link>
       </Menu.Item>
       <Menu.Item key='1'>
         <Link to='/admin/settings'>Cài đặt</Link>

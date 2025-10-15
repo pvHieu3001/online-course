@@ -3,7 +3,7 @@ import UseSidenav from '../../../utils/UseSidenav'
 import { useEffect, useState } from 'react'
 import type { MenuProps } from 'antd'
 import ShopeeLogo from '@/assets/images/shopee_v2.png'
-import { ReadOutlined, TagsOutlined, UsergroupAddOutlined, DashboardOutlined } from '@ant-design/icons'
+import { ReadOutlined, TagsOutlined, UsergroupAddOutlined, DashboardOutlined, UserOutlined } from '@ant-design/icons'
 
 function Sidenav() {
   const [stateOpenKeys, setStateOpenKeys] = useState<string[]>([])
@@ -14,7 +14,7 @@ function Sidenav() {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
             <ReadOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Khóa học</span>
+            <span className='label font-bold text-[#344767]'>Khóa Học</span>
           </Flex>
         ),
         link: '/admin/products'
@@ -23,7 +23,7 @@ function Sidenav() {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
             <TagsOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Danh mục</span>
+            <span className='label font-bold text-[#344767]'>Danh Mục</span>
           </Flex>
         ),
         link: '/admin/categories'
@@ -32,7 +32,7 @@ function Sidenav() {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
             <TagsOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Bài viết</span>
+            <span className='label font-bold text-[#344767]'>Bài Viết</span>
           </Flex>
         ),
         link: '/admin/blogs'
@@ -41,7 +41,7 @@ function Sidenav() {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
             <UsergroupAddOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Người dùng</span>
+            <span className='label font-bold text-[#344767]'>Người Dùng</span>
           </Flex>
         ),
         link: '/admin/users'
@@ -63,6 +63,15 @@ function Sidenav() {
           </Flex>
         ),
         link: '/admin/dashboard'
+      },
+      {
+        label: (
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <UserOutlined className='text-[18px] text-[#344767]' />
+            <span className='label font-bold text-[#344767]'>Tài Khoản</span>
+          </Flex>
+        ),
+        link: '/admin/account'
       }
     ]
   })

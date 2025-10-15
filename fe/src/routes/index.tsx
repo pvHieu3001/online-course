@@ -31,6 +31,7 @@ import BlogDetailPage from '@/page/user/BlogDetailPage'
 import AffiliateManagement from '@/page/admin/affiliate'
 import AddAffiliate from '@/page/admin/affiliate/_components/add'
 import EditAffiliate from '@/page/admin/affiliate/_components/edit'
+import AccountManagement from '@/page/admin/account'
 
 export default function Router() {
   return (
@@ -85,6 +86,7 @@ export default function Router() {
                 <Route path='add' element={<AddAffiliate />} />
                 <Route path=':id' element={<EditAffiliate />} />
               </Route>
+              <Route path='account' element={<AccountManagement />} />
             </Route>
           </Route>
         </Route>
