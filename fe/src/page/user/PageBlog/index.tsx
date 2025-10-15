@@ -129,7 +129,7 @@ function PageBlog() {
                         {article?.title || 'Tiêu đề chưa có'}
                       </h2>
                       <p className='text-sm text-gray-500'>
-                        ✍️ {getFullName(article?.updatedBy.firstname, article?.updatedBy.lastname) || 'Tác giả ẩn danh'}{' '}
+                        ✍️ {getFullName(article?.updatedBy?.firstname, article?.updatedBy?.lastname)}{' '}
                         • 🗓️ {formatDateTimeString(article?.updatedAt) || 'Chưa cập nhật'}
                       </p>
                     </div>

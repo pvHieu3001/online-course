@@ -1,4 +1,4 @@
-import { capitalize } from "lodash"
+import { capitalize } from 'lodash'
 
 export function formatDate(date: Date): string {
   const pad = (n: number) => n.toString().padStart(2, '0')
@@ -23,5 +23,8 @@ export function formatDateTimeString(date: string): string {
 }
 
 export function getFullName(firstName: string, lastName: string): string {
-  return `${capitalize(firstName)} ${capitalize(lastName)}`;
+  if (!firstName && !lastName) return 'Ẩn danh'
+  if (!firstName) return capitalize(lastName)
+  if (!lastName) return capitalize(firstName)
+  return `${capitalize(firstName)} ${capitalize(lastName)}`
 }

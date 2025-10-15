@@ -50,7 +50,7 @@ function BlogDetailPage() {
           <span>
             Đăng bởi &nbsp;
             <strong className='text-gray-700'>
-              {getFullName(blogData?.updatedBy.firstname, blogData?.updatedBy.lastname)}
+              {getFullName(blogData?.updatedBy?.firstname, blogData?.updatedBy?.lastname)}
             </strong>
           </span>{' '}
           ·<span>{formatDateTimeString(blogData?.updatedAt) || 'Chưa cập nhật'}</span>
