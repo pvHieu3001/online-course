@@ -48,6 +48,9 @@ function deleteUser(id: string) {
 function getPageUser(page: string, size: string, sort: string) {
   return http.get(`/api/v1/admin/user/pageable/?page=${page}&size=${size}&sort=${sort}`)
 }
+function getLoginUser() {
+  return http.get(`/api/v1/admin/user/me`)
+}
 
 export const userService = {
   getUsers,
@@ -58,5 +61,6 @@ export const userService = {
   updateUser,
   createUser,
   deleteUser,
-  getPageUser
+  getPageUser,
+  getLoginUser
 }

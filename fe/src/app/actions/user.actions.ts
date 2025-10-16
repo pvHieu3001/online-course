@@ -139,13 +139,27 @@ export const signup = (data: IRegister) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
-// Logout user (sync action)
 function logout() {
   userService.logout()
-  return { type: 'LOGOUT' } // ⛔ userConstants.LOGOUT không thấy được import
+  return { type: 'LOGOUT' }
 }
 
-// Export actions
+export const getLoginUser = () => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return userService
+    .getLoginUser()
+    .then((res) => {
+      dispatch(getByIdSuccess(res))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getByIdFailure(error))
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
 export const userActions = {
   login,
   signup,
@@ -154,5 +168,6 @@ export const userActions = {
   getUserById,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getLoginUser
 }

@@ -115,7 +115,7 @@ export default function EditCategory() {
   const onValuesChange = () => setIsDirty(true)
 
   if (categoryStore.error_message) {
-    return <ErrorLoad />
+    return <ErrorLoad error_message={categoryStore.error_message}/>
   }
   return (
     <Drawer

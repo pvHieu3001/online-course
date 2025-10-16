@@ -1,5 +1,6 @@
 package online.course.market.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,11 +47,13 @@ public class UserController {
 	private final PasswordEncoder passwordEncoder;
 
 	@Operation(description = "Get pageable endpoint for user", summary = "This is a summary for user get pageable endpoint")
-	@GetMapping(value = "/pageable")
-	public ResponseEntity<Page<UserDto>> getPageable(Pageable pageable) {
-		Page<UserModel> userPage = userService.finadAll(pageable);
-		Page<UserDto> userPageDto = userPage.map(user -> modelMapper.map(user, UserDto.class));
-		return ResponseEntity.status(HttpStatus.OK).body(userPageDto);
+	@GetMapping(value = "/me")
+	public ResponseEntity<ApiResponse<UserDto>> getLoginUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserModel currentUser = (UserModel) authentication.getPrincipal();
+		UserModel userModel = userService.getByUserName(currentUser.getUsername());
+		UserDto userDto = modelMapper.map(userModel, UserDto.class);
+		return ResponseEntity.ok(ApiResponse.success(userDto));
 	}
 
 	@Operation(description = "Get all endpoint for user", summary = "This is a summary for user get all endpoint")

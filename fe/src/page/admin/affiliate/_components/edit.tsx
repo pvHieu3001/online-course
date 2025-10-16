@@ -91,7 +91,7 @@ export default function EditAffiliate() {
   const onValuesChange = () => setIsDirty(true)
 
   if (affiliateStore.error_message) {
-    return <ErrorLoad />
+    return <ErrorLoad error_message={affiliateStore.error_message} />
   }
   return (
     <Drawer

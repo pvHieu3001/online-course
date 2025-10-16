@@ -104,7 +104,7 @@ export default function EditBlog() {
   const onValuesChange = () => setIsDirty(true)
 
   if (blogStore.error_message) {
-    return <ErrorLoad />
+    return <ErrorLoad error_message={blogStore.error_message} />
   }
   return (
     <Drawer
