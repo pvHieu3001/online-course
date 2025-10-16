@@ -11,6 +11,7 @@ import { useQuery } from '@/utils/useQuery'
 import Link from 'antd/es/typography/Link'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
+import HandleLoading from '@/page/admin/components/util/HandleLoading'
 
 function PageSearch() {
   const query = useQuery()
@@ -32,43 +33,45 @@ function PageSearch() {
   }
 
   return (
-    <div className={styles.bg}>
-      <Helmet>
-        <title>Học Free || Tìm Kiếm</title>
-      </Helmet>
-      <main className={styles.mainContent} role='main'>
-        <section className={styles.coursesWrapper} aria-label='Course listings'>
-          <h2 className={styles.courseListTitle}>Kết quả tìm kiếm</h2>
-          <div className={styles.courses}>
-            {isLoading && <p>Đang tải khóa học...</p>}
-            {!isLoading && error_message && (
-              <p className={styles.error}>Đã xảy ra lỗi khi tải khóa học. Vui lòng thử lại sau.</p>
-            )}
-            {!isLoading && !error_message && dataList?.length === 0 && <p>Không tìm thấy khóa học phù hợp.</p>}
-            {!isLoading &&
-              !error_message &&
-              dataList?.map((course: IProduct) => (
-                <article
-                  className={styles.courseCard}
-                  key={course.id}
-                  role='button'
-                  tabIndex={0}
-                  onClick={() => handleDetail(course.slug)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleDetail(course.slug)}
-                >
-                  <img src={getImageUrl(course.imageUrl)} alt={`${course.name} course image`} loading='lazy' />
-                  <Link className={styles.courseCat}>{course.category?.name}</Link>
-                  <h3 className={styles.courseTitle}>{course.name}</h3>
-                </article>
-              ))}
-          </div>
-          <div className={styles.breaker}></div>
-        </section>
-        <aside className='w-full lg:w-[20%] sticky top-4' role='complementary'>
-          <TabCategory />
-        </aside>
-      </main>
-    </div>
+    <HandleLoading isLoading={isLoading} error_message={error_message}>
+      <div className={styles.bg}>
+        <Helmet>
+          <title>Học Free || Tìm Kiếm</title>
+        </Helmet>
+        <main className={styles.mainContent} role='main'>
+          <section className={styles.coursesWrapper} aria-label='Course listings'>
+            <h2 className={styles.courseListTitle}>Kết quả tìm kiếm</h2>
+            <div className={styles.courses}>
+              {isLoading && <p>Đang tải khóa học...</p>}
+              {!isLoading && error_message && (
+                <p className={styles.error}>Đã xảy ra lỗi khi tải khóa học. Vui lòng thử lại sau.</p>
+              )}
+              {!isLoading && !error_message && dataList?.length === 0 && <p>Không tìm thấy khóa học phù hợp.</p>}
+              {!isLoading &&
+                !error_message &&
+                dataList?.map((course: IProduct) => (
+                  <article
+                    className={styles.courseCard}
+                    key={course.id}
+                    role='button'
+                    tabIndex={0}
+                    onClick={() => handleDetail(course.slug)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleDetail(course.slug)}
+                  >
+                    <img src={getImageUrl(course.imageUrl)} alt={`${course.name} course image`} loading='lazy' />
+                    <Link className={styles.courseCat}>{course.category?.name}</Link>
+                    <h3 className={styles.courseTitle}>{course.name}</h3>
+                  </article>
+                ))}
+            </div>
+            <div className={styles.breaker}></div>
+          </section>
+          <aside className='w-full lg:w-[20%] sticky top-4' role='complementary'>
+            <TabCategory />
+          </aside>
+        </main>
+      </div>
+    </HandleLoading>
   )
 }
 

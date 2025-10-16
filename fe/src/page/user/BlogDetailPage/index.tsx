@@ -7,18 +7,26 @@ import { RootState } from '@/app/store'
 import { ContextType, IBlog } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { formatDateTimeString, getFullName } from '@/utils/formatDate'
+import HandleLoading from '@/page/admin/components/util/HandleLoading'
+import LoadingPage from '@/page/admin/components/util/LoadingPage'
 
 function BlogDetailPage() {
   const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
   const { slug } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { data: blogData, relatedPosts: relatedDatas } = useSelector((state: RootState) => state.blog)
+  const {
+    data: blogData,
+    relatedPosts: relatedDatas,
+    isLoading,
+    error_message
+  } = useSelector((state: RootState) => state.blog)
   const [featuredPost, setFeaturedPost] = useState<IBlog>()
   const [relatedBlogs, setRelatedBlogs] = useState<IBlog[]>()
 
   useEffect(() => {
     if (slug) {
+      dispatch(blogActions.resetBlog() as unknown as AnyAction)
       dispatch(blogActions.getBlogBySlug(slug) as unknown as AnyAction)
     }
     setIsShowRecommendCourses(false)
@@ -35,31 +43,30 @@ function BlogDetailPage() {
     navigate(`/bai-viet/${slug}`)
   }
 
-  if (!blogData) {
-    return (
-      <div className='flex items-center justify-center min-h-screen text-gray-500 text-lg'>Đang tải bài viết...</div>
-    )
+  if (isLoading || !blogData) {
+    return <LoadingPage />
   }
 
   return (
-    <div className='bg-white text-gray-800 font-sans leading-relaxed'>
-      <main className='max-w-[1300px] w-full mx-auto px-4 py-10'>
-        <h1 className='text-4xl font-bold mb-4'>{blogData.title}</h1>
-        <h3 className='text-3xl mb-4'>{blogData.description}</h3>
-        <div className='text-sm text-gray-500 mb-6'>
-          <span>
-            Đăng bởi &nbsp;
-            <strong className='text-gray-700'>
-              {getFullName(blogData?.updatedBy?.firstname, blogData?.updatedBy?.lastname)}
-            </strong>
-          </span>{' '}
-          ·<span>{formatDateTimeString(blogData?.updatedAt) || 'Chưa cập nhật'}</span>
-        </div>
+    <HandleLoading isLoading={isLoading} error_message={error_message}>
+      <div className='bg-white text-gray-800 font-sans leading-relaxed'>
+        <main className='max-w-[1300px] w-full mx-auto px-4 py-10'>
+          <h1 className='text-4xl font-bold mb-4'>{blogData.title}</h1>
+          <h3 className='text-3xl mb-4'>{blogData.description}</h3>
+          <div className='text-sm text-gray-500 mb-6'>
+            <span>
+              Đăng bởi &nbsp;
+              <strong className='text-gray-700'>
+                {getFullName(blogData.updatedBy?.firstname, blogData.updatedBy?.lastname)}
+              </strong>
+            </span>{' '}
+            ·<span>{formatDateTimeString(blogData.updatedAt) || 'Chưa cập nhật'}</span>
+          </div>
 
-        <img src={getImageUrl(blogData.image)} alt={blogData.title} className='w-full rounded-lg mb-8 shadow' />
+          <img src={getImageUrl(blogData.image)} alt={blogData.title} className='w-full rounded-lg mb-8 shadow' />
 
-        <article
-          className='prose prose-lg max-w-none font-arial
+          <article
+            className='prose prose-lg max-w-none font-arial
                 [&_p]:mb-4 
                 [&_p]:text-base
                 [&_h1]:text-3xl 
@@ -68,54 +75,55 @@ function BlogDetailPage() {
                 [&_ul]:list-disc 
                 [&_ul]:pl-6 
                 [&_a]:text-blue-600 [&_a:hover]:underline text-base'
-          dangerouslySetInnerHTML={{ __html: blogData.content || '' }}
-        ></article>
+            dangerouslySetInnerHTML={{ __html: blogData.content || '' }}
+          ></article>
 
-        {/* Bài viết liên quan */}
-        <section className='mt-16 border-t pt-10'>
-          <h3 className='text-xl font-semibold mb-6'>Bài viết liên quan</h3>
-          <div className='grid grid-cols-1 lg:grid-cols-5 gap-6 lg:h-full'>
-            {/* Cột 1 */}
-            {featuredPost && (
-              <div
-                onClick={() => {
-                  handleDetail(featuredPost.slug)
-                }}
-                className='lg:col-span-2 h-full'
-              >
-                <div className='border rounded p-6 shadow hover:shadow-lg transition-shadow h-full flex flex-col'>
-                  <img
-                    src={getImageUrl(featuredPost.image)}
-                    alt={featuredPost.title}
-                    className='w-full h-40 object-cover rounded mb-3'
-                  />
-                  <p className='text-2xl font-bold hover:text-blue-600 block mb-2'>{featuredPost.title}</p>
-                  <p className='text-sm text-gray-500 mb-2'>{formatDateTimeString(featuredPost.updatedAt)}</p>
-                  <p className='text-base text-gray-700'>{featuredPost.description}</p>
-                </div>
-              </div>
-            )}
-
-            {/* Cột 2: 4 bài viết nhỏ */}
-            {relatedBlogs && relatedBlogs.length > 0 && (
-              <div className='lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6 h-full'>
-                {relatedBlogs.map((post, index) => (
-                  <div key={index} className='border rounded p-4 hover:shadow transition-shadow h-full flex flex-col'>
+          {/* Bài viết liên quan */}
+          <section className='mt-16 border-t pt-10'>
+            <h3 className='text-xl font-semibold mb-6'>Bài viết liên quan</h3>
+            <div className='grid grid-cols-1 lg:grid-cols-5 gap-6 lg:h-full'>
+              {/* Cột 1 */}
+              {featuredPost && (
+                <div
+                  onClick={() => {
+                    handleDetail(featuredPost.slug)
+                  }}
+                  className='lg:col-span-2 h-full'
+                >
+                  <div className='border rounded p-6 shadow hover:shadow-lg transition-shadow h-full flex flex-col'>
                     <img
-                      src={getImageUrl(post.image)}
-                      alt={post.title}
+                      src={getImageUrl(featuredPost.image)}
+                      alt={featuredPost.title}
                       className='w-full h-40 object-cover rounded mb-3'
                     />
-                    <p className='text-lg font-medium hover:text-blue-600 block mb-1'>{post.title}</p>
-                    <p className='text-sm text-gray-500'>{formatDateTimeString(post.updatedAt)}</p>
+                    <p className='text-2xl font-bold hover:text-blue-600 block mb-2'>{featuredPost.title}</p>
+                    <p className='text-sm text-gray-500 mb-2'>{formatDateTimeString(featuredPost.updatedAt)}</p>
+                    <p className='text-base text-gray-700'>{featuredPost.description}</p>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      </main>
-    </div>
+                </div>
+              )}
+
+              {/* Cột 2: 4 bài viết nhỏ */}
+              {relatedBlogs && relatedBlogs.length > 0 && (
+                <div className='lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6 h-full'>
+                  {relatedBlogs.map((post, index) => (
+                    <div key={index} className='border rounded p-4 hover:shadow transition-shadow h-full flex flex-col'>
+                      <img
+                        src={getImageUrl(post.image)}
+                        alt={post.title}
+                        className='w-full h-40 object-cover rounded mb-3'
+                      />
+                      <p className='text-lg font-medium hover:text-blue-600 block mb-1'>{post.title}</p>
+                      <p className='text-sm text-gray-500'>{formatDateTimeString(post.updatedAt)}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        </main>
+      </div>
+    </HandleLoading>
   )
 }
 

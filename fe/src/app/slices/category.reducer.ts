@@ -61,6 +61,14 @@ const categorySlice = createSlice({
     deleteFailure: (state) => {
       state.error_message = 'Xóa Loai Khóa Học Thất Bại'
       state.isLoading = false
+    },
+    reset: (state) => {
+      state.isLoading = true
+      state.code = ''
+      state.message = ''
+      state.error_message = ''
+      state.data = null as unknown as ICategory
+      state.dataList = []
     }
   }
 })
@@ -77,6 +85,7 @@ export const {
   updateFailure,
   updateSuccessfully,
   deleteFailure,
-  deleteSuccessfully
+  deleteSuccessfully,
+  reset
 } = categorySlice.actions
 export default categorySlice.reducer

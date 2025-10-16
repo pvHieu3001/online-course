@@ -1,4 +1,3 @@
-import styles from './styles.module.css'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,52 +8,51 @@ import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
+import HandleLoading from '@/page/admin/components/util/HandleLoading'
+import LoadingPage from '@/page/admin/components/util/LoadingPage'
 
 function CategoryDetailPage() {
   const { slug } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const [coursesPerPage] = useState(15)
 
-  // Get data from Redux store
-  const { dataList: courses, isLoading: coursesLoading } = useSelector((state: RootState) => state.course)
+  const {
+    dataList: courses,
+    isLoading: coursesLoading,
+    error_message: courseError
+  } = useSelector((state: RootState) => state.course)
   const { data: category, isLoading: categoryLoading } = useSelector((state: RootState) => state.category)
 
-  // Fetch category and courses when component mounts
   useEffect(() => {
     if (slug) {
+      dispatch(categoryActions.resetCategory() as unknown as AnyAction)
       dispatch(categoryActions.getCategoryBySlug(slug) as unknown as AnyAction)
     }
-  }, [slug])
+  }, [dispatch, slug])
 
-  // Fetch courses when category is loaded
   useEffect(() => {
     if (category && category.id) {
       dispatch(courseActions.getCoursesByCategory(category.id) as unknown as AnyAction)
     }
-  }, [category])
+  }, [category, dispatch])
 
-  // Handle course item click
   const handleCourseClick = (course: IProduct) => {
     navigate(`/chi-tiet-khoa-hoc/${course.slug}`)
   }
 
-  // Pagination logic
   const indexOfLastCourse = currentPage * coursesPerPage
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage
   const currentCourses = courses ? courses.slice(indexOfFirstCourse, indexOfLastCourse) : []
   const totalPages = courses ? Math.ceil(courses.length / coursesPerPage) : 0
 
-  // Handle page change
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Generate page numbers
   const getPageNumbers = () => {
     const pageNumbers = []
     const maxVisiblePages = 15
@@ -89,50 +87,29 @@ function CategoryDetailPage() {
 
     return pageNumbers
   }
-  // Show loading if category is still loading
-  if (categoryLoading) {
-    return (
-      <div className={styles.bg}>
-        <div className={styles.categoryDetailPage}>
-          <div className={styles.loading}>Loading category...</div>
-        </div>
-      </div>
-    )
-  }
-
-  // Show error if Danh mục không tồn tại
-  if (!category) {
-    return (
-      <div className={styles.bg}>
-        <div className={styles.categoryDetailPage}>
-          <div className={styles.noCourses}>Danh mục không tồn tại</div>
-        </div>
-      </div>
-    )
+  if (categoryLoading || !category) {
+    return <LoadingPage />
   }
 
   return (
-    <div className='bg-gray-100 py-8 px-4'>
-      <Helmet>
-        <title>Học Free || {category.name}</title>
-      </Helmet>
-      <div className='max-w-7xl mx-auto'>
-        <div className='flex flex-col lg:flex-row gap-8'>
-          {/* Nội dung chính bên trái */}
-          <div className='flex-1 bg-white rounded-lg shadow-md p-6'>
-            <div>
-              <div className='text-xl font-semibold text-indigo-600 mb-2'>Khóa học - {category.name}</div>
-              <p className='text-gray-700 mb-6 text-base'>{category.description}</p>
-            </div>
+    <HandleLoading isLoading={coursesLoading} error_message={courseError}>
+      <div className='bg-gray-100 py-8 min-h-screen px-4'>
+        <Helmet>
+          <title>Học Free || {category.name}</title>
+        </Helmet>
+        <div className='max-w-7xl mx-auto'>
+          <div className='flex flex-col lg:flex-row gap-8'>
+            <div className='flex-1 bg-white rounded-lg shadow-md p-6'>
+              <div>
+                <div className='text-xl font-semibold text-indigo-600 mb-2'>Khóa học - {category.name}</div>
+                <p className='text-gray-700 mb-6 text-base'>{category.description}</p>
+              </div>
 
-            <div>
-              {coursesLoading ? (
-                <div className='text-center text-gray-500'>Đang tải khóa học...</div>
-              ) : currentCourses && currentCourses.length > 0 ? (
-                <>
+              {currentCourses && currentCourses.length > 0 ? (
+                <div>
                   <div className='flex flex-col gap-6 mb-6'>
                     {currentCourses.map((course) => {
-                      const stripHtml = (html) => {
+                      const stripHtml = (html: string) => {
                         const tmp = document.createElement('div')
                         tmp.innerHTML = html
                         return tmp.textContent || tmp.innerText || ''
@@ -202,19 +179,19 @@ function CategoryDetailPage() {
                       </button>
                     </div>
                   )}
-                </>
+                </div>
               ) : (
                 <div className='text-center text-gray-500'>Không tìm thấy khóa học nào trong danh mục này</div>
               )}
             </div>
-          </div>
 
-          <aside className='w-full lg:w-[20%] sticky top-4' role='complementary'>
-            <TabCategory />
-          </aside>
+            <aside className='w-full lg:w-[20%] sticky top-4' role='complementary'>
+              <TabCategory />
+            </aside>
+          </div>
         </div>
       </div>
-    </div>
+    </HandleLoading>
   )
 }
 

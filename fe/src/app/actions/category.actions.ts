@@ -5,6 +5,7 @@ import {
   getCategoriesSuccessFully,
   getCategoriesSuccessFailure,
   isFetching,
+  reset,
   createFailure,
   createSuccessfully,
   updateFailure,
@@ -127,6 +128,10 @@ export const deleteCategory = (id: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const resetCategory = () => (dispatch: Dispatch) => {
+  dispatch(reset())
+}
+
 export const categoryActions = {
   getCategories,
   getAdminCategories,
@@ -134,5 +139,6 @@ export const categoryActions = {
   getCategoryBySlug,
   createCategory,
   updateCategory,
-  deleteCategory
+  deleteCategory,
+  resetCategory
 }
