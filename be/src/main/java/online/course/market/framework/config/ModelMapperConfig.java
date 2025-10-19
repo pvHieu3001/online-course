@@ -1,4 +1,4 @@
-package online.course.market.config;
+package online.course.market.framework.config;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

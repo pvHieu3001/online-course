@@ -1,6 +1,5 @@
 package online.course.market.controller;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,8 +7,6 @@ import online.course.market.entity.dto.ApiResponse;
 import online.course.market.service.AuthService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,7 +24,7 @@ import online.course.market.entity.dto.user.UserDto;
 import online.course.market.entity.dto.user.UserPostRequest;
 import online.course.market.entity.dto.user.UserPutRequest;
 import online.course.market.entity.model.UserModel;
-import online.course.market.exception.CJNotFoundException;
+import online.course.market.framework.exception.CJNotFoundException;
 import online.course.market.service.UserService;
 import online.course.market.utils.CustomCodeException;
 import io.swagger.v3.oas.annotations.Operation;

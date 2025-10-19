@@ -3,7 +3,6 @@ package online.course.market.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.category.CategoryDto;
 import online.course.market.entity.dto.course.CourseDto;
 import online.course.market.entity.dto.course.CoursePutRequest;
@@ -13,7 +12,7 @@ import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
 import online.course.market.entity.model.Tag;
 import online.course.market.entity.model.Url;
-import online.course.market.exception.CJNotFoundException;
+import online.course.market.framework.exception.CJNotFoundException;
 import online.course.market.repository.CategoryRepository;
 import online.course.market.repository.CourseRepository;
 import online.course.market.repository.TagRepository;
@@ -23,22 +22,14 @@ import online.course.market.utils.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static online.course.market.utils.Constant.LOG_ACTION_UPDATE_COURSE;
-import static online.course.market.utils.Constant.LOG_UPDATE_COURSE;
 
 @Service
 @AllArgsConstructor

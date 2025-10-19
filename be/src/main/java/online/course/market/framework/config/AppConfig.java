@@ -1,4 +1,4 @@
-package online.course.market.config;
+package online.course.market.framework.config;
 
 import online.course.market.utils.Constant;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

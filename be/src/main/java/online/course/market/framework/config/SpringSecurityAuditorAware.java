@@ -1,4 +1,4 @@
-package online.course.market.config;
+package online.course.market.framework.config;
 
 import online.course.market.entity.model.UserModel;
 import org.springframework.data.domain.AuditorAware;

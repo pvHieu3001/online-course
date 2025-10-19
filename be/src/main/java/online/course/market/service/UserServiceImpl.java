@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import online.course.market.entity.model.UserModel;
-import online.course.market.exception.CJNotFoundException;
+import online.course.market.framework.exception.CJNotFoundException;
 import online.course.market.repository.UserRepository;
 import online.course.market.utils.CustomCodeException;
 

@@ -2,8 +2,7 @@ package online.course.market.service;
 
 import lombok.AllArgsConstructor;
 import online.course.market.entity.model.Blog;
-import online.course.market.entity.model.Category;
-import online.course.market.exception.CJNotFoundException;
+import online.course.market.framework.exception.CJNotFoundException;
 import online.course.market.repository.BlogRepository;
 import online.course.market.utils.CustomCodeException;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor

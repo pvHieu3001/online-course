@@ -2,7 +2,7 @@ package online.course.market.service;
 
 import lombok.AllArgsConstructor;
 import online.course.market.entity.model.Category;
-import online.course.market.exception.CJNotFoundException;
+import online.course.market.framework.exception.CJNotFoundException;
 import online.course.market.repository.CategoryRepository;
 import online.course.market.utils.CustomCodeException;
 import org.springframework.stereotype.Service;

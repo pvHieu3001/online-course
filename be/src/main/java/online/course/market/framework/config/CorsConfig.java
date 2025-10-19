@@ -1,4 +1,4 @@
-package online.course.market.config;
+package online.course.market.framework.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -3,7 +3,7 @@ package online.course.market.service;
 import online.course.market.entity.dto.affiliate.link.AffiliateLinkPostRequest;
 import online.course.market.entity.dto.affiliate.link.AffiliateLinkPutRequest;
 import online.course.market.entity.model.AffiliateLink;
-import online.course.market.exception.CJNotFoundException;
+import online.course.market.framework.exception.CJNotFoundException;
 import online.course.market.repository.AffiliateLinkRepository;
 import online.course.market.utils.CustomCodeException;
 import org.springframework.beans.factory.annotation.Autowired;

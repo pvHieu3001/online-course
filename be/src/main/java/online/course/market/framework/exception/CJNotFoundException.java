@@ -1,4 +1,4 @@
-package online.course.market.exception;
+package online.course.market.framework.exception;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

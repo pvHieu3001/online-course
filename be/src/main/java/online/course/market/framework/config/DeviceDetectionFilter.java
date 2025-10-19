@@ -1,4 +1,4 @@
-package online.course.market.config;
+package online.course.market.framework.config;
 
 import com.deevvi.device.detector.engine.api.DeviceDetectorParser;
 import com.deevvi.device.detector.engine.api.DeviceDetectorResult;
