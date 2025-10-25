@@ -50,8 +50,8 @@ const Header = (props: Props) => {
   const menuItems = [
     { label: 'TRANG CHỦ', href: '/' },
     { label: 'KHÓA HỌC', href: '/tat-ca-khoa-hoc' },
-    { label: 'CÔNG NGHỆ', href: '/san-pham-cong-nghe' },
-    { label: 'GAME', href: '/game' },
+    { label: 'CHỨNG KHOÁN', href: '/chung-khoan' },
+    { label: 'CRYPTO', href: '/crypto' },
     { label: 'TIỆN ÍCH', href: '/thu-thuat-huu-ich' },
     { label: 'SƯU TẦM', href: '/suu-tam' }
   ]

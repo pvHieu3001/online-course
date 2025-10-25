@@ -15,6 +15,18 @@ import java.util.Set;
 @Entity
 @Table(name = "courses")
 @NoArgsConstructor
+
+@NamedStoredProcedureQueries({
+        @NamedStoredProcedureQuery(name = "Course.getCourseBySlug", procedureName = "get_course_by_slug", resultClasses = { Course.class },
+                parameters = {
+                        @StoredProcedureParameter(
+                                name = "in_slug",
+                                type = String.class,
+                                mode = ParameterMode.IN
+                        )
+                }
+        )
+})
 public class Course extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -185,6 +185,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
+    public Course getCourseBySlug(String slug) {
+        return courseRepository.getCourseBySlug(slug);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Page<Course> filterCourse(String status, String search, Boolean isDisplayHot, Pageable pageable) {
         return courseRepository.filterCourse(status, search, isDisplayHot, pageable);

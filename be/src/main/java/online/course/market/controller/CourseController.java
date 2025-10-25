@@ -67,10 +67,10 @@ public class CourseController {
     }
 
     @Operation(description = "Get pageable endpoint for Course", summary = "This is a summary for Course get pageable endpoint")
-    @GetMapping("/pageable")
-    public ResponseEntity<ApiResponse<Page<CourseDto>>> getPageable(Pageable pageable) {
-        Page<Course> coursePage = courseService.finadAll(pageable);
-        Page<CourseDto> coursePageDto = coursePage.map(this::toDto);
+    @GetMapping("/procedure/{slug}")
+    public ResponseEntity<ApiResponse<CourseDto>> getPageable(@PathVariable String slug) {
+        Course courseBySlug = courseService.getCourseBySlug(slug);
+        CourseDto coursePageDto = toDto(courseBySlug);
         return ResponseEntity.ok(ApiResponse.success(coursePageDto));
     }
 
@@ -88,8 +88,8 @@ public class CourseController {
                         "1".equals(isDisplayHot) ? Boolean.TRUE :
                                 "0".equals(isDisplayHot) ? Boolean.FALSE : null;
         Page<CourseDto> courseDtos = courseService.filterCourse(
-                (status != null && !status.toString().isBlank()) ? status : null,
-                (search != null && !search.toString().isBlank()) ? search : null,
+                (status != null && !status.isBlank()) ? status : null,
+                (search != null && !search.isBlank()) ? search : null,
                 displayHot,
                 pageable
         ).map(course -> {

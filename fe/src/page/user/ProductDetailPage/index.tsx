@@ -54,7 +54,7 @@ function ProductDetailPage() {
           <nav aria-label='Breadcrumb' className='mt-6'>
             <ol className='flex items-center space-x-2 text-sm text-gray-500'>
               {breadcrumbs.map((crumb, index) => (
-                <li key={crumb.name} className='flex items-center'>
+                <li key={index} className='flex items-center'>
                   {index > 0 && (
                     <svg
                       className='h-5 w-5 flex-shrink-0 text-gray-300'
@@ -158,9 +158,7 @@ function ProductDetailPage() {
                         onClick={() => handleDetail(related)}
                         className='relative group rounded-lg overflow-hidden shadow-md cursor-pointer transition-all duration-300 hover:shadow-xl'
                         style={{
-                          backgroundImage: `url(${
-                            related.imageUrl ? getImageUrl(related.imageUrl) : '/default-image.jpg'
-                          })`,
+                          backgroundImage: `url(${getImageUrl(related.imageUrl)})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                           height: '220px'

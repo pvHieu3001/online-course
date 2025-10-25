@@ -46,6 +46,14 @@ function PageBlog() {
         type = 'technology'
         title = 'Sản Phẩm Công Nghệ'
         break
+      case 'crypto':
+        type = 'crypto'
+        title = 'Tiền Mã Hóa'
+        break
+      case 'chung-khoan':
+        type = 'stock'
+        title = 'Chứng Khoán'
+        break
       case 'thu-thuat-huu-ich':
         type = 'tips'
         title = 'Thủ Thuật Hữu Ích'
@@ -122,7 +130,7 @@ function PageBlog() {
               </div>
 
               {dataList && dataList.length > 0 ? (
-                <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+                <div className='grid grid-cols-1 sm:grid-cols-1 gap-6'>
                   {dataList.map((article, index) => (
                     <div
                       onClick={() => handleDetail(article.slug)}

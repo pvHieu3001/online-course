@@ -21,7 +21,6 @@ function BlogDetailPage() {
     isLoading,
     error_message
   } = useSelector((state: RootState) => state.blog)
-  const [featuredPost, setFeaturedPost] = useState<IBlog>()
   const [relatedBlogs, setRelatedBlogs] = useState<IBlog[]>()
 
   useEffect(() => {
@@ -34,7 +33,6 @@ function BlogDetailPage() {
 
   useEffect(() => {
     if (relatedDatas && relatedDatas.length > 0) {
-      setFeaturedPost(relatedDatas[0])
       setRelatedBlogs(relatedDatas.slice())
     }
   }, [relatedDatas])
@@ -81,44 +79,26 @@ function BlogDetailPage() {
           {/* Bài viết liên quan */}
           <section className='mt-16 border-t pt-10'>
             <h3 className='text-xl font-semibold mb-6'>Bài viết liên quan</h3>
-            <div className='grid grid-cols-1 lg:grid-cols-5 gap-6 lg:h-full'>
-              {/* Cột 1 */}
-              {featuredPost && (
-                <div
-                  onClick={() => {
-                    handleDetail(featuredPost.slug)
-                  }}
-                  className='lg:col-span-2 h-full'
-                >
-                  <div className='border rounded p-6 shadow hover:shadow-lg transition-shadow h-full flex flex-col'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+              {relatedBlogs &&
+                relatedBlogs.length > 0 &&
+                relatedBlogs.map((post, index) => (
+                  <div
+                    onClick={() => {
+                      handleDetail(post.slug)
+                    }}
+                    key={index}
+                    className='border rounded p-4 hover:shadow transition-shadow h-full flex flex-col'
+                  >
                     <img
-                      src={getImageUrl(featuredPost.image)}
-                      alt={featuredPost.title}
+                      src={getImageUrl(post.image)}
+                      alt={post.title}
                       className='w-full h-40 object-cover rounded mb-3'
                     />
-                    <p className='text-2xl font-bold hover:text-blue-600 block mb-2'>{featuredPost.title}</p>
-                    <p className='text-sm text-gray-500 mb-2'>{formatDateTimeString(featuredPost.updatedAt)}</p>
-                    <p className='text-base text-gray-700'>{featuredPost.description}</p>
+                    <p className='text-lg font-medium hover:text-blue-600 block mb-1'>{post.title}</p>
+                    <p className='text-sm text-gray-500'>{formatDateTimeString(post.updatedAt)}</p>
                   </div>
-                </div>
-              )}
-
-              {/* Cột 2: 4 bài viết nhỏ */}
-              {relatedBlogs && relatedBlogs.length > 0 && (
-                <div className='lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6 h-full'>
-                  {relatedBlogs.map((post, index) => (
-                    <div key={index} className='border rounded p-4 hover:shadow transition-shadow h-full flex flex-col'>
-                      <img
-                        src={getImageUrl(post.image)}
-                        alt={post.title}
-                        className='w-full h-40 object-cover rounded mb-3'
-                      />
-                      <p className='text-lg font-medium hover:text-blue-600 block mb-1'>{post.title}</p>
-                      <p className='text-sm text-gray-500'>{formatDateTimeString(post.updatedAt)}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+                ))}
             </div>
           </section>
         </main>

@@ -48,6 +48,8 @@ export default function Router() {
             <Route path='khoa-hoc-theo-chu-de/:slug' element={<CategoryDetailPage />} />
             <Route path='game' element={<PageBlog />} />
             <Route path='san-pham-cong-nghe' element={<PageBlog />} />
+            <Route path='crypto' element={<PageBlog />} />
+            <Route path='chung-khoan' element={<PageBlog />} />
             <Route path='thu-thuat-huu-ich' element={<PageBlog />} />
             <Route path='suu-tam' element={<PageBlog />} />
             <Route path='bai-viet/:slug' element={<BlogDetailPage />} />
