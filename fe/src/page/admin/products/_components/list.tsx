@@ -15,8 +15,8 @@ export default function ListProduct() {
   const [active, setActive] = useState('')
   const [isHot, setIsHot] = useState('') // blank: all, 0: false, 1: true
   const [dataTable, setDataTable] = useState<(IProduct & { key: number })[]>([])
-  const [currentPage, setCurrentPage] = useState(0)
-  const [coursesPerPage] = useState(15)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [coursesPerPage] = useState(10)
 
   const courses = useSelector((state: RootState) => state.course)
 
@@ -27,8 +27,14 @@ export default function ListProduct() {
   }, [searchValue, active, isHot, dispatch, currentPage, coursesPerPage])
 
   useEffect(() => {
-    setDataTable(courses.dataList?.map((item: IProduct, index: number) => ({ ...item, key: index + 1 })))
-  }, [courses])
+    setDataTable(
+      courses.dataList?.map((item: IProduct, index: number) => ({ ...item, key: index + (currentPage - 1) * 10 + 1 }))
+    )
+  }, [courses, currentPage])
+
+  useEffect(() => {
+    console.log(dataTable)
+  }, [dataTable])
 
   const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value
@@ -248,7 +254,6 @@ export default function ListProduct() {
           total: courses.totalElements || 0,
           showSizeChanger: false
         }}
-        // 2. Thêm hàm xử lý khi đổi trang
         onChange={handleTableChange}
       />
     </>
