@@ -17,7 +17,6 @@ import online.course.market.entity.model.Category;
 import online.course.market.entity.model.Course;
 import online.course.market.entity.model.Tag;
 import online.course.market.entity.model.Url;
-import online.course.market.repository.TagRepository;
 import online.course.market.repository.UrlRepository;
 import online.course.market.service.CategoryService;
 import online.course.market.service.CourseService;
@@ -26,6 +25,7 @@ import online.course.market.service.TagService;
 import online.course.market.utils.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -34,13 +34,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.stream.Collectors;
+
 import static online.course.market.utils.Constant.*;
 
 @RestController
@@ -101,7 +102,7 @@ public class AdminCourseController {
 
     @Operation(description = "Get all endpoint for Course", summary = "This is a summary for Course get all endpoint")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CourseDto>>> getAll(
+    public ResponseEntity<ApiResponse<Page<CourseDto>>> getAll(
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
@@ -112,13 +113,11 @@ public class AdminCourseController {
                 isDisplayHot == null || isDisplayHot.isBlank() ? null :
                         "1".equals(isDisplayHot) ? Boolean.TRUE :
                                 "0".equals(isDisplayHot) ? Boolean.FALSE : null;
-        List<CourseDto> getCourseDtos = courseService.filterCourse(
+        Page<CourseDto> getCourseDtos = courseService.filterCourse(
                         !String.valueOf(status).isEmpty() ? status : null,
                         !String.valueOf(search).isEmpty() ? search : null,
                         displayHot, pageable
-                )
-                .stream().map(this::toDto)
-                .collect(Collectors.toList());
+                ).map(this::toDto);
 
 
         return ResponseEntity.ok(ApiResponse.success(getCourseDtos));

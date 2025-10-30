@@ -20,37 +20,41 @@ import {
   getQuickViewCoursesSuccessFully
 } from '../slices/course.reducer'
 
-export const getCourses = (status?: string, search?: string, isDisplayHot?: string, currentPage?: number, coursesPerPage?: number) => (dispatch: Dispatch) => {
-  dispatch(isFetching())
+export const getCourses =
+  (status?: string, search?: string, isDisplayHot?: string, currentPage?: number, coursesPerPage?: number) =>
+  (dispatch: Dispatch) => {
+    dispatch(isFetching())
 
-  return courseServices
-    .getCourses(status, search, isDisplayHot, currentPage, coursesPerPage)
-    .then((res) => {
-      dispatch(getCoursesSuccessFully(res.data))
-      return res
-    })
-    .catch((error) => {
-      dispatch(getCoursesFailure(error))
-      throw error
-    })
-    .finally(() => dispatch(fetchedDone()))
-}
+    return courseServices
+      .getCourses(status, search, isDisplayHot, currentPage, coursesPerPage)
+      .then((res) => {
+        dispatch(getCoursesSuccessFully(res.data))
+        return res
+      })
+      .catch((error) => {
+        dispatch(getCoursesFailure(error))
+        throw error
+      })
+      .finally(() => dispatch(fetchedDone()))
+  }
 
-export const getAdminCourses = (status?: string, search?: string, isDisplayHot?: string) => (dispatch: Dispatch) => {
-  dispatch(isFetching())
+export const getAdminCourses =
+  (status?: string, search?: string, isDisplayHot?: string, currentPage?: number, coursesPerPage?: number) =>
+  (dispatch: Dispatch) => {
+    dispatch(isFetching())
 
-  return courseServices
-    .getAdminCourses(status, search, isDisplayHot)
-    .then((res) => {
-      dispatch(getCoursesSuccessFully(res.data))
-      return res
-    })
-    .catch((error) => {
-      dispatch(getCoursesFailure(error))
-      throw error
-    })
-    .finally(() => dispatch(fetchedDone()))
-}
+    return courseServices
+      .getAdminCourses(status, search, isDisplayHot, currentPage, coursesPerPage)
+      .then((res) => {
+        dispatch(getCoursesSuccessFully(res.data))
+        return res
+      })
+      .catch((error) => {
+        dispatch(getCoursesFailure(error))
+        throw error
+      })
+      .finally(() => dispatch(fetchedDone()))
+  }
 
 export const getRecommendCourses = () => (dispatch: Dispatch) => {
   dispatch(isFetching())

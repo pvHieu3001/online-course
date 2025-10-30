@@ -15,12 +15,16 @@ export default function ListProduct() {
   const [active, setActive] = useState('')
   const [isHot, setIsHot] = useState('') // blank: all, 0: false, 1: true
   const [dataTable, setDataTable] = useState<(IProduct & { key: number })[]>([])
+  const [currentPage, setCurrentPage] = useState(0)
+  const [coursesPerPage] = useState(15)
 
   const courses = useSelector((state: RootState) => state.course)
 
   useEffect(() => {
-    dispatch(courseActions.getAdminCourses(active, searchValue, isHot) as unknown as AnyAction)
-  }, [searchValue, active, isHot, dispatch])
+    dispatch(
+      courseActions.getAdminCourses(active, searchValue, isHot, currentPage - 1, coursesPerPage) as unknown as AnyAction
+    )
+  }, [searchValue, active, isHot, dispatch, currentPage, coursesPerPage])
 
   useEffect(() => {
     setDataTable(courses.dataList?.map((item: IProduct, index: number) => ({ ...item, key: index + 1 })))
@@ -36,7 +40,15 @@ export default function ListProduct() {
   const handlerDeleteProduct = async (id: string) => {
     try {
       await dispatch(courseActions.deleteCourse(id) as unknown as AnyAction)
-      await dispatch(courseActions.getAdminCourses(active, searchValue, isHot) as unknown as AnyAction)
+      await dispatch(
+        courseActions.getAdminCourses(
+          active,
+          searchValue,
+          isHot,
+          currentPage - 1,
+          coursesPerPage
+        ) as unknown as AnyAction
+      )
       message.success('Xoá khóa học thành công!')
     } catch (error) {
       message.error('Xoá khóa học thất bại!')
@@ -153,6 +165,10 @@ export default function ListProduct() {
     }
   ]
 
+  const handleTableChange = (pagination: any) => {
+    setCurrentPage(pagination.current)
+  }
+
   return (
     <>
       <div className='flex items-center justify-between my-2'>
@@ -226,6 +242,14 @@ export default function ListProduct() {
         scroll={{ x: 1200 }}
         dataSource={dataTable}
         loading={courses.isLoading}
+        pagination={{
+          current: currentPage,
+          pageSize: coursesPerPage,
+          total: courses.totalElements || 0,
+          showSizeChanger: false
+        }}
+        // 2. Thêm hàm xử lý khi đổi trang
+        onChange={handleTableChange}
       />
     </>
   )
