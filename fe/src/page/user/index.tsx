@@ -14,7 +14,7 @@ function Base() {
     <>
       <div className={styles.modules}>
         <Helmet>
-          <title>Học Free</title>
+          <title>Website Chia Sẻ Tài Liệu Miễn Phí - Kho học liệu chất lượng cho người Việt</title>
           <meta name='description' content='Học Free' />
           <meta name='google-site-verification' content='T9IaRbRYVAYLaOMteD3gLMso6FUu62Kkyu7ORBpDrqw' />
         </Helmet>
