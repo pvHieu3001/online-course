@@ -1,7 +1,7 @@
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Pagination } from 'antd' // <-- import Pagination của antd
+import { Pagination } from 'antd'
 import TabCategory from '../components/TabCategory'
 import { courseActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
@@ -47,6 +47,10 @@ function PageCourse() {
       <div className='bg-gray-100 min-h-screen pb-16'>
         <Helmet>
           <title>Học Free || Tất cả khóa học</title>
+          <meta
+            name='description'
+            content='Khám phá tất cả khóa học miễn phí trên Học Free — học lập trình, thiết kế, marketing và nhiều lĩnh vực khác hoàn toàn miễn phí.'
+          />
         </Helmet>
         <div className='flex flex-col lg:flex-row gap-6 max-w-[1300px] mx-auto'>
           <div className='min-h-screen w-full lg:w-[80%] bg-white flex-1 bg-white rounded-lg shadow-md p-6'>

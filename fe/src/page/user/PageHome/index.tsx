@@ -10,6 +10,7 @@ import Description from './Description'
 import Link from 'antd/es/typography/Link'
 import { getImageUrl } from '@/utils/getImageUrl'
 import HandleLoading from '@/page/admin/components/util/HandleLoading'
+import { Helmet } from 'react-helmet-async'
 
 function PageHome() {
   const dispatch = useDispatch()
@@ -29,6 +30,13 @@ function PageHome() {
 
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
+      <Helmet>
+        <title>Website Chia Sẻ Tài Liệu Miễn Phí - Kho học liệu chất lượng cho người Việt</title>
+        <meta
+          name='description'
+          content='Nền tảng Học Free chia sẻ tài liệu học tập miễn phí, đa lĩnh vực — giúp sinh viên, giáo viên và người học Việt Nam tiếp cận nguồn học liệu chất lượng, dễ dàng và nhanh chóng.'
+        />
+      </Helmet>
       <div className='bg-gray-100 min-h-screen pb-16'>
         <main className='flex flex-col lg:flex-row gap-6 max-w-[1300px] mx-auto'>
           <section

@@ -96,6 +96,10 @@ function CategoryDetailPage() {
       <div className='bg-gray-100 py-8 min-h-screen px-4'>
         <Helmet>
           <title>Học Free || {category.name}</title>
+          <meta
+            name='description'
+            content={`Khám phá các khóa học miễn phí về ${category.name} trên Học Free — học từ cơ bản đến nâng cao, phù hợp cho người mới bắt đầu và người muốn nâng cao kỹ năng.`}
+          />
         </Helmet>
         <div className='max-w-7xl mx-auto'>
           <div className='flex flex-col lg:flex-row gap-8'>

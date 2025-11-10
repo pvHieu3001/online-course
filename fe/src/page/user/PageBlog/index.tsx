@@ -85,6 +85,10 @@ function PageBlog() {
       <div className='bg-gray-100 min-h-screen'>
         <Helmet>
           <title>Học Free || {title}</title>
+          <meta
+            name='description'
+            content={`Đọc bài viết "${title}" trên Học Free để khám phá kiến thức mới về lập trình, thiết kế, marketing và nhiều lĩnh vực khác.`}
+          />
         </Helmet>
         {Array.isArray(recommendList) && recommendList.length > 0 && (
           <div className='w-full flex justify-center items-center'>
