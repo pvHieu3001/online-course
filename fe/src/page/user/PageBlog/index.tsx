@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom'
+import TabCategory from '../components/TabCategory'
 
 function PageBlog() {
   const location = useLocation()
@@ -123,12 +124,14 @@ function PageBlog() {
           <div className='flex flex-col lg:flex-row gap-6 max-w-[1300px] mx-auto'>
             <div className='min-h-screen w-full lg:w-[80%] bg-white flex-1 bg-white rounded-lg shadow-md p-6'>
               <div className='flex flex-col items-start gap-4 border-b border-gray-200 pb-4 mb-2 md:flex-row md:items-center md:justify-between'>
-                <h2 className='text-xl font-bold text-gray-800'>Bài Viết Nổi Bật</h2>
+                <div>
+                  <div className='text-xl font-semibold text-indigo-600 mb-2'>Tất cả bài viết</div>
+                </div>
                 <Input
                   placeholder='Tìm kiếm bài viết...'
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className='w-full md:w-72' // Chiều rộng linh hoạt
+                  className='w-full md:w-72'
                   allowClear
                 />
               </div>
@@ -139,18 +142,16 @@ function PageBlog() {
                     <div
                       onClick={() => handleDetail(article.slug)}
                       key={index}
-                      className='bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden cursor-pointer flex flex-col sm:flex-row'
+                      className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4'
                     >
                       <img
                         src={getImageUrl(article?.image || '/default-image.jpg')}
                         alt={article?.title || 'Không có tiêu đề'}
-                        className='w-full sm:w-1/3 h-48 object-cover rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none'
+                        className='w-100 h-40 object-cover rounded-md flex-shrink-0'
                         loading='lazy'
                       />
                       <div className='p-5 flex-1'>
-                        <h2 className='text-xl font-semibold text-black mb-2 hover:underline'>
-                          {article?.title || 'Tiêu đề chưa có'}
-                        </h2>
+                        <h2 className='text-lg font-semibold text-gray-800'>{article?.title || 'Tiêu đề chưa có'}</h2>
                         <p className='text-sm text-gray-500'>
                           ✍️ {getFullName(article?.updatedBy?.firstname, article?.updatedBy?.lastname)} • 🗓️{' '}
                           {formatDateTimeString(article?.updatedAt) || 'Chưa cập nhật'}
@@ -163,6 +164,9 @@ function PageBlog() {
                 <p className='text-gray-500 italic'>Không có bài viết nào để hiển thị.</p>
               )}
             </div>
+            <aside className='w-full lg:w-[20%] sticky top-4' role='complementary'>
+              <TabCategory />
+            </aside>
           </div>
         </div>
       </div>

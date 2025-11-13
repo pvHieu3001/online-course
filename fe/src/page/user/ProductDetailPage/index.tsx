@@ -46,9 +46,14 @@ function ProductDetailPage() {
 
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
-      <div className='min-h-screen max-w-7xl mx-auto mt-8 px-4 flex flex-col lg:flex-row gap-8'>
+      <div className='min-h-screen max-w-7xl mx-auto px-4 flex flex-col lg:flex-row gap-8'>
         <Helmet>
-          <title>Học Free || Chi Tiết</title>
+          <title>Học Free || {course?.name ?? ''} </title>
+          <meta
+            key='description'
+            name='description'
+            content={`Khám phá chi tiết khóa học ${course?.name} tại Học Free. Đăng ký ngay để học thêm kiến thức mới và nâng cao kỹ năng của bạn.`}
+          />
         </Helmet>
         <div className='lg:w-[80%] w-full'>
           <nav aria-label='Breadcrumb' className='mt-6'>
