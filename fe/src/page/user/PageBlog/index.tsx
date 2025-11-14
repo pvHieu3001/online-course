@@ -5,7 +5,6 @@ import HandleLoading from '@/page/admin/components/util/HandleLoading'
 import { formatDateTimeString, getFullName } from '@/utils/formatDate'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { AnyAction } from '@reduxjs/toolkit'
-import { Input } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,7 +15,6 @@ function PageBlog() {
   const location = useLocation()
   const prevContent = useRef('')
   const [title, setTitle] = useState('Văn Hóa Công Nghệ')
-  const [searchQuery, setSearchQuery] = useState('')
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -69,13 +67,13 @@ function PageBlog() {
 
     if (prevContent.current !== type) {
       prevContent.current = type
-      dispatch(blogActions.getBlogByType(type, searchQuery) as unknown as AnyAction)
+      dispatch(blogActions.getBlogByType(type, '') as unknown as AnyAction)
     }
-  }, [location.pathname, dispatch, searchQuery])
+  }, [location.pathname, dispatch])
 
   useEffect(() => {
-    dispatch(blogActions.getBlogByType(prevContent.current, searchQuery) as unknown as AnyAction)
-  }, [location.pathname, dispatch, searchQuery])
+    dispatch(blogActions.getBlogByType(prevContent.current, '') as unknown as AnyAction)
+  }, [location.pathname, dispatch])
 
   const handleDetail = (slug: string) => {
     navigate(`/bai-viet/${slug}`)
@@ -127,13 +125,6 @@ function PageBlog() {
                 <div>
                   <div className='text-xl font-semibold text-indigo-600 mb-2'>Tất cả bài viết</div>
                 </div>
-                <Input
-                  placeholder='Tìm kiếm bài viết...'
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className='w-full md:w-72'
-                  allowClear
-                />
               </div>
 
               {dataList && dataList.length > 0 ? (

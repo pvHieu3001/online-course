@@ -38,7 +38,7 @@ function TabBlogCategory() {
 
   const handleSearch = (e: React.FormEvent) => {
     if (e) e.preventDefault()
-    router(`/tim-kiem?search=${encodeURIComponent(keyword)}`)
+    router(`/tim-kiem-bai-viet?search=${encodeURIComponent(keyword)}`)
   }
 
   return (

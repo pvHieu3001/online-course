@@ -32,6 +32,7 @@ import AffiliateManagement from '@/page/admin/affiliate'
 import AddAffiliate from '@/page/admin/affiliate/_components/add'
 import EditAffiliate from '@/page/admin/affiliate/_components/edit'
 import AccountManagement from '@/page/admin/account'
+import PageBlogSearch from '@/page/user/PageBlogSearch'
 
 export default function Router() {
   return (
@@ -43,6 +44,7 @@ export default function Router() {
           <Route path='' element={<Base />}>
             <Route index element={<PageHome />} />
             <Route path='tim-kiem' element={<PageSearch />} />
+            <Route path='tim-kiem-bai-viet' element={<PageBlogSearch />} />
             <Route path='tat-ca-khoa-hoc' element={<PageCourse />} />
             <Route path='chi-tiet-khoa-hoc/:slug' element={<ProductDetailPage />} />
             <Route path='khoa-hoc-theo-chu-de/:slug' element={<CategoryDetailPage />} />
