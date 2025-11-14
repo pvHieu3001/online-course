@@ -44,6 +44,10 @@ function ProductDetailPage() {
     { name: course?.name, href: `/chi-tiet-khoa-hoc/${slug}` }
   ]
 
+  const handleSearch = (tag: string) => {
+    navigate(`/tim-kiem?tag=${encodeURIComponent(tag)}`)
+  }
+
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <div className='min-h-screen max-w-7xl mx-auto px-4 flex flex-col lg:flex-row gap-8'>
@@ -94,6 +98,9 @@ function ProductDetailPage() {
                 {course.tags?.map((tag) => (
                   <span
                     key={tag.id}
+                    onClick={() => {
+                      handleSearch(tag.name)
+                    }}
                     className='cursor-pointer rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-300'
                   >
                     {tag.name}

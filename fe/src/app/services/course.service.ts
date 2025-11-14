@@ -5,7 +5,8 @@ function getCourses(
   search?: string,
   isDisplayHot?: string,
   currentPage?: number,
-  coursesPerPage?: number
+  coursesPerPage?: number,
+  tag?: string
 ) {
   currentPage = currentPage ?? 0
   coursesPerPage = coursesPerPage ?? 15
@@ -14,6 +15,8 @@ function getCourses(
       status +
       '&search=' +
       search +
+      '&tag=' +
+      tag +
       '&isDisplayHot=' +
       isDisplayHot +
       '&page=' +

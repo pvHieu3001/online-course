@@ -16,14 +16,15 @@ import HandleLoading from '@/page/admin/components/util/HandleLoading'
 function PageSearch() {
   const query = useQuery()
   const search = query.get('search') || ''
+  const tag = query.get('tag') || ''
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const { dataList, isLoading, error_message } = useSelector((state: RootState) => state.course)
 
   useEffect(() => {
-    dispatch(courseActions.getCourses('active', search, '') as unknown as AnyAction)
-  }, [dispatch, search])
+    dispatch(courseActions.getCourses('active', search, '', undefined, undefined, tag) as unknown as AnyAction)
+  }, [dispatch, search, tag])
 
   const handleDetail = (slug: string) => {
     const course = dataList.find((c: IProduct) => c.slug === slug)

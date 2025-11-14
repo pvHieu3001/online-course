@@ -21,12 +21,19 @@ import {
 } from '../slices/course.reducer'
 
 export const getCourses =
-  (status?: string, search?: string, isDisplayHot?: string, currentPage?: number, coursesPerPage?: number) =>
+  (
+    status?: string,
+    search?: string,
+    isDisplayHot?: string,
+    currentPage?: number,
+    coursesPerPage?: number,
+    tag?: string
+  ) =>
   (dispatch: Dispatch) => {
     dispatch(isFetching())
 
     return courseServices
-      .getCourses(status, search, isDisplayHot, currentPage, coursesPerPage)
+      .getCourses(status, search, isDisplayHot, currentPage, coursesPerPage, tag)
       .then((res) => {
         dispatch(getCoursesSuccessFully(res.data))
         return res

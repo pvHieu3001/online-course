@@ -80,6 +80,7 @@ public class CourseController {
             @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
+            @RequestParam(required = false) String tag,
             @RequestParam(required = false) String isDisplayHot,
             HttpServletRequest request) {
         logService.save(env, request, LOG_VIEW_COURSE, LOG_ACTION_GET_ALL_COURSE, HttpMethod.GET.name());
@@ -90,6 +91,7 @@ public class CourseController {
         Page<CourseDto> courseDtos = courseService.filterCourse(
                 (status != null && !status.isBlank()) ? status : null,
                 (search != null && !search.isBlank()) ? search : null,
+                (tag != null && !tag.isBlank()) ? tag : null,
                 displayHot,
                 pageable
         ).map(course -> {

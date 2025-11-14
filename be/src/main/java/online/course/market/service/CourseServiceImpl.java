@@ -192,8 +192,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Course> filterCourse(String status, String search, Boolean isDisplayHot, Pageable pageable) {
-        return courseRepository.filterCourse(status, search, isDisplayHot, pageable);
+    public Page<Course> filterCourse(String status, String search, String tag, Boolean isDisplayHot, Pageable pageable) {
+        return courseRepository.filterCourse(status, search, tag, isDisplayHot, pageable);
     }
 
     @Override

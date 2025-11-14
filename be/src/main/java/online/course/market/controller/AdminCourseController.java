@@ -116,7 +116,7 @@ public class AdminCourseController {
         Page<CourseDto> getCourseDtos = courseService.filterCourse(
                         !String.valueOf(status).isEmpty() ? status : null,
                         !String.valueOf(search).isEmpty() ? search : null,
-                        displayHot, pageable
+                        null, displayHot, pageable
                 ).map(this::toDto);
 
 

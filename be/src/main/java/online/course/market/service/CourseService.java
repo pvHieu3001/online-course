@@ -20,7 +20,7 @@ public interface CourseService {
 	List<Course> getByCategoryId(Integer categoryId);
     Course getBySlug(String slug);
 	Course getCourseBySlug(String slug);
-	Page<Course> filterCourse(String status, String search, Boolean isDisplayHot, Pageable pageable);
+	Page<Course> filterCourse(String status, String search, String tag, Boolean isDisplayHot, Pageable pageable);
 	List<QuickViewCourseGetResponse> getQuickViewCourse();
 	Long count();
 }
