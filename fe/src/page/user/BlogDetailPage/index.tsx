@@ -11,7 +11,7 @@ import HandleLoading from '@/page/admin/components/util/HandleLoading'
 import LoadingPage from '@/page/admin/components/util/LoadingPage'
 import { Helmet } from 'react-helmet-async'
 import { getBlogInfoByType } from '@/utils/getBlogInfo'
-import TabCategory from '../components/TabCategory'
+import TabBlogCategory from '../components/TabBlogCategory'
 
 function BlogDetailPage() {
   const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
@@ -195,7 +195,7 @@ function BlogDetailPage() {
           </div>
         </div>
         <aside className='w-full lg:w-[20%] sticky top-4' role='complementary'>
-          <TabCategory />
+          <TabBlogCategory />
         </aside>
       </div>
     </HandleLoading>

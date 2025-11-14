@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate, useOutletContext } from 'react-router-dom'
-import TabCategory from '../components/TabCategory'
+import TabBlogCategory from '../components/TabBlogCategory'
 
 function PageBlog() {
   const location = useLocation()
@@ -165,7 +165,7 @@ function PageBlog() {
               )}
             </div>
             <aside className='w-full lg:w-[20%] sticky top-4' role='complementary'>
-              <TabCategory />
+              <TabBlogCategory />
             </aside>
           </div>
         </div>
