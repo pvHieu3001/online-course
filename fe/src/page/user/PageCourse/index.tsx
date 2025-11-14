@@ -29,7 +29,7 @@ function PageCourse() {
   }, [setIsShowRecommendCourses])
 
   useEffect(() => {
-    dispatch(courseActions.getCourses('active', '', '', currentPage - 1, coursesPerPage) as unknown as AnyAction)
+    dispatch(courseActions.getCourses('active', '', '', currentPage - 1, coursesPerPage, '') as unknown as AnyAction)
   }, [dispatch, currentPage, coursesPerPage])
 
   // Handle course item click
