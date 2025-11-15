@@ -22,16 +22,10 @@ function PageStock() {
         to: toTimestamp
       }
 
-      const API_URL = `/chart/history`
+      const API_URL = `/tradingview/history?symbol=VNINDEX&resolution=D&from=${fromTimestamp}&to=${toTimestamp}`
 
       try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(requestBody)
-        })
+        const response = await fetch(API_URL)
         const data = await response.json()
 
         if (data && data.t && data.c) {
