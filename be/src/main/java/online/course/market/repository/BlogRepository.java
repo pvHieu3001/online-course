@@ -17,11 +17,13 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
             "WHERE (:status IS NULL OR c.status = :status) " +
             "AND (:search IS NULL OR LOWER(c.title) LIKE LOWER(CONCAT('%', :search, '%'))) " +
             "AND (:isDisplayHot IS NULL OR c.isDisplayHot = :isDisplayHot)" +
-            "AND (:type IS NULL OR c.type = :type)")
+            "AND (:type IS NULL OR c.type = :type)"+
+            "AND (:tag IS NULL OR EXISTS (SELECT t FROM c.tags t WHERE t.name = :tag))")
     List<Blog> filterBlog(@Param("type") String type,
                           @Param("status") Boolean status,
                           @Param("search") String search,
-                          @Param("isDisplayHot") Boolean isDisplayHot);
+                          @Param("isDisplayHot") Boolean isDisplayHot,
+                          @Param("tag") String tag);
 
     @Query("SELECT c FROM Blog c " +
             "WHERE c.status = true " +

@@ -1,7 +1,7 @@
 import http from '../http-common'
 
-function getBlogs(search: string) {
-  return http.get('/api/v1/user/blog?search=' + search)
+function getBlogs(search: string, tag: string) {
+  return http.get('/api/v1/user/blog?search=' + search + '&tag=' + tag)
 }
 function getAdminBlogs(status: string, search: string, isDisplayHot: string) {
   return http.get('/api/v1/admin/blog?status=' + status + '&search=' + search + '&isDisplayHot=' + isDisplayHot)

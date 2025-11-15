@@ -20,11 +20,11 @@ import {
   getBySlugSuccessFailure
 } from '../slices/blog.reducer'
 
-export const getBlogs = (searchValue: string) => (dispatch: Dispatch) => {
+export const getBlogs = (searchValue: string, tag: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return blogServices
-    .getBlogs(searchValue)
+    .getBlogs(searchValue, tag)
     .then((res) => {
       dispatch(getBlogSuccessFully(res.data))
       return res

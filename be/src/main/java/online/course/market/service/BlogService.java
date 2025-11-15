@@ -16,7 +16,7 @@ public interface BlogService {
     Blog update(Blog blog, Integer id);
     void deleteById(Integer id);
     List<Blog> getByType(String type);
-    List<Blog> filterBlog(String type, Boolean status, String search, Boolean isDisplayHot);
+    List<Blog> filterBlog(String type, Boolean status, String search, Boolean isDisplayHot, String tag);
     List<Blog> getRecommendBlog(String type);
     Long count();
 }

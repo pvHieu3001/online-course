@@ -24,7 +24,7 @@ function PageBlogSearch() {
   const { dataList, isLoading, error_message } = useSelector((state: RootState) => state.blog)
 
   useEffect(() => {
-    dispatch(blogActions.getBlogs(search) as unknown as AnyAction)
+    dispatch(blogActions.getBlogs(search, tag) as unknown as AnyAction)
   }, [dispatch, search, tag])
 
   const handleDetail = (slug: string) => {

@@ -70,8 +70,8 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Blog> filterBlog(String type, Boolean status, String search, Boolean isDisplayHot) {
-        return blogRepository.filterBlog(type, status, search, isDisplayHot);
+    public List<Blog> filterBlog(String type, Boolean status, String search, Boolean isDisplayHot, String tag) {
+        return blogRepository.filterBlog(type, status, search, isDisplayHot, tag);
     }
 
     @Override

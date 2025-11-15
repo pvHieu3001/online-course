@@ -56,11 +56,13 @@ public class BlogController {
 
     @Operation(description = "Get all endpoint for Blog", summary = "Get all Blog")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<BlogDto>>> getAll(@RequestParam(required = false) String search, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<List<BlogDto>>> getAll(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String tag,
+            HttpServletRequest request) {
         logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG, HttpMethod.GET.name());
-        List<BlogDto> dtos = blogService.getAll().stream()
-                .filter(Blog -> search == null || search.isEmpty() || Blog.getTitle().toLowerCase().contains(search.toLowerCase()))
-                .map(this::toDto).collect(Collectors.toList());
+        List<BlogDto> dtos = blogService.filterBlog(null, true, search, null, tag)
+                .stream().map(this::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(dtos));
     }
 
@@ -84,7 +86,7 @@ public class BlogController {
     @GetMapping("/type/{type}")
     public ResponseEntity<ApiResponse<BlogGetByTypeResponse>> filterBlog(@PathVariable String type, @RequestParam(required = false) String search, HttpServletRequest request) {
         logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG, HttpMethod.GET.name());
-        List<BlogDto> blogList = blogService.filterBlog(type, true, search, null).stream().map((blog)->{
+        List<BlogDto> blogList = blogService.filterBlog(type, true, search, null, null).stream().map((blog)->{
             BlogDto blogDto = modelMapper.map(blog, BlogDto.class);
             if(blog.getUpdatedBy()!= null){
                 UserDto userDto = modelMapper.map(blog.getUpdatedBy(), UserDto.class);

@@ -81,7 +81,7 @@ public class AdminBlogController {
                 null,
                 !String.valueOf(status).isEmpty() ? DataUtils.convertStatus(status) : null,
                 !String.valueOf(search).isEmpty() ? search : null,
-                displayHot
+                displayHot, null
         ).stream()
                 .filter(blog -> search == null || search.isEmpty() || blog.getTitle().toLowerCase().contains(search.toLowerCase()))
                 .map(this::toDto).collect(Collectors.toList());

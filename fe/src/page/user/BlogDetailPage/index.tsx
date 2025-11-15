@@ -61,6 +61,10 @@ function BlogDetailPage() {
     { name: blogData?.title, href: `/bai-viet/${slug}` }
   ]
 
+  const handleSearch = (tag: string) => {
+    navigate(`/tim-kiem-bai-viet?tag=${encodeURIComponent(tag)}`)
+  }
+
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <Helmet>
@@ -134,6 +138,9 @@ function BlogDetailPage() {
                 {blogData.tags?.map((tag) => (
                   <span
                     key={tag.id}
+                    onClick={() => {
+                      handleSearch(tag.name)
+                    }}
                     className='cursor-pointer rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-300'
                   >
                     {tag.name}
