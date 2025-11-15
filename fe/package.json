@@ -110,5 +110,5 @@
   "engines": {
     "node": ">=20.19.0"
   },
-  "proxy": "https://bgapidatafeed.vps.com.vn"
+  "proxy": "https://histdatafeed.vps.com.vn"
 }
