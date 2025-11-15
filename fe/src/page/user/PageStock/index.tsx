@@ -15,14 +15,7 @@ function PageStock() {
       const toTimestamp = Math.floor(Date.now() / 1000) // Unix timestamp (giây)
       const fromTimestamp = toTimestamp - 90 * 24 * 60 * 60 // 90 ngày trước
 
-      const requestBody = {
-        symbol: 'VNINDEX',
-        resolution: 'D',
-        from: fromTimestamp,
-        to: toTimestamp
-      }
-
-      const API_URL = `/tradingview/history?symbol=VNINDEX&resolution=D&from=${fromTimestamp}&to=${toTimestamp}`
+      const API_URL = `https://bgapidatafeed.vps.com.vn/tradingview/history?symbol=VNINDEX&resolution=D&from=${fromTimestamp}&to=${toTimestamp}`
 
       try {
         const response = await fetch(API_URL)
