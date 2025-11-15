@@ -15,6 +15,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/charts": "^2.6.6",
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.19.0",
     "@emotion/react": "^11.11.4",
@@ -43,7 +44,7 @@
     "@types/lodash": "^4.17.5",
     "@types/xlsx": "^0.0.36",
     "@uidotdev/usehooks": "^2.4.1",
-    "antd": "^5.19.2",
+    "antd": "^5.28.1",
     "apexcharts": "^4.0.0",
     "axios": "^1.6.8",
     "chart.js": "^4.4.2",
@@ -108,5 +109,6 @@
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
   "engines": {
     "node": ">=20.19.0"
-  }
+  },
+  "proxy": "https://apipub.tcbs.com.vn"
 }

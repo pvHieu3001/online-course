@@ -33,6 +33,7 @@ import AddAffiliate from '@/page/admin/affiliate/_components/add'
 import EditAffiliate from '@/page/admin/affiliate/_components/edit'
 import AccountManagement from '@/page/admin/account'
 import PageBlogSearch from '@/page/user/PageBlogSearch'
+import PageStock from '@/page/user/PageStock'
 
 export default function Router() {
   return (
@@ -52,6 +53,7 @@ export default function Router() {
             <Route path='san-pham-cong-nghe' element={<PageBlog />} />
             <Route path='crypto' element={<PageBlog />} />
             <Route path='chung-khoan' element={<PageBlog />} />
+            <Route path='bang-gia-chung-khoan' element={<PageStock />} />
             <Route path='thu-thuat-huu-ich' element={<PageBlog />} />
             <Route path='suu-tam' element={<PageBlog />} />
             <Route path='bai-viet/:slug' element={<BlogDetailPage />} />
