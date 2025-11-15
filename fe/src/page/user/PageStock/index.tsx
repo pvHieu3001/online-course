@@ -22,7 +22,7 @@ function PageStock() {
         to: toTimestamp
       }
 
-      const API_URL = `https://bgapidatafeed.vps.com.vn/chart/history`
+      const API_URL = `/chart/history`
 
       try {
         const response = await fetch(API_URL, {
