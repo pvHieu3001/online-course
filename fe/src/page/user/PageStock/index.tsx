@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Typography, Spin } from 'antd';
-import StockChart from './StockChart';
-import { RiseOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react'
+import { Card, Typography, Spin } from 'antd'
+import StockChart from './StockChart'
+import { RiseOutlined } from '@ant-design/icons'
 
 const { Title } = Typography
 
@@ -15,23 +15,33 @@ function PageStock() {
       const toTimestamp = Math.floor(Date.now() / 1000) // Unix timestamp (giây)
       const fromTimestamp = toTimestamp - 90 * 24 * 60 * 60 // 90 ngày trước
 
-      const API_URL = `https://apipub.tcbs.com.vn/stock-insight/v2/stock/bars?ticker=VNINDEX&resolution=D&from=${fromTimestamp}&to=${toTimestamp}`
+      const requestBody = {
+        symbol: 'VNINDEX',
+        resolution: 'D',
+        from: fromTimestamp,
+        to: toTimestamp
+      }
+
+      const API_URL = `https://bgapidatafeed.vps.com.vn/chart/history`
 
       try {
-        const response = await fetch(API_URL)
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        })
         const data = await response.json()
 
-        // 2. Chuyển đổi dữ liệu
-        // API của TCBS trả về data hơi khác, cần "biến hình" (transform)
-        // data.t là mảng các timestamp
-        // data.c là mảng các giá đóng cửa (Close)
         if (data && data.t && data.c) {
           const formattedData = data.t.map((timestamp, index) => ({
-            // Chuyển đổi timestamp (giây) sang ngày tháng
             time: new Date(timestamp * 1000).toLocaleDateString('vi-VN'),
             price: data.c[index] // Lấy giá đóng cửa
           }))
           setChartData(formattedData)
+        } else {
+          console.error('Cấu trúc data trả về không như mong đợi:', data)
         }
       } catch (error) {
         console.error('Lỗi khi fetch data:', error)

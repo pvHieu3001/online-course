@@ -110,5 +110,5 @@
   "engines": {
     "node": ">=20.19.0"
   },
-  "proxy": "https://apipub.tcbs.com.vn"
+  "proxy": "https://bgapidatafeed.vps.com.vn"
 }
