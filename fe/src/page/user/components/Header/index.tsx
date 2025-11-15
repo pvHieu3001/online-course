@@ -53,7 +53,8 @@ const Header = (props: Props) => {
     { label: 'TÀI CHÍNH', href: '/chung-khoan' },
     { label: 'CRYPTO', href: '/crypto' },
     { label: 'TIỆN ÍCH', href: '/thu-thuat-huu-ich' },
-    { label: 'SƯU TẦM', href: '/suu-tam' }
+    { label: 'SƯU TẦM', href: '/suu-tam' },
+    { label: 'BẢNG GIÁ CHỨNG KHOÁN', href: '/bang-gia-chung-khoan' }
   ]
 
   const handleDetail = (course: IProduct) => {
