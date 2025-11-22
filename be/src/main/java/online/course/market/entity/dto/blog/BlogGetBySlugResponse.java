@@ -11,4 +11,5 @@ import java.util.List;
 public class BlogGetBySlugResponse {
     private BlogDto blog;
     private List<BlogDto> relatedBlogs;
+    private List<BlogDto> blogRecommendList;
 } 

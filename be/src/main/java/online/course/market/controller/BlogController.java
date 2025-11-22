@@ -77,8 +77,10 @@ public class BlogController {
         }
 
         List<BlogDto> blogs = blogService.getByType(blog.getType()).stream().filter(b -> !b.getSlug().equals(slug)).map(this::toDto).toList();
+        List<BlogDto> blogRecommendList = blogService.getRecommendBlog(blog.getType).stream().map(this::toDto).toList();
         response.setBlog(modelMapper.map(blog, BlogDto.class));
         response.setRelatedBlogs(blogs);
+        response.setBlogRecommendList(blogRecommendList);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 

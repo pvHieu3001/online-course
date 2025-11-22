@@ -36,12 +36,6 @@ function BlogDetailPage() {
   }, [dispatch, setIsShowRecommendCourses, slug])
 
   useEffect(() => {
-    if (blogData) {
-      dispatch(blogActions.getBlogByType(blogData.type, '') as unknown as AnyAction)
-    }
-  }, [blogData, dispatch])
-
-  useEffect(() => {
     if (relatedDatas && relatedDatas.length > 0) {
       setRelatedBlogs(relatedDatas.slice())
     }

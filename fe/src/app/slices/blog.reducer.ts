@@ -49,6 +49,7 @@ const blogSlice = createSlice({
     getBySlugSuccessFully: (state, { payload }) => {
       state.data = payload.data.blog
       state.relatedPosts = payload.data.relatedBlogs
+      state.recommendList = payload.data.blogRecommendList
       state.isLoading = false
     },
     getBySlugSuccessFailure: (state, { payload }) => {
