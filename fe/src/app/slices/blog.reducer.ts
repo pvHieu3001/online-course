@@ -26,6 +26,8 @@ const blogSlice = createSlice({
       state.error_message = ''
       state.data = null as unknown as IBlog
       state.dataList = []
+      state.recommendList = []
+      state.blogRecommendList = []
     },
     fetchedDone: (state) => {
       state.isLoading = false
