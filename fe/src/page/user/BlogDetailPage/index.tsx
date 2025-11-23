@@ -30,6 +30,7 @@ function BlogDetailPage() {
   useEffect(() => {
     if (slug) {
       dispatch(blogActions.resetBlog() as unknown as AnyAction)
+      setRelatedBlogs([])
       dispatch(blogActions.getBlogBySlug(slug) as unknown as AnyAction)
     }
     setIsShowRecommendCourses(false)
