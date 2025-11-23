@@ -27,7 +27,7 @@ const blogSlice = createSlice({
       state.data = null as unknown as IBlog
       state.dataList = []
       state.recommendList = []
-      state.blogRecommendList = []
+      state.relatedPosts = []
     },
     fetchedDone: (state) => {
       state.isLoading = false
