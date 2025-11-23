@@ -25,22 +25,14 @@ function BlogDetailPage() {
     isLoading,
     error_message
   } = useSelector((state: RootState) => state.blog)
-  const [relatedBlogs, setRelatedBlogs] = useState<IBlog[]>()
 
   useEffect(() => {
     if (slug) {
       dispatch(blogActions.resetBlog() as unknown as AnyAction)
-      setRelatedBlogs([])
       dispatch(blogActions.getBlogBySlug(slug) as unknown as AnyAction)
     }
     setIsShowRecommendCourses(false)
   }, [dispatch, setIsShowRecommendCourses, slug])
-
-  useEffect(() => {
-    if (relatedDatas && relatedDatas.length > 0) {
-      setRelatedBlogs(relatedDatas.slice())
-    }
-  }, [relatedDatas])
 
   const handleDetail = (slug: string) => {
     navigate(`/bai-viet/${slug}`)
@@ -172,9 +164,9 @@ function BlogDetailPage() {
               <section className='mt-16 border-t pt-10'>
                 <h3 className='text-xl font-semibold mb-6'>Bài viết liên quan</h3>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-                  {relatedBlogs &&
-                    relatedBlogs.length > 0 &&
-                    relatedBlogs.map((post, index) => (
+                  {relatedDatas &&
+                    relatedDatas.length > 0 &&
+                    relatedDatas.map((post, index) => (
                       <div
                         onClick={() => {
                           handleDetail(post.slug)
