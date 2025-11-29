@@ -70,7 +70,9 @@ function AddProduct() {
         courseActions.getAdminCourses(
           query.get('status') ?? '',
           query.get('search') ?? '',
-          query.get('isHot') ?? ''
+          query.get('isHot') ?? '',
+          Number.parseInt(query.get('page') ?? '0'),
+          10
         ) as unknown as AnyAction
       )
       popupSuccess('Thêm khóa học thành công')
@@ -86,7 +88,9 @@ function AddProduct() {
       courseActions.getAdminCourses(
         query.get('status') ?? '',
         query.get('search') ?? '',
-        query.get('isHot') ?? ''
+        query.get('isHot') ?? '',
+        Number.parseInt(query.get('page') ?? '0'),
+        10
       ) as unknown as AnyAction
     )
     navigate('..')

@@ -151,7 +151,7 @@ export default function ListProduct() {
           <Link to={`/chi-tiet-khoa-hoc/${record.slug}`}>
             <Button icon={<EyeOutlined />} />
           </Link>
-          <Link to={'' + record.id + `?status=${active}&isHot=${isHot}&search=${searchValue}`}>
+          <Link to={'' + record.id + `?status=${active}&isHot=${isHot}&search=${searchValue}&page=${currentPage - 1}`}>
             <Button type='primary'>Sửa</Button>
           </Link>
           <Popconfirm
@@ -232,7 +232,7 @@ export default function ListProduct() {
           </Button>
         </div>
 
-        <Link to={`add?status=${active}&isHot=${isHot}&search=${searchValue}`}>
+        <Link to={`add?status=${active}&isHot=${isHot}&search=${searchValue}&page=${currentPage - 1}`}>
           <Button type='primary'>Thêm khóa học</Button>
         </Link>
       </Flex>

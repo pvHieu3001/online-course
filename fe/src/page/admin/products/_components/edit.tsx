@@ -131,7 +131,9 @@ function EditProduct() {
         courseActions.getAdminCourses(
           query.get('status') ?? '',
           query.get('search') ?? '',
-          query.get('isHot') ?? ''
+          query.get('isHot') ?? '',
+          Number.parseInt(query.get('page') ?? '0'),
+          10
         ) as unknown as AnyAction
       )
       popupSuccess('Cập nhật khóa học thành công')
@@ -147,7 +149,9 @@ function EditProduct() {
       courseActions.getAdminCourses(
         query.get('status') ?? '',
         query.get('search') ?? '',
-        query.get('isHot') ?? ''
+        query.get('isHot') ?? '',
+        Number.parseInt(query.get('page') ?? '0'),
+        10
       ) as unknown as AnyAction
     )
     navigator('..')
