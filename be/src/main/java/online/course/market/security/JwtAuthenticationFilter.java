@@ -45,6 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			Pattern.compile("^/api/v1/user/course.*$"),
 			Pattern.compile("^/api/v1/user/category.*$"),
 			Pattern.compile("^/api/v1/user/blog.*$"),
+			Pattern.compile("^/v3/api-docs.*$"),
+			Pattern.compile("^/webjars/.*$"),
+			Pattern.compile("^/swagger-ui/.*$"),
+			Pattern.compile("^/swagger-ui.html$"),
 			Pattern.compile(".*/user/affiliate.*$"));
 
 	private boolean isWhitelisted(String path) {
