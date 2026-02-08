@@ -8,6 +8,7 @@ import online.course.market.entity.model.UserModel;
 
 public interface UserService {
 	UserModel getById(final Long id);
+	UserModel getByPhoneNumber(String userName);
 	UserModel getByUserName(String userName);
 	List<UserModel> getAll();
 	UserModel save(final UserModel user);

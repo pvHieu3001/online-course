@@ -28,6 +28,7 @@ public class UserModel  extends BaseEntity implements UserDetails {
 	private Long id;
 	private String firstname;
 	private String lastname;
+	private String phonenumber;
 	private String username;
 	@JsonIgnore
 	private String password;	

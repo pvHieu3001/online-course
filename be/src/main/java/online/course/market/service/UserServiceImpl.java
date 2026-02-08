@@ -32,6 +32,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public UserModel getByPhoneNumber(String phone) {
+		return userRepository.findByPhonenumber(phone).orElseThrow(
+				() -> new CJNotFoundException(CustomCodeException.CODE_400, "user not found with phone "+phone));
+	}
+
+	@Override
 	public UserModel getByUserName(String userName) {
 		return userRepository.findByUsername(userName).orElseThrow(
 				() -> new CJNotFoundException(CustomCodeException.CODE_400, "user not found with username "+userName));
