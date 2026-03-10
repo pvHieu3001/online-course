@@ -3,11 +3,12 @@ package online.course.market.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.microsoft.playwright.*;
-import com.microsoft.playwright.options.WaitForSelectorState;
-import com.microsoft.playwright.options.WaitUntilState;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import online.course.market.entity.dto.thread.ThreadsDownloadResult;
 import online.course.market.entity.model.ThreadEntity;
 import online.course.market.repository.ThreadRepository;
@@ -18,6 +19,8 @@ import org.springframework.web.util.UriUtils;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -87,76 +90,102 @@ public class ThreadsService {
         return String.format(templates[randomIndex], amzLink);
     }
 
-    public ThreadsDownloadResult downloadContent(String threadUrl) {
-        // 1. Dùng try-with-resources cho Playwright để tự đóng tài nguyên
-        try (Playwright playwright = Playwright.create()) {
+    private final OkHttpClient client = new OkHttpClient();
+    private final ObjectMapper mapper = new ObjectMapper();
 
-            BrowserType.LaunchPersistentContextOptions options = new BrowserType.LaunchPersistentContextOptions()
-                    .setHeadless(false) // Để false để tránh bị detect và dễ debug
-                    .setArgs(Arrays.asList(
-                            "--disable-blink-features=AutomationControlled",
-                            "--no-sandbox"
-                    ))
-                    .setViewportSize(null) // Để null nếu dùng --start-maximized
-                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
+    // Header quan trọng để Threads không chặn bạn
+    private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
+    private static final String THREADS_APP_ID = "2382805111822166";
 
-            // 2. Launch Context (Lưu ý: PersistentContext không cần gọi browser.launch nữa)
-            try (BrowserContext context = playwright.chromium().launchPersistentContext(
-                    Paths.get("threads_profile"), options)) {
+    public void downloadContent(String url) {
+        Request request = new Request.Builder()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .header("x-ig-app-id", THREADS_APP_ID) // Trick: Giả lập app web Threads
+                .header("Sec-Fetch-Dest", "document")
+                .header("Sec-Fetch-Mode", "navigate")
+                .build();
 
-                // Chèn script giả lập trình duyệt thật
-                context.addInitScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Lỗi kết nối: " + response);
 
-                Page page = context.newPage();
-                page.navigate(threadUrl);
+            String html = response.body().string();
 
-                // 3. Đợi bài viết xuất hiện (Tăng timeout lên vì Threads load khá nặng)
-                Locator mainArticle = page.locator("article").first();
-                try {
-                    mainArticle.waitFor(new Locator.WaitForOptions()
-                            .setState(WaitForSelectorState.VISIBLE)
-                            .setTimeout(15000));
-                } catch (PlaywrightException e) {
-                    System.err.println("Không tìm thấy bài viết. Có thể bị chặn hoặc link sai.");
-                    return null;
-                }
+            // 1. Tìm đoạn JSON chứa dữ liệu bài viết (thường nằm trong script chứa "all_items")
+            String jsonString = extractJsonFromHtml(html);
 
-                // 4. Lấy Username (Threads thường để username trong thẻ <a> đầu tiên có text)
-                // Dùng selector an toàn hơn thay vì chỉ tìm trong header
-                String username = mainArticle.locator("a").first().innerText().trim();
-
-                // 5. Lấy Text nội dung
-                // Threads dùng các thẻ span hoặc div với dir="auto" cho nội dung bài viết
-                String text = "";
-                Locator textLocator = mainArticle.locator("div[dir='auto']").first();
-                if (textLocator.count() > 0) {
-                    text = textLocator.innerText();
-                }
-
-                // 6. Lấy Media (Ảnh/Video)
-                List<String> mediaUrls = new ArrayList<>();
-                // Chỉ lấy các ảnh thuộc nội dung bài viết, tránh avatar (thường nhỏ)
-                Locator images = mainArticle.locator("img");
-                for (int i = 0; i < images.count(); i++) {
-                    String src = images.nth(i).getAttribute("src");
-                    // Loại bỏ avatar bằng cách kiểm tra alt hoặc kích thước nếu cần
-                    String alt = images.nth(i).getAttribute("alt");
-                    if (src != null && (alt == null || !alt.contains("profile picture"))) {
-                        if (!mediaUrls.contains(src)) mediaUrls.add(src);
-                    }
-                }
-
-                return ThreadsDownloadResult.builder()
-                        .text(text)
-                        .username(username)
-                        .mediaUrls(mediaUrls)
-                        .build();
+            if (jsonString != null) {
+                parseAndPrintData(jsonString);
+            } else {
+                System.out.println("Không tìm thấy dữ liệu bài viết. Có thể bài đăng riêng tư hoặc link sai.");
             }
+
         } catch (Exception e) {
-            System.err.println("Lỗi hệ thống: " + e.getMessage());
-            e.printStackTrace();
-            return null;
+            System.err.println("Lỗi cào dữ liệu: " + e.getMessage());
         }
+    }
+
+    private String extractJsonFromHtml(String html) {
+        // Regex tìm đoạn JSON nhúng trong HTML của Threads
+        // Thường bắt đầu bằng {"require":[["ScheduledServerJS"...
+        Pattern pattern = Pattern.compile("id=\"__eqmc\"[^>]*>\\s*(.*?)\\s*</script>");
+        // Nếu không tìm thấy bằng ID trên, dùng regex rộng hơn cho các script JSON
+        Matcher matcher = pattern.matcher(html);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+
+        // Backup: Tìm đoạn chứa thông tin media trực tiếp
+        if (html.contains("video_versions")) {
+            // Kỹ thuật cắt chuỗi thủ công nếu Regex phức tạp
+            int start = html.indexOf("{\"video_versions\"");
+            if (start != -1) {
+                int end = html.indexOf("}]}", start) + 3;
+                return html.substring(start, end);
+            }
+        }
+        return null;
+    }
+
+    private void parseAndPrintData(String jsonString) {
+        try {
+            JsonNode root = mapper.readTree(jsonString);
+
+            // Tìm đến node chứa media (Cấu trúc Threads cực kỳ sâu và lồng nhau)
+            // Lưu ý: Cấu trúc JSON của Meta thay đổi liên tục, đây là các field chính:
+
+            // 1. Lấy Caption (Nội dung chữ)
+            String caption = root.findPath("caption").findPath("text").asText();
+            System.out.println("Nội dung: " + caption);
+
+            // 2. Lấy Video (Nếu có)
+            JsonNode videoVersions = root.findPath("video_versions");
+            if (!videoVersions.isMissingNode() && videoVersions.isArray()) {
+                // Phần tử đầu tiên luôn có chất lượng cao nhất
+                String videoUrl = videoVersions.get(0).path("url").asText();
+                System.out.println("Link Video HD: " + videoUrl);
+            }
+
+            // 3. Lấy Ảnh (Nếu có)
+            JsonNode imageVersions = root.findPath("image_versions2").path("candidates");
+            if (!imageVersions.isMissingNode() && imageVersions.isArray()) {
+                String imageUrl = imageVersions.get(0).path("url").asText();
+                System.out.println("Link Ảnh HD: " + imageUrl);
+            }
+
+            // 4. Lấy Username
+            String username = root.findPath("user").path("username").asText();
+            System.out.println("Người đăng: @" + username);
+
+        } catch (Exception e) {
+            System.err.println("Lỗi khi Parse JSON: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        ThreadsDownloader dl = new ThreadsDownloader();
+        // Thay bằng link thực tế bạn muốn test
+        dl.downloadContent("https://www.threads.net/@cristiano/post/C4X9_...");
     }
 
 
