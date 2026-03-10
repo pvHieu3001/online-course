@@ -41,7 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final TokenRepository tokenRepository;
 
 	private static final Set<Pattern> WHITE_LIST_URL = Set.of(
-			Pattern.compile("^/api/v1/nice.*$"),
 			Pattern.compile("^/api/v1/auth.*$"),
 			Pattern.compile("^/api/v1/user/course.*$"),
 			Pattern.compile("^/api/v1/user/category.*$"),
