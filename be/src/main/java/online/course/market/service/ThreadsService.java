@@ -3,6 +3,9 @@ package online.course.market.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.WaitForSelectorState;
+import com.microsoft.playwright.options.WaitUntilState;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.thread.ThreadsDownloadResult;
@@ -13,10 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -26,7 +27,7 @@ public class ThreadsService {
     private final Cloudinary cloudinary;
     private final ThreadRepository repository;
 
-    private final String ACCESS_TOKEN = "";
+    private final String ACCESS_TOKEN = "THAAU0ibZCp5lBBUVRLMnlGVGI2b1ZARMjktMXJYOFV2UXNGU0RrVlVQSFNUUWlnTHNlRDVoaUloN3AxVnhuTm9NeU9oQnBGMEJWOGFqM3VxYXZAhWDdpMWRsc0JvSFB1X2EyWkpEU0ktcjRmMko3ZAElCODhhR2dxNmFGVFpqdkFScm9kcjcwZA2NnOTUzYk9IcDgZD";
     private final String BASE_URL = "https://graph.threads.net/";
 
 
@@ -86,46 +87,78 @@ public class ThreadsService {
         return String.format(templates[randomIndex], amzLink);
     }
 
-
     public ThreadsDownloadResult downloadContent(String threadUrl) {
-        try {
-            String postId = extractPostId(threadUrl);
-            log.info("Đang xử lý bài đăng ID: {}", postId);
+        // 1. Dùng try-with-resources cho Playwright để tự đóng tài nguyên
+        try (Playwright playwright = Playwright.create()) {
 
-            String detailUrl = String.format("%s%s?fields=id,media_type,text,username,timestamp,children{id,media_type,media_url}&access_token=%s",
-                    BASE_URL, postId, ACCESS_TOKEN);
+            BrowserType.LaunchPersistentContextOptions options = new BrowserType.LaunchPersistentContextOptions()
+                    .setHeadless(false) // Để false để tránh bị detect và dễ debug
+                    .setArgs(Arrays.asList(
+                            "--disable-blink-features=AutomationControlled",
+                            "--no-sandbox"
+                    ))
+                    .setViewportSize(null) // Để null nếu dùng --start-maximized
+                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
 
-            JsonNode root = restTemplate.getForObject(detailUrl, JsonNode.class);
-            String mediaType = root.path("media_type").asText();
+            // 2. Launch Context (Lưu ý: PersistentContext không cần gọi browser.launch nữa)
+            try (BrowserContext context = playwright.chromium().launchPersistentContext(
+                    Paths.get("threads_profile"), options)) {
 
-            List<String> mediaUrls = new ArrayList<>();
+                // Chèn script giả lập trình duyệt thật
+                context.addInitScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
 
-            if ("CAROUSEL".equals(mediaType)) {
-                JsonNode children = root.path("children").path("data");
-                for (JsonNode child : children) {
-                    mediaUrls.add(getMediaUrlFromNode(child));
+                Page page = context.newPage();
+                page.navigate(threadUrl);
+
+                // 3. Đợi bài viết xuất hiện (Tăng timeout lên vì Threads load khá nặng)
+                Locator mainArticle = page.locator("article").first();
+                try {
+                    mainArticle.waitFor(new Locator.WaitForOptions()
+                            .setState(WaitForSelectorState.VISIBLE)
+                            .setTimeout(15000));
+                } catch (PlaywrightException e) {
+                    System.err.println("Không tìm thấy bài viết. Có thể bị chặn hoặc link sai.");
+                    return null;
                 }
-            } else {
-                String singleMediaUrl = String.format("%s%s?fields=media_url&access_token=%s", BASE_URL, postId, ACCESS_TOKEN);
-                JsonNode singleRes = restTemplate.getForObject(singleMediaUrl, JsonNode.class);
-                mediaUrls.add(singleRes.path("media_url").asText());
+
+                // 4. Lấy Username (Threads thường để username trong thẻ <a> đầu tiên có text)
+                // Dùng selector an toàn hơn thay vì chỉ tìm trong header
+                String username = mainArticle.locator("a").first().innerText().trim();
+
+                // 5. Lấy Text nội dung
+                // Threads dùng các thẻ span hoặc div với dir="auto" cho nội dung bài viết
+                String text = "";
+                Locator textLocator = mainArticle.locator("div[dir='auto']").first();
+                if (textLocator.count() > 0) {
+                    text = textLocator.innerText();
+                }
+
+                // 6. Lấy Media (Ảnh/Video)
+                List<String> mediaUrls = new ArrayList<>();
+                // Chỉ lấy các ảnh thuộc nội dung bài viết, tránh avatar (thường nhỏ)
+                Locator images = mainArticle.locator("img");
+                for (int i = 0; i < images.count(); i++) {
+                    String src = images.nth(i).getAttribute("src");
+                    // Loại bỏ avatar bằng cách kiểm tra alt hoặc kích thước nếu cần
+                    String alt = images.nth(i).getAttribute("alt");
+                    if (src != null && (alt == null || !alt.contains("profile picture"))) {
+                        if (!mediaUrls.contains(src)) mediaUrls.add(src);
+                    }
+                }
+
+                return ThreadsDownloadResult.builder()
+                        .text(text)
+                        .username(username)
+                        .mediaUrls(mediaUrls)
+                        .build();
             }
-
-            List<String> urls = uploadFilesToCloudinary(postId, mediaUrls);
-
-            return ThreadsDownloadResult.builder()
-                    .postId(postId)
-                    .text(root.path("text").asText())
-                    .username(root.path("username").asText())
-                    .createdAt(root.path("timestamp").asText())
-                    .mediaUrls(urls)
-                    .build();
-
         } catch (Exception e) {
-            log.error("Lỗi khi tải nội dung Threads: {}", e.getMessage());
+            System.err.println("Lỗi hệ thống: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
+
 
 
     private String getMediaUrlFromNode(JsonNode node) {

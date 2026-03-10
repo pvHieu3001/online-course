@@ -42,3 +42,6 @@ Project đã tích hợp sẵn Swagger UI để tự động sinh tài liệu AP
 ## Liên hệ
 - Người phát triển: Giancarlo
 - Email: giancarlo@contact.com
+
+
+curl --location --request POST 'localhost:8080/api/v1/thread/create?urlPost=https://www.threads.com/@thuhoai260401/post/DVkmeuLEZZE?xmt=AQF0SNZeZOojq1tYdA5Vv3AMCqtxYY8G_81D6j9lXrWqYQ&urlAmz=https://www.threads.com/@daviltieu98/post/DVhsiRhEUuZ?xmt=AQF0zQoKPYNKaWQIHuwQla5Sum3kk3-ImOef0BdSmzPY1A&cap=This little princess looks so stylish and adorable.” 👸✨😍😍😍'
