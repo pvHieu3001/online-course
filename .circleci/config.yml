@@ -100,7 +100,7 @@ jobs:
           at: fe
       - add_ssh_keys:
           fingerprints:
-            - "SHA256:2ddCb9OOC47UzX27NS3G1bHd5FeEFd7MD4++MtqCBQY"
+            - "SHA256:WAbTxIkHjFjU4Qff1Kok3r8niH0cBjr0jGnulGsXTy8"
       - run:
           name: Deploy Frontend to Server
           command: |
@@ -149,7 +149,7 @@ jobs:
           at: be
       - add_ssh_keys:
           fingerprints:
-            - "SHA256:2ddCb9OOC47UzX27NS3G1bHd5FeEFd7MD4++MtqCBQY"
+            - "SHA256:WAbTxIkHjFjU4Qff1Kok3r8niH0cBjr0jGnulGsXTy8"
       - run:
           name: Verify workspace contents
           command: |

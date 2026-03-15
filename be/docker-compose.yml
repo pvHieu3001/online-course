@@ -6,7 +6,7 @@ services:
     image: online-course-backend:v1.0.0
     container_name: online-course-backend
     ports:
-      - "8080:8080"
+      - "8888:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=${DB_URL}
