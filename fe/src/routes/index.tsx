@@ -34,6 +34,9 @@ import EditAffiliate from '@/page/admin/affiliate/_components/edit'
 import AccountManagement from '@/page/admin/account'
 import PageBlogSearch from '@/page/user/PageBlogSearch'
 import PageStock from '@/page/user/PageStock'
+import AmazonManagement from '@/page/admin/amazon'
+import AddAmazon from '@/page/admin/amazon/_components/add'
+import EditAmazon from '@/page/admin/amazon/_components/edit'
 
 export default function Router() {
   return (
@@ -91,6 +94,11 @@ export default function Router() {
               <Route path='affiliate' element={<AffiliateManagement />}>
                 <Route path='add' element={<AddAffiliate />} />
                 <Route path=':id' element={<EditAffiliate />} />
+              </Route>
+
+              <Route path='amazon' element={<AmazonManagement />}>
+                <Route path='add' element={<AddAmazon />} />
+                <Route path=':id' element={<EditAmazon />} />
               </Route>
               <Route path='account' element={<AccountManagement />} />
             </Route>

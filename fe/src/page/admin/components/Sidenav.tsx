@@ -3,6 +3,8 @@ import UseSidenav from '../../../utils/UseSidenav'
 import { useEffect, useState } from 'react'
 import type { MenuProps } from 'antd'
 import ShopeeLogo from '@/assets/images/shopee_v2.png'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAmazon } from '@fortawesome/free-brands-svg-icons';
 import { ReadOutlined, TagsOutlined, UsergroupAddOutlined, DashboardOutlined, UserOutlined } from '@ant-design/icons'
 
 function Sidenav() {
@@ -54,6 +56,15 @@ function Sidenav() {
           </Flex>
         ),
         link: '/admin/affiliate'
+      },
+      {
+        label: (
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <FontAwesomeIcon icon={faAmazon} style={{ fontSize: '24px', color: '#ff9900' }} />
+            <span className='label font-bold text-[#344767]'>Amazon</span>
+          </Flex>
+        ),
+        link: '/admin/amazon'
       },
       {
         label: (
