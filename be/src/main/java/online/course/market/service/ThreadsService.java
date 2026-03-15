@@ -315,7 +315,7 @@ public class ThreadsService {
             headers.add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
 
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("id", amazonPostRequest.getUrlPost());
+            map.add("id", amazonPostRequest.getSourceUrl());
             map.add("locale", "en");
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
@@ -336,15 +336,15 @@ public class ThreadsService {
         Document doc = Jsoup.parse(html);
         Elements links = doc.select("a.download_link");
 
-        String caption = (amazonPostRequest.getCap() != null && !amazonPostRequest.getCap().isEmpty()) ? amazonPostRequest.getCap() : doc.select("p.text-sm.text-gray-700.leading-relaxed").text();
+        String caption = (amazonPostRequest.getCaption() != null && !amazonPostRequest.getCaption().isEmpty()) ? amazonPostRequest.getCaption() : doc.select("p.text-sm.text-gray-700.leading-relaxed").text();
         String prompt = "Rewrite this in English using Gen Z slang (e.g., 'slay', 'vibe', 'lowkey', 'game changer'). Keep it vibe-heavy and very concise. Add a few trendy emojis. Original content: " + caption;
         String newCaption = groqService.generateThreadsContent(prompt);
         String cleanCaption = newCaption.trim();
 
         PostEntity post = new PostEntity();
         post.setCaption(cleanCaption);
-        post.setSourceUrl(amazonPostRequest.getUrlPost());
-        post.setAmzUrl(amazonPostRequest.getUrlAmz());
+        post.setSourceUrl(amazonPostRequest.getSourceUrl());
+        post.setAmzUrl(amazonPostRequest.getAmzUrl());
         post.setIsPublished(false);
         post = postRepository.save(post);
 

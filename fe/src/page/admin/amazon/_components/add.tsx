@@ -45,8 +45,8 @@ export default function AddAmazon() {
     const formData = new FormData()
 
     formData.append('sourceUrl', sourceUrl)
-    formData.append('status', amzUrl)
-    formData.append('targetUrl', caption)
+    formData.append('amzUrl', amzUrl)
+    formData.append('caption', caption)
 
     try {
       setIsLoading(true)
