@@ -81,7 +81,7 @@ public class ThreadsService {
                     throw new RuntimeException("Media (Image/Video) không sẵn sàng sau thời gian chờ.");
                 }
 
-                List<String> childrenIds = Arrays.asList(photoId, videoId);
+                List<String> childrenIds = Arrays.asList(videoId, photoId);
                 containerId = createCarouselWithRetry(userId, text, childrenIds, accessToken);
             } else {
                 log.info("Bắt đầu tạo Single Video Post cho bài viết ID: {}", post.getId());
