@@ -5,10 +5,17 @@ import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import online.course.market.entity.dto.affiliate.link.AffiliateLinkPostRequest;
+import online.course.market.entity.dto.affiliate.link.AffiliateLinkPutRequest;
+import online.course.market.entity.dto.amazon.AmazonPostRequest;
+import online.course.market.entity.dto.amazon.AmazonPutRequest;
+import online.course.market.entity.model.AffiliateLink;
 import online.course.market.entity.model.MediaEntity;
 import online.course.market.entity.model.PostEntity;
+import online.course.market.framework.exception.CJNotFoundException;
 import online.course.market.repository.MediaRepository;
 import online.course.market.repository.PostRepository;
+import online.course.market.utils.CustomCodeException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -33,6 +40,27 @@ public class ThreadsService {
     private final MediaRepository mediaRepository;
     private final PostRepository postRepository;
     private final GroqService groqService;
+
+
+    public List<PostEntity> getAllPosts() {
+        return postRepository.findAll();
+    }
+
+    public PostEntity getPostById(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "Link không tồn tại"));
+    }
+
+    public PostEntity updateAffiliateLink(Long id, AmazonPutRequest request) {
+        PostEntity link = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Link không tồn tại"));
+        return postRepository.save(link);
+    }
+
+    public void deleteById(Long id) {
+        PostEntity postEntity = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Link không tồn tại"));
+        postRepository.delete(postEntity);
+    }
 
     public void postToThreads(String text, String imageUrl, String videoUrl, String amzUrl, PostEntity post, String accessToken, String userId) {
         try {
@@ -233,7 +261,7 @@ public class ThreadsService {
     }
 
     @Transactional
-    public void downloadAndUpload(String threadUrl,  String urlAmz, String caption) {
+    public void downloadAndUpload(AmazonPostRequest amazonPostRequest) {
         String apiUrl = "https://savethr.com/process";
 
         try {
@@ -242,7 +270,7 @@ public class ThreadsService {
             headers.add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
 
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("id", threadUrl);
+            map.add("id", amazonPostRequest.getUrlPost());
             map.add("locale", "en");
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
@@ -250,7 +278,7 @@ public class ThreadsService {
             ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                parseAndUpload(response.getBody(), threadUrl, urlAmz, caption);
+                parseAndUpload(response.getBody(), amazonPostRequest);
             }
 
         } catch (Exception e) {
@@ -258,20 +286,20 @@ public class ThreadsService {
         }
     }
 
-    private void parseAndUpload(String html, String threadUrl, String urlAmz, String caption) {
+    private void parseAndUpload(String html, AmazonPostRequest amazonPostRequest) {
 
         Document doc = Jsoup.parse(html);
         Elements links = doc.select("a.download_link");
 
-        caption = (caption != null && !caption.isEmpty()) ? caption : doc.select("p.text-sm.text-gray-700.leading-relaxed").text();
+        String caption = (amazonPostRequest.getCap() != null && !amazonPostRequest.getCap().isEmpty()) ? amazonPostRequest.getCap() : doc.select("p.text-sm.text-gray-700.leading-relaxed").text();
         String prompt = "Rewrite this in English using Gen Z slang (e.g., 'slay', 'vibe', 'lowkey', 'game changer'). Keep it vibe-heavy and very concise. Add a few trendy emojis. Original content: " + caption;
         String newCaption = groqService.generateThreadsContent(prompt);
         String cleanCaption = newCaption.trim();
 
         PostEntity post = new PostEntity();
         post.setCaption(cleanCaption);
-        post.setSourceUrl(threadUrl);
-        post.setAmzUrl(urlAmz);
+        post.setSourceUrl(amazonPostRequest.getUrlPost());
+        post.setAmzUrl(amazonPostRequest.getUrlAmz());
         post.setIsPublished(false);
         post = postRepository.save(post);
 

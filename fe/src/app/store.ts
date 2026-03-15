@@ -9,6 +9,7 @@ import blogSlice from './slices/blog.reducer'
 import tagSlice from './slices/tag.reducer'
 import dashboardSlice from './slices/dashboard.reducer'
 import affiliateSlice from './slices/affiliate.reducer'
+import amazonSlice from './slices/amazon.reducer'
 export const store = configureStore({
   reducer: {
     category: categoryReducer,
@@ -20,7 +21,8 @@ export const store = configureStore({
     blog: blogSlice,
     tag: tagSlice,
     dashboard: dashboardSlice,
-    affiliate: affiliateSlice
+    affiliate: affiliateSlice,
+    amazon: amazonSlice
   }
 })
 

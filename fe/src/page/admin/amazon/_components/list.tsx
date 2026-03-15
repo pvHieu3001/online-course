@@ -4,25 +4,25 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import ErrorLoad from '../../components/util/ErrorLoad'
-import { affiliateActions } from '@/app/actions'
+import { amazonActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
-import { IAffiliate } from '@/common/types.interface'
+import { IAmazon } from '@/common/types.interface'
 import { RootState } from '@/app/store'
 
-export default function ListAffiliate() {
+export default function ListAmazon() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
-  const affiliates = useSelector((state: RootState) => state.affiliate)
+  const Amazons = useSelector((state: RootState) => state.amazon)
 
   useEffect(() => {
-    dispatch(affiliateActions.getAdminAffiliates(searchValue) as unknown as AnyAction)
+    dispatch(amazonActions.getAdminAmazons(searchValue) as unknown as AnyAction)
   }, [dispatch, searchValue])
 
-  const handlerDistableAffiliate = async (id: string) => {
+  const handlerDistableAmazon = async (id: string) => {
     try {
-      dispatch(affiliateActions.deleteAffiliate(id) as unknown as AnyAction)
-      dispatch(affiliateActions.getAdminAffiliates('') as unknown as AnyAction)
+      dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error) {
       message.error('Vô hiệu hoá danh mục thất bại!')
@@ -36,7 +36,7 @@ export default function ListAffiliate() {
     }
   }
 
-  const columns: TableProps<IAffiliate>['columns'] = [
+  const columns: TableProps<IAmazon>['columns'] = [
     {
       title: '#',
       dataIndex: 'key',
@@ -45,17 +45,25 @@ export default function ListAffiliate() {
       align: 'center'
     },
     {
-      title: 'Tên danh mục',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Link bài viết clone',
+      dataIndex: 'sourceUrl',
+      key: 'sourceUrl',
       align: 'center',
       width: 140,
       render: (text) => <a className='block w-64 truncate text-blue-600 hover:underline'>{text}</a>
     },
     {
-      title: 'Lượt click',
-      dataIndex: 'clickCount',
-      key: 'clickCount',
+      title: 'Caption bài viết',
+      dataIndex: 'caption',
+      key: 'caption',
+      align: 'center',
+      width: 100,
+      render: (text) => <>{text ?? 0}</>
+    },
+    {
+      title: 'Link Amz affiliate',
+      dataIndex: 'amzUrl',
+      key: 'amzUrl',
       align: 'center',
       width: 100,
       render: (text) => <>{text ?? 0}</>
@@ -68,7 +76,7 @@ export default function ListAffiliate() {
       width: 100,
       render: (status) => {
         const color = !status ? 'volcano' : 'green'
-        const text = !status ? 'Không Hoạt động' : 'Đang hoạt động'
+        const text = !status ? 'Chưa clone' : 'Đã clone'
 
         return <Tag color={color}>{text.toUpperCase()}</Tag>
       }
@@ -86,8 +94,8 @@ export default function ListAffiliate() {
           </Link>
           <Popconfirm
             placement='topRight'
-            title={record.active == 1 ? 'Are you sure distable this affiliate?' : 'Are you sure enable this affiliate?'}
-            onConfirm={() => handlerDistableAffiliate(record.id)}
+            title={record.active == 1 ? 'Are you sure distable this Amazon?' : 'Are you sure enable this Amazon?'}
+            onConfirm={() => handlerDistableAmazon(record.id)}
             onCancel={() => {}}
             okText='Đồng ý'
             cancelText='Hủy bỏ'
@@ -101,8 +109,8 @@ export default function ListAffiliate() {
     }
   ]
 
-  if (affiliates.error_message) {
-    return <ErrorLoad error_message={affiliates.error_message} />
+  if (Amazons.error_message) {
+    return <ErrorLoad error_message={Amazons.error_message} />
   }
 
   return (
@@ -145,11 +153,11 @@ export default function ListAffiliate() {
           columns={columns}
           sticky={{ offsetHeader: 0 }}
           scroll={{ x: 1200 }}
-          dataSource={affiliates?.dataList?.map((category: IAffiliate, index: number) => ({
+          dataSource={Amazons?.dataList?.map((category: IAmazon, index: number) => ({
             ...category,
             key: index + 1
           }))}
-          loading={affiliates.isLoading}
+          loading={Amazons.isLoading}
         />
       </div>
     </>
