@@ -37,12 +37,12 @@ public class ThreadController {
         return ResponseEntity.ok(ApiResponse.success(dtos));
     }
 
-//    @Operation(description = "Get by id endpoint for Category", summary = "Get Category by id")
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ApiResponse<AmazonDto>> getById(@PathVariable Long id) {
-//        Amazon Amazon = affiliateService.getAmazonById(id);
-//        return ResponseEntity.ok(ApiResponse.success(toDto(Amazon)));
-//    }
+    @Operation(description = "Get by id endpoint for Category", summary = "Get Category by id")
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<PostDto>> getById(@PathVariable Long id) {
+        PostEntity post = service.getPostById(id);
+        return ResponseEntity.ok(ApiResponse.success(toDto(post)));
+    }
     
     @PostMapping
     public ResponseEntity<ApiResponse<?>> cloneThreadPost(@RequestBody AmazonPostRequest request) {

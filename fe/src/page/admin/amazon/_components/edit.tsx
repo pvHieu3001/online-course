@@ -29,12 +29,10 @@ export default function EditAmazon() {
       const data = AmazonStore.data as IAmazon
 
       form.setFieldsValue({
-        targetUrl: data.targetUrl,
-        status: data.status,
-        name: data.name,
-        price: data.price,
-        originalPrice: data.originalPrice,
-        image: data.image
+        sourceUrl: data.sourceUrl,
+        caption: data.caption,
+        amzUrl: data.amzUrl,
+        isPublished: data.isPublished
       })
     }
   }, [AmazonStore, form])

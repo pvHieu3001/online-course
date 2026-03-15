@@ -39,17 +39,14 @@ export default function AddAmazon() {
   }
 
   const handleSubmit = async () => {
-    const name = form.getFieldValue('name')
-    const active = form.getFieldValue('status')
-    const targetUrl = form.getFieldValue('targetUrl')
+    const sourceUrl = form.getFieldValue('sourceUrl')
+    const amzUrl = form.getFieldValue('amzUrl')
+    const caption = form.getFieldValue('caption')
     const formData = new FormData()
 
-    formData.append('name', name)
-    formData.append('status', active.toString())
-    formData.append('targetUrl', targetUrl)
-    formData.append('image', form.getFieldValue('image'))
-    formData.append('price', form.getFieldValue('price'))
-    formData.append('originalPrice', form.getFieldValue('originalPrice'))
+    formData.append('sourceUrl', sourceUrl)
+    formData.append('status', amzUrl)
+    formData.append('targetUrl', caption)
 
     try {
       setIsLoading(true)
@@ -70,7 +67,7 @@ export default function AddAmazon() {
   return (
     <Drawer
       width={'70%'}
-      title={<span className='font-bold text-xl'>Tạo link afiliate mới</span>}
+      title={<span className='font-bold text-xl'>Tạo bài viết thread</span>}
       onClose={handleCancel}
       open={true}
       footer={
@@ -79,7 +76,7 @@ export default function AddAmazon() {
             Hủy
           </Button>
           <Button type='primary' htmlType='submit' form='Amazon-form' loading={isLoading}>
-            Lưu link afiliate
+            Lưu bài viết
           </Button>
         </div>
       }
@@ -99,72 +96,37 @@ export default function AddAmazon() {
           }}
         >
           <Row gutter={[24, 24]}>
-            {/* Cột trái: Ảnh và Cài đặt */}
-            <Col xs={24} md={8}>
-              <Form.Item
-                label={<span className='font-semibold'>Link ảnh sản phẩm</span>}
-                className='border-[1px] p-[24px] rounded-md border-[#F1F1F4] bg-[#fafbfc]'
-                style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
-                name='image'
-              >
-                <Input size='large' placeholder='Nhập link ảnh afiliate...' />
-              </Form.Item>
-              <div
-                className='border rounded-md overflow-hidden flex-1 bg-[#fafbfc]'
-                style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem' }}
-              >
-                <div className='p-2'>
-                  <h2 className='font-semibold'>Cài đặt</h2>
-                </div>
-                <hr />
-                <div className='flex justify-between items-center p-2'>
-                  <span>Kích hoạt hiển thị</span>
-                  <Form.Item className='m-0' label='' name='status' valuePropName='checked'>
-                    <Switch />
-                  </Form.Item>
-                </div>
-                <div className='text-xs text-gray-400 px-2 pb-2'>Bật để link afiliate này hiển thị trên website.</div>
-              </div>
-            </Col>
-
-            {/* Cột phải: Tổng quan */}
-            <Col xs={24} md={16}>
+            <Col xs={24} md={24}>
               <div
                 className='border-[1px] p-[24px] rounded-md bg-[#fafbfc]'
                 style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
               >
-                <h2 className='mb-5 font-bold text-[16px]'>Tổng quan</h2>
+                <h2 className='mb-5 font-bold text-[16px]'>Nội dung bài viết</h2>
                 <Row gutter={[16, 16]}>
                   <Col xs={24}>
                     <Form.Item
-                      name='name'
-                      label='Tên link afiliate'
+                      name='sourceUrl'
+                      label='Link bài viết thread'
                       rules={[
-                        { required: true, message: 'Vui lòng nhập tên link afiliate!' },
-                        { max: 120, message: 'Tên không vượt quá 120 ký tự' },
-                        { whitespace: true, message: 'Tên link afiliate không được để trống!' }
+                        { required: true, message: 'Vui lòng nhập link thread!' },
+                        { whitespace: true, message: 'Link bài viết không được để trống!' }
                       ]}
                     >
-                      <Input size='large' placeholder='Nhập tên link afiliate...' />
+                      <Input size='large' placeholder='Nhập link thread...' />
                     </Form.Item>
                   </Col>
                   <Col span={24}>
                     <Form.Item
-                      name='targetUrl'
+                      name='amzUrl'
                       label='Link Amazon'
-                      rules={[{ max: 120, message: 'Mô tả không vượt quá 120 ký tự' }]}
+                      rules={[{ required: true, message: 'Vui lòng nhập link affiliate!' }]}
                     >
                       <Input size='large' placeholder='Nhập link afiliate...' />
                     </Form.Item>
                   </Col>
                   <Col span={24}>
-                    <Form.Item name='price' label='Giá khuyến mãi'>
-                      <Input size='large' placeholder='Nhập giá khuyến mãi...' />
-                    </Form.Item>
-                  </Col>
-                  <Col span={24}>
-                    <Form.Item name='originalPrice' label='Giá gốc'>
-                      <Input size='large' placeholder='Nhập giá gốc...' />
+                    <Form.Item name='caption' label='Caption bài viết'>
+                      <Input size='large' placeholder='Nhập Caption...' />
                     </Form.Item>
                   </Col>
                 </Row>

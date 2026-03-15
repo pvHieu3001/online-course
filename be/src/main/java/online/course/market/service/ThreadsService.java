@@ -48,17 +48,17 @@ public class ThreadsService {
 
     public PostEntity getPostById(Long id) {
         return postRepository.findById(id)
-                .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "Link không tồn tại"));
+                .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "Bài viết không tồn tại"));
     }
 
     public PostEntity updateAffiliateLink(Long id, AmazonPutRequest request) {
         PostEntity link = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Link không tồn tại"));
+                .orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
         return postRepository.save(link);
     }
 
     public void deleteById(Long id) {
-        PostEntity postEntity = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Link không tồn tại"));
+        PostEntity postEntity = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
         postRepository.delete(postEntity);
     }
 
