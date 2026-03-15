@@ -20,7 +20,7 @@ import static online.course.market.utils.Constant.LOG_VIEW_TAG;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v1/admin/tag")
+@RequestMapping("/api/v1/admin/tag")
 @Tag(name = "Tag", description = "Tag controller")
 public class TagController {
     private final TagService tagService;

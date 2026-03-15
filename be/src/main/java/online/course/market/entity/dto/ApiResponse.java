@@ -32,6 +32,9 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
+    public static <T> ApiResponse<T> success() {
+        return new ApiResponse<>(200, "Success", null);
+    }
     public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>(200, "Success", data);
     }
