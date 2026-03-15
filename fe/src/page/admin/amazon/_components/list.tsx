@@ -13,7 +13,7 @@ import { RootState } from '@/app/store'
 export default function ListAmazon() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
-  const Amazons = useSelector((state: RootState) => state.amazon)
+  const amazons = useSelector((state: RootState) => state.amazon)
 
   useEffect(() => {
     dispatch(amazonActions.getAdminAmazons(searchValue) as unknown as AnyAction)
@@ -109,8 +109,8 @@ export default function ListAmazon() {
     }
   ]
 
-  if (Amazons.error_message) {
-    return <ErrorLoad error_message={Amazons.error_message} />
+  if (amazons.error_message) {
+    return <ErrorLoad error_message={amazons.error_message} />
   }
 
   return (
@@ -153,11 +153,11 @@ export default function ListAmazon() {
           columns={columns}
           sticky={{ offsetHeader: 0 }}
           scroll={{ x: 1200 }}
-          dataSource={Amazons?.dataList?.map((category: IAmazon, index: number) => ({
+          dataSource={amazons?.dataList?.map((category: IAmazon, index: number) => ({
             ...category,
             key: index + 1
           }))}
-          loading={Amazons.isLoading}
+          loading={amazons.isLoading}
         />
       </div>
     </>

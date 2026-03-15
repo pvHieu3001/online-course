@@ -26,7 +26,7 @@ public class SecurityConfig {
 			"/api/v1/user/affiliate/**","/api/v1/nice/**", "/api/v1/thread/**"};
 	private static final String[] ADMIN_URL = {
 			"/api/v1/admin/tag/**", "/api/v1/admin/course/**", "/api/v1/admin/category/**", "/api/v1/admin/upload/**", "/api/v1/admin/blog/**",
-			"/api/v1/admin/dashboard/**", "/api/v1/admin/user/**", "/api/v1/admin/affiliate/**"};
+			"/api/v1/admin/dashboard/**", "/api/v1/admin/user/**", "/api/v1/admin/affiliate/**", "/api/v1/admin/amazon/**"};
 
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final AuthenticationProvider authenticationProvider;
