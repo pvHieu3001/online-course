@@ -67,34 +67,46 @@ public class ThreadsService {
             post.setStatus("PROCESSING");
             postRepository.save(post);
 
+            String containerId;
 
-            String photoId = createMediaContainer(userId, "IMAGE", imageUrl, true, accessToken);
-            String videoId = createMediaContainer(userId, "VIDEO", videoUrl, true, accessToken);
+            // Kiểm tra xem có imageUrl không để quyết định loại bài đăng
+            if (imageUrl != null && !imageUrl.isBlank()) {
+                // TRƯỜNG HỢP 1: CẢ ẢNH VÀ VIDEO (Dùng Carousel)
+                log.info("Bắt đầu tạo Carousel cho bài viết ID: {}", post.getId());
 
-            if (!waitForMediaReady(photoId, accessToken) || !waitForMediaReady(videoId, accessToken)) {
-                log.error("Media không sẵn sàng (Timeout hoặc lỗi định dạng file).");
-                return;
+                String photoId = createMediaContainer(userId, "IMAGE", imageUrl, true, accessToken);
+                String videoId = createMediaContainer(userId, "VIDEO", videoUrl, true, accessToken);
+
+                if (!waitForMediaReady(photoId, accessToken) || !waitForMediaReady(videoId, accessToken)) {
+                    throw new RuntimeException("Media (Image/Video) không sẵn sàng sau thời gian chờ.");
+                }
+
+                List<String> childrenIds = Arrays.asList(photoId, videoId);
+                containerId = createCarouselWithRetry(userId, text, childrenIds, accessToken);
+            } else {
+                log.info("Bắt đầu tạo Single Video Post cho bài viết ID: {}", post.getId());
+                containerId = createMediaContainerWithText(userId, "VIDEO", videoUrl, text, accessToken);
+                if (!waitForMediaReady(containerId, accessToken)) {
+                    throw new RuntimeException("Video đơn lẻ không sẵn sàng sau thời gian chờ.");
+                }
             }
 
-            List<String> childrenIds = Arrays.asList(photoId, videoId);
-            String carouselId = createCarouselWithRetry(userId, text, childrenIds, accessToken);
-
-            String postId = publishWithRetry(userId, carouselId, accessToken);
+            String postId = publishWithRetry(userId, containerId, accessToken);
             log.info("--- ĐÃ ĐĂNG BÀI THÀNH CÔNG! ID: {} ---", postId);
 
             publishComment(userId, postId, generateRandomComment(amzUrl), accessToken);
 
+            post.setStatus("SUCCESS");
             post.setIsPublished(true);
             post.setPublishedAt(LocalDateTime.now());
             postRepository.save(post);
-            log.info("Bài viết ID {} thành công!", post.getId());
 
         } catch (Exception e) {
             post.setStatus("FAILED");
             post.setLastError(e.getMessage());
             post.setRetryCount(post.getRetryCount() + 1);
             postRepository.save(post);
-            log.error("Dừng đăng bài do lỗi không thể phục hồi: {}", e.getMessage());
+            log.error("Thất bại khi đăng bài ID {}: {}", post.getId(), e.getMessage());
         }
     }
 
@@ -133,9 +145,42 @@ public class ThreadsService {
         params.add("children", String.join(",", children));
         params.add("text", text);
         params.add("access_token", accessToken);
+        try {
+            JsonNode response = restTemplate.postForObject(url, params, JsonNode.class);
+            return response.get("id").asText();
+        } catch (Exception e) {
+            log.error("Lỗi gọi API Threads tạo Multi Media Container: {}", e.getMessage());
+            throw e;
+        }
+    }
 
-        JsonNode response = restTemplate.postForObject(url, params, JsonNode.class);
-        return response.get("id").asText();
+    private String createMediaContainerWithText(String userId, String mediaType, String mediaUrl, String caption, String accessToken) {
+        String url = "https://graph.threads.net/v1.0/" + userId + "/threads";
+
+        // Sử dụng MultiValueMap để gửi dữ liệu dạng form-url-encoded
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("media_type", mediaType);
+        body.add(mediaType.equals("VIDEO") ? "video_url" : "image_url", mediaUrl);
+        body.add("caption", caption);
+        body.add("access_token", accessToken);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body, headers);
+
+        try {
+            ResponseEntity<Map> response = restTemplate.postForEntity(url, entity, Map.class);
+
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                return (String) response.getBody().get("id");
+            } else {
+                throw new RuntimeException("Lỗi tạo container: " + response.getBody());
+            }
+        } catch (Exception e) {
+            log.error("Lỗi gọi API Threads tạo Single Media Container: {}", e.getMessage());
+            throw e;
+        }
     }
 
     private String createMediaContainer(String userId, String type, String mediaUrl, boolean isCarouselItem, String accessToken) {
