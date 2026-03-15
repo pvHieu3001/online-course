@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
 
@@ -47,9 +48,9 @@ public class AppConfig {
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder
-                .setConnectTimeout(Duration.ofMillis(3000))
-                .setReadTimeout(Duration.ofMillis(3000))
-                .build();
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(60000);
+        factory.setReadTimeout(120000);
+        return new RestTemplate(factory);
     }
 }

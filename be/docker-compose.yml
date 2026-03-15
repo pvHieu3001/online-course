@@ -9,10 +9,50 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - APP_JWT_SECRET=${JWT_SECRET}
+      - APP_JWT_EXPIRATION=${JWT_EXPIRATION}
+      - SPRING_DATA_REDIS_HOST=${REDIS_HOST}
+      - SPRING_DATA_REDIS_PORT=${REDIS_PORT}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - ACCOUNT_1=${ACCOUNT_1}
+      - ACCOUNT_1_ID=${ACCOUNT_1_ID}
+      - ACCOUNT_2=${ACCOUNT_2}
+      - ACCOUNT_2_ID=${ACCOUNT_2_ID}
+      - ACCOUNT_3=${ACCOUNT_3}
+      - ACCOUNT_3_ID=${ACCOUNT_3_ID}
+      - ACCOUNT_4=${ACCOUNT_4}
+      - ACCOUNT_4_ID=${ACCOUNT_4_ID}
+      - ACCOUNT_5=${ACCOUNT_5}
+      - ACCOUNT_5_ID=${ACCOUNT_5_ID}
     volumes:
       - /var/www/html/online-course/uploads:/app/uploads
+    depends_on:
+      - db-postgres
     networks:
       - app-network
+
+  db-postgres:
+    image: postgres:15-alpine
+    container_name: db-postgres
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: online_course
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
 networks:
   app-network:
     driver: bridge

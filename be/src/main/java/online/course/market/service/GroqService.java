@@ -31,14 +31,13 @@ public class GroqService {
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setBearerAuth(apiKey);
 
-            // Cấu trúc body y hệt OpenAI
             Map<String, Object> requestBody = new HashMap<>();
             requestBody.put("model", model);
             requestBody.put("messages", List.of(
                     Map.of("role", "system", "content", "You are a content-writing bot. You ONLY return caption text, no explanations, and no quotation marks."),
                     Map.of("role", "user", "content", prompt)
             ));
-            requestBody.put("temperature", 0.8); // Độ sáng tạo cao để tránh spam
+            requestBody.put("temperature", 0.8);
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
