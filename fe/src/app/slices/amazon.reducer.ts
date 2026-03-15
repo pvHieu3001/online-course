@@ -11,7 +11,7 @@ const initialState = {
   dataList: <IAmazon[]>(<unknown>null)
 }
 
-const AmazonSlice = createSlice({
+const amazonSlice = createSlice({
   name: 'Amazon',
   initialState,
   reducers: {
@@ -89,5 +89,5 @@ export const {
   updateSuccessfully,
   deleteFailure,
   deleteSuccessfully
-} = AmazonSlice.actions
-export default AmazonSlice.reducer
+} = amazonSlice.actions
+export default amazonSlice.reducer

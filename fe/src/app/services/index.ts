@@ -5,6 +5,7 @@ import { blogServices } from './blog.service'
 import { tagServices } from './tag.service'
 import { dashboardServices } from './dashboard.service'
 import { affiliateServices } from './affiliate.service'
+import { amazonServices } from './amazon.service'
 
 export {
   userService,
@@ -13,5 +14,6 @@ export {
   blogServices,
   tagServices,
   dashboardServices,
-  affiliateServices
+  affiliateServices,
+  amazonServices
 }

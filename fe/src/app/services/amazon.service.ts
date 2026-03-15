@@ -25,7 +25,7 @@ function getPageAmazon(page: string, size: string, sort: string) {
   return http.get(`/api/v1/user/amazon/pageable/?page=${page}&size=${size}&sort=${sort}`)
 }
 
-export const AmazonServices = {
+export const amazonServices = {
   getAmazons,
   getAdminAmazons,
   getAmazonById,

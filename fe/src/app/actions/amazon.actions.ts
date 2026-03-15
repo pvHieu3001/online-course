@@ -129,7 +129,7 @@ export const deleteAmazon = (id: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const AmazonActions = {
+export const amazonActions = {
   getAmazons,
   getAdminAmazons,
   getAmazonById,
