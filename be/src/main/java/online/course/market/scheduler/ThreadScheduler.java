@@ -27,33 +27,40 @@ public class ThreadScheduler {
     private final ThreadsService threadsService;
     private final PostRepository postRepository;
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 6,8,12 * * *", zone = "Asia/Ho_Chi_Minh")
+//    @Scheduled(cron = "0 * * * * *")
     @Transactional
     public void runAtStartOfHour() {
-        log.info("Bắt đầu tiến trình lấy bài đăng: " + LocalDateTime.now());
-        Optional<PostEntity> postOpt = postRepository.findFirstByIsPublishedFalseOrderByCreatedAtAsc();
+        log.info("Bắt đầu tiến trình lấy bài đăng buổi sáng (2h/lần): " + LocalDateTime.now());
+
+        Optional<PostEntity> postOpt = postRepository.findFirstByIsPublishedFalseAndThreadIdOrderByIdAsc(accountId1);
+
         if (postOpt.isPresent()) {
             PostEntity post = postOpt.get();
-
             try {
                 if (StringUtils.isEmpty(post.getCaption()) || StringUtils.isEmpty(post.getAmzUrl())) {
-                    log.warn("Bỏ qua bài ID {}: Thiếu Caption hoặc Amazon URL", post.getId());
-                    return;
-                }
-
-                if (post.getMedias() == null || post.getMedias().size() < 2) {
-                    log.warn("Bỏ qua bài ID {}: Không đủ số lượng Media (Yêu cầu ít nhất 1 Video và 1 Image)", post.getId());
+                    log.warn("Bỏ qua bài ID {}: Thiếu dữ liệu bắt buộc", post.getId());
                     return;
                 }
 
                 String videoUrl = post.getMedias().get(0).getCloudinaryUrl();
-                String imageUrl = post.getMedias().get(1).getCloudinaryUrl();
+                String imageUrl = (post.getMedias().size() >= 2) ? post.getMedias().get(1).getCloudinaryUrl() : null;
 
-                if (StringUtils.isEmpty(videoUrl) || StringUtils.isEmpty(imageUrl)) {
-                    log.warn("Bỏ qua bài ID {}: Link Media bị trống", post.getId());
+                if (StringUtils.isEmpty(videoUrl)) {
+                    log.warn("Bỏ qua bài ID {}: Không có Video URL", post.getId());
                     return;
                 }
+
+                log.info("Đang chờ 5 giây trước khi thực hiện đăng bài...");
+                Thread.sleep(5000);
+
                 threadsService.postToThreads(post.getCaption(), imageUrl, videoUrl, post.getAmzUrl(), post, account1, accountId1);
+
+                log.info("Đã đăng thành công bài ID: {}", post.getId());
+
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                log.error("Tiến trình delay bị ngắt quãng: {}", ie.getMessage());
             } catch (Exception e) {
                 log.error("Lỗi khi đăng bài ID {}: {}", post.getId(), e.getMessage());
             }

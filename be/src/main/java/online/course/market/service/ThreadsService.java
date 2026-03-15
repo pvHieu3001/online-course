@@ -28,6 +28,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -157,24 +158,33 @@ public class ThreadsService {
     private String createMediaContainerWithText(String userId, String mediaType, String mediaUrl, String caption, String accessToken) {
         String url = "https://graph.threads.net/v1.0/" + userId + "/threads";
 
-        // Sử dụng MultiValueMap để gửi dữ liệu dạng form-url-encoded
+        String finalCaption = (caption == null || caption.trim().isEmpty()) ? "No caption" : caption;
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("media_type", mediaType);
-        body.add(mediaType.equals("VIDEO") ? "video_url" : "image_url", mediaUrl);
-        body.add("caption", caption);
+
+        if ("VIDEO".equalsIgnoreCase(mediaType)) {
+            body.add("video_url", mediaUrl);
+        } else {
+            body.add("image_url", mediaUrl);
+        }
+        body.add("text", finalCaption);
+        body.add("caption", finalCaption);
         body.add("access_token", accessToken);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
 
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body, headers);
 
         try {
+            log.info("Đang tạo container cho User ID: {} với caption: {}", userId, finalCaption);
             ResponseEntity<Map> response = restTemplate.postForEntity(url, entity, Map.class);
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 return (String) response.getBody().get("id");
             } else {
+                log.error("Threads API trả về lỗi: {}", response.getBody());
                 throw new RuntimeException("Lỗi tạo container: " + response.getBody());
             }
         } catch (Exception e) {
@@ -306,7 +316,7 @@ public class ThreadsService {
     }
 
     @Transactional
-    public void downloadAndUpload(AmazonPostRequest amazonPostRequest) {
+    public void downloadAndUpload(AmazonPostRequest amazonPostRequest, String threadId) {
         String apiUrl = "https://savethr.com/process";
 
         try {
@@ -323,7 +333,7 @@ public class ThreadsService {
             ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                parseAndUpload(response.getBody(), amazonPostRequest);
+                parseAndUpload(response.getBody(), amazonPostRequest, threadId);
             }
 
         } catch (Exception e) {
@@ -331,7 +341,7 @@ public class ThreadsService {
         }
     }
 
-    private void parseAndUpload(String html, AmazonPostRequest amazonPostRequest) {
+    private void parseAndUpload(String html, AmazonPostRequest amazonPostRequest, String threadId) {
 
         Document doc = Jsoup.parse(html);
         Elements links = doc.select("a.download_link");
@@ -346,6 +356,7 @@ public class ThreadsService {
         post.setSourceUrl(amazonPostRequest.getSourceUrl());
         post.setAmzUrl(amazonPostRequest.getAmzUrl());
         post.setIsPublished(false);
+        post.setThreadId(threadId);
         post = postRepository.save(post);
 
         List<MediaEntity> mediaList = new ArrayList<>();

@@ -35,4 +35,9 @@ public class BaseEntity {
     @LastModifiedDate
     @Column(nullable = true)
     protected LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

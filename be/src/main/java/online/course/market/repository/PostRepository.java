@@ -13,5 +13,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<PostEntity, Long>{
-    Optional<PostEntity> findFirstByIsPublishedFalseOrderByCreatedAtAsc();
+    Optional<PostEntity> findFirstByIsPublishedFalseAndThreadIdOrderByIdAsc(String threadId);
 }

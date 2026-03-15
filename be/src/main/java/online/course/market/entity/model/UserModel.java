@@ -30,6 +30,7 @@ public class UserModel  extends BaseEntity implements UserDetails {
 	private String lastname;
 	private String phonenumber;
 	private String username;
+	private String threadId;
 	@JsonIgnore
 	private String password;	
 	private String email;

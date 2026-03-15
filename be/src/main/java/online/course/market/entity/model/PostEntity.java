@@ -2,6 +2,7 @@ package online.course.market.entity.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class PostEntity {
+@SuperBuilder
+public class PostEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,16 +37,9 @@ public class PostEntity {
     private String status;
     private String lastError;
     private Integer retryCount = 0;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private String threadId;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<MediaEntity> medias = new ArrayList<>();
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 }

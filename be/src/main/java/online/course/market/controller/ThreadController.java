@@ -6,11 +6,13 @@ import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.amazon.PostDto;
 import online.course.market.entity.dto.amazon.AmazonPostRequest;
 import online.course.market.entity.model.PostEntity;
+import online.course.market.entity.model.UserModel;
 import online.course.market.service.AffiliateService;
 import online.course.market.service.ThreadsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,7 +49,8 @@ public class ThreadController {
     @PostMapping
     public ResponseEntity<ApiResponse<?>> cloneThreadPost(@RequestBody AmazonPostRequest request) {
         try {
-            service.downloadAndUpload(request);
+            UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            service.downloadAndUpload(request, userModel.getThreadId());
             return ResponseEntity.ok(ApiResponse.success());
         } catch (Exception e) {
             throw new RuntimeException("Failed to create category: " + e.getMessage(), e);
