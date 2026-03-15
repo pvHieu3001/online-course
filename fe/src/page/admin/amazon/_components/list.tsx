@@ -70,13 +70,13 @@ export default function ListAmazon() {
     },
     {
       title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'isPublished',
+      key: 'isPublished',
       align: 'center',
       width: 100,
       render: (status) => {
         const color = !status ? 'volcano' : 'green'
-        const text = !status ? 'Chưa clone' : 'Đã clone'
+        const text = !status ? 'Chưa đăng' : 'Đã đăng'
 
         return <Tag color={color}>{text.toUpperCase()}</Tag>
       }

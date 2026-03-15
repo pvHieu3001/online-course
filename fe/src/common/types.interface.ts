@@ -138,6 +138,19 @@ export interface IAffiliate {
   updatedBy: IUser
 }
 
+export interface IAmazon {
+  id: number
+  sourceUrl: string
+  caption: string
+  amzUrl: string
+  isPublished: boolean
+  status: string
+  publishedAt: string
+  lastError: string
+  retryCount: number
+  createdAt: string
+}
+
 export type ContextType = {
   setIsShowRecommendCourses: (value: boolean) => void
 }
