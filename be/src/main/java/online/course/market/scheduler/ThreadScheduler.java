@@ -27,8 +27,8 @@ public class ThreadScheduler {
     private final ThreadsService threadsService;
     private final PostRepository postRepository;
 
-//    @Scheduled(cron = "0 0 6,8,12 * * *", zone = "Asia/Ho_Chi_Minh")
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 6,9,12,15,18,21 * * *", zone = "Asia/Ho_Chi_Minh")
+//    @Scheduled(cron = "0 * * * * *")
     @Transactional
     public void runAtStartOfHour() {
         log.info("Bắt đầu tiến trình lấy bài đăng buổi sáng (2h/lần): " + LocalDateTime.now());
