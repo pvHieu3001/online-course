@@ -4,12 +4,14 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.thread.ThreadAccount;
+import online.course.market.entity.dto.user.UserDto;
 import online.course.market.entity.model.PostEntity;
 import online.course.market.entity.model.UserModel;
 import online.course.market.repository.PostRepository;
 import online.course.market.repository.UserRepository;
 import online.course.market.service.GroqService;
 import online.course.market.service.ThreadsService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -49,16 +51,17 @@ public class ThreadScheduler {
     private final ThreadsService threadsService;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    @Scheduled(cron = "0 0 0,6,9,12,15,18,21 * * *", zone = "Asia/Ho_Chi_Minh")
-    //    @Scheduled(cron = "0 * * * * *")
+    // @Scheduled(cron = "0 0 0,6,9,12,15,18,21 * * *", zone = "Asia/Ho_Chi_Minh")
+       @Scheduled(cron = "0 * * * * *")
     public void runMultiAccountPost() {
         log.info("Bắt đầu tiến trình đăng bài phân tách thời gian: {}", LocalDateTime.now());
 
         List<UserModel> users = userRepository.findAll();
-
-        for (int i = 0; i < users.size(); i++) {
-            UserModel account = users.get(i);
+        List<ThreadAccount> userDtos = users.stream().map(userModel -> modelMapper.map(userModel, ThreadAccount.class)).toList();
+        for (int i = 0; i < userDtos.size(); i++) {
+            ThreadAccount account = userDtos.get(i);
 
             if (account == null || !StringUtils.hasText(account.getThreadId()) || !StringUtils.hasText(account.getThreadToken())) {
                 log.warn("Bỏ qua account do thiếu thông tin định danh hoặc token.");
@@ -84,7 +87,7 @@ public class ThreadScheduler {
     }
 
     @Transactional
-    public void processSingleAccountPost(UserModel account) {
+    public void processSingleAccountPost(ThreadAccount account) {
         Optional<PostEntity> postOpt = postRepository.findFirstByIsPublishedFalseAndThreadIdOrderByIdAsc(account.getThreadId());
 
         if (postOpt.isPresent()) {

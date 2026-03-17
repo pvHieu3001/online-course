@@ -46,7 +46,7 @@ public class ThreadsService {
 
 
     public void publishPost(Long id, UserModel account) {
-        Optional<PostEntity> postOpt = postRepository.findById(id);
+        Optional<PostEntity> postOpt = postRepository.findPostWithMediasById(id);
 
         if (postOpt.isPresent()) {
             PostEntity post = postOpt.get();

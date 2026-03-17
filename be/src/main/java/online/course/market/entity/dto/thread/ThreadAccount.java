@@ -1,11 +1,14 @@
 package online.course.market.entity.dto.thread;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class ThreadAccount {
-    private String token;
-    private String id;
+    String id;
+    String threadId;
+    String threadToken;
 }
