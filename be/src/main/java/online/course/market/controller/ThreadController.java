@@ -9,6 +9,7 @@ import online.course.market.entity.model.PostEntity;
 import online.course.market.entity.model.UserModel;
 import online.course.market.service.AffiliateService;
 import online.course.market.service.ThreadsService;
+import online.course.market.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/admin/amazon")
 public class ThreadController {
     private final ThreadsService service;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
 
@@ -52,9 +54,9 @@ public class ThreadController {
     }
     
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> cloneThreadPost(@RequestBody AmazonPostRequest request) {
+    public ResponseEntity<ApiResponse<?>> cloneThreadPost(@RequestBody AmazonPostRequest request, Authentication authentication) {
         try {
-            UserModel userModel = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UserModel userModel = userService.getByUserName(authentication.getName());
             service.downloadAndUpload(request, userModel.getThreadId());
             return ResponseEntity.ok(ApiResponse.success());
         } catch (Exception e) {
