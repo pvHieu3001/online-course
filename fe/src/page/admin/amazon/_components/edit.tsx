@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { Form, Input, Button, Switch, Drawer, Col, Row } from 'antd'
+import { Form, Input, Button, Drawer, Col, Row } from 'antd'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ErrorLoad from '../../components/util/ErrorLoad'
@@ -14,7 +14,7 @@ import { RootState } from '@/app/store'
 export default function EditAmazon() {
   const params = useParams()
   const dispatch = useDispatch()
-  const AmazonStore = useSelector((state: RootState) => state.amazon)
+  const amazonStore = useSelector((state: RootState) => state.amazon)
   useEffect(() => {
     dispatch(amazonActions.getAmazonById(params.id ?? '0') as unknown as AnyAction)
     dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
@@ -25,8 +25,8 @@ export default function EditAmazon() {
   const [isDirty, setIsDirty] = useState(false)
 
   useEffect(() => {
-    if (AmazonStore.data) {
-      const data = AmazonStore.data as IAmazon
+    if (amazonStore.data) {
+      const data = amazonStore.data as IAmazon
 
       form.setFieldsValue({
         sourceUrl: data.sourceUrl,
@@ -35,7 +35,7 @@ export default function EditAmazon() {
         isPublished: data.isPublished
       })
     }
-  }, [AmazonStore, form])
+  }, [amazonStore, form])
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -62,16 +62,14 @@ export default function EditAmazon() {
   }
 
   const handleSubmit = async () => {
-    const name = form.getFieldValue('name')
-    const active = form.getFieldValue('status')
+    const sourceUrl = form.getFieldValue('sourceUrl')
+    const amzUrl = form.getFieldValue('amzUrl')
+    const caption = form.getFieldValue('caption')
     const formData = new FormData()
 
-    formData.append('name', name)
-    formData.append('status', active.toString())
-    formData.append('targetUrl', form.getFieldValue('image'))
-    formData.append('image', form.getFieldValue('image'))
-    formData.append('price', form.getFieldValue('price'))
-    formData.append('originalPrice', form.getFieldValue('originalPrice'))
+    formData.append('sourceUrl', sourceUrl)
+    formData.append('amzUrl', amzUrl)
+    formData.append('caption', caption)
 
     try {
       await dispatch(amazonActions.updateAmazon(params.id, formData) as unknown as AnyAction)
@@ -88,13 +86,13 @@ export default function EditAmazon() {
   // Đánh dấu form đã thay đổi
   const onValuesChange = () => setIsDirty(true)
 
-  if (AmazonStore.error_message) {
-    return <ErrorLoad error_message={AmazonStore.error_message} />
+  if (amazonStore.error_message) {
+    return <ErrorLoad error_message={amazonStore.error_message} />
   }
   return (
     <Drawer
-      width='70%'
-      title={<span className='font-bold text-xl'>Chỉnh sửa link afiliate</span>}
+      width='100%'
+      title={<span className='font-bold text-xl'>Chỉnh sửa viết thread</span>}
       onClose={handleCancel}
       open={true}
       bodyStyle={{ padding: 24, maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}
@@ -103,14 +101,14 @@ export default function EditAmazon() {
           <Button onClick={handleCancel} style={{ marginRight: 8 }}>
             Hủy
           </Button>
-          <Button type='primary' htmlType='submit' form='Amazon-form' loading={AmazonStore.isLoading}>
+          <Button type='primary' htmlType='submit' form='Amazon-form' loading={amazonStore.isLoading}>
             Cập nhật
           </Button>
         </div>
       }
     >
-      <Spin spinning={AmazonStore.isLoading} tip='Đang tải...'>
-        {AmazonStore.data && (
+      <Spin spinning={amazonStore.isLoading} tip='Đang tải...'>
+        {amazonStore.data && (
           <Form
             id='Amazon-form'
             form={form}
@@ -121,80 +119,37 @@ export default function EditAmazon() {
             initialValues={{}}
           >
             <Row gutter={[24, 24]}>
-              {/* Cột trái: Ảnh và Cài đặt */}
-              <Col xs={24} md={8}>
-                <Form.Item
-                  label={<span className='font-semibold'>Link ảnh sản phẩm</span>}
-                  className='border p-6 rounded-md bg-[#fafbfc]'
-                  style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.03)' }}
-                  name='image'
-                >
-                  <Input size='large' placeholder='Nhập tên link ảnh afiliate...' />
-                </Form.Item>
-
-                <div
-                  className='border rounded-md bg-[#fafbfc] overflow-hidden'
-                  style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.05)' }}
-                >
-                  <div className='p-2'>
-                    <h2 className='font-semibold'>Cài đặt</h2>
-                  </div>
-                  <hr />
-                  <div className='flex justify-between items-center p-2'>
-                    <span>Kích hoạt hiển thị</span>
-                    <Form.Item className='m-0' label='' name='status' valuePropName='checked'>
-                      <Switch />
-                    </Form.Item>
-                  </div>
-                  <div className='text-xs text-gray-400 px-2 pb-2'>Bật để link afiliate này hiển thị trên website.</div>
-
-                  <div className='flex justify-between items-center p-2'>
-                    <span>Hiện thị trên trang chủ</span>
-                    <Form.Item className='m-0' label='' name='isQuickView' valuePropName='checked'>
-                      <Switch />
-                    </Form.Item>
-                  </div>
-                </div>
-              </Col>
-
-              <Col xs={24} md={16}>
+              <Col xs={24} md={24}>
                 <div
                   className='border p-6 rounded-md bg-[#fafbfc]'
                   style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.03)' }}
                 >
-                  <h2 className='mb-5 font-bold text-[16px]'>Tổng quan</h2>
+                  <h2 className='mb-5 font-bold text-[16px]'>Nội dung bài viết</h2>
                   <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={12}>
+                    <Col xs={24}>
                       <Form.Item
-                        name='name'
-                        label='Tên link afiliate'
-                        className='w-full max-w-[350px]'
+                        name='sourceUrl'
+                        label='Link bài viết thread'
                         rules={[
-                          { required: true, message: 'Vui lòng nhập tên link afiliate!' },
-                          { max: 120, message: 'Tên không vượt quá 120 ký tự' },
-                          { whitespace: true, message: 'Tên link afiliate không được để trống!' }
+                          { required: true, message: 'Vui lòng nhập link thread!' },
+                          { whitespace: true, message: 'Link bài viết không được để trống!' }
                         ]}
                       >
-                        <Input size='large' placeholder='Nhập tên link afiliate...' />
+                        <Input disabled size='large' placeholder='Nhập tên link thread...' />
                       </Form.Item>
                     </Col>
                     <Col span={24}>
                       <Form.Item
-                        name='targetUrl'
-                        label='Mô tả ngắn'
-                        rules={[{ max: 120, message: 'Mô tả không vượt quá 120 ký tự' }]}
+                        name='amzUrl'
+                        label='Link Amazon'
+                        rules={[{ required: true, message: 'Vui lòng nhập link affiliate!' }]}
                       >
                         <Input size='large' placeholder='Nhập link afiliate...' />
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <Form.Item name='price' label='Giá khuyến mãi'>
-                        <Input size='large' placeholder='Nhập giá khuyến mãi...' />
-                      </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                      <Form.Item name='originalPrice' label='Giá gốc'>
-                        <Input size='large' placeholder='Nhập giá gốc...' />
+                      <Form.Item name='caption' label='Caption bài viết'>
+                        <Input size='large' placeholder='Nhập Caption...' />
                       </Form.Item>
                     </Col>
                   </Row>

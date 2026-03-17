@@ -3,6 +3,7 @@ package online.course.market.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import online.course.market.entity.dto.ApiResponse;
+import online.course.market.entity.dto.amazon.AmazonPutRequest;
 import online.course.market.entity.dto.amazon.PostDto;
 import online.course.market.entity.dto.amazon.AmazonPostRequest;
 import online.course.market.entity.model.PostEntity;
@@ -64,24 +65,24 @@ public class ThreadController {
         }
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<ApiResponse<PostDto>> updateLink(@PathVariable Long id, @RequestBody AmazonPutRequest request) {
-//        try {
-//            Amazon updated = affiliateService.updateAmazon(id, request);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(updated)));
-//        }catch (Exception e) {
-//            throw new RuntimeException("Failed to create category: " + e.getMessage(), e);
-//        }
-//    }
-//
-//    @Operation(description = "Delete Category", summary = "Delete Category")
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
-//        try {
-//            affiliateService.deleteById(id);
-//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("Deleted", null));
-//        } catch (Exception e) {
-//            throw new RuntimeException("Failed to delete category: " + e.getMessage(), e);
-//        }
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<PostDto>> updateLink(@PathVariable Long id, @RequestBody AmazonPutRequest request) {
+        try {
+            PostEntity updated = service.updatePost(id, request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Created", toDto(updated)));
+        }catch (Exception e) {
+            throw new RuntimeException("Failed to create category: " + e.getMessage(), e);
+        }
+    }
+
+    @Operation(description = "Delete Category", summary = "Delete Category")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
+        try {
+            service.deleteById(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("Deleted", null));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete category: " + e.getMessage(), e);
+        }
+    }
 }

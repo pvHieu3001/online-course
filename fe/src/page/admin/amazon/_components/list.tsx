@@ -1,5 +1,6 @@
 import type { TableProps } from 'antd'
-import { Button, Flex, Input, Popconfirm, Space, Table, Tag, Typography, message } from 'antd'
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { Button, Input, Popconfirm, Space, Table, Tag, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
@@ -41,68 +42,61 @@ export default function ListAmazon() {
       title: '#',
       dataIndex: 'key',
       key: 'key',
-      width: 40,
-      align: 'center'
-    },
-    {
-      title: 'Link bài viết clone',
-      dataIndex: 'sourceUrl',
-      key: 'sourceUrl',
+      width: 50,
       align: 'center',
-      width: 140,
-      render: (text) => <a className='block w-64 truncate text-blue-600 hover:underline'>{text}</a>
-    },
-    {
-      title: 'Caption bài viết',
-      dataIndex: 'caption',
-      key: 'caption',
-      align: 'center',
-      width: 100,
-      render: (text) => <>{text ?? 0}</>
-    },
-    {
-      title: 'Link Amz affiliate',
-      dataIndex: 'amzUrl',
-      key: 'amzUrl',
-      align: 'center',
-      width: 100,
-      render: (text) => <>{text ?? 0}</>
+      fixed: 'left',
+      responsive: ['sm']
     },
     {
       title: 'Trạng thái',
       dataIndex: 'isPublished',
       key: 'isPublished',
+      width: 110,
       align: 'center',
-      width: 100,
       render: (status) => {
         const color = !status ? 'volcano' : 'green'
         const text = !status ? 'Chưa đăng' : 'Đã đăng'
-
         return <Tag color={color}>{text.toUpperCase()}</Tag>
       }
     },
     {
+      title: 'Link clone',
+      dataIndex: 'sourceUrl',
+      key: 'sourceUrl',
+      width: 150,
+      render: (text) => (
+        <a href={text} target='_blank' className='block w-40 truncate text-blue-600 hover:underline'>
+          {text}
+        </a>
+      )
+    },
+    {
+      title: 'Caption',
+      dataIndex: 'caption',
+      key: 'caption',
+      width: 150,
+      ellipsis: true, // Tự động rút gọn bằng dấu ... nếu dài
+      render: (text) => <span className='line-clamp-2'>{text ?? 'N/A'}</span>
+    },
+    {
       title: 'Hành động',
       key: 'action',
-      width: 150,
+      width: 50,
       align: 'center',
       fixed: 'right',
       render: (record) => (
-        <Space size={'middle'}>
+        <Space size={0}>
           <Link to={'' + record.id}>
-            <Button type='primary'>Sửa </Button>
+            <Button type='text' size='small' icon={<EditOutlined style={{ color: '#1677ff', fontSize: '16px' }} />} />
           </Link>
           <Popconfirm
             placement='topRight'
-            title={record.active == 1 ? 'Are you sure distable this Amazon?' : 'Are you sure enable this Amazon?'}
+            title='Xác nhận xóa?'
             onConfirm={() => handlerDistableAmazon(record.id)}
-            onCancel={() => {}}
-            okText='Đồng ý'
-            cancelText='Hủy bỏ'
+            okText='Có'
+            cancelText='Không'
           >
-            <Button type='primary' danger>
-              Xóa
-            </Button>
+            <Button type='text' danger size='small' icon={<DeleteOutlined style={{ fontSize: '16px' }} />} />
           </Popconfirm>
         </Space>
       )
@@ -114,52 +108,48 @@ export default function ListAmazon() {
   }
 
   return (
-    <>
-      <div className='flex items-center justify-between my-2'>
-        <Typography.Title level={2} style={{ margin: 0 }}>
-          Danh sách danh mục
+    <div className='p-2 sm:p-4'>
+      {/* Header section: Chuyển từ hàng ngang sang hàng dọc trên Mobile */}
+      <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-4'>
+        <Typography.Title level={3} style={{ margin: 0 }}>
+          Danh sách Amazon
         </Typography.Title>
+        <Link to='add' className='w-full sm:w-auto'>
+          <Button type='primary' block>
+            Thêm danh mục
+          </Button>
+        </Link>
       </div>
-      <div className=''>
-        <Flex wrap='wrap' gap='small' className='my-5' align='center' justify='space-between'>
+
+      <div className='bg-white rounded-lg shadow-sm'>
+        {/* Thanh tìm kiếm: Co giãn theo màn hình */}
+        <div className='p-4'>
           <Input
-            className='header-search w-[250px]'
-            prefix={
-              <div className=' px-2'>
-                <SearchRoundedIcon />
-              </div>
-            }
+            className='w-full sm:w-[300px]'
+            prefix={<SearchRoundedIcon className='text-gray-400' />}
             value={searchValue}
-            spellCheck={false}
             allowClear
             onChange={handleChangeSearch}
-            size='small'
-            placeholder={'Tìm kiếm'}
-            style={{
-              borderRadius: '2rem'
-            }}
+            placeholder='Tìm kiếm bài viết...'
+            style={{ borderRadius: '1rem' }}
           />
-          <Link to='add'>
-            <Button type='primary'>Thêm danh mục</Button>
-          </Link>
-        </Flex>
+        </div>
+
         <Table
-          style={{
-            border: '2px',
-            borderRadius: '10px',
-            boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem',
-            height: '100%'
-          }}
           columns={columns}
-          sticky={{ offsetHeader: 0 }}
-          scroll={{ x: 1200 }}
-          dataSource={amazons?.dataList?.map((category: IAmazon, index: number) => ({
-            ...category,
+          dataSource={amazons?.dataList?.map((item: IAmazon, index: number) => ({
+            ...item,
             key: index + 1
           }))}
           loading={amazons.isLoading}
+          scroll={{ x: 800 }}
+          pagination={{
+            size: 'small',
+            showSizeChanger: false
+          }}
+          className='responsive-table'
         />
       </div>
-    </>
+    </div>
   )
 }

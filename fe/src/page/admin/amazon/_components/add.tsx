@@ -66,7 +66,7 @@ export default function AddAmazon() {
 
   return (
     <Drawer
-      width={'70%'}
+      width={'100%'}
       title={<span className='font-bold text-xl'>Tạo bài viết thread</span>}
       onClose={handleCancel}
       open={true}

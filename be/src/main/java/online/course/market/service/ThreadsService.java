@@ -59,10 +59,12 @@ public class ThreadsService {
                 .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "Bài viết không tồn tại"));
     }
 
-    public PostEntity updateAffiliateLink(Long id, AmazonPutRequest request) {
-        PostEntity link = postRepository.findById(id)
+    public PostEntity updatePost(Long id, AmazonPutRequest request) {
+        PostEntity post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
-        return postRepository.save(link);
+        post.setCaption(request.getCaption());
+        post.setAmzUrl(request.getAmzUrl());
+        return postRepository.save(post);
     }
 
     public void deleteById(Long id) {
