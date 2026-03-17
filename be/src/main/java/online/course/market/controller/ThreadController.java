@@ -53,6 +53,14 @@ public class ThreadController {
         PostEntity post = service.getPostById(id);
         return ResponseEntity.ok(ApiResponse.success(toDto(post)));
     }
+
+    @Operation(description = "Get by id endpoint for Category", summary = "Get Category by id")
+    @PostMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> publishPost(@PathVariable Long id, Authentication authentication) {
+        UserModel userModel = userService.getByUserName(authentication.getName());
+        service.publishPost(id, userModel);
+        return ResponseEntity.ok(ApiResponse.success());
+    }
     
     @PostMapping
     public ResponseEntity<ApiResponse<?>> cloneThreadPost(@RequestBody AmazonPostRequest request, Authentication authentication) {

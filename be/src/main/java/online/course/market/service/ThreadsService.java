@@ -45,8 +45,22 @@ public class ThreadsService {
     private final UserService userService;
 
 
-    public List<PostEntity> getAllPosts() {
-        return postRepository.findAll();
+    public void publishPost(Long id, UserModel account) {
+        Optional<PostEntity> postOpt = postRepository.findById(id);
+
+        if (postOpt.isPresent()) {
+            PostEntity post = postOpt.get();
+            try {
+                String videoUrl = post.getMedias().get(0).getCloudinaryUrl();
+                String imageUrl = (post.getMedias().size() >= 2) ? post.getMedias().get(1).getCloudinaryUrl() : null;
+
+                postToThreads(post.getCaption(), imageUrl, videoUrl, post.getAmzUrl(), post, account.getThreadToken(), account.getThreadId());
+                log.info("Account {} đã đăng bài ID {} thành công sau thời gian chờ.", account.getId(), post.getId());
+
+            } catch (Exception e) {
+                log.error("Lỗi khi đăng bài cho Account {}: {}", account.getId(), e.getMessage());
+            }
+        }
     }
 
     public List<PostEntity> getPostsByUser(String currentUsername, String search) {
