@@ -12,6 +12,7 @@ import online.course.market.service.ThreadsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +31,16 @@ public class ThreadController {
         return modelMapper.map(post, PostDto.class);
     }
 
-    @Operation(description = "Get all endpoint for Category", summary = "Get all Category")
+    @Operation(description = "Get all posts for the logged-in user", summary = "Get user posts")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<PostDto>>> getAll(@RequestParam(required = false) String search) {
-        List<PostDto> dtos = service.getAllPosts().stream()
-                .filter(affiliate -> search == null || search.isEmpty() || affiliate.getCaption().toLowerCase().contains(search.toLowerCase()))
-                .map(this::toDto).collect(Collectors.toList());
+    public ResponseEntity<ApiResponse<List<PostDto>>> getAll(
+            @RequestParam(required = false) String search,
+            Authentication authentication) {
+        String currentUsername = authentication.getName();
+        List<PostDto> dtos = service.getPostsByUser(currentUsername, search)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(dtos));
     }
 

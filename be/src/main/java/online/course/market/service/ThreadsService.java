@@ -12,6 +12,7 @@ import online.course.market.entity.dto.amazon.AmazonPutRequest;
 import online.course.market.entity.model.AffiliateLink;
 import online.course.market.entity.model.MediaEntity;
 import online.course.market.entity.model.PostEntity;
+import online.course.market.entity.model.UserModel;
 import online.course.market.framework.exception.CJNotFoundException;
 import online.course.market.repository.MediaRepository;
 import online.course.market.repository.PostRepository;
@@ -41,10 +42,16 @@ public class ThreadsService {
     private final MediaRepository mediaRepository;
     private final PostRepository postRepository;
     private final GroqService groqService;
+    private final UserService userService;
 
 
     public List<PostEntity> getAllPosts() {
         return postRepository.findAll();
+    }
+
+    public List<PostEntity> getPostsByUser(String currentUsername, String search) {
+        UserModel userModel = userService.getByUserName(currentUsername);
+        return postRepository.findAllByThreadIdAndCaption(userModel.getThreadId(), search);
     }
 
     public PostEntity getPostById(Long id) {
@@ -70,9 +77,7 @@ public class ThreadsService {
 
             String containerId;
 
-            // Kiểm tra xem có imageUrl không để quyết định loại bài đăng
             if (imageUrl != null && !imageUrl.isBlank()) {
-                // TRƯỜNG HỢP 1: CẢ ẢNH VÀ VIDEO (Dùng Carousel)
                 log.info("Bắt đầu tạo Carousel cho bài viết ID: {}", post.getId());
 
                 String photoId = createMediaContainer(userId, "IMAGE", imageUrl, true, accessToken);
@@ -346,13 +351,20 @@ public class ThreadsService {
         Document doc = Jsoup.parse(html);
         Elements links = doc.select("a.download_link");
 
-        String caption = (amazonPostRequest.getCaption() != null && !amazonPostRequest.getCaption().isEmpty()) ? amazonPostRequest.getCaption() : doc.select("p.text-sm.text-gray-700.leading-relaxed").text();
-        String prompt = "Rewrite this in English using Gen Z slang (e.g., 'slay', 'vibe', 'lowkey', 'game changer'). Keep it vibe-heavy and very concise. Add a few trendy emojis. Original content: " + caption;
-        String newCaption = groqService.generateThreadsContent(prompt);
-        String cleanCaption = newCaption.trim();
+        String rawContent = (amazonPostRequest.getCaption() != null && !amazonPostRequest.getCaption().isEmpty())
+                ? amazonPostRequest.getCaption()
+                : doc.select("p.text-sm.text-gray-700.leading-relaxed").text();
+
+        String finalThreadsCaption = "";
+        if (!rawContent.isEmpty()) {
+            String prompt = "Act as a Threads expert. Turn this into a relatable hot take or a question: \"" + rawContent + "\". " +
+                    "Keep it friendly but provocative. Return ONLY the caption text. Language: English.";
+            String aiResponse = groqService.generateThreadsContent(prompt);
+            finalThreadsCaption = aiResponse.trim().replaceAll("^\"|\"$", "");
+        }
 
         PostEntity post = new PostEntity();
-        post.setCaption(cleanCaption);
+        post.setCaption(finalThreadsCaption);
         post.setSourceUrl(amazonPostRequest.getSourceUrl());
         post.setAmzUrl(amazonPostRequest.getAmzUrl());
         post.setIsPublished(false);

@@ -14,4 +14,10 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<PostEntity, Long>{
     Optional<PostEntity> findFirstByIsPublishedFalseAndThreadIdOrderByIdAsc(String threadId);
+
+    @Query(value = "SELECT * FROM posts p " +
+            "WHERE p.thread_id = :threadId " +
+            "AND (:search IS NULL OR :search = '' OR LOWER(p.caption) LIKE LOWER(CONCAT('%', :search, '%')))",
+            nativeQuery = true)
+    List<PostEntity> findAllByThreadIdAndCaption(@Param("threadId") String threadId, @Param("search") String search);
 }
