@@ -142,7 +142,7 @@ export default function EditAmazon() {
                       <Form.Item
                         name='amzUrl'
                         label='Link Amazon'
-                        rules={[{ required: true, message: 'Vui lòng nhập link affiliate!' }]}
+                        rules={[{ message: 'Vui lòng nhập link affiliate!' }]}
                       >
                         <Input size='large' placeholder='Nhập link afiliate...' />
                       </Form.Item>

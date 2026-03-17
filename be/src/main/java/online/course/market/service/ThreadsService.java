@@ -102,7 +102,12 @@ public class ThreadsService {
             String postId = publishWithRetry(userId, containerId, accessToken);
             log.info("--- ĐÃ ĐĂNG BÀI THÀNH CÔNG! ID: {} ---", postId);
 
-            publishComment(userId, postId, generateRandomComment(amzUrl), accessToken);
+            if (amzUrl != null && !amzUrl.trim().isEmpty()) {
+                String comment = generateRandomComment(amzUrl);
+                publishComment(userId, postId, comment, accessToken);
+            } else {
+                log.warn("Bỏ qua đăng comment vì amzUrl bị null hoặc rỗng. PostId: {}", postId);
+            }
 
             post.setStatus("SUCCESS");
             post.setIsPublished(true);
