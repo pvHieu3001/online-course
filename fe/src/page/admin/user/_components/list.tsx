@@ -1,6 +1,6 @@
-import { Button, Flex, Input, Popconfirm, Space, Table, Tag, Typography } from 'antd'
+import { Button, Flex, Input, Popconfirm, Space, Table, Tooltip, Typography } from 'antd'
 import type { TableProps } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { popupSuccess } from '@/page/shared/Toast'
@@ -9,8 +9,10 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { IUser } from '@/common/types.interface'
+import { SwapOutlined } from '@ant-design/icons'
 
 export default function ListUser() {
+  const navigator = useNavigate()
   const [id, setId] = useState<number | string>()
   const [searchValue, setSearchValue] = useState('')
   const dispatch = useDispatch()
@@ -39,59 +41,52 @@ export default function ListUser() {
     }
   }
 
+  const handleSwitchUser = async (username: string) => {
+    await dispatch(userActions.switchUser(username) as unknown as AnyAction)
+    navigator('/')
+  }
+
   const columns: TableProps<IUser>['columns'] = [
     {
       title: '#',
       dataIndex: 'key',
       key: 'key',
-      width: 40,
-      align: 'center'
+      width: 60,
+      align: 'center',
+      fixed: 'left'
     },
     {
       title: 'Tên người dùng',
       dataIndex: 'username',
       key: 'username',
-      align: 'center',
-      render: (text) => <a>{text}</a>
+      minWidth: 150,
+      render: (text) => <a className='font-medium'>{text}</a>
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      align: 'center'
+      width: 200,
+      responsive: ['md']
     },
-    // {
-    //   title: 'Vai trò',
-    //   key: 'role_id',
-    //   dataIndex: 'role_id',
-    //   align: 'center',
-    //   render: (_, { role_id }) => (
-    //     <Tag color={role_id == '1' ? 'geekblue' : 'green'}>{role_id == '1' ? 'Admin' : 'Guest'}</Tag>
-    //   ),
-    //   filters: [
-    //     { text: 'Admin', value: '1' },
-    //     { text: 'Guest', value: '2' }
-    //   ],
-    //   onFilter: (value, record) => record.role_id.startsWith(value as string),
-    //   filterSearch: true
-    // },
-    // {
-    //   title: 'Trạng thái',
-    //   key: 'is_active',
-    //   dataIndex: 'is_active',
-    //   align: 'center',
-    //   render: (_, { is_active }) => (
-    //     <Tag color={is_active == 1 ? 'green' : 'red'}>{is_active == 1 ? 'Đang hoạt động' : 'Không hoạt động'}</Tag>
-    //   )
-    // },
     {
       title: 'Hành động',
       key: 'action',
       align: 'center',
+      width: 280,
+      fixed: 'right',
       render: (data: IUser) => (
-        <Space size='middle'>
+        <Space size='small' wrap>
+          {' '}
+          <Tooltip title='Nhập vai'>
+            <Button size='small' icon={<SwapOutlined />} onClick={() => handleSwitchUser(data.username)}>
+              Nhập vai
+            </Button>
+          </Tooltip>
           <Link to={String(data?.id)}>
-            <Button type='primary'>Sửa</Button>
+            <Button size='small' type='primary'>
+              Sửa
+            </Button>
           </Link>
           <Popconfirm
             disabled={userStore.isLoading}
@@ -101,7 +96,7 @@ export default function ListUser() {
             okText='Đồng ý'
             cancelText='Hủy bỏ'
           >
-            <Button danger loading={userStore.isLoading && data.id == id}>
+            <Button size='small' danger loading={userStore.isLoading && data.id == id}>
               Xóa
             </Button>
           </Popconfirm>
@@ -111,17 +106,24 @@ export default function ListUser() {
   ]
 
   return (
-    <>
-      <div className='flex items-center justify-between my-2'>
-        <Typography.Title level={2} style={{ margin: 0 }}>
+    <div className='p-2 md:p-4'>
+      <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-2'>
+        <Typography.Title level={2} style={{ margin: 0, fontSize: 'clamp(1.2rem, 5vw, 1.8rem)' }}>
           Danh sách người dùng
         </Typography.Title>
+
+        <Link to='add' className='w-full sm:w-auto'>
+          <Button type='primary' className='w-full'>
+            Thêm người dùng
+          </Button>
+        </Link>
       </div>
-      <Flex wrap='wrap' gap='small' className='my-5' align='center' justify='space-between'>
+
+      <Flex wrap='wrap' gap='small' className='my-5' align='center'>
         <Input
-          className='header-search w-[250px]'
+          className='header-search w-full sm:w-[300px]'
           prefix={
-            <div className=' px-2'>
+            <div className='px-2'>
               <SearchRoundedIcon />
             </div>
           }
@@ -129,26 +131,26 @@ export default function ListUser() {
           spellCheck={false}
           allowClear
           onChange={handleChangeSearch}
-          size='small'
+          size='middle' // Tăng size cho dễ chạm trên mobile
           placeholder={'Tìm kiếm'}
           style={{ borderRadius: '2rem' }}
         />
-        <Link to='add'>
-          <Button type='primary'>Thêm người dùng</Button>
-        </Link>
       </Flex>
-      <Table
-        style={{
-          border: '2px',
-          borderRadius: '10px',
-          boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem',
-          height: '100%'
-        }}
-        columns={columns}
-        sticky={{ offsetHeader: 0 }}
-        dataSource={dataTable}
-        loading={userStore.isLoading}
-      />
-    </>
+
+      <div className='overflow-hidden bg-white rounded-[10px] shadow-[rgba(0,0,0,0.05)_0rem_1.25rem_1.6875rem_0rem]'>
+        <Table
+          columns={columns}
+          dataSource={dataTable}
+          loading={userStore.isLoading}
+          sticky={{ offsetHeader: 0 }}
+          scroll={{ x: 800 }}
+          pagination={{
+            size: 'small',
+            responsive: true,
+            showSizeChanger: true
+          }}
+        />
+      </div>
+    </div>
   )
 }

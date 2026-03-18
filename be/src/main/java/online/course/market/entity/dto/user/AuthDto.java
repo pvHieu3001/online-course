@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthDto {
 	@JsonProperty("access_token")
-	  private String accessToken;
-	  @JsonProperty("refresh_token")
-	  private String refreshToken;
+	private String accessToken;
+	@JsonProperty("refresh_token")
+	private String refreshToken;
+	@JsonProperty("user_dto")
+	private UserDto userDto;
 }

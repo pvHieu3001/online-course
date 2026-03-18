@@ -18,4 +18,6 @@ public interface AuthService {
 	void refreshToken(final HttpServletRequest request, final HttpServletResponse response) throws IOException;
 	
 	boolean isUsernameValid(String username);
+
+	AuthDto switchUser(String userName);
 }

@@ -1,29 +1,31 @@
 package online.course.market.service;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import online.course.market.entity.dto.user.AuthDto;
+import online.course.market.entity.dto.user.LoginDto;
+import online.course.market.entity.dto.user.RegisterDto;
+import online.course.market.entity.dto.user.UserDto;
+import online.course.market.entity.model.Token;
+import online.course.market.entity.model.TokenType;
 import online.course.market.entity.model.UserModel;
+import online.course.market.repository.TokenRepository;
 import online.course.market.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import online.course.market.entity.dto.user.AuthDto;
-import online.course.market.entity.dto.user.LoginDto;
-import online.course.market.entity.dto.user.RegisterDto;
-import online.course.market.entity.model.Token;
-import online.course.market.entity.model.TokenType;
-import online.course.market.repository.TokenRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -54,10 +56,11 @@ public class AuthServiceImpl implements AuthService {
 
         revokeAllUserTokens(user);
 		saveUserToken(user, token);
-		
+		UserDto userDto = modelMapper.map(user, UserDto.class);
 		return AuthDto.builder()
 				.accessToken(token)
 				.refreshToken(refreshtoken)
+				.userDto(userDto)
 				.build();
 	}
 
@@ -143,4 +146,36 @@ public class AuthServiceImpl implements AuthService {
 		return !userRepository.existsUserModelByUsername(username);
 	}
 
+	@Override
+	public AuthDto switchUser(String userName) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		boolean isAdmin = auth.getAuthorities().stream()
+				.anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+
+		if (!isAdmin) {
+			throw new AccessDeniedException("Bạn không có quyền thực hiện hành động này!");
+		}
+
+		UserModel currentUser = userRepository.findByUsername(userName).orElseThrow();
+		UserModel swUser = userRepository.findByUsername(auth.getName()).orElseThrow();
+		String token = null;
+		String refreshtoken = null;
+		try {
+			token = jwtService.getToken(swUser);
+			refreshtoken = jwtService.getRefreshToken(swUser);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+
+		revokeAllUserTokens(swUser);
+		revokeAllUserTokens(currentUser);
+		saveUserToken(swUser, token);
+		UserDto userDto = modelMapper.map(swUser, UserDto.class);
+		return AuthDto.builder()
+				.accessToken(token)
+				.refreshToken(refreshtoken)
+				.userDto(userDto)
+				.build();
+	}
 }

@@ -376,16 +376,16 @@ public class ThreadsService {
                 ? amazonPostRequest.getCaption()
                 : doc.select("p.text-sm.text-gray-700.leading-relaxed").text();
 
-        String finalThreadsCaption = "";
-        if (!rawContent.isEmpty()) {
-            String prompt = "Act as a Threads expert. Turn this into a relatable hot take or a question: \"" + rawContent + "\". " +
-                    "Keep it friendly but provocative. Return ONLY the caption text. Language: English.";
-            String aiResponse = groqService.generateThreadsContent(prompt);
-            finalThreadsCaption = aiResponse.trim().replaceAll("^\"|\"$", "");
-        }
+//        String finalThreadsCaption = "";
+//        if (!rawContent.isEmpty()) {
+//            String prompt = "Act as a Threads expert. Turn this into a relatable hot take or a question: \"" + rawContent + "\". " +
+//                    "Keep it friendly but provocative. Return ONLY the caption text. Language: English.";
+//            String aiResponse = groqService.generateThreadsContent(prompt);
+//            finalThreadsCaption = aiResponse.trim().replaceAll("^\"|\"$", "");
+//        }
 
         PostEntity post = new PostEntity();
-        post.setCaption(finalThreadsCaption);
+        post.setCaption(rawContent);
         post.setSourceUrl(amazonPostRequest.getSourceUrl());
         post.setAmzUrl(amazonPostRequest.getAmzUrl());
         post.setIsPublished(false);

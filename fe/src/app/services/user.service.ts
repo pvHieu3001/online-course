@@ -17,12 +17,26 @@ async function login(data: ILogin) {
   return res.data
 }
 
-async function register(data: IRegister) {
-  const res = await httpauth.post(`/api/v1/auth/register`, data)
+async function switchUser(userName: string) {
+  const data = {
+    userName: userName
+  }
+  const res = await httpauth.post(`/api/v1/auth/switch-user`, data)
   const token = res.data.access_token
   axs.defaults.headers.common.Authorization = `Bearer ${token}`
 
   localStorage.setItem(LOCAL_STORAGE_TOKEN, token)
+  return res.data
+}
+
+async function register(data: IRegister) {
+  const res = await httpauth.post(`/api/v1/auth/register`, data)
+  const token = res.data.access_token
+  const user = res.data.user_dto
+  axs.defaults.headers.common.Authorization = `Bearer ${token}`
+
+  localStorage.setItem(LOCAL_STORAGE_TOKEN, token)
+  localStorage.setItem(LOCAL_STORAGE_USER, user)
   return res.data
 }
 
@@ -62,5 +76,6 @@ export const userService = {
   createUser,
   deleteUser,
   getPageUser,
-  getLoginUser
+  getLoginUser,
+  switchUser
 }

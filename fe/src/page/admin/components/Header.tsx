@@ -8,11 +8,13 @@ import { Link } from 'react-router-dom'
 import { RootState } from '@/app/store'
 import { userActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
+import { LOCAL_STORAGE_USER } from '@/common/constants'
 
 function Header() {
   const { notification } = useSelector((state: RootState) => state.web)
   const [showSidenav, setShowSidenav] = useState(false)
   const dispatch = useDispatch()
+  const user = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER) || '')
 
   const data = Array.from({ length: 2 }).map((_, i) => ({
     href: 'https://ant.design',
@@ -120,7 +122,7 @@ function Header() {
                   src='https://api.dicebear.com/7.x/miniavs/svg?seed=1'
                   className=' bg-gray-200 w-[28px] h-[28px]'
                 />
-                <span className='hidden md:inline'>Xin chào, User</span>
+                <span className='hidden md:inline'>Xin chào, {user?.username}</span>
               </Button>
             </Dropdown>
           </Flex>

@@ -122,6 +122,23 @@ export const login = (token: ILogin) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
+// Switch user
+export const switchUser = (userName: string) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return userService
+    .switchUser(userName)
+    .then((res) => {
+      dispatch(loginSuccess(res))
+      return res
+    })
+    .catch((error) => {
+      dispatch(loginFailure(error))
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
 // Signup user
 export const signup = (data: IRegister) => (dispatch: Dispatch) => {
   dispatch(isFetching())
@@ -169,5 +186,6 @@ export const userActions = {
   createUser,
   updateUser,
   deleteUser,
-  getLoginUser
+  getLoginUser,
+  switchUser
 }
