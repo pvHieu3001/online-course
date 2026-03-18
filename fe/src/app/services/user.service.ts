@@ -11,9 +11,11 @@ function getUsers() {
 async function login(data: ILogin) {
   const res = await httpauth.post(`/api/v1/auth/login`, data)
   const token = res.data.access_token
+  const user = res.data.user_dto
   axs.defaults.headers.common.Authorization = `Bearer ${token}`
 
   localStorage.setItem(LOCAL_STORAGE_TOKEN, token)
+  localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(user))
   return res.data
 }
 

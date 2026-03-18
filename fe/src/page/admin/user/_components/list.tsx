@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Input, Popconfirm, Space, Table, Tooltip, Typography } from 'antd'
+import { Button, Flex, Input, Popconfirm, Space, Table, Tooltip, Typography } from 'antd'
 import type { TableProps } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -10,6 +10,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { IUser } from '@/common/types.interface'
 import { DeleteOutlined, EditOutlined, SwapOutlined } from '@ant-design/icons'
+import { LOCAL_STORAGE_USER } from '@/common/constants'
 
 export default function ListUser() {
   const navigator = useNavigate()
@@ -18,6 +19,7 @@ export default function ListUser() {
   const dispatch = useDispatch()
   const userStore = useSelector((state: RootState) => state.user)
   const [dataTable, setDataTable] = useState<(IUser & { key: number })[]>([])
+  const currentUser = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER) || '{}')
 
   useEffect(() => {
     dispatch(userActions.getUsers() as unknown as AnyAction)
@@ -60,7 +62,20 @@ export default function ListUser() {
       dataIndex: 'username',
       key: 'username',
       minWidth: 150,
-      render: (text) => <a className='font-medium'>{text}</a>
+      render: (text: string) => {
+        const isMe = text === currentUser?.username
+        return (
+          <a
+            className={`font-medium ${isMe ? 'text-blue-600' : 'text-gray-700'}`}
+            style={{
+              color: isMe ? '#1890ff' : 'inherit',
+              fontWeight: isMe ? 'bold' : 'normal'
+            }}
+          >
+            {text} {isMe && '(Bạn)'}
+          </a>
+        )
+      }
     },
     {
       title: 'Email',
