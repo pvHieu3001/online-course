@@ -19,5 +19,5 @@ public interface AuthService {
 	
 	boolean isUsernameValid(String username);
 
-	AuthDto switchUser(String userName);
+	AuthDto switchUser(String userName, String currentUsername);
 }

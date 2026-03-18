@@ -21,7 +21,7 @@ async function switchUser(userName: string) {
   const data = {
     userName: userName
   }
-  const res = await httpauth.post(`/api/v1/auth/switch-user`, data)
+  const res = await http.post(`api/v1/admin/user/switch-user`, data)
   const token = res.data.access_token
   axs.defaults.headers.common.Authorization = `Bearer ${token}`
 

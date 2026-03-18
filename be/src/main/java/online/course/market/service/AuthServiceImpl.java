@@ -147,18 +147,9 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public AuthDto switchUser(String userName) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		boolean isAdmin = auth.getAuthorities().stream()
-				.anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
-
-		if (!isAdmin) {
-			throw new AccessDeniedException("Bạn không có quyền thực hiện hành động này!");
-		}
-
-		UserModel currentUser = userRepository.findByUsername(userName).orElseThrow();
-		UserModel swUser = userRepository.findByUsername(auth.getName()).orElseThrow();
+	public AuthDto switchUser(String swUsername, String currentUsername) {
+		UserModel currentUser = userRepository.findByUsername(currentUsername).orElseThrow();
+		UserModel swUser = userRepository.findByUsername(swUsername).orElseThrow();
 		String token = null;
 		String refreshtoken = null;
 		try {

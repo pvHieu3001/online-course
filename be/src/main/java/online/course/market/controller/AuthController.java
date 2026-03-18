@@ -3,8 +3,11 @@ package online.course.market.controller;
 import java.io.IOException;
 
 import online.course.market.entity.dto.user.SwitchUserRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +33,6 @@ public class AuthController {
 	@PostMapping(value="/login")
 	public ResponseEntity<AuthDto> login(@RequestBody LoginDto dto){					
 		return ResponseEntity.ok(authService.login(dto));
-	}
-
-	@PostMapping(value="/switch-user")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<AuthDto> switchUser(@RequestBody SwitchUserRequest dto){
-		return ResponseEntity.ok(authService.switchUser(dto.getUserName()));
 	}
 	
 	@PostMapping(value="/register")

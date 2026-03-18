@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import online.course.market.entity.dto.ApiResponse;
+import online.course.market.entity.dto.user.*;
 import online.course.market.service.AuthService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,9 +22,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import online.course.market.entity.dto.user.UserDto;
-import online.course.market.entity.dto.user.UserPostRequest;
-import online.course.market.entity.dto.user.UserPutRequest;
 import online.course.market.entity.model.UserModel;
 import online.course.market.framework.exception.CJNotFoundException;
 import online.course.market.service.UserService;
@@ -96,5 +95,12 @@ public class UserController {
 	public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable(name = "id") Long id) {
 		userService.deleteById(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("Deleted", null));
+	}
+
+	@PostMapping(value="/switch-user")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<AuthDto> switchUser(@RequestBody SwitchUserRequest dto, Authentication adminAuth){
+		String currentUsername = adminAuth.getName();
+		return ResponseEntity.ok(authService.switchUser(dto.getUserName(), currentUsername));
 	}
 }

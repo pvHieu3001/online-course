@@ -14,7 +14,7 @@ function Header() {
   const { notification } = useSelector((state: RootState) => state.web)
   const [showSidenav, setShowSidenav] = useState(false)
   const dispatch = useDispatch()
-  const user = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER) || '')
+  const user = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER) || '{}')
 
   const data = Array.from({ length: 2 }).map((_, i) => ({
     href: 'https://ant.design',

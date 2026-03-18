@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Popconfirm, Space, Table, Tooltip, Typography } from 'antd'
+import { Button, Divider, Flex, Input, Popconfirm, Space, Table, Tooltip, Typography } from 'antd'
 import type { TableProps } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -9,7 +9,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { IUser } from '@/common/types.interface'
-import { SwapOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, SwapOutlined } from '@ant-design/icons'
 
 export default function ListUser() {
   const navigator = useNavigate()
@@ -43,7 +43,7 @@ export default function ListUser() {
 
   const handleSwitchUser = async (username: string) => {
     await dispatch(userActions.switchUser(username) as unknown as AnyAction)
-    navigator('/')
+    navigator('/admin/amazon')
   }
 
   const columns: TableProps<IUser>['columns'] = [
@@ -70,35 +70,44 @@ export default function ListUser() {
       responsive: ['md']
     },
     {
-      title: 'Hành động',
+      title: 'Action',
       key: 'action',
       align: 'center',
-      width: 280,
+      width: 50,
       fixed: 'right',
       render: (data: IUser) => (
         <Space size='small' wrap>
-          {' '}
           <Tooltip title='Nhập vai'>
-            <Button size='small' icon={<SwapOutlined />} onClick={() => handleSwitchUser(data.username)}>
-              Nhập vai
-            </Button>
+            <Button
+              size='small'
+              type='text' // Dùng loại text để bỏ khung cho đỡ rối
+              icon={<SwapOutlined style={{ color: '#1890ff' }} />}
+              onClick={() => handleSwitchUser(data.username)}
+            />
           </Tooltip>
+
           <Link to={String(data?.id)}>
-            <Button size='small' type='primary'>
-              Sửa
-            </Button>
+            <Tooltip title='Sửa'>
+              <Button size='small' type='text' icon={<EditOutlined style={{ color: '#52c41a' }} />} />
+            </Tooltip>
           </Link>
+
           <Popconfirm
-            disabled={userStore.isLoading}
             title='Xóa người dùng'
-            description={`Bạn có chắc muốn xóa "${data.username}"?`}
+            description={`Xóa "${data.username}"?`}
             onConfirm={() => confirm(String(data.id))}
             okText='Đồng ý'
-            cancelText='Hủy bỏ'
+            cancelText='Hủy'
           >
-            <Button size='small' danger loading={userStore.isLoading && data.id == id}>
-              Xóa
-            </Button>
+            <Tooltip title='Xóa'>
+              <Button
+                size='small'
+                type='text'
+                danger
+                icon={<DeleteOutlined />}
+                loading={userStore.isLoading && data.id == id}
+              />
+            </Tooltip>
           </Popconfirm>
         </Space>
       )
