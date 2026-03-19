@@ -92,16 +92,25 @@ public class ThreadScheduler {
 
         if (postOpt.isPresent()) {
             PostEntity post = postOpt.get();
-            try {
-                String videoUrl = post.getMedias().get(0).getCloudinaryUrl();
-                String imageUrl = (post.getMedias().size() >= 2) ? post.getMedias().get(1).getCloudinaryUrl() : null;
+	    if(post.getMedias().size() > 0){
+            	try {
+                	String videoUrl = post.getMedias().get(0).getCloudinaryUrl();
+                	String imageUrl = (post.getMedias().size() >= 2) ? post.getMedias().get(1).getCloudinaryUrl() : null;
 
-                threadsService.postToThreads(post.getCaption(), imageUrl, videoUrl, post.getAmzUrl(), post, account.getThreadToken(), account.getThreadId());
-                log.info("Account {} đã đăng bài ID {} thành công sau thời gian chờ.", account.getId(), post.getId());
+                	threadsService.postToThreads(post.getCaption(), imageUrl, videoUrl, post.getAmzUrl(), post, account.getThreadToken(), account.getThreadId());
+                	log.info("Account {} đã đăng bài ID {} thành công sau thời gian chờ.", account.getId(), post.getId());
 
-            } catch (Exception e) {
-                log.error("Lỗi khi đăng bài ID {} cho Account {}: {}", post.getId(), account.getId(), e.getMessage());
-            }
+            	} catch (Exception e) {
+                	log.error("Lỗi khi đăng bài ID {} cho Account {}: {}", post.getId(), account.getId(), e.getMessage());
+            	}
+	    }else{
+            	post.setIsPublished(true);
+            	post.setPublishedAt(LocalDateTime.now());
+            	post.setStatus("FAILED");
+            	post.setLastError("Post don't have media");
+            	post.setRetryCount(1);
+            	postRepository.save(post);
+	    }
         }
     }
 }
