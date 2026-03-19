@@ -53,7 +53,7 @@ public class ThreadScheduler {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    @Scheduled(cron = "0 0 0,6,9,12,15,18,21 * * *", zone = "Asia/Ho_Chi_Minh")
+    @Scheduled(cron = "0 0 0,5,8,11,14,17,20,22 * * *", zone = "Asia/Ho_Chi_Minh")
     //@Scheduled(cron = "0 0 * * * *")
     public void runMultiAccountPost() {
         log.info("Bắt đầu tiến trình đăng bài phân tách thời gian: {}", LocalDateTime.now());
