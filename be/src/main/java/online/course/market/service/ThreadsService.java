@@ -58,7 +58,7 @@ public class ThreadsService {
                 log.info("Account {} đã đăng bài ID {} thành công sau thời gian chờ.", account.getId(), post.getId());
 
             } catch (Exception e) {
-                log.error("Lỗi khi đăng bài cho Account {}: {}", account.getId(), e.getMessage());
+                log.error("Lỗi khi đăng bài ID {} cho Account {}: {}", post.getId(), account.getId(), e.getMessage());
             }
         }
     }
