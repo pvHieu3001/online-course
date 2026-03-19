@@ -14,7 +14,12 @@ function Header() {
   const { notification } = useSelector((state: RootState) => state.web)
   const [showSidenav, setShowSidenav] = useState(false)
   const dispatch = useDispatch()
-  const user = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER) || '{}')
+  const userStore = useSelector((state: RootState) => state.user)
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER) || '{}'))
+
+  useEffect(() => {
+    setCurrentUser(JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER) || '{}'))
+  }, [userStore])
 
   const data = Array.from({ length: 2 }).map((_, i) => ({
     href: 'https://ant.design',
@@ -122,7 +127,7 @@ function Header() {
                   src='https://api.dicebear.com/7.x/miniavs/svg?seed=1'
                   className=' bg-gray-200 w-[28px] h-[28px]'
                 />
-                <span className='hidden md:inline'>Xin chào, {user?.username}</span>
+                <span className='hidden md:inline'>Xin chào, {currentUser?.username}</span>
               </Button>
             </Dropdown>
           </Flex>

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
-import { Form, Input, Modal, Button, Switch, Drawer, Spin, Row, Col } from 'antd'
+import { Form, Input, Modal, Button, Drawer, Spin, Row, Col } from 'antd'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
@@ -45,7 +45,7 @@ export default function AddAmazon() {
     const formData = new FormData()
 
     formData.append('sourceUrl', sourceUrl)
-    formData.append('amzUrl', amzUrl)
+    formData.append('amzUrl', amzUrl ?? '')
     formData.append('caption', caption)
 
     try {
@@ -116,11 +116,7 @@ export default function AddAmazon() {
                     </Form.Item>
                   </Col>
                   <Col span={24}>
-                    <Form.Item
-                      name='amzUrl'
-                      label='Link Amazon'
-                      rules={[{message: 'Vui lòng nhập link affiliate!' }]}
-                    >
+                    <Form.Item name='amzUrl' label='Link Amazon' rules={[{ message: 'Vui lòng nhập link affiliate!' }]}>
                       <Input size='large' placeholder='Nhập link afiliate...' />
                     </Form.Item>
                   </Col>

@@ -17,7 +17,7 @@ const Manager = () => {
   const dispatch = useDispatch()
 
   return (
-    <Layout className={clsx(styles.modules, `layout-dashboard `)} style={{ padding: '0 30px' }} id='manager'>
+    <Layout className={clsx(styles.modules, `layout-dashboard `)} id='manager'>
       <Drawer
         title={false}
         placement={'left'}

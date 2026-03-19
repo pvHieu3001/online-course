@@ -68,7 +68,7 @@ export default function EditAmazon() {
     const formData = new FormData()
 
     formData.append('sourceUrl', sourceUrl)
-    formData.append('amzUrl', amzUrl)
+    formData.append('amzUrl', amzUrl ?? '')
     formData.append('caption', caption)
 
     try {

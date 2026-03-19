@@ -19,7 +19,7 @@ export default function ListUser() {
   const dispatch = useDispatch()
   const userStore = useSelector((state: RootState) => state.user)
   const [dataTable, setDataTable] = useState<(IUser & { key: number })[]>([])
-  const currentUser = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER) || '{}')
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER) || '{}'))
 
   useEffect(() => {
     dispatch(userActions.getUsers() as unknown as AnyAction)
@@ -45,6 +45,7 @@ export default function ListUser() {
 
   const handleSwitchUser = async (username: string) => {
     await dispatch(userActions.switchUser(username) as unknown as AnyAction)
+    setCurrentUser(JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER) || '{}'))
     navigator('/admin/amazon')
   }
 
@@ -81,14 +82,14 @@ export default function ListUser() {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      width: 200,
+      width: 400,
       responsive: ['md']
     },
     {
       title: 'Action',
       key: 'action',
       align: 'center',
-      width: 50,
+      width: 150,
       fixed: 'right',
       render: (data: IUser) => (
         <Space size='small' wrap>

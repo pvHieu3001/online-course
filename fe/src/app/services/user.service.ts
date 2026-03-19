@@ -25,9 +25,11 @@ async function switchUser(userName: string) {
   }
   const res = await http.post(`api/v1/admin/user/switch-user`, data)
   const token = res.data.access_token
+  const user = res.data.user_dto
   axs.defaults.headers.common.Authorization = `Bearer ${token}`
 
   localStorage.setItem(LOCAL_STORAGE_TOKEN, token)
+  localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(user))
   return res.data
 }
 

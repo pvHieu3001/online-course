@@ -3,8 +3,8 @@ import UseSidenav from '../../../utils/UseSidenav'
 import { useEffect, useState } from 'react'
 import type { MenuProps } from 'antd'
 import ShopeeLogo from '@/assets/images/shopee_v2.png'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAmazon } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAmazon } from '@fortawesome/free-brands-svg-icons'
 import { ReadOutlined, TagsOutlined, UsergroupAddOutlined, DashboardOutlined, UserOutlined } from '@ant-design/icons'
 
 function Sidenav() {

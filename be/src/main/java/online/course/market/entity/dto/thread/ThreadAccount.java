@@ -11,4 +11,5 @@ public class ThreadAccount {
     String id;
     String threadId;
     String threadToken;
+    Boolean isThreadPending;
 }

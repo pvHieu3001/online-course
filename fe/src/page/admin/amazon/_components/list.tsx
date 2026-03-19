@@ -60,23 +60,23 @@ export default function ListAmazon() {
       }
     },
     {
+      title: 'Caption',
+      dataIndex: 'caption',
+      key: 'caption',
+      width: 150,
+      ellipsis: true,
+      render: (text) => <span className='line-clamp-2'>{text ?? 'N/A'}</span>
+    },
+    {
       title: 'Link clone',
       dataIndex: 'sourceUrl',
       key: 'sourceUrl',
-      width: 150,
+      width: 300,
       render: (text) => (
         <a href={text} target='_blank' className='block w-40 truncate text-blue-600 hover:underline'>
           {text}
         </a>
       )
-    },
-    {
-      title: 'Caption',
-      dataIndex: 'caption',
-      key: 'caption',
-      width: 150,
-      ellipsis: true, // Tự động rút gọn bằng dấu ... nếu dài
-      render: (text) => <span className='line-clamp-2'>{text ?? 'N/A'}</span>
     },
     {
       title: 'Hành động',

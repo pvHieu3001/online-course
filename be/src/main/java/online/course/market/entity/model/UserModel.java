@@ -30,8 +30,10 @@ public class UserModel  extends BaseEntity implements UserDetails {
 	private String lastname;
 	private String phonenumber;
 	private String username;
+
 	private String threadId;
 	private String threadToken;
+	private Boolean isThreadPending;
 	@JsonIgnore
 	private String password;	
 	private String email;

@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -63,8 +64,8 @@ public class ThreadScheduler {
         for (int i = 0; i < userDtos.size(); i++) {
             ThreadAccount account = userDtos.get(i);
 
-            if (account == null || !StringUtils.hasText(account.getThreadId()) || !StringUtils.hasText(account.getThreadToken())) {
-                log.warn("Bỏ qua account do thiếu thông tin định danh hoặc token.");
+            if (account == null || Objects.equals(account.getIsThreadPending(), true) || !StringUtils.hasText(account.getThreadId()) || !StringUtils.hasText(account.getThreadToken())) {
+                log.warn("Bỏ qua account do thiếu thông tin định danh, token hoặc pending.");
                 continue;
             }
 
