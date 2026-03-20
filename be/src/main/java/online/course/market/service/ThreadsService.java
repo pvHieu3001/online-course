@@ -32,6 +32,7 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -51,14 +52,37 @@ public class ThreadsService {
         if (postOpt.isPresent()) {
             PostEntity post = postOpt.get();
             try {
-                String videoUrl = post.getMedias().get(0).getCloudinaryUrl();
-                String imageUrl = (post.getMedias().size() >= 2) ? post.getMedias().get(1).getCloudinaryUrl() : null;
+                List<String> videoUrls = List.of();
+                List<String> imageUrls = List.of();
 
-                postToThreads(post.getCaption(), imageUrl, videoUrl, post.getAmzUrl(), post, account.getThreadToken(), account.getThreadId());
-                log.info("Account {} đã đăng bài ID {} thành công sau thời gian chờ.", account.getId(), post.getId());
+                if (post.getMedias() != null && !post.getMedias().isEmpty()) {
+                    Map<String, List<String>> mediaMap = post.getMedias().stream()
+                            .filter(m -> m.getCloudinaryUrl() != null)
+                            .collect(Collectors.groupingBy(
+                                    MediaEntity::getMediaType,
+                                    Collectors.mapping(MediaEntity::getCloudinaryUrl, Collectors.toList())
+                            ));
 
+                    videoUrls = mediaMap.getOrDefault("VIDEO", List.of());
+                    imageUrls = mediaMap.getOrDefault("IMAGE", List.of());
+                }
+
+                if ((post.getCaption() == null || post.getCaption().isBlank()) && imageUrls.isEmpty() && videoUrls.isEmpty()) {
+                    handleFailedPost(post, "Post nội dung trống (không có chữ cũng không có media)");
+                    return;
+                }
+                postToThreads(
+                        post.getCaption(),
+                        imageUrls,
+                        videoUrls,
+                        post.getAmzUrl(),
+                        post,
+                        account.getThreadToken(),
+                        account.getThreadId()
+                );
+                log.info("Account {} đã xử lý bài bài ID {}.", account.getId(), post.getId());
             } catch (Exception e) {
-                log.error("Lỗi khi đăng bài ID {} cho Account {}: {}", post.getId(), account.getId(), e.getMessage());
+                log.error("Lỗi hệ thống khi xử lý bài ID {} cho Account {}: {}", post.getId(), account.getId(), e.getMessage());
             }
         }
     }
@@ -86,31 +110,53 @@ public class ThreadsService {
         postRepository.delete(postEntity);
     }
 
-    public void postToThreads(String text, String imageUrl, String videoUrl, String amzUrl, PostEntity post, String accessToken, String userId) {
+    public void postToThreads(String text, List<String> imageUrls, List<String> videoUrls, String amzUrl, PostEntity post, String accessToken, String userId) {
         try {
             post.setStatus("PROCESSING");
             postRepository.save(post);
 
             String containerId;
+            List<String> childrenIds = new ArrayList<>();
 
-            if (imageUrl != null && !imageUrl.isBlank()) {
+            // 1. Xử lý gom tất cả Media (Images + Videos) vào danh sách children
+            if (imageUrls != null) {
+                for (String url : imageUrls) {
+                    childrenIds.add(createMediaContainer(userId, "IMAGE", url, true, accessToken));
+                }
+            }
+            if (videoUrls != null) {
+                for (String url : videoUrls) {
+                    childrenIds.add(createMediaContainer(userId, "VIDEO", url, true, accessToken));
+                }
+            }
+
+            // 2. Logic đăng bài dựa trên số lượng Media
+            if (childrenIds.size() > 1) {
                 log.info("Bắt đầu tạo Carousel cho bài viết ID: {}", post.getId());
 
-                String photoId = createMediaContainer(userId, "IMAGE", imageUrl, true, accessToken);
-                String videoId = createMediaContainer(userId, "VIDEO", videoUrl, true, accessToken);
-
-                if (!waitForMediaReady(photoId, accessToken) || !waitForMediaReady(videoId, accessToken)) {
-                    throw new RuntimeException("Media (Image/Video) không sẵn sàng sau thời gian chờ.");
+                // Đợi tất cả item con sẵn sàng (Wait for ready)
+                for (String id : childrenIds) {
+                    if (!waitForMediaReady(id, accessToken)) {
+                        throw new RuntimeException("Media item " + id + " không sẵn sàng sau thời gian chờ.");
+                    }
                 }
 
-                List<String> childrenIds = Arrays.asList(videoId, photoId);
+                // Tạo Carousel container từ danh sách IDs
                 containerId = createCarouselWithRetry(userId, text, childrenIds, accessToken);
+
+            } else if (childrenIds.size() == 1) {
+                log.info("Bắt đầu tạo Single Post cho bài viết ID: {}", post.getId());
+                String singleMediaUrl = (videoUrls != null && !videoUrls.isEmpty()) ? videoUrls.get(0) : imageUrls.get(0);
+                String type = (videoUrls != null && !videoUrls.isEmpty()) ? "VIDEO" : "IMAGE";
+
+                containerId = createMediaContainerWithText(userId, type, singleMediaUrl, text, accessToken);
             } else {
-                log.info("Bắt đầu tạo Single Video Post cho bài viết ID: {}", post.getId());
-                containerId = createMediaContainerWithText(userId, "VIDEO", videoUrl, text, accessToken);
-                if (!waitForMediaReady(containerId, accessToken)) {
-                    throw new RuntimeException("Video đơn lẻ không sẵn sàng sau thời gian chờ.");
-                }
+                log.info("Bắt đầu tạo Text-only Post cho bài viết ID: {}", post.getId());
+                containerId = createTextContainer(userId, text, accessToken);
+            }
+
+            if (!waitForMediaReady(containerId, accessToken)) {
+                throw new RuntimeException("Container chính không sẵn sàng để publish.");
             }
 
             String postId = publishWithRetry(userId, containerId, accessToken);
@@ -119,8 +165,6 @@ public class ThreadsService {
             if (amzUrl != null && !amzUrl.trim().isEmpty()) {
                 String comment = generateRandomComment(amzUrl);
                 publishComment(userId, postId, comment, accessToken);
-            } else {
-                log.warn("Bỏ qua đăng comment vì amzUrl bị null hoặc rỗng. PostId: {}", postId);
             }
 
             post.setStatus("SUCCESS");
@@ -215,6 +259,32 @@ public class ThreadsService {
             }
         } catch (Exception e) {
             log.error("Lỗi gọi API Threads tạo Single Media Container: {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    private String createTextContainer(String userId, String text, String accessToken) {
+        String url = "https://graph.threads.net/v1.0/" + userId + "/threads";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("text", text);
+        body.put("media_type", "TEXT");
+        body.put("access_token", accessToken);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+        try {
+            ResponseEntity<Map> response = restTemplate.postForEntity(url, entity, Map.class);
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                return (String) response.getBody().get("id");
+            } else {
+                throw new RuntimeException("Lỗi khi tạo Text Container: " + response.getBody());
+            }
+        } catch (Exception e) {
+            log.error("Không thể kết nối đến Threads API để tạo Text Container: {}", e.getMessage());
             throw e;
         }
     }
@@ -434,5 +504,15 @@ public class ThreadsService {
             }
         }
         mediaRepository.saveAll(mediaList);
+    }
+
+    public void handleFailedPost(PostEntity post, String reason) {
+        post.setIsPublished(true);
+        post.setPublishedAt(LocalDateTime.now());
+        post.setStatus("FAILED");
+        post.setLastError(reason);
+        post.setRetryCount(1);
+        postRepository.save(post);
+        log.warn("Bài viết ID {} bị từ chối: {}", post.getId(), reason);
     }
 }
