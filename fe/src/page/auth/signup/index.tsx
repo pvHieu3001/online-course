@@ -12,35 +12,35 @@ import { AnyAction } from '@reduxjs/toolkit'
 
 const validationSchema = Joi.object({
   firstname: Joi.string().required().messages({
-    'any.required': 'Họ là bắt buộc',
-    'string.empty': 'Họ không được để trống'
+    'any.required': 'First name is required',
+    'string.empty': 'First name cannot be empty'
   }),
   lastname: Joi.string().required().messages({
-    'any.required': 'Tên là bắt buộc',
-    'string.empty': 'Tên không được để trống'
+    'any.required': 'Last name is required',
+    'string.empty': 'Last name cannot be empty'
   }),
   username: Joi.string().min(6).required().messages({
-    'string.min': 'Tên người dùng phải có ít nhất 6 ký tự',
-    'any.required': 'Tên người dùng là bắt buộc',
-    'string.empty': 'Tên người dùng không được để trống'
+    'string.min': 'Username must have at least 6 characters',
+    'any.required': 'Username is required',
+    'string.empty': 'Username cannot be empty'
   }),
   email: Joi.string()
     .email({ tlds: { allow: false } })
     .required()
     .messages({
-      'string.email': 'Địa chỉ email không hợp lệ',
-      'any.required': 'Địa chỉ email là bắt buộc',
-      'string.empty': 'Email không được để trống'
+      'string.email': 'Invalid email address',
+      'any.required': 'Email address is required',
+      'string.empty': 'Email cannot be empty'
     }),
   password: Joi.string().min(6).required().messages({
-    'string.min': 'Mật khẩu phải có ít nhất 6 ký tự',
-    'any.required': 'Mật khẩu là bắt buộc',
-    'string.empty': 'Mật khẩu không được để trống'
+    'string.min': 'Password must have at least 6 characters',
+    'any.required': 'Password is required',
+    'string.empty': 'Password cannot be empty'
   }),
   confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
-    'any.only': 'Xác nhận mật khẩu không khớp',
-    'any.required': 'Xác nhận mật khẩu là bắt buộc',
-    'string.empty': 'Xác nhận mật khẩu không được để trống'
+    'any.only': 'Confirm password does not match',
+    'any.required': 'Confirm password is required',
+    'string.empty': 'Confirm password cannot be empty'
   })
 })
 
@@ -77,10 +77,10 @@ const SignUp = () => {
     try {
       setLoadingSignUp(true)
       await dispatch(userActions.signup(payload) as unknown as AnyAction)
-      popupSuccess('Đăng ký thành công!')
+      popupSuccess('Registration successful!')
       navigate('/login')
     } catch (err) {
-      popupError('Đăng ký thất bại')
+      popupError('Registration failed')
     } finally {
       setLoadingSignUp(false)
     }
@@ -92,34 +92,34 @@ const SignUp = () => {
       style={{ backgroundImage: `url(${bgSignup})` }}
     >
       <Helmet>
-        <title>Đăng Ký || Học Free</title>
+        <title>Sign Up || Hocfree</title>
       </Helmet>
 
       <div className='w-full max-w-md space-y-8 bg-white dark:bg-neutral-900 p-6 rounded-lg shadow-lg'>
-        <h2 className='text-center text-3xl font-bold text-neutral-800 dark:text-neutral-100'>Đăng ký</h2>
+        <h2 className='text-center text-3xl font-bold text-neutral-800 dark:text-neutral-100'>Sign Up</h2>
 
         <Form form={form} layout='vertical' onFinish={handleFinish}>
-          <Form.Item label='Họ' name='firstname'>
+          <Form.Item label='First Name' name='firstname'>
             <Input placeholder='Nguyễn' />
           </Form.Item>
 
-          <Form.Item label='Tên' name='lastname'>
+          <Form.Item label='Last Name' name='lastname'>
             <Input placeholder='Văn A' />
           </Form.Item>
 
-          <Form.Item label='Tên người dùng' name='username'>
-            <Input placeholder='Nhập tên người dùng' />
+          <Form.Item label='Username' name='username'>
+            <Input placeholder='Enter username' />
           </Form.Item>
 
           <Form.Item label='Email' name='email'>
             <Input placeholder='example@example.com' />
           </Form.Item>
 
-          <Form.Item label='Mật khẩu' name='password'>
+          <Form.Item label='Password' name='password'>
             <Input.Password placeholder='*******' />
           </Form.Item>
 
-          <Form.Item label='Xác nhận mật khẩu' name='confirmPassword'>
+          <Form.Item label='Confirm Password' name='confirmPassword'>
             <Input.Password placeholder='*******' />
           </Form.Item>
 
@@ -130,7 +130,7 @@ const SignUp = () => {
             block
             className='bg-green-600 hover:bg-green-700'
           >
-            {isLoadingSignUp ? 'Đang xử lý...' : 'Đăng ký'}
+            {isLoadingSignUp ? 'Processing...' : 'Sign Up'}
           </Button>
         </Form>
       </div>

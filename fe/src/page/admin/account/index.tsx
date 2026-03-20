@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/app/store'
 import { userActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
-import Loading from '@/page/Loading'
 import LoadingPage from '../components/util/LoadingPage'
 
 export default function AccountManagement() {
@@ -29,18 +28,18 @@ export default function AccountManagement() {
   }, [dispatch])
 
   const handleLogout = () => {
-    message.success('Đăng xuất thành công!')
+    message.success('Logged out successfully!')
   }
 
-  const handleEditFinish = (values) => {
-    console.log('Dữ liệu mới:', values)
-    message.success('Cập nhật thông tin thành công!')
+  const handleEditFinish = (values: any) => {
+    console.log('New data:', values)
+    message.success('Information updated successfully!')
     setIsEditModalVisible(false)
   }
 
-  const handleChangePasswordFinish = (values) => {
-    console.log('Mật khẩu mới:', values)
-    message.success('Đổi mật khẩu thành công!')
+  const handleChangePasswordFinish = (values: any) => {
+    console.log('New password:', values)
+    message.success('Password changed successfully!')
     setIsPasswordModalVisible(false)
     passwordForm.resetFields()
   }
@@ -69,7 +68,7 @@ export default function AccountManagement() {
             <div className='flex items-center justify-between text-gray-700'>
               <span className='flex items-center font-semibold'>
                 <UserOutlined className='mr-2 text-gray-500' />
-                Tên đăng nhập
+                Username
               </span>
               <span>{user.data?.username}</span>
             </div>
@@ -83,7 +82,7 @@ export default function AccountManagement() {
             <div className='flex items-center justify-between text-gray-700'>
               <span className='flex items-center font-semibold'>
                 <CalendarOutlined className='mr-2 text-gray-500' />
-                Đăng nhập lần cuối
+                Last login
               </span>
               <span>15/10/2025 16:30</span>
             </div>
@@ -93,7 +92,7 @@ export default function AccountManagement() {
 
           <div className='flex flex-col sm:flex-row sm:justify-center gap-3'>
             <Button icon={<EditOutlined />} size='large' className='flex-1' onClick={() => setIsEditModalVisible(true)}>
-              Chỉnh sửa
+              Edit
             </Button>
             <Button
               icon={<KeyOutlined />}
@@ -101,7 +100,7 @@ export default function AccountManagement() {
               className='flex-1'
               onClick={() => setIsPasswordModalVisible(true)}
             >
-              Đổi mật khẩu
+              Change Password
             </Button>
             <Button
               type='primary'
@@ -111,7 +110,7 @@ export default function AccountManagement() {
               size='large'
               className='flex-1'
             >
-              Đăng xuất
+              Logout
             </Button>
           </div>
         </div>
@@ -119,21 +118,21 @@ export default function AccountManagement() {
 
       {/* --- MODAL CHỈNH SỬA THÔNG TIN --- */}
       <Modal
-        title='Chỉnh sửa thông tin cá nhân'
+        title='Edit Profile'
         open={isEditModalVisible}
         onOk={() => editForm.submit()}
         onCancel={() => setIsEditModalVisible(false)}
-        okText='Lưu thay đổi'
-        cancelText='Hủy'
+        okText='Save changes'
+        cancelText='Cancel'
       >
         <Form form={editForm} layout='vertical' onFinish={handleEditFinish} initialValues={user}>
-          <Form.Item name='fullName' label='Họ và tên' rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}>
+          <Form.Item name='fullName' label='Full name' rules={[{ required: true, message: 'Please enter your full name!' }]}>
             <Input />
           </Form.Item>
           <Form.Item
             name='email'
             label='Email'
-            rules={[{ required: true, type: 'email', message: 'Email không hợp lệ!' }]}
+            rules={[{ required: true, type: 'email', message: 'Invalid email!' }]}
           >
             <Input />
           </Form.Item>
@@ -142,27 +141,27 @@ export default function AccountManagement() {
 
       {/* --- MODAL ĐỔI MẬT KHẨU --- */}
       <Modal
-        title='Đổi mật khẩu'
+        title='Change Password'
         open={isPasswordModalVisible}
         onOk={() => passwordForm.submit()}
         onCancel={() => setIsPasswordModalVisible(false)}
-        okText='Xác nhận'
-        cancelText='Hủy'
+        okText='Confirm'
+        cancelText='Cancel'
       >
         <Form form={passwordForm} layout='vertical' onFinish={handleChangePasswordFinish}>
           <Form.Item
             name='oldPassword'
-            label='Mật khẩu cũ'
-            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu cũ!' }]}
+            label='Old Password'
+            rules={[{ required: true, message: 'Please enter old password!' }]}
           >
             <Input.Password />
           </Form.Item>
           <Form.Item
             name='newPassword'
-            label='Mật khẩu mới'
+            label='New Password'
             rules={[
-              { required: true, message: 'Vui lòng nhập mật khẩu mới!' },
-              { min: 8, message: 'Mật khẩu phải có ít nhất 8 ký tự!' }
+              { required: true, message: 'Please enter new password!' },
+              { min: 8, message: 'Password must have at least 8 characters!' }
             ]}
             hasFeedback
           >
@@ -170,17 +169,17 @@ export default function AccountManagement() {
           </Form.Item>
           <Form.Item
             name='confirmPassword'
-            label='Xác nhận mật khẩu mới'
+            label='Confirm New Password'
             dependencies={['newPassword']}
             hasFeedback
             rules={[
-              { required: true, message: 'Vui lòng xác nhận mật khẩu mới!' },
+              { required: true, message: 'Please confirm new password!' },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue('newPassword') === value) {
                     return Promise.resolve()
                   }
-                  return Promise.reject(new Error('Mật khẩu xác nhận không khớp!'))
+                  return Promise.reject(new Error('Passwords do not match!'))
                 }
               })
             ]}

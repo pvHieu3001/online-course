@@ -55,9 +55,9 @@ export default function ListProduct() {
           coursesPerPage
         ) as unknown as AnyAction
       )
-      message.success('Xoá khóa học thành công!')
+      message.success('Course deleted successfully!')
     } catch (error) {
-      message.error('Xoá khóa học thất bại!')
+      message.error('Failed to delete course!')
     }
   }
 
@@ -70,7 +70,7 @@ export default function ListProduct() {
       align: 'center'
     },
     {
-      title: 'Tên khóa học',
+      title: 'Course Name',
       dataIndex: 'name',
       key: 'name',
       align: 'center',
@@ -82,7 +82,7 @@ export default function ListProduct() {
       )
     },
     {
-      title: 'Loại khóa học',
+      title: 'Category',
       dataIndex: 'category',
       key: 'category',
       align: 'center',
@@ -98,7 +98,7 @@ export default function ListProduct() {
       )
     },
     {
-      title: 'Độ khó',
+      title: 'Level',
       dataIndex: 'level',
       key: 'level',
       align: 'center',
@@ -122,7 +122,7 @@ export default function ListProduct() {
       }
     },
     {
-      title: 'Trạng thái',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       align: 'center',
@@ -135,13 +135,13 @@ export default function ListProduct() {
 
         return (
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusClass}`}>
-            {status == 'active' ? 'Hoạt động' : 'Không hoạt động'}
+            {status == 'active' ? 'Active' : 'Inactive'}
           </span>
         )
       }
     },
     {
-      title: 'Hành động',
+      title: 'Action',
       key: 'action',
       width: 150,
       align: 'center',
@@ -152,18 +152,18 @@ export default function ListProduct() {
             <Button icon={<EyeOutlined />} />
           </Link>
           <Link to={'' + record.id + `?status=${active}&isHot=${isHot}&search=${searchValue}&page=${currentPage - 1}`}>
-            <Button type='primary'>Sửa</Button>
+            <Button type='primary'>Edit</Button>
           </Link>
           <Popconfirm
             placement='topRight'
-            title={'Bạn có chắc muốn xoá khóa học này?'}
+            title={'Are you sure you want to delete this course?'}
             onConfirm={() => handlerDeleteProduct(record.id)}
             onCancel={() => {}}
-            okText='Đồng ý'
-            cancelText='Huỷ bỏ'
+            okText='Yes'
+            cancelText='Cancel'
           >
             <Button type='primary' danger>
-              Xoá
+              Delete
             </Button>
           </Popconfirm>
         </Space>
@@ -179,7 +179,7 @@ export default function ListProduct() {
     <>
       <div className='flex items-center justify-between my-2'>
         <Typography.Title level={2} style={{ margin: 0 }}>
-          Danh sách khóa học
+          Course List
         </Typography.Title>
       </div>
       <Flex wrap='wrap' gap='small' className='my-5' align='center' justify='space-between'>
@@ -196,13 +196,13 @@ export default function ListProduct() {
             allowClear
             onChange={handleChangeSearch}
             size='small'
-            placeholder={'Tìm kiếm'}
+            placeholder={'Search'}
             style={{ borderRadius: '2rem' }}
           />
           <Select className='ml-2 w-40' onChange={(value) => setActive(value)} value={active} size='large'>
-            <Select.Option value=''>Trạng Thái</Select.Option>
-            <Select.Option value='active'>Hoạt Động</Select.Option>
-            <Select.Option value='inactive'>Không Hoạt Động</Select.Option>
+            <Select.Option value=''>Status</Select.Option>
+            <Select.Option value='active'>Active</Select.Option>
+            <Select.Option value='inactive'>Inactive</Select.Option>
           </Select>
           <Button
             size='large'
@@ -216,7 +216,7 @@ export default function ListProduct() {
               setIsHot(isHot == '' || isHot == '0' ? '1' : '0')
             }}
           >
-            <StarOutlined /> Được yêu thích
+            <StarOutlined /> Favorite
           </Button>
           <Button
             size='large'
@@ -228,12 +228,12 @@ export default function ListProduct() {
               setIsHot('')
             }}
           >
-            <UnorderedListOutlined /> Tất Cả
+            <UnorderedListOutlined /> All
           </Button>
         </div>
 
         <Link to={`add?status=${active}&isHot=${isHot}&search=${searchValue}&page=${currentPage - 1}`}>
-          <Button type='primary'>Thêm khóa học</Button>
+          <Button type='primary'>Add course</Button>
         </Link>
       </Flex>
       <Table

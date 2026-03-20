@@ -48,13 +48,13 @@ const Header = (props: Props) => {
   }, [menuOpen])
 
   const menuItems = [
-    { label: 'TRANG CHỦ', href: '/' },
-    { label: 'KHÓA HỌC', href: '/tat-ca-khoa-hoc' },
-    { label: 'TÀI CHÍNH', href: '/chung-khoan' },
+    { label: 'HOME', href: '/' },
+    { label: 'COURSES', href: '/tat-ca-khoa-hoc' },
+    { label: 'FINANCE', href: '/chung-khoan' },
     { label: 'CRYPTO', href: '/crypto' },
-    { label: 'TIỆN ÍCH', href: '/thu-thuat-huu-ich' },
-    { label: 'SƯU TẦM', href: '/suu-tam' },
-    // { label: 'BẢNG GIÁ CHỨNG KHOÁN', href: '/bang-gia-chung-khoan' }
+    { label: 'UTILITIES', href: '/thu-thuat-huu-ich' },
+    { label: 'COLLECTIONS', href: '/suu-tam' },
+    // { label: 'STOCK PRICES', href: '/bang-gia-chung-khoan' }
   ]
 
   const handleDetail = (course: IProduct) => {
@@ -68,7 +68,7 @@ const Header = (props: Props) => {
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch((e.target as HTMLInputElement).value)
-      setMenuOpen(false) // Đóng menu sau khi tìm kiếm
+      setMenuOpen(false) // Close menu after search
     }
   }
 
@@ -79,7 +79,7 @@ const Header = (props: Props) => {
         {/* Toggle button for mobile */}
         <button
           className='absolute left-2 top-2 z-50 bg-transparent border-none'
-          aria-label='Mở menu'
+          aria-label='Open menu'
           onClick={() => setMenuOpen(true)}
         >
           <MenuOutlined style={{ fontSize: 24, color: '#fff' }} />
@@ -106,7 +106,7 @@ const Header = (props: Props) => {
             </text>
           </svg>
           <span className='text-white text-sm sm:text-base font-semibold tracking-wide'>
-            HỌC MIỄN PHÍ – CHIA SẺ KIẾN THỨC – NÂNG TẦM BẢN THÂN
+            LEARN FOR FREE – SHARE KNOWLEDGE – ELEVATE YOURSELF
           </span>
         </header>
       </div>
@@ -141,7 +141,7 @@ const Header = (props: Props) => {
         >
           <button
             className='absolute top-3 right-3 bg-transparent border-none'
-            aria-label='Đóng menu'
+            aria-label='Close menu'
             onClick={() => setMenuOpen(false)}
           >
             <CloseOutlined style={{ fontSize: 24 }} />
@@ -154,7 +154,7 @@ const Header = (props: Props) => {
             <input
               onKeyDown={handleSearchKeyDown}
               type='text'
-              placeholder='Tìm kiếm khóa học...'
+              placeholder='Search courses...'
               className='w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
             />
           </div>

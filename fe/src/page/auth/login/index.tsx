@@ -64,10 +64,10 @@ const Login = () => {
     }
     try {
       await dispatch(userActions.login(data) as unknown as AnyAction)
-      popupSuccess('Đăng nhập thành công')
+      popupSuccess('Login successful')
       navigate('/admin')
     } catch (error) {
-      popupError('Đăng nhập thất bại')
+      popupError('Login failed')
     }
   }
 
@@ -79,11 +79,11 @@ const Login = () => {
       }}
     >
       <Helmet>
-        <title>Đăng nhập || Học Free</title>
+        <title>Login || Hocfree</title>
       </Helmet>
 
       <div className='w-full max-w-md space-y-8'>
-        <h2 className='text-center text-3xl font-bold text-neutral-800 dark:text-neutral-100'>Đăng nhập</h2>
+        <h2 className='text-center text-3xl font-bold text-neutral-800 dark:text-neutral-100'>Login</h2>
 
         <div className='space-y-3'>
           {loginSocials.map((item, index) => (
@@ -99,7 +99,7 @@ const Login = () => {
 
         <div className='relative text-center my-6'>
           <span className='relative z-10 bg-neutral-50 dark:bg-neutral-950 px-4 text-sm text-neutral-500 dark:text-neutral-400'>
-            Hoặc đăng nhập bằng tài khoản
+            Or login with
           </span>
           <div className='absolute top-1/2 left-0 w-full border-t border-neutral-200 dark:border-neutral-700 transform -translate-y-1/2'></div>
         </div>
@@ -118,8 +118,8 @@ const Login = () => {
               name='username'
               className='w-full'
               rules={[
-                { required: true, message: 'Vui lòng nhập tên tài khoản!' },
-                { whitespace: true, message: 'Tên tài khoản không được để trống!' }
+                { required: true, message: 'Please enter username!' },
+                { whitespace: true, message: 'Username cannot be empty!' }
               ]}
             >
               <Input
@@ -132,23 +132,23 @@ const Login = () => {
 
           <label className='block'>
             <span className='flex justify-between items-center text-neutral-700 dark:text-neutral-200'>
-              Mật khẩu
+              Password
               <Link to='/forgot-pass' className='text-sm text-green-600 hover:underline'>
-                Quên mật khẩu?
+                Forgot password?
               </Link>
             </span>
             <Form.Item
               name='password'
               className='w-full text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500'
               rules={[
-                { required: true, message: 'Vui lòng nhập mật khẩu!' },
-                { whitespace: true, message: 'Mật khẩu không được để trống!' }
+                { required: true, message: 'Please enter password!' },
+                { whitespace: true, message: 'Password cannot be empty!' }
               ]}
             >
               <Input
                 size='large'
                 type='password'
-                placeholder='Mật khẩu'
+                placeholder='Password'
                 className='!text-black dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500'
               />
             </Form.Item>
@@ -158,14 +158,14 @@ const Login = () => {
             type='submit'
             className='w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition'
           >
-            Tiếp tục
+            Continue
           </button>
         </Form>
 
         <p className='text-center text-sm text-neutral-600 dark:text-neutral-400'>
-          Chưa có tài khoản?{' '}
+          Don't have an account?{' '}
           <Link to='/signup' className='text-green-600 hover:underline'>
-            Đăng ký ngay
+            Sign up now
           </Link>
         </p>
       </div>

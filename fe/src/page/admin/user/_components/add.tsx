@@ -8,10 +8,10 @@ import { userActions } from '@/app/actions'
 import { roleOptions } from '@/common/constants'
 
 const validateMessages = {
-  required: '${label} là bắt buộc!',
+  required: '${label} is required!',
   types: {
-    email: '${label} không phải là 1 email hợp lệ!',
-    number: '${label} không phải là 1 số hợp lệ!'
+    email: '${label} is not a valid email!',
+    number: '${label} is not a valid number!'
   },
   number: {
     range: '${label} must be between ${min} and ${max}'
@@ -48,37 +48,37 @@ export default function AddUser() {
 
   return (
     <Modal
-      title='Thêm người dùng'
+      title='Add User'
       open={true}
       onCancel={handleCancel}
       width={620}
-      okText='Tạo'
-      cancelText='Hủy'
+      okText='Create'
+      cancelText='Cancel'
       onOk={() => form.submit()}
     >
       <Form form={form} name='add-user-form' layout='vertical' onFinish={onFinish} validateMessages={validateMessages}>
-        <Form.Item name='firstname' label='Tên' rules={[{ required: true }]}>
-          <Input type='text' placeholder='Nhập tên' />
+        <Form.Item name='firstname' label='First Name' rules={[{ required: true }]}>
+          <Input type='text' placeholder='Enter first name' />
         </Form.Item>
 
-        <Form.Item name='lastname' label='Họ' rules={[{ required: true }]}>
-          <Input type='text' placeholder='Nhập họ' />
+        <Form.Item name='lastname' label='Last Name' rules={[{ required: true }]}>
+          <Input type='text' placeholder='Enter last name' />
         </Form.Item>
 
-        <Form.Item name='username' label='Tên đăng nhập' rules={[{ required: true }]}>
-          <Input type='text' placeholder='Nhập tên đăng nhập' />
+        <Form.Item name='username' label='Username' rules={[{ required: true }]}>
+          <Input type='text' placeholder='Enter username' />
         </Form.Item>
 
         <Form.Item name='email' label='Email' rules={[{ required: true, type: 'email' }]}>
-          <Input type='email' placeholder='Nhập email' />
+          <Input type='email' placeholder='Enter email' />
         </Form.Item>
 
-        <Form.Item name='password' label='Mật khẩu' rules={[{ required: true, min: 8, max: 30 }]}>
-          <Input.Password placeholder='Nhập mật khẩu' />
+        <Form.Item name='password' label='Password' rules={[{ required: true, min: 8, max: 30 }]}>
+          <Input.Password placeholder='Enter password' />
         </Form.Item>
 
-        <Form.Item name='role' label='Vai trò' rules={[{ required: true, message: 'Vui lòng chọn vai trò!' }]}>
-          <Select placeholder='Chọn vai trò' options={roleOptions} />
+        <Form.Item name='role' label='Role' rules={[{ required: true, message: 'Please select a role!' }]}>
+          <Select placeholder='Select role' options={roleOptions} />
         </Form.Item>
       </Form>
     </Modal>

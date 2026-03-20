@@ -10,11 +10,11 @@ const StockChart = ({ chartData }) => {
     padding: 'auto',
 
     yAxis: {
-      title: { text: 'Điểm số' },
+      title: { text: 'Score' },
       minLimit: chartData.length > 0 ? Math.min(...chartData.map((d) => d.price)) * 0.98 : 0
     },
     xAxis: {
-      title: { text: 'Thời gian' },
+      title: { text: 'Time' },
       label: {
         autoHide: true,
         autoRotate: true
@@ -24,7 +24,7 @@ const StockChart = ({ chartData }) => {
       showCrosshairs: true,
       shared: true,
       formatter: (datum) => ({
-        name: 'Giá trị',
+        name: 'Value',
         value: `${datum.price}`
       })
     },

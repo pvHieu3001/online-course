@@ -14,7 +14,7 @@ import TabBlogCategory from '../components/TabBlogCategory'
 function PageBlog() {
   const location = useLocation()
   const prevContent = useRef('')
-  const [title, setTitle] = useState('Văn Hóa Công Nghệ')
+  const [title, setTitle] = useState('Tech Culture')
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -34,32 +34,32 @@ function PageBlog() {
     const path = location.pathname.replace(/^\/|\/$/g, '')
 
     let type = 'technology'
-    let title = 'Văn Hóa Công Nghệ'
+    let title = 'Tech Culture'
 
     switch (path) {
       case 'game':
         type = 'game'
-        title = 'Game Hot'
+        title = 'Hot Games'
         break
       case 'san-pham-cong-nghe':
         type = 'technology'
-        title = 'Sản Phẩm Công Nghệ'
+        title = 'Tech Products'
         break
       case 'crypto':
         type = 'crypto'
-        title = 'Tiền Mã Hóa'
+        title = 'Crypto'
         break
       case 'chung-khoan':
         type = 'stock'
-        title = 'Chứng Khoán'
+        title = 'Stock'
         break
       case 'thu-thuat-huu-ich':
         type = 'tips'
-        title = 'Thủ Thuật Hữu Ích'
+        title = 'Useful Tips'
         break
       case 'suu-tam':
         type = 'archive'
-        title = 'Sưu Tầm'
+        title = 'Collections'
         break
     }
 
@@ -83,10 +83,10 @@ function PageBlog() {
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <div className='bg-gray-100 min-h-screen'>
         <Helmet>
-          <title>Học Free || {title}</title>
+          <title>Hocfree || {title}</title>
           <meta
             name='description'
-            content={`Đọc bài viết "${title}" trên Học Free để khám phá kiến thức mới về lập trình, thiết kế, marketing và nhiều lĩnh vực khác.`}
+            content={`Read the article "${title}" on Hocfree to discover new knowledge about programming, design, marketing, and more.`}
           />
         </Helmet>
         {Array.isArray(recommendList) && recommendList.length > 0 && (
@@ -123,7 +123,7 @@ function PageBlog() {
             <div className='min-h-screen w-full lg:w-[80%] bg-white flex-1 bg-white rounded-lg shadow-md p-6'>
               <div className='flex flex-col items-start gap-4 border-b border-gray-200 pb-4 mb-2 md:flex-row md:items-center md:justify-between'>
                 <div>
-                  <div className='text-xl font-semibold text-indigo-600 mb-2'>Tất cả bài viết</div>
+                  <div className='text-xl font-semibold text-indigo-600 mb-2'>All Blogs</div>
                 </div>
               </div>
 
@@ -137,22 +137,22 @@ function PageBlog() {
                     >
                       <img
                         src={getImageUrl(article?.image || '/default-image.jpg')}
-                        alt={article?.title || 'Không có tiêu đề'}
+                        alt={article?.title || 'No title'}
                         className='w-100 h-40 object-cover rounded-md flex-shrink-0'
                         loading='lazy'
                       />
                       <div className='p-5 flex-1'>
-                        <h2 className='text-lg font-semibold text-gray-800'>{article?.title || 'Tiêu đề chưa có'}</h2>
+                        <h2 className='text-lg font-semibold text-gray-800'>{article?.title || 'No title available'}</h2>
                         <p className='text-sm text-gray-500'>
                           ✍️ {getFullName(article?.updatedBy?.firstname, article?.updatedBy?.lastname)} • 🗓️{' '}
-                          {formatDateTimeString(article?.updatedAt) || 'Chưa cập nhật'}
+                          {formatDateTimeString(article?.updatedAt) || 'Not updated yet'}
                         </p>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className='text-gray-500 italic'>Không có bài viết nào để hiển thị.</p>
+                <p className='text-gray-500 italic'>No blogs to display.</p>
               )}
             </div>
             <aside className='w-full lg:w-[20%] sticky top-4' role='complementary'>

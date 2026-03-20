@@ -28,9 +28,9 @@ export default function AddAmazon() {
   const handleCancel = () => {
     if (isDirty) {
       Modal.confirm({
-        title: 'Bạn có chắc muốn rời khỏi trang?',
+        title: 'Are you sure you want to leave?',
         icon: <ExclamationCircleOutlined />,
-        content: 'Các thay đổi chưa được lưu sẽ bị mất.',
+        content: 'Unsaved changes will be lost.',
         onOk: () => navigate('..')
       })
     } else {
@@ -52,11 +52,11 @@ export default function AddAmazon() {
       setIsLoading(true)
       await dispatch(amazonActions.createAmazon(formData) as unknown as AnyAction)
       await dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
-      popupSuccess('Thêm link afiliate thành công')
+      popupSuccess('Affiliate link added successfully')
       setIsDirty(false)
       navigate('..')
     } catch (error) {
-      popupError('Thêm link afiliate thất bại')
+      popupError('Failed to add affiliate link')
     } finally {
       setIsLoading(false)
     }
@@ -67,21 +67,21 @@ export default function AddAmazon() {
   return (
     <Drawer
       width={'100%'}
-      title={<span className='font-bold text-xl'>Tạo bài viết thread</span>}
+      title={<span className='font-bold text-xl'>Create Thread Post</span>}
       onClose={handleCancel}
       open={true}
       footer={
         <div style={{ textAlign: 'right' }}>
           <Button onClick={handleCancel} style={{ marginRight: 8 }}>
-            Hủy
+            Cancel
           </Button>
           <Button type='primary' htmlType='submit' form='Amazon-form' loading={isLoading}>
-            Lưu bài viết
+            Save Post
           </Button>
         </div>
       }
     >
-      <Spin spinning={isLoading} tip='Đang lưu...'>
+      <Spin spinning={isLoading} tip='Saving...'>
         <Form
           id='Amazon-form'
           form={form}
@@ -101,28 +101,28 @@ export default function AddAmazon() {
                 className='border-[1px] p-[24px] rounded-md bg-[#fafbfc]'
                 style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
               >
-                <h2 className='mb-5 font-bold text-[16px]'>Nội dung bài viết</h2>
+                <h2 className='mb-5 font-bold text-[16px]'>Post Content</h2>
                 <Row gutter={[16, 16]}>
                   <Col xs={24}>
                     <Form.Item
                       name='sourceUrl'
-                      label='Link bài viết thread'
+                      label='Thread Post Link'
                       rules={[
-                        { required: true, message: 'Vui lòng nhập link thread!' },
-                        { whitespace: true, message: 'Link bài viết không được để trống!' }
+                        { required: true, message: 'Please enter thread link!' },
+                        { whitespace: true, message: 'Post link cannot be empty!' }
                       ]}
                     >
-                      <Input size='large' placeholder='Nhập link thread...' />
+                      <Input size='large' placeholder='Enter thread link...' />
                     </Form.Item>
                   </Col>
                   <Col span={24}>
-                    <Form.Item name='amzUrl' label='Link Amazon' rules={[{ message: 'Vui lòng nhập link affiliate!' }]}>
-                      <Input size='large' placeholder='Nhập link afiliate...' />
+                    <Form.Item name='amzUrl' label='Amazon Link' rules={[{ message: 'Please enter affiliate link!' }]}>
+                      <Input size='large' placeholder='Enter affiliate link...' />
                     </Form.Item>
                   </Col>
                   <Col span={24}>
-                    <Form.Item name='caption' label='Caption bài viết'>
-                      <Input size='large' placeholder='Nhập Caption...' />
+                    <Form.Item name='caption' label='Post Caption'>
+                      <Input size='large' placeholder='Enter Caption...' />
                     </Form.Item>
                   </Col>
                 </Row>

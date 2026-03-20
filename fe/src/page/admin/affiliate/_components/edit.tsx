@@ -53,9 +53,9 @@ export default function EditAffiliate() {
   const handleCancel = () => {
     if (isDirty) {
       Modal.confirm({
-        title: 'Bạn có chắc muốn rời khỏi trang?',
+        title: 'Are you sure you want to leave?',
         icon: <ExclamationCircleOutlined />,
-        content: 'Các thay đổi chưa được lưu sẽ bị mất.',
+        content: 'Unsaved changes will be lost.',
         onOk: () => navigate('..')
       })
     } else {
@@ -78,12 +78,12 @@ export default function EditAffiliate() {
     try {
       await dispatch(affiliateActions.updateAffiliate(params.id, formData) as unknown as AnyAction)
       await dispatch(affiliateActions.getAdminAffiliates('') as unknown as AnyAction)
-      popupSuccess('Cập nhật link afiliate thành công')
+      popupSuccess('Affiliate link updated successfully')
       setIsDirty(false)
       navigate('..')
     } catch (error) {
       console.error('Error updating afiliate:', error)
-      popupError('Cập nhật link afiliate thất bại')
+      popupError('Failed to update affiliate link')
     }
   }
 
@@ -96,22 +96,22 @@ export default function EditAffiliate() {
   return (
     <Drawer
       width='70%'
-      title={<span className='font-bold text-xl'>Chỉnh sửa link afiliate</span>}
+      title={<span className='font-bold text-xl'>Edit Affiliate Link</span>}
       onClose={handleCancel}
       open={true}
       bodyStyle={{ padding: 24, maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}
       footer={
         <div style={{ textAlign: 'right' }}>
           <Button onClick={handleCancel} style={{ marginRight: 8 }}>
-            Hủy
+            Cancel
           </Button>
           <Button type='primary' htmlType='submit' form='affiliate-form' loading={affiliateStore.isLoading}>
-            Cập nhật
+            Update
           </Button>
         </div>
       }
     >
-      <Spin spinning={affiliateStore.isLoading} tip='Đang tải...'>
+      <Spin spinning={affiliateStore.isLoading} tip='Loading...'>
         {affiliateStore.data && (
           <Form
             id='affiliate-form'
@@ -126,12 +126,12 @@ export default function EditAffiliate() {
               {/* Cột trái: Ảnh và Cài đặt */}
               <Col xs={24} md={8}>
                 <Form.Item
-                  label={<span className='font-semibold'>Link ảnh sản phẩm</span>}
+                  label={<span className='font-semibold'>Product Image Link</span>}
                   className='border p-6 rounded-md bg-[#fafbfc]'
                   style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.03)' }}
                   name='image'
                 >
-                  <Input size='large' placeholder='Nhập tên link ảnh afiliate...' />
+                  <Input size='large' placeholder='Enter affiliate image link...' />
                 </Form.Item>
 
                 <div
@@ -139,19 +139,19 @@ export default function EditAffiliate() {
                   style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.05)' }}
                 >
                   <div className='p-2'>
-                    <h2 className='font-semibold'>Cài đặt</h2>
+                    <h2 className='font-semibold'>Settings</h2>
                   </div>
                   <hr />
                   <div className='flex justify-between items-center p-2'>
-                    <span>Kích hoạt hiển thị</span>
+                    <span>Active</span>
                     <Form.Item className='m-0' label='' name='status' valuePropName='checked'>
                       <Switch />
                     </Form.Item>
                   </div>
-                  <div className='text-xs text-gray-400 px-2 pb-2'>Bật để link afiliate này hiển thị trên website.</div>
+                  <div className='text-xs text-gray-400 px-2 pb-2'>Enable to display this affiliate link on the website.</div>
 
                   <div className='flex justify-between items-center p-2'>
-                    <span>Hiện thị trên trang chủ</span>
+                    <span>Show on homepage</span>
                     <Form.Item className='m-0' label='' name='isQuickView' valuePropName='checked'>
                       <Switch />
                     </Form.Item>
@@ -164,39 +164,39 @@ export default function EditAffiliate() {
                   className='border p-6 rounded-md bg-[#fafbfc]'
                   style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.03)' }}
                 >
-                  <h2 className='mb-5 font-bold text-[16px]'>Tổng quan</h2>
+                  <h2 className='mb-5 font-bold text-[16px]'>Overview</h2>
                   <Row gutter={[16, 16]}>
                     <Col xs={24} sm={12}>
                       <Form.Item
                         name='name'
-                        label='Tên link afiliate'
+                        label='Affiliate Link Name'
                         className='w-full max-w-[350px]'
                         rules={[
-                          { required: true, message: 'Vui lòng nhập tên link afiliate!' },
-                          { max: 120, message: 'Tên không vượt quá 120 ký tự' },
-                          { whitespace: true, message: 'Tên link afiliate không được để trống!' }
+                          { required: true, message: 'Please enter affiliate link name!' },
+                          { max: 120, message: 'Name cannot exceed 120 characters' },
+                          { whitespace: true, message: 'Affiliate link name cannot be empty!' }
                         ]}
                       >
-                        <Input size='large' placeholder='Nhập tên link afiliate...' />
+                        <Input size='large' placeholder='Enter affiliate link name...' />
                       </Form.Item>
                     </Col>
                     <Col span={24}>
                       <Form.Item
                         name='targetUrl'
-                        label='Mô tả ngắn'
-                        rules={[{ max: 120, message: 'Mô tả không vượt quá 120 ký tự' }]}
+                        label='Affiliate Link'
+                        rules={[{ max: 120, message: 'URL cannot exceed 120 characters' }]}
                       >
-                        <Input size='large' placeholder='Nhập link afiliate...' />
+                        <Input size='large' placeholder='Enter affiliate link...' />
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <Form.Item name='price' label='Giá khuyến mãi'>
-                        <Input size='large' placeholder='Nhập giá khuyến mãi...' />
+                      <Form.Item name='price' label='Discounted Price'>
+                        <Input size='large' placeholder='Enter discounted price...' />
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <Form.Item name='originalPrice' label='Giá gốc'>
-                        <Input size='large' placeholder='Nhập giá gốc...' />
+                      <Form.Item name='originalPrice' label='Original Price'>
+                        <Input size='large' placeholder='Enter original price...' />
                       </Form.Item>
                     </Col>
                   </Row>

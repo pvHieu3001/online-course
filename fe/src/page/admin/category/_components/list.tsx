@@ -23,9 +23,9 @@ export default function ListCategory() {
     try {
       dispatch(categoryActions.deleteCategory(id) as unknown as AnyAction)
       dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
-      message.success('Vô hiệu hoá danh mục thành công!')
+      message.success('Category disabled successfully!')
     } catch (error) {
-      message.error('Vô hiệu hoá danh mục thất bại!')
+      message.error('Failed to disable category!')
     }
   }
 
@@ -45,7 +45,7 @@ export default function ListCategory() {
       align: 'center'
     },
     {
-      title: 'Tên danh mục',
+      title: 'Category Name',
       dataIndex: 'name',
       key: 'name',
       align: 'center',
@@ -53,28 +53,28 @@ export default function ListCategory() {
       render: (text) => <a>{text}</a>
     },
     {
-      title: 'Danh mục cha',
+      title: 'Parent Category',
       dataIndex: 'parent_id',
       key: 'parent_id',
       align: 'center',
       width: 100,
-      render: (text) => <>{text ? text : 'không có'}</>
+      render: (text) => <>{text ? text : 'none'}</>
     },
     {
-      title: 'Trạng thái',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       align: 'center',
       width: 100,
       render: (status) => {
         const color = !status ? 'volcano' : 'green'
-        const text = !status ? 'Không Hoạt động' : 'Đang hoạt động'
+        const text = !status ? 'Inactive' : 'Active'
 
         return <Tag color={color}>{text.toUpperCase()}</Tag>
       }
     },
     {
-      title: 'Hành động',
+      title: 'Action',
       key: 'action',
       width: 150,
       align: 'center',
@@ -82,18 +82,18 @@ export default function ListCategory() {
       render: (record) => (
         <Space size={'middle'}>
           <Link to={'' + record.id}>
-            <Button type='primary'>Sửa </Button>
+            <Button type='primary'>Edit </Button>
           </Link>
           <Popconfirm
             placement='topRight'
-            title={record.active == 1 ? 'Are you sure distable this category?' : 'Are you sure enable this category?'}
+            title={record.active == 1 ? 'Are you sure you want to disable this category?' : 'Are you sure you want to enable this category?'}
             onConfirm={() => handlerDistableCategory(record.id)}
             onCancel={() => {}}
-            okText='Đồng ý'
-            cancelText='Hủy bỏ'
+            okText='Yes'
+            cancelText='Cancel'
           >
             <Button type='primary' danger>
-              Xóa
+              Delete
             </Button>
           </Popconfirm>
         </Space>
@@ -102,14 +102,14 @@ export default function ListCategory() {
   ]
 
   if (categories.error_message) {
-    return <ErrorLoad />
+    return <ErrorLoad error_message={categories.error_message} />
   }
 
   return (
     <>
       <div className='flex items-center justify-between my-2'>
         <Typography.Title level={2} style={{ margin: 0 }}>
-          Danh sách danh mục
+          Category List
         </Typography.Title>
       </div>
       <div className=''>
@@ -126,13 +126,13 @@ export default function ListCategory() {
             allowClear
             onChange={handleChangeSearch}
             size='small'
-            placeholder={'Tìm kiếm'}
+            placeholder={'Search'}
             style={{
               borderRadius: '2rem'
             }}
           />
           <Link to='add'>
-            <Button type='primary'>Thêm danh mục</Button>
+            <Button type='primary'>Add category</Button>
           </Link>
         </Flex>
         <Table

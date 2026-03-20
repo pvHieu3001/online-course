@@ -24,9 +24,9 @@ export default function ListAmazon() {
     try {
       dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
       dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
-      message.success('Vô hiệu hoá danh mục thành công!')
+      message.success('Amazon item disabled successfully!')
     } catch (error) {
-      message.error('Vô hiệu hoá danh mục thất bại!')
+      message.error('Failed to disable Amazon item!')
     }
   }
 
@@ -48,14 +48,14 @@ export default function ListAmazon() {
       responsive: ['sm']
     },
     {
-      title: 'Trạng thái',
+      title: 'Status',
       dataIndex: 'isPublished',
       key: 'isPublished',
       width: 110,
       align: 'center',
       render: (status) => {
         const color = !status ? 'volcano' : 'green'
-        const text = !status ? 'Chưa đăng' : 'Đã đăng'
+        const text = !status ? 'Unpublished' : 'Published'
         return <Tag color={color}>{text.toUpperCase()}</Tag>
       }
     },
@@ -79,7 +79,7 @@ export default function ListAmazon() {
       )
     },
     {
-      title: 'Hành động',
+      title: 'Action',
       key: 'action',
       width: 50,
       align: 'center',
@@ -91,10 +91,10 @@ export default function ListAmazon() {
           </Link>
           <Popconfirm
             placement='topRight'
-            title='Xác nhận xóa?'
+            title='Confirm deletion?'
             onConfirm={() => handlerDistableAmazon(record.id)}
-            okText='Có'
-            cancelText='Không'
+            okText='Yes'
+            cancelText='No'
           >
             <Button type='text' danger size='small' icon={<DeleteOutlined style={{ fontSize: '16px' }} />} />
           </Popconfirm>
@@ -112,11 +112,11 @@ export default function ListAmazon() {
       {/* Header section: Chuyển từ hàng ngang sang hàng dọc trên Mobile */}
       <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-4'>
         <Typography.Title level={3} style={{ margin: 0 }}>
-          Danh sách Amazon
+          Amazon List
         </Typography.Title>
         <Link to='add' className='w-full sm:w-auto'>
           <Button type='primary' block>
-            Thêm danh mục
+            Add Amazon Item
           </Button>
         </Link>
       </div>
@@ -130,7 +130,7 @@ export default function ListAmazon() {
             value={searchValue}
             allowClear
             onChange={handleChangeSearch}
-            placeholder='Tìm kiếm bài viết...'
+            placeholder='Search articles...'
             style={{ borderRadius: '1rem' }}
           />
         </div>

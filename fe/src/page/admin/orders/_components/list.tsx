@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { TableProps } from 'antd'
 import { Flex, Input, Table, Typography } from 'antd'
 import { AnyAction } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,7 +24,7 @@ export default function ListOrders() {
     }
   }
 
-  const columns = [
+  const columns: TableProps<IOrder>['columns'] = [
     {
       title: '#',
       dataIndex: 'id',
@@ -32,7 +33,7 @@ export default function ListOrders() {
       align: 'center'
     },
     {
-      title: 'Tổng số lượng',
+      title: 'Subtotal',
       dataIndex: 'subTotal',
       key: 'subTotal',
       align: 'center',
@@ -40,7 +41,7 @@ export default function ListOrders() {
       render: (text: string) => <span>{text}</span>
     },
     {
-      title: 'Mã giảm giá ',
+      title: 'Discount Amount',
       dataIndex: 'discountAmount',
       key: 'discountAmount',
       align: 'center',
@@ -48,7 +49,7 @@ export default function ListOrders() {
       render: (text: string) => <span>{text}</span>
     },
     {
-      title: 'Tổng số lượng',
+      title: 'Total Amount',
       dataIndex: 'totalAmount',
       key: 'totalAmount',
       align: 'center',
@@ -56,7 +57,7 @@ export default function ListOrders() {
       render: (text: string) => <span>{text}</span>
     },
     {
-      title: 'ID phiếu giảm giá',
+      title: 'Coupon ID',
       dataIndex: 'couponId',
       key: 'couponId',
       align: 'center',
@@ -69,7 +70,7 @@ export default function ListOrders() {
     <>
       <div className='flex items-center justify-between my-2'>
         <Typography.Title level={2} style={{ margin: 0 }}>
-          Danh sách khóa học
+          Order List
         </Typography.Title>
       </div>
       <Flex wrap='wrap' gap='small' className='my-5' align='center' justify='space-between'>
@@ -85,7 +86,7 @@ export default function ListOrders() {
           allowClear
           onChange={handleChangeSearch}
           size='small'
-          placeholder={'Tìm kiếm'}
+          placeholder={'Search'}
           style={{ borderRadius: '2rem' }}
         />
       </Flex>

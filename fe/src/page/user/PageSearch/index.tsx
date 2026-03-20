@@ -37,21 +37,21 @@ function PageSearch() {
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <div className={styles.bg}>
         <Helmet>
-          <title>Học Free || Tìm Kiếm</title>
+          <title>Hocfree || Search</title>
           <meta
             name='description'
-            content='Trang tìm kiếm của Học Free. Tìm kiếm các khóa học, bài giảng và tài liệu học tập miễn phí chất lượng cao về mọi lĩnh vực.'
+            content='Hocfree search page. Search for high-quality free courses, lectures, and learning materials in all fields.'
           />
         </Helmet>
         <main className={styles.mainContent} role='main'>
           <section className={styles.coursesWrapper} aria-label='Course listings'>
-            <h2 className={styles.courseListTitle}>Kết quả tìm kiếm</h2>
+            <h2 className={styles.courseListTitle}>Search Results</h2>
             <div className={styles.courses}>
-              {isLoading && <p>Đang tải khóa học...</p>}
+              {isLoading && <p>Loading courses...</p>}
               {!isLoading && error_message && (
-                <p className={styles.error}>Đã xảy ra lỗi khi tải khóa học. Vui lòng thử lại sau.</p>
+                <p className={styles.error}>Error loading courses. Please try again later.</p>
               )}
-              {!isLoading && !error_message && dataList?.length === 0 && <p>Không tìm thấy khóa học phù hợp.</p>}
+              {!isLoading && !error_message && dataList?.length === 0 && <p>No matching courses found.</p>}
               {!isLoading &&
                 !error_message &&
                 dataList?.map((course: IProduct) => (

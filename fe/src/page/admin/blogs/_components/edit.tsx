@@ -63,9 +63,9 @@ export default function EditBlog() {
   const handleCancel = async () => {
     if (isDirty) {
       Modal.confirm({
-        title: 'Bạn có chắc muốn rời khỏi trang?',
+        title: 'Are you sure you want to leave?',
         icon: <ExclamationCircleOutlined />,
-        content: 'Các thay đổi chưa được lưu sẽ bị mất.',
+        content: 'Unsaved changes will be lost.',
         onOk: () => navigate('..')
       })
     } else {
@@ -92,12 +92,12 @@ export default function EditBlog() {
     try {
       await dispatch(blogActions.updateBlog(params.id, formData) as unknown as AnyAction)
       await dispatch(blogActions.getAdminBlogs('', '', '') as unknown as AnyAction)
-      popupSuccess('Cập nhật bài viết thành công')
+      popupSuccess('Blog updated successfully')
       setIsDirty(false)
       navigate('..')
     } catch (error) {
       console.error('Error updating Blog:', error)
-      popupError('Cập nhật bài viết thất bại')
+      popupError('Failed to update blog')
     }
   }
 
@@ -109,23 +109,23 @@ export default function EditBlog() {
   return (
     <Drawer
       width='80%'
-      title={<div className='text-center font-bold text-2xl'>Chỉnh sửa bài viết</div>}
+      title={<div className='text-center font-bold text-2xl'>Edit Blog</div>}
       onClose={handleCancel}
       open={true}
       bodyStyle={{ padding: 24, maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}
       footer={
         <div className='flex justify-between items-center px-4 py-2 border-t'>
-          <span className='text-sm text-gray-500'>* Kiểm tra kỹ nội dung trước khi cập nhật</span>
+          <span className='text-sm text-gray-500'>* Please double check content before updating</span>
           <div className='space-x-2'>
-            <Button onClick={handleCancel}>Hủy</Button>
+            <Button onClick={handleCancel}>Cancel</Button>
             <Button type='primary' htmlType='submit' form='Blog-form' loading={blogStore.isLoading}>
-              Cập nhật
+              Update
             </Button>
           </div>
         </div>
       }
     >
-      <Spin spinning={blogStore.isLoading} tip='Đang tải...'>
+      <Spin spinning={blogStore.isLoading} tip='Loading...'>
         {blogStore.data && (
           <Form
             id='Blog-form'
@@ -139,7 +139,7 @@ export default function EditBlog() {
               {/* Cài đặt hiển thị */}
               <Col xs={24} md={8}>
                 <Form.Item
-                  label={<span className='font-semibold'>Ảnh đại diện</span>}
+                  label={<span className='font-semibold'>Thumbnail</span>}
                   className='border p-6 rounded-md bg-[#fafbfc]'
                   style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.03)' }}
                 >
@@ -152,7 +152,7 @@ export default function EditBlog() {
                         <div className='h-[180px] w-[180px] rounded-lg overflow-hidden relative'>
                           <img
                             src={displayPic}
-                            alt='Ảnh hiện tại'
+                            alt='Current image'
                             className='object-cover h-full w-full object-center rounded-lg border border-gray-300 bg-white'
                           />
                         </div>
@@ -161,7 +161,7 @@ export default function EditBlog() {
                         <div className='relative group w-[180px] h-[180px] mb-2'>
                           <img
                             src={URL.createObjectURL(imageUrl as Blob)}
-                            alt='Ảnh danh mục'
+                            alt='Blog image'
                             className='object-cover w-full h-full rounded-lg border shadow'
                           />
                           <Button
@@ -175,7 +175,7 @@ export default function EditBlog() {
                               setIsDirty(true)
                             }}
                           >
-                            Xóa
+                            Delete
                           </Button>
                         </div>
                       ) : (
@@ -197,14 +197,14 @@ export default function EditBlog() {
                   </div>
                 </Form.Item>
                 <div className='bg-white rounded-md shadow-sm p-4 space-y-4'>
-                  <h2 className='text-lg font-semibold text-gray-700'>Cài đặt hiển thị</h2>
-                  <Form.Item label='Kích hoạt' name='status' valuePropName='checked'>
+                  <h2 className='text-lg font-semibold text-gray-700'>Display Settings</h2>
+                  <Form.Item label='Active' name='status' valuePropName='checked'>
                     <Switch />
                   </Form.Item>
-                  <p className='text-xs text-gray-500'>Bật để bài viết này hiển thị trên website.</p>
+                  <p className='text-xs text-gray-500'>Enable to display this blog on the website.</p>
 
-                  <Form.Item name='isDisplayHot' label='Bài viết nổi bật' valuePropName='checked'>
-                    <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                  <Form.Item name='isDisplayHot' label='Featured Blog' valuePropName='checked'>
+                    <Switch className='w-20' checkedChildren='Show' unCheckedChildren='Hide' />
                   </Form.Item>
                 </div>
               </Col>
@@ -212,26 +212,26 @@ export default function EditBlog() {
               {/* Thông tin bài viết */}
               <Col xs={24} md={16}>
                 <div className='bg-white rounded-md shadow-sm p-6 space-y-4'>
-                  <h2 className='text-lg font-semibold text-gray-700'>Thông tin bài viết</h2>
+                  <h2 className='text-lg font-semibold text-gray-700'>Blog Information</h2>
                   <Form.Item
                     name='title'
-                    label='Tiêu đề bài viết'
+                    label='Blog Title'
                     rules={[
-                      { required: true, message: 'Vui lòng nhập tiêu đề bài viết!' },
-                      { max: 120, message: 'Tiêu đề không vượt quá 120 ký tự' },
-                      { whitespace: true, message: 'Tiêu đề bài viết không được để trống!' }
+                      { required: true, message: 'Please enter blog title!' },
+                      { max: 120, message: 'Title cannot exceed 120 characters' },
+                      { whitespace: true, message: 'Blog title cannot be empty!' }
                     ]}
                   >
-                    <Input size='large' placeholder='Nhập tiêu đề bài viết...' />
+                    <Input size='large' placeholder='Enter blog title...' />
                   </Form.Item>
-                  <Form.Item name='description' label='Mô tả bài viết'>
-                    <Input size='large' placeholder='Nhập mô tả bài viết...' />
+                  <Form.Item name='description' label='Blog Description'>
+                    <Input size='large' placeholder='Enter blog description...' />
                   </Form.Item>
 
-                  <Form.Item name='type' label='Loại bài viết'>
+                  <Form.Item name='type' label='Blog Type'>
                     <Select
                       showSearch
-                      placeholder='Chọn loại bài viết'
+                      placeholder='Select blog type'
                       optionFilterProp='label'
                       filterOption={(input, option) =>
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -243,7 +243,7 @@ export default function EditBlog() {
                   <Form.Item name='tagStr' label='Tags'>
                     <Select
                       mode='tags'
-                      placeholder='Nhập hoặc chọn tag'
+                      placeholder='Enter or select tag'
                       size='large'
                       className='w-full'
                       options={tagStore.dataList?.map((tag) => ({
@@ -254,7 +254,7 @@ export default function EditBlog() {
                     />
                   </Form.Item>
 
-                  <Form.Item name='content' label='Nội dung chi tiết'>
+                  <Form.Item name='content' label='Detailed Content'>
                     <TextEditor
                       content={form.getFieldValue('content') ?? ''}
                       onHandleChange={(value) => form.setFieldValue('content', value)}
@@ -267,7 +267,7 @@ export default function EditBlog() {
 
             {/* Xem trước nội dung */}
             <div className='mt-6 bg-gray-50 rounded-md p-4 border'>
-              <h3 className='text-lg font-semibold mb-2'>Xem trước bài viết</h3>
+              <h3 className='text-lg font-semibold mb-2'>Preview Blog</h3>
               <div className='prose max-w-none'>
                 <h1>{form.getFieldValue('name')}</h1>
                 <div

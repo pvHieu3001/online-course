@@ -52,15 +52,15 @@ const StockChart = () => {
     yField: 'price',
     smooth: true, // Làm mượt đường line
     yAxis: {
-      title: { text: 'Giá (USD)' },
+      title: { text: 'Price (USD)' },
       min: Math.min(...data.map((d) => d.price)) - 10 // Tự động điều chỉnh trục Y
     },
     xAxis: {
-      title: { text: 'Thời gian' }
+      title: { text: 'Time' }
     },
     tooltip: {
       formatter: (datum) => ({
-        name: 'Giá',
+        name: 'Price',
         value: `${datum.price.toFixed(2)} USD`
       })
     },

@@ -23,9 +23,9 @@ export default function ListAffiliate() {
     try {
       dispatch(affiliateActions.deleteAffiliate(id) as unknown as AnyAction)
       dispatch(affiliateActions.getAdminAffiliates('') as unknown as AnyAction)
-      message.success('Vô hiệu hoá danh mục thành công!')
+      message.success('Affiliate disabled successfully!')
     } catch (error) {
-      message.error('Vô hiệu hoá danh mục thất bại!')
+      message.error('Failed to disable affiliate!')
     }
   }
 
@@ -45,7 +45,7 @@ export default function ListAffiliate() {
       align: 'center'
     },
     {
-      title: 'Tên danh mục',
+      title: 'Affiliate Name',
       dataIndex: 'name',
       key: 'name',
       align: 'center',
@@ -53,7 +53,7 @@ export default function ListAffiliate() {
       render: (text) => <a className='block w-64 truncate text-blue-600 hover:underline'>{text}</a>
     },
     {
-      title: 'Lượt click',
+      title: 'Clicks',
       dataIndex: 'clickCount',
       key: 'clickCount',
       align: 'center',
@@ -61,20 +61,20 @@ export default function ListAffiliate() {
       render: (text) => <>{text ?? 0}</>
     },
     {
-      title: 'Trạng thái',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       align: 'center',
       width: 100,
       render: (status) => {
         const color = !status ? 'volcano' : 'green'
-        const text = !status ? 'Không Hoạt động' : 'Đang hoạt động'
+        const text = !status ? 'Inactive' : 'Active'
 
         return <Tag color={color}>{text.toUpperCase()}</Tag>
       }
     },
     {
-      title: 'Hành động',
+      title: 'Action',
       key: 'action',
       width: 150,
       align: 'center',
@@ -82,18 +82,18 @@ export default function ListAffiliate() {
       render: (record) => (
         <Space size={'middle'}>
           <Link to={'' + record.id}>
-            <Button type='primary'>Sửa </Button>
+            <Button type='primary'>Edit </Button>
           </Link>
           <Popconfirm
             placement='topRight'
-            title={record.active == 1 ? 'Are you sure distable this affiliate?' : 'Are you sure enable this affiliate?'}
+            title={record.active == 1 ? 'Are you sure you want to disable this affiliate?' : 'Are you sure you want to enable this affiliate?'}
             onConfirm={() => handlerDistableAffiliate(record.id)}
             onCancel={() => {}}
-            okText='Đồng ý'
-            cancelText='Hủy bỏ'
+            okText='Yes'
+            cancelText='Cancel'
           >
             <Button type='primary' danger>
-              Xóa
+              Delete
             </Button>
           </Popconfirm>
         </Space>
@@ -109,7 +109,7 @@ export default function ListAffiliate() {
     <>
       <div className='flex items-center justify-between my-2'>
         <Typography.Title level={2} style={{ margin: 0 }}>
-          Danh sách danh mục
+          Affiliate List
         </Typography.Title>
       </div>
       <div className=''>
@@ -126,13 +126,13 @@ export default function ListAffiliate() {
             allowClear
             onChange={handleChangeSearch}
             size='small'
-            placeholder={'Tìm kiếm'}
+            placeholder={'Search'}
             style={{
               borderRadius: '2rem'
             }}
           />
           <Link to='add'>
-            <Button type='primary'>Thêm danh mục</Button>
+            <Button type='primary'>Add affiliate</Button>
           </Link>
         </Flex>
         <Table

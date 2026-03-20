@@ -42,7 +42,7 @@ const ShopeeAffiliateBanner = ({
 
         <div className='flex items-baseline gap-2'>
           <span className='text-white font-bold text-xl sm:text-2xl'>
-            {price}<span className='text-sm font-semibold align-super'>đ</span>
+            {price}<span className='text-sm font-semibold ml-1'>VND</span>
           </span>
           <span className='text-gray-200 text-xs sm:text-sm line-through'>{originalPrice}</span>
         </div>

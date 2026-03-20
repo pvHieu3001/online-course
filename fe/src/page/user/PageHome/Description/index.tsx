@@ -2,69 +2,67 @@ function Description() {
   return (
     <div id='description' className='max-w-[1300px] mx-auto mt-6 p-5 bg-white rounded-md text-[1.3rem] space-y-6'>
       <div className='inline-block bg-[#232323] text-white font-bold rounded px-4 py-2 tracking-wide shadow-none mb-4'>
-        <h1>Học Free – Tải về hơn 5000+ khóa học chất lượng</h1>
+        <h1>Hocfree – Download over 5000+ high-quality courses</h1>
       </div>
 
       <section className='space-y-5 text-[#222] font-sans '>
         <p className='text-[1.3rem]'>
-          Hocfree là nền tảng học tập miễn phí giúp bạn dễ dàng tiếp cận hàng nghìn tài nguyên chất lượng từ nhiều lĩnh
-          vực khác nhau. Từ tiếp thị, thiết kế, lập trình, đến phát triển cá nhân – tất cả đều có sẵn, không cần trả
-          phí.
+          Hocfree is a free learning platform helping you easily access thousands of high-quality resources across various
+          fields. From marketing, design, programming, to personal development - everything is available, free of charge.
         </p>
 
         <div>
-          <h2 className='text-[1.5rem] font-semibold py-2'>Vì sao chọn hocfree?</h2>
+          <h2 className='text-[1.5rem] font-semibold py-2'>Why choose hocfree?</h2>
           <ul className='list-disc list-inside space-y-1'>
             <li>
-              <strong>Miễn phí 100%</strong> – Tải khóa học mà không cần thanh toán.
+              <strong>100% Free</strong> – Download courses without payment.
             </li>
             <li>
-              <strong>Không cần đăng ký</strong> – Truy cập và tải ngay, không cần tạo tài khoản.
+              <strong>No registration required</strong> – Access and download immediately, without creating an account.
             </li>
             <li>
-              <strong>An toàn tuyệt đối</strong> – File sạch, không chứa mã độc.
+              <strong>Absolutely safe</strong> – Clean files, no malware.
             </li>
             <li>
-              <strong>Giao diện dễ sử dụng</strong> – Chỉ vài bước đơn giản là bạn có thể học ngay.
+              <strong>Easy to use interface</strong> – Just a few simple steps and you can start learning.
             </li>
           </ul>
         </div>
 
         <div>
-          <h2 className='text-[1.5rem] font-semibold py-2'>Danh mục nổi bật</h2>
-          <p className='text-[1.3rem]'>Trang web hỗ trợ nhiều lĩnh vực như:</p>
+          <h2 className='text-[1.5rem] font-semibold py-2'>Featured Categories</h2>
+          <p className='text-[1.3rem]'>The website supports multiple fields such as:</p>
           <ul className='list-disc list-inside space-y-1'>
-            <li>Thiết kế đồ họa & 3D</li>
-            <li>Lập trình Web & Ứng dụng</li>
-            <li>Tiếp thị số, SEO</li>
-            <li>Chỉnh sửa video, Photoshop</li>
+            <li>Graphic & 3D Design</li>
+            <li>Web & App Programming</li>
+            <li>Digital Marketing, SEO</li>
+            <li>Video Editing, Photoshop</li>
           </ul>
         </div>
 
         <div>
-          <h2 className='text-[1.5rem] font-semibold py-2'>Ai có thể học?</h2>
+          <h2 className='text-[1.5rem] font-semibold py-2'>Who can learn?</h2>
           <p className='text-[1.3rem]'>
-            Bất kỳ ai – từ học sinh, sinh viên đến người đi làm đều có thể tìm được khóa học phù hợp tại đây. Không phân
-            biệt độ tuổi, giới tính hay tài chính.
+            Anyone - from students to working professionals can find suitable courses here. Regardless of age, gender, or financial status.
           </p>
         </div>
 
         <div>
-          <h2 className='text-[1.5rem] font-semibold py-2'>Cách tải khóa học</h2>
+          <h2 className='text-[1.5rem] font-semibold py-2'>How to download courses</h2>
           <ol className='list-decimal list-inside space-y-1'>
-            <li>Truy cập website và chọn khóa học mong muốn.</li>
-            <li>Nhấn nút “Get Course Now”.</li>
-            <li>Chờ 15 giây và nhấn “Get Link”.</li>
-            <li>Khóa học sẽ được thêm vào Google Drive của bạn.</li>
-            <li>Bạn có thể tải về và học bất cứ lúc nào.</li>
+            <li>Visit the website and select the desired course.</li>
+            <li>Click the "Get Course Now" button.</li>
+            <li>Wait 15 seconds and click "Get Link".</li>
+            <li>The course will be added to your Google Drive.</li>
+            <li>You can download and learn at any time.</li>
           </ol>
         </div>
 
         <div>
-          <h2 className='text-[1.5rem] font-semibold py-2'>Cam kết từ chúng tôi</h2>
+          <h2 className='text-[1.5rem] font-semibold py-2'>Our Commitment</h2>
           <p className='text-[1.3rem]'>
-            hocfree luôn đặt người học làm trung tâm. Tất cả khóa học đều được kiểm duyệt kỹ trước khi chia sẻ, đảm bảo
-            nội dung an toàn và chất lượng. Hãy bắt đầu hành trình học tập của bạn hôm nay!
+            hocfree always puts learners at the center. All courses are carefully reviewed before sharing, ensuring safe and
+            high-quality content. Start your learning journey today!
           </p>
         </div>
       </section>

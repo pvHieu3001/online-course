@@ -136,10 +136,10 @@ function EditProduct() {
           10
         ) as unknown as AnyAction
       )
-      popupSuccess('Cập nhật khóa học thành công')
+      popupSuccess('Course updated successfully')
       navigator('..')
     } catch (error) {
-      popupError('Cập nhật khóa học thất bại')
+      popupError('Failed to update course')
     }
   }
 
@@ -165,7 +165,7 @@ function EditProduct() {
           open={true}
           title={
             <>
-              <h2 className=' font-bold text-[24px]'>Cập nhật sản phẩm</h2>
+              <h2 className=' font-bold text-[24px]'>Update Course</h2>
             </>
           }
           width={'85%'}
@@ -189,65 +189,65 @@ function EditProduct() {
               id: courseStore.data?.id
             }}
           >
-            <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
+            <Card title='System Information' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
               <Row gutter={[16, 16]}>
                 <Col xs={24} sm={12} md={8}>
                   <Form.Item name='slug' label='Slug'>
-                    <Input disabled placeholder='Nhập slug' />
+                    <Input disabled placeholder='Enter slug' />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12} md={8}>
-                  <Form.Item name='total_students' label='Tổng số học viên'>
-                    <InputNumber disabled className='w-full' min={0} placeholder='Nhập tổng số học viên' />
+                  <Form.Item name='total_students' label='Total Students'>
+                    <InputNumber disabled className='w-full' min={0} placeholder='Enter total students' />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12} md={8}>
-                  <Form.Item name='total_rating' label='Tổng số đánh giá'>
-                    <InputNumber disabled className='w-full' min={0} placeholder='Nhập tổng số đánh giá' />
+                  <Form.Item name='total_rating' label='Total Ratings'>
+                    <InputNumber disabled className='w-full' min={0} placeholder='Enter total ratings' />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12} md={8}>
-                  <Form.Item name='rating' label='Đánh giá'>
+                  <Form.Item name='rating' label='Rating'>
                     <InputNumber
                       disabled
                       className='w-full'
                       min={0}
                       max={5}
                       step={0.1}
-                      placeholder='Nhập điểm đánh giá'
+                      placeholder='Enter rating score'
                     />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12} md={8}>
-                  <Form.Item name='createdAt' label='Ngày tạo'>
+                  <Form.Item name='createdAt' label='Created At'>
                     <Input disabled />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12} md={8}>
-                  <Form.Item name='updatedAt' label='Ngày cập nhật'>
+                  <Form.Item name='updatedAt' label='Updated At'>
                     <Input disabled />
                   </Form.Item>
                 </Col>
               </Row>
             </Card>
-            <Card title='Thông tin khoá học' size='small' style={{ marginBottom: 24 }}>
+            <Card title='Course Information' size='small' style={{ marginBottom: 24 }}>
               <Row gutter={[16, 16]}>
                 <Col xs={24} md={12}>
                   <Form.Item
                     name='name'
-                    label='Tên khoá học'
-                    rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}
+                    label='Course Name'
+                    rules={[{ required: true, message: 'Please enter course name!' }]}
                   >
-                    <Input placeholder='Nhập tên khoá học' size='large' />
+                    <Input placeholder='Enter course name' size='large' />
                   </Form.Item>
                   {categoryStore.dataList?.length > 0 && (
                     <Form.Item
                       name='categoryId'
-                      label='Danh mục'
-                      rules={[{ required: true, message: 'Vui lòng nhập danh mục!' }]}
+                      label='Category'
+                      rules={[{ required: true, message: 'Please select category!' }]}
                     >
                       <Select
-                        placeholder='Chọn danh mục'
+                        placeholder='Select category'
                         loading={categoryStore.isLoading}
                         allowClear
                         showSearch
@@ -265,7 +265,7 @@ function EditProduct() {
                   <Form.Item name='tagStr' label='Tags'>
                     <Select
                       mode='tags'
-                      placeholder='Nhập hoặc chọn tag'
+                      placeholder='Enter or select tag'
                       size='large'
                       className='w-full'
                       options={tagStore.dataList?.map((tag) => ({
@@ -278,38 +278,38 @@ function EditProduct() {
                 </Col>
 
                 <Col xs={24} md={12}>
-                  <Form.Item name='language' label='Ngôn ngữ'>
-                    <Select placeholder='Chọn ngôn ngữ' size='large'>
-                      <Select.Option value='vi'>Tiếng Việt</Select.Option>
+                  <Form.Item name='language' label='Language'>
+                    <Select placeholder='Select language' size='large'>
+                      <Select.Option value='vi'>Vietnamese</Select.Option>
                       <Select.Option value='en'>English</Select.Option>
                       <Select.Option value='jp'>日本語</Select.Option>
                     </Select>
                   </Form.Item>
 
-                  <Form.Item name='level' label='Trình độ'>
-                    <Select placeholder='Chọn trình độ' size='large'>
-                      <Select.Option value='beginner'>Dễ</Select.Option>
-                      <Select.Option value='intermediate'>Trung Bình</Select.Option>
-                      <Select.Option value='advanced'>Khó</Select.Option>
+                  <Form.Item name='level' label='Level'>
+                    <Select placeholder='Select level' size='large'>
+                      <Select.Option value='beginner'>Beginner</Select.Option>
+                      <Select.Option value='intermediate'>Intermediate</Select.Option>
+                      <Select.Option value='advanced'>Advanced</Select.Option>
                     </Select>
                   </Form.Item>
 
                   <Row gutter={[16, 16]}>
                     <Col xs={24} sm={12} md={8}>
-                      <Form.Item name='price' label='Giá'>
-                        <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
+                      <Form.Item name='price' label='Price'>
+                        <InputNumber className='w-full' min={0} placeholder='Enter price' size='large' />
                       </Form.Item>
                     </Col>
 
                     <Col xs={24} sm={12} md={8}>
-                      <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
-                        <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                      <Form.Item name='status' label='Status' valuePropName='checked'>
+                        <Switch className='w-20' checkedChildren='Show' unCheckedChildren='Hide' />
                       </Form.Item>
                     </Col>
 
                     <Col xs={24} sm={12} md={8}>
-                      <Form.Item name='isDisplayHot' label='Khóa học nổi bật' valuePropName='checked'>
-                        <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                      <Form.Item name='isDisplayHot' label='Featured Course' valuePropName='checked'>
+                        <Switch className='w-20' checkedChildren='Show' unCheckedChildren='Hide' />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -317,7 +317,7 @@ function EditProduct() {
               </Row>
             </Card>
             <Card size='small' style={{ marginBottom: 24 }}>
-              <Form.Item label='Nguồn tài liệu'>
+              <Form.Item label='Resource Source'>
                 <Form.List name='urls'>
                   {(fields, { add, remove, move }) => (
                     <>
@@ -340,7 +340,7 @@ function EditProduct() {
                             style={{ marginBottom: 8, cursor: 'grab' }}
                           >
                             <Col xs={24} sm={4} style={{ textAlign: 'center' }}>
-                              <span>Phần {index + 1}</span>
+                              <span>Part {index + 1}</span>
                             </Col>
 
                             <Col xs={24} sm={18} style={{ textAlign: 'center' }}>
@@ -348,10 +348,10 @@ function EditProduct() {
                                 {...field}
                                 name={[field.name, 'link']}
                                 fieldKey={[field.fieldKey, 'link']}
-                                rules={[{ required: true, message: 'Vui lòng nhập URL' }]}
+                                rules={[{ required: true, message: 'Please enter URL' }]}
                                 noStyle
                               >
-                                <Input size='large' placeholder={`URL phần ${index + 1}`} />
+                                <Input size='large' placeholder={`Part ${index + 1} URL`} />
                               </Form.Item>
                               <Form.Item {...field} name={[field.name, 'id']} noStyle hidden>
                                 <Input />
@@ -370,7 +370,7 @@ function EditProduct() {
 
                       <Form.Item>
                         <Button type='dashed' onClick={() => add({ id: '', link: '' })} icon={<PlusOutlined />} block>
-                          Thêm URL
+                          Add URL
                         </Button>
                       </Form.Item>
                     </>
@@ -379,7 +379,7 @@ function EditProduct() {
               </Form.Item>
             </Card>
             <Card size='small' style={{ marginBottom: 24 }}>
-              <Form.Item name='content' className='m-0' label={'Nội dung khoá học'}>
+              <Form.Item name='content' className='m-0' label={'Course Content'}>
                 <TextEditor
                   content={content ?? ''}
                   onHandleChange={(value) => {
@@ -396,7 +396,7 @@ function EditProduct() {
                 style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 1rem' }}
               >
                 <Flex vertical gap={20}>
-                  <h2 className='font-bold text-[16px]'>Ảnh Đại diện</h2>
+                  <h2 className='font-bold text-[16px]'>Thumbnail</h2>
                   <div
                     style={{
                       flex: 5,
@@ -422,7 +422,7 @@ function EditProduct() {
                           <div className='h-[100px] w-[120px] rounded-lg overflow-hidden relative'>
                             <img
                               src={displayPic}
-                              alt='Ảnh hiện tại'
+                              alt='Current image'
                               className='object-cover h-full w-full object-center rounded-lg border border-gray-300 bg-white'
                             />
                           </div>
@@ -442,7 +442,7 @@ function EditProduct() {
                               style={{ position: 'absolute', top: 4, right: 4, zIndex: 2 }}
                               onClick={() => setImageUrl(undefined)}
                             >
-                              Xóa
+                              Delete
                             </Button>
                           </div>
                         ) : (
@@ -457,7 +457,7 @@ function EditProduct() {
                               if (!e.target.files || e.target.files.length === 0) return
                               const file = e.target.files[0]
                               if (file.size > 2 * 1024 * 1024) {
-                                popupError('Ảnh phải nhỏ hơn 2MB')
+                                popupError('Image must be smaller than 2MB')
                                 return
                               }
                               setImageUrl(file)
@@ -478,7 +478,7 @@ function EditProduct() {
                 type='primary'
                 className=' '
               >
-                Cập nhật
+                Update
               </Button>
             </Flex>
           </Form>

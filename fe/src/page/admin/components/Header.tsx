@@ -43,14 +43,14 @@ function Header() {
   const menu = (
     <Menu>
       <Menu.Item key='0'>
-        <Link to='/admin/account'>Thông tin cá nhân</Link>
+        <Link to='/admin/account'>Profile Details</Link>
       </Menu.Item>
       <Menu.Item key='1'>
-        <Link to='/admin/settings'>Cài đặt</Link>
+        <Link to='/admin/settings'>Settings</Link>
       </Menu.Item>
       <Menu.Item key='2'>
         <Button type='link' onClick={handleLogout}>
-          Đăng xuất
+          Logout
         </Button>
       </Menu.Item>
     </Menu>
@@ -106,7 +106,7 @@ function Header() {
       <Flex gap={10} justify='space-between' align='center'>
         <Link to='/' className='flex items-center gap-2 text-black hover:text-blue-500 transition-colors duration-200'>
           <HomeOutlined className='text-black text-xl' />
-          <span>Trang chủ</span>
+          <span>Home</span>
         </Link>
         <Flex align='center' gap={20}>
           <Badge size='small' count={4}>
@@ -127,7 +127,7 @@ function Header() {
                   src='https://api.dicebear.com/7.x/miniavs/svg?seed=1'
                   className=' bg-gray-200 w-[28px] h-[28px]'
                 />
-                <span className='hidden md:inline'>Xin chào, {currentUser?.username}</span>
+                <span className='hidden md:inline'>Hello, {currentUser?.username}</span>
               </Button>
             </Dropdown>
           </Flex>

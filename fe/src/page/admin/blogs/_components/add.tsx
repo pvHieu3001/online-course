@@ -39,9 +39,9 @@ export default function AddBlog() {
   const handleCancel = () => {
     if (isDirty) {
       Modal.confirm({
-        title: 'Bạn có chắc muốn rời khỏi trang?',
+        title: 'Are you sure you want to leave?',
         icon: <ExclamationCircleOutlined />,
-        content: 'Các thay đổi chưa được lưu sẽ bị mất.',
+        content: 'Unsaved changes will be lost.',
         onOk: () => navigate('..')
       })
     } else {
@@ -67,11 +67,11 @@ export default function AddBlog() {
       setIsLoading(true)
       await dispatch(blogActions.createBlog(formData) as unknown as AnyAction)
       await dispatch(blogActions.getAdminBlogs('', '', '') as unknown as AnyAction)
-      popupSuccess('Thêm bài viết thành công')
+      popupSuccess('Blog added successfully')
       setIsDirty(false)
       navigate('..')
     } catch (error) {
-      popupError('Thêm bài viết thất bại')
+      popupError('Failed to add blog')
     } finally {
       setIsLoading(false)
     }
@@ -82,22 +82,22 @@ export default function AddBlog() {
   return (
     <Drawer
       width='80%'
-      title={<div className='text-center font-bold text-2xl'>Tạo bài viết mới</div>}
+      title={<div className='text-center font-bold text-2xl'>Create New Blog</div>}
       onClose={handleCancel}
       open={true}
       footer={
         <div className='flex justify-between items-center px-4 py-2 border-t'>
-          <span className='text-sm text-gray-500'>* Kiểm tra kỹ nội dung trước khi lưu</span>
+          <span className='text-sm text-gray-500'>* Please double check content before saving</span>
           <div className='space-x-2'>
-            <Button onClick={handleCancel}>Hủy</Button>
+            <Button onClick={handleCancel}>Cancel</Button>
             <Button type='primary' htmlType='submit' form='Blog-form' loading={isLoading}>
-              Lưu bài viết
+              Save Blog
             </Button>
           </div>
         </div>
       }
     >
-      <Spin spinning={isLoading} tip='Đang lưu...'>
+      <Spin spinning={isLoading} tip='Saving...'>
         <Form
           id='Blog-form'
           form={form}
@@ -110,10 +110,10 @@ export default function AddBlog() {
             {/* Cài đặt */}
             <Col xs={24} lg={8}>
               <Form.Item
-                label={<span className='font-semibold'>Ảnh đại diện</span>}
+                label={<span className='font-semibold'>Thumbnail</span>}
                 className='border-[1px] p-[24px] rounded-md border-[#F1F1F4] bg-[#fafbfc]'
                 style={{ boxShadow: '0px 3px 4px 0px rgba(0, 0, 0, 0.03)' }}
-                rules={[{ required: true, message: 'Vui lòng chọn ảnh bài viết!' }]}
+                rules={[{ required: true, message: 'Please select blog image!' }]}
               >
                 <div className='flex flex-col items-center'>
                   <label
@@ -124,7 +124,7 @@ export default function AddBlog() {
                       <div className='relative group w-[180px] h-[180px] mb-2'>
                         <img
                           src={URL.createObjectURL(imageUrl as Blob)}
-                          alt='Ảnh danh mục'
+                          alt='Blog image'
                           className='object-cover w-full h-full rounded-md border border-gray-300 bg-white'
                         />
                         <Button
@@ -157,13 +157,13 @@ export default function AddBlog() {
                 </div>
               </Form.Item>
               <div className='bg-white rounded-md shadow-sm p-4 space-y-4'>
-                <h2 className='text-lg font-semibold text-gray-700'>Cài đặt hiển thị</h2>
-                <p className='text-xs text-gray-500'>Bật để bài viết hiển thị trên website.</p>
-                <Form.Item label='Kích hoạt' name='status' valuePropName='checked'>
+                <h2 className='text-lg font-semibold text-gray-700'>Display Settings</h2>
+                <p className='text-xs text-gray-500'>Enable to display this blog on the website.</p>
+                <Form.Item label='Active' name='status' valuePropName='checked'>
                   <Switch />
                 </Form.Item>
-                <Form.Item name='isDisplayHot' label='Bài viết nổi bật' valuePropName='checked'>
-                  <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                <Form.Item name='isDisplayHot' label='Featured Blog' valuePropName='checked'>
+                  <Switch className='w-20' checkedChildren='Show' unCheckedChildren='Hide' />
                 </Form.Item>
               </div>
             </Col>
@@ -171,20 +171,20 @@ export default function AddBlog() {
             {/* Thông tin bài viết */}
             <Col xs={24} lg={16}>
               <div className='bg-white rounded-md shadow-sm p-6 space-y-4'>
-                <h2 className='text-lg font-semibold text-gray-700'>Thông tin bài viết</h2>
-                <Form.Item name='title' label='Tiêu đề' rules={[{ required: true, message: 'Vui lòng nhập tiêu đề!' }]}>
-                  <Input size='large' placeholder='Nhập tiêu đề...' />
+                <h2 className='text-lg font-semibold text-gray-700'>Blog Information</h2>
+                <Form.Item name='title' label='Title' rules={[{ required: true, message: 'Please enter title!' }]}>
+                  <Input size='large' placeholder='Enter title...' />
                 </Form.Item>
-                <Form.Item name='description' label='Mô tả bài viết'>
-                  <Input size='large' placeholder='Nhập mô tả bài viết...' />
+                <Form.Item name='description' label='Blog Description'>
+                  <Input size='large' placeholder='Enter blog description...' />
                 </Form.Item>
-                <Form.Item name='type' label='Loại bài viết'>
-                  <Select placeholder='Chọn loại' options={typeOptions} />
+                <Form.Item name='type' label='Blog Type'>
+                  <Select placeholder='Select type' options={typeOptions} />
                 </Form.Item>
                 <Form.Item name='tagStr' label='Tags'>
                   <Select
                     mode='tags'
-                    placeholder='Nhập hoặc chọn tag'
+                    placeholder='Enter or select tag'
                     size='large'
                     className='w-full'
                     options={tagStore.dataList?.map((tag) => ({
@@ -194,7 +194,7 @@ export default function AddBlog() {
                     onChange={(value) => setSelectedTags(value)}
                   />
                 </Form.Item>
-                <Form.Item name='content' label='Nội dung chi tiết'>
+                <Form.Item name='content' label='Detailed Content'>
                   <TextEditor
                     content={content}
                     onHandleChange={(value) => {
@@ -209,7 +209,7 @@ export default function AddBlog() {
 
           {/* Xem trước nội dung */}
           <div className='mt-6 bg-gray-50 rounded-md p-4 border'>
-            <h3 className='text-lg font-semibold mb-2'>Xem trước bài viết</h3>
+            <h3 className='text-lg font-semibold mb-2'>Preview Blog</h3>
             <div className='prose max-w-none'>
               <h1>{form.getFieldValue('title')}</h1>
               <div

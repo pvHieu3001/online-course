@@ -92,10 +92,10 @@ function EditProduct() {
 
     try {
       await dispatch(courseActions.updateCourse(id, formdata) as unknown as AnyAction)
-      popupSuccess('Cập nhật khóa học thành công')
+      popupSuccess('Course updated successfully')
       navigate('..')
     } catch (error) {
-      popupError('Cập nhật khóa học thất bại')
+      popupError('Failed to update course')
     }
   }
 
@@ -156,7 +156,7 @@ function EditProduct() {
           open={true}
           title={
             <>
-              <h2 className=' font-bold text-[24px]'>Cập nhật khóa học</h2>
+              <h2 className=' font-bold text-[24px]'>Update Course</h2>
             </>
           }
           width={'85%'}
@@ -197,103 +197,103 @@ function EditProduct() {
               total_students: courseStore.data?.total_students
             }}
           >
-            <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
+            <Card title='System Information' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
               <Row gutter={16}>
                 <Col span={8}>
-                  <Form.Item name='created_at' label='Ngày tạo'>
+                  <Form.Item name='created_at' label='Created At'>
                     <Input disabled />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name='created_by' label='Người tạo'>
+                  <Form.Item name='created_by' label='Created By'>
                     <Input disabled />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name='updated_at' label='Ngày cập nhật'>
+                  <Form.Item name='updated_at' label='Updated At'>
                     <Input disabled />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item name='updated_by' label='Người cập nhật'>
+                  <Form.Item name='updated_by' label='Updated By'>
                     <Input disabled />
                   </Form.Item>
                 </Col>
               </Row>
             </Card>
-            <Card title='Thông tin khoá học' size='small' style={{ marginBottom: 24 }}>
+            <Card title='Course Information' size='small' style={{ marginBottom: 24 }}>
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
                     name='name'
-                    label='Tên khoá học'
-                    rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}
+                    label='Course Name'
+                    rules={[{ required: true, message: 'Please enter course name!' }]}
                   >
-                    <Input placeholder='Nhập tên khoá học' />
+                    <Input placeholder='Enter course name' />
                   </Form.Item>
                   <Form.Item name='slug' label='Slug'>
-                    <Input placeholder='Nhập slug' />
+                    <Input placeholder='Enter slug' />
                   </Form.Item>
-                  <Form.Item name='category_id' label='Danh mục'>
-                    <Input placeholder='Nhập ID danh mục' />
+                  <Form.Item name='category_id' label='Category'>
+                    <Input placeholder='Enter Category ID' />
                   </Form.Item>
-                  <Form.Item name='description' label='Mô tả'>
-                    <Input.TextArea rows={3} placeholder='Nhập mô tả' />
+                  <Form.Item name='description' label='Description'>
+                    <Input.TextArea rows={3} placeholder='Enter description' />
                   </Form.Item>
-                  <Form.Item name='image_url' label='Ảnh đại diện'>
-                    <Input placeholder='Nhập URL ảnh' />
+                  <Form.Item name='image_url' label='Thumbnail Image'>
+                    <Input placeholder='Enter image URL' />
                   </Form.Item>
-                  <Form.Item name='source_url' label='Nguồn video'>
-                    <Input placeholder='Nhập URL nguồn video' />
+                  <Form.Item name='source_url' label='Video Source'>
+                    <Input placeholder='Enter video source URL' />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name='language' label='Ngôn ngữ'>
-                    <Select placeholder='Chọn ngôn ngữ'>
-                      <Select.Option value='vi'>Tiếng Việt</Select.Option>
+                  <Form.Item name='language' label='Language'>
+                    <Select placeholder='Select language'>
+                      <Select.Option value='vi'>Vietnamese</Select.Option>
                       <Select.Option value='en'>English</Select.Option>
                       <Select.Option value='jp'>日本語</Select.Option>
                     </Select>
                   </Form.Item>
-                  <Form.Item name='level' label='Trình độ'>
-                    <Select placeholder='Chọn trình độ'>
+                  <Form.Item name='level' label='Level'>
+                    <Select placeholder='Select level'>
                       <Select.Option value='beginner'>Beginner</Select.Option>
                       <Select.Option value='intermediate'>Intermediate</Select.Option>
                       <Select.Option value='advanced'>Advanced</Select.Option>
                     </Select>
                   </Form.Item>
-                  <Form.Item name='price' label='Giá'>
-                    <InputNumber className='w-full' min={0} placeholder='Nhập giá' />
+                  <Form.Item name='price' label='Price'>
+                    <InputNumber className='w-full' min={0} placeholder='Enter price' />
                   </Form.Item>
-                  <Form.Item name='rating' label='Đánh giá'>
-                    <InputNumber className='w-full' min={0} max={5} step={0.1} placeholder='Nhập điểm đánh giá' />
+                  <Form.Item name='rating' label='Rating'>
+                    <InputNumber className='w-full' min={0} max={5} step={0.1} placeholder='Enter rating score' />
                   </Form.Item>
-                  <Form.Item name='total_rating' label='Tổng số đánh giá'>
-                    <InputNumber className='w-full' min={0} placeholder='Nhập tổng số đánh giá' />
+                  <Form.Item name='total_rating' label='Total Ratings'>
+                    <InputNumber className='w-full' min={0} placeholder='Enter total ratings' />
                   </Form.Item>
-                  <Form.Item name='total_students' label='Tổng số học viên'>
-                    <InputNumber className='w-full' min={0} placeholder='Nhập tổng số học viên' />
+                  <Form.Item name='total_students' label='Total Students'>
+                    <InputNumber className='w-full' min={0} placeholder='Enter total students' />
                   </Form.Item>
-                  <Form.Item name='status' label='Trạng thái'>
-                    <Select placeholder='Chọn trạng thái'>
-                      <Select.Option value='active'>Hoạt động</Select.Option>
-                      <Select.Option value='inactive'>Không hoạt động</Select.Option>
-                      <Select.Option value='draft'>Bản nháp</Select.Option>
+                  <Form.Item name='status' label='Status'>
+                    <Select placeholder='Select status'>
+                      <Select.Option value='active'>Active</Select.Option>
+                      <Select.Option value='inactive'>Inactive</Select.Option>
+                      <Select.Option value='draft'>Draft</Select.Option>
                     </Select>
                   </Form.Item>
                 </Col>
               </Row>
             </Card>
-            <Divider orientation='left'>Nội dung chi tiết</Divider>
+            <Divider orientation='left'>Detailed Content</Divider>
             <Card size='small' style={{ marginBottom: 24 }}>
-              <Form.Item name='content' label='Nội dung'>
+              <Form.Item name='content' label='Content'>
                 <TextEditor content={courseStore.data?.content ?? ''} onHandleChange={() => {}} />
               </Form.Item>
-              <Form.Item name='detail' label='Mô tả chi tiết'>
+              <Form.Item name='detail' label='Detailed Description'>
                 <ReactQuill modules={modules} formats={formats} theme='snow' className='h-[200px]' />
               </Form.Item>
             </Card>
-            <Divider orientation='left'>Ảnh & Gallery</Divider>
+            <Divider orientation='left'>Image & Gallery</Divider>
             <Card size='small' style={{ marginBottom: 24 }}>
               {/* Gallery giữ nguyên như cũ */}
               <Form.Item
@@ -302,7 +302,7 @@ function EditProduct() {
                 style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 1rem' }}
               >
                 <Flex vertical gap={20}>
-                  <h2 className='font-bold text-[16px]'>Hình Ảnh</h2>
+                  <h2 className='font-bold text-[16px]'>Images</h2>
                   <div
                     style={{
                       flex: 5,
@@ -328,7 +328,7 @@ function EditProduct() {
                           </Flex>
                           <Flex style={{ width: '100%', color: 'gray' }} vertical justify='center' align='center'>
                             <span style={{ fontSize: '11px' }}>
-                              Kích thước tối đa: 50MB{' '}
+                              Max size: 50MB{' '}
                               <span className={`${gallery.length != 5 ? 'text-red-400' : 'text-blue-400'}`}>
                                 {gallery.length}/5
                               </span>
@@ -390,7 +390,7 @@ function EditProduct() {
                 type='primary'
                 className=' '
               >
-                Cập nhật
+                Update
               </Button>
             </Flex>
           </Form>

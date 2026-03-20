@@ -46,21 +46,21 @@ function PageCourse() {
     <HandleLoading isLoading={coursesLoading} error_message={error_message}>
       <div className='bg-gray-100 min-h-screen pb-16'>
         <Helmet>
-          <title>Học Free || Tất cả khóa học</title>
+          <title>Hocfree || All Courses</title>
           <meta
             name='description'
-            content='Khám phá tất cả khóa học miễn phí trên Học Free — học lập trình, thiết kế, marketing và nhiều lĩnh vực khác hoàn toàn miễn phí.'
+            content='Discover all free courses on Hocfree — learn programming, design, marketing, and more, completely free.'
           />
         </Helmet>
         <div className='flex flex-col lg:flex-row gap-6 max-w-[1300px] mx-auto'>
           <div className='min-h-screen w-full lg:w-[80%] bg-white flex-1 bg-white rounded-lg shadow-md p-6'>
             <div>
-              <div className='text-xl font-semibold text-indigo-600 mb-2'>Tất cả khóa học</div>
+              <div className='text-xl font-semibold text-indigo-600 mb-2'>All Courses</div>
             </div>
 
             <div>
               {coursesLoading ? (
-                <div className='text-center text-gray-500'>Đang tải khóa học...</div>
+                <div className='text-center text-gray-500'>Loading courses...</div>
               ) : courses && courses.length > 0 ? (
                 <>
                   <div className='flex flex-col gap-6 mb-6'>
@@ -115,7 +115,7 @@ function PageCourse() {
                   </div>
                 </>
               ) : (
-                <div className='text-center text-gray-500'>Không tìm thấy khóa học nào trong danh mục này</div>
+                <div className='text-center text-gray-500'>No courses found in this category</div>
               )}
             </div>
           </div>

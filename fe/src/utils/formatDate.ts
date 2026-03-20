@@ -23,7 +23,7 @@ export function formatDateTimeString(date: string): string {
 }
 
 export function getFullName(firstName: string, lastName: string): string {
-  if (!firstName && !lastName) return 'Ẩn danh'
+  if (!firstName && !lastName) return 'Anonymous'
   if (!firstName) return capitalize(lastName)
   if (!lastName) return capitalize(firstName)
   return `${capitalize(firstName)} ${capitalize(lastName)}`

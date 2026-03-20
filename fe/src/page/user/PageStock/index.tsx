@@ -47,7 +47,7 @@ function PageStock() {
           <div className='flex items-center space-x-2'>
             <RiseOutlined style={{ color: '#52c41a', fontSize: '24px' }} />
             <Title level={3} className='!mb-0'>
-              Biểu đồ Lịch sử VNINDEX (90 ngày)
+              VNINDEX History Chart (90 days)
             </Title>
           </div>
         }

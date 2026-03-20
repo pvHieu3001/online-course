@@ -1,30 +1,30 @@
 export const getBlogInfoByType = (type: string): { path: string; title: string } => {
-  let title = 'Văn Hóa Công Nghệ'
+  let title = 'Tech Culture'
   let path = 'game'
   switch (type) {
     case 'game':
       path = 'game'
-      title = 'Game Hot'
+      title = 'Hot Games'
       break
     case 'technology':
       path = 'san-pham-cong-nghe'
-      title = 'Sản Phẩm Công Nghệ'
+      title = 'Tech Products'
       break
     case 'crypto':
       path = 'crypto'
-      title = 'Tiền Mã Hóa'
+      title = 'Crypto'
       break
     case 'stock':
       path = 'chung-khoan'
-      title = 'Chứng Khoán'
+      title = 'Stock'
       break
     case 'tips':
       path = 'thu-thuat-huu-ich'
-      title = 'Thủ Thuật Hữu Ích'
+      title = 'Useful Tips'
       break
     case 'archive':
       path = 'suu-tam'
-      title = 'Sưu Tầm'
+      title = 'Collections'
       break
   }
   return { path, title }

@@ -16,7 +16,7 @@ function Sidenav() {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
             <ReadOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Khóa Học</span>
+            <span className='label font-bold text-[#344767]'>Courses</span>
           </Flex>
         ),
         link: '/admin/products'
@@ -25,7 +25,7 @@ function Sidenav() {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
             <TagsOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Danh Mục</span>
+            <span className='label font-bold text-[#344767]'>Categories</span>
           </Flex>
         ),
         link: '/admin/categories'
@@ -34,7 +34,7 @@ function Sidenav() {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
             <TagsOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Bài Viết</span>
+            <span className='label font-bold text-[#344767]'>Blogs</span>
           </Flex>
         ),
         link: '/admin/blogs'
@@ -43,7 +43,7 @@ function Sidenav() {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
             <UsergroupAddOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Người Dùng</span>
+            <span className='label font-bold text-[#344767]'>Users</span>
           </Flex>
         ),
         link: '/admin/users'
@@ -79,7 +79,7 @@ function Sidenav() {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
             <UserOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Tài Khoản</span>
+            <span className='label font-bold text-[#344767]'>Account</span>
           </Flex>
         ),
         link: '/admin/account'
@@ -144,7 +144,7 @@ function Sidenav() {
           <path d='M11 12.83L3.26 9.26 2 9.91l9 4.09 9-4.09-1.26-.65L13 12.83V20h-2v-7.17z' />
         </svg>
 
-        <span className='text-black font-semibold text-lg'>Học Free</span>
+        <span className='text-black font-semibold text-lg'>Hocfree</span>
       </Flex>
 
       <Menu
