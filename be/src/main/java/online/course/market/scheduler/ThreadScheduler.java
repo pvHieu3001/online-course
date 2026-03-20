@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.thread.ThreadAccount;
 import online.course.market.entity.dto.user.UserDto;
+import online.course.market.entity.model.MediaEntity;
 import online.course.market.entity.model.PostEntity;
 import online.course.market.entity.model.UserModel;
 import online.course.market.repository.PostRepository;
@@ -19,11 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -55,7 +54,7 @@ public class ThreadScheduler {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    @Scheduled(cron = "0 0 0,5,8,11,14,17,20,21,22,23 * * *", zone = "Asia/Ho_Chi_Minh")
+    @Scheduled(cron = "0 0 0,5,8,11,14,17,18,19,20,21,22,23 * * *", zone = "Asia/Ho_Chi_Minh")
 //    @Scheduled(cron = "0 0 * * * *")
     public void runMultiAccountPost() {
         log.info("Bắt đầu tiến trình đăng bài phân tách thời gian: {}", LocalDateTime.now());
@@ -91,28 +90,44 @@ public class ThreadScheduler {
     @Transactional
     public void processSingleAccountPost(ThreadAccount account) {
         Optional<PostEntity> postOpt = postRepository.findFirstByIsPublishedFalseAndThreadIdOrderByIdAsc(account.getThreadId());
-
         if (postOpt.isPresent()) {
             PostEntity post = postOpt.get();
-	    if(post.getMedias().size() > 0){
-            	try {
-                	String videoUrl = post.getMedias().get(0).getCloudinaryUrl();
-                	String imageUrl = (post.getMedias().size() >= 2) ? post.getMedias().get(1).getCloudinaryUrl() : null;
+            try {
+                List<String> videoUrls = List.of();
+                List<String> imageUrls = List.of();
 
-                	threadsService.postToThreads(post.getCaption(), imageUrl, videoUrl, post.getAmzUrl(), post, account.getThreadToken(), account.getThreadId());
-                	log.info("Account {} đã đăng bài ID {} thành công sau thời gian chờ.", account.getId(), post.getId());
+                if (post.getMedias() != null && !post.getMedias().isEmpty()) {
+                    Map<String, List<String>> mediaMap = post.getMedias().stream()
+                            .filter(m -> m.getCloudinaryUrl() != null)
+                            .collect(Collectors.groupingBy(
+                                    MediaEntity::getMediaType,
+                                    Collectors.mapping(MediaEntity::getCloudinaryUrl, Collectors.toList())
+                            ));
 
-            	} catch (Exception e) {
-                	log.error("Lỗi khi đăng bài ID {} cho Account {}: {}", post.getId(), account.getId(), e.getMessage());
-            	}
-	    }else{
-            	post.setIsPublished(true);
-            	post.setPublishedAt(LocalDateTime.now());
-            	post.setStatus("FAILED");
-            	post.setLastError("Post don't have media");
-            	post.setRetryCount(1);
-            	postRepository.save(post);
-	    }
+                    videoUrls = mediaMap.getOrDefault("VIDEO", List.of());
+                    imageUrls = mediaMap.getOrDefault("IMAGE", List.of());
+                }
+
+                if ((post.getCaption() == null || post.getCaption().isBlank()) && imageUrls.isEmpty() && videoUrls.isEmpty()) {
+                    threadsService.handleFailedPost(post, "Post nội dung trống (không có chữ cũng không có media)");
+                    return;
+                }
+
+                threadsService.postToThreads(
+                        post.getCaption(),
+                        imageUrls,
+                        videoUrls,
+                        post.getAmzUrl(),
+                        post,
+                        account.getThreadToken(),
+                        account.getThreadId()
+                );
+
+                log.info("Account {} đã xử lý bài bài ID {}.", account.getId(), post.getId());
+
+            } catch (Exception e) {
+                log.error("Lỗi hệ thống khi xử lý bài ID {} cho Account {}: {}", post.getId(), account.getId(), e.getMessage());
+            }
         }
     }
 }
