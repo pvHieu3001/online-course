@@ -1,4 +1,4 @@
-# React + TypeScript + Vite +https://znews.vn/
+# React + TypeScript + Vite + znews.vn
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
