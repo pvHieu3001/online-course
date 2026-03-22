@@ -48,13 +48,20 @@ const Header = (props: Props) => {
   }, [menuOpen])
 
   const menuItems = [
-    { label: 'HOME', href: '/' },
-    { label: 'COURSES', href: '/tat-ca-khoa-hoc' },
-    { label: 'FINANCE', href: '/chung-khoan' },
-    { label: 'CRYPTO', href: '/crypto' },
-    { label: 'UTILITIES', href: '/thu-thuat-huu-ich' },
-    { label: 'COLLECTIONS', href: '/suu-tam' },
-    // { label: 'STOCK PRICES', href: '/bang-gia-chung-khoan' }
+    { label: 'Home', href: '/' },
+    { label: 'Books', href: '/tat-ca-khoa-hoc' },
+    { label: 'Business', href: '/chung-khoan' },
+    { label: 'Health', href: '/crypto' },
+    { label: 'Sport', href: '/thu-thuat-huu-ich' },
+    { label: 'Life', href: '/suu-tam' },
+    { label: 'Technology', href: '/bang-gia-chung-khoan' },
+    { label: 'Entertainment', href: '/bang-gia-chung-khoan' },
+    { label: 'Lifestype', href: '/bang-gia-chung-khoan' },
+    { label: 'Car', href: '/bang-gia-chung-khoan' },
+    { label: 'Law', href: '/bang-gia-chung-khoan' },
+    { label: 'Education', href: '/bang-gia-chung-khoan' },
+    { label: 'Tourism', href: '/bang-gia-chung-khoan' }
+
   ]
 
   const handleDetail = (course: IProduct) => {
