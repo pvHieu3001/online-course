@@ -119,14 +119,14 @@ public class ThreadsService {
             List<String> childrenIds = new ArrayList<>();
 
             // 1. Xử lý gom tất cả Media (Images + Videos) vào danh sách children
-            if (imageUrls != null) {
-                for (String url : imageUrls) {
-                    childrenIds.add(createMediaContainer(userId, "IMAGE", url, true, accessToken));
-                }
-            }
             if (videoUrls != null) {
                 for (String url : videoUrls) {
                     childrenIds.add(createMediaContainer(userId, "VIDEO", url, true, accessToken));
+                }
+            }
+            if (imageUrls != null) {
+                for (String url : imageUrls) {
+                    childrenIds.add(createMediaContainer(userId, "IMAGE", url, true, accessToken));
                 }
             }
 
