@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/amazon")
+@CrossOrigin(origins = "*")
 public class ThreadController {
     private final ThreadsService service;
     private final UserService userService;
@@ -60,6 +61,18 @@ public class ThreadController {
         UserModel userModel = userService.getByUserName(authentication.getName());
         service.publishPost(id, userModel);
         return ResponseEntity.ok(ApiResponse.success());
+    }
+
+    @PostMapping("/collect")
+    public ResponseEntity<String> collectData(@RequestBody List<AmazonPostRequest> posts) {
+        try {
+            for (AmazonPostRequest post : posts) {
+                service.downloadAndUpload(post, "25978367705192214");
+            }
+            return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết thành công!");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Lỗi hệ thống: " + e.getMessage());
+        }
     }
     
     @PostMapping
