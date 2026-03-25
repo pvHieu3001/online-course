@@ -32,6 +32,8 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -409,6 +411,24 @@ public class ThreadsService {
 
         int randomIndex = new Random().nextInt(templates.length);
         return String.format(templates[randomIndex], amzLink);
+    }
+
+    public String resolveAmazonLink(String shortUrl) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = restTemplate.headForHeaders(shortUrl);
+            String longUrl = headers.getLocation().toString();
+
+            // Dùng Regex lấy ASIN như đã bàn
+            Pattern pattern = Pattern.compile("/(?:dp|gp/product)/([A-Z0-9]{10})");
+            Matcher matcher = pattern.matcher(longUrl);
+            if (matcher.find()) {
+                return "https://www.amazon.com/dp/" + matcher.group(1) + "?tag=khairul280203-20";
+            }
+            return longUrl;
+        } catch (Exception e) {
+            return shortUrl;
+        }
     }
 
     @Transactional

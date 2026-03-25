@@ -67,6 +67,7 @@ public class ThreadController {
     public ResponseEntity<String> collectData(@RequestBody List<AmazonPostRequest> posts) {
         try {
             for (AmazonPostRequest post : posts) {
+                post.setAmzUrl(service.resolveAmazonLink(post.getAmzUrl()));
                 service.downloadAndUpload(post, "25978367705192214");
             }
             return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết thành công!");
