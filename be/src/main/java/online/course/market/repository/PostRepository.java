@@ -27,4 +27,6 @@ public interface PostRepository extends JpaRepository<PostEntity, Long>{
             "ORDER BY p.id desc",
             nativeQuery = true)
     List<PostEntity> findAllByThreadIdAndCaption(@Param("threadId") String threadId, @Param("search") String search);
+
+    boolean existsBySourceUrl(String sourceUrl);
 }

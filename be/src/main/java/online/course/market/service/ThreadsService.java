@@ -416,6 +416,9 @@ public class ThreadsService {
         String apiUrl = "https://savethr.com/process";
 
         try {
+            if(postRepository.existsBySourceUrl(amazonPostRequest.getSourceUrl())){
+                return;
+            }
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             headers.add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
