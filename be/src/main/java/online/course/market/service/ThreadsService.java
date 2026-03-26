@@ -459,6 +459,18 @@ public class ThreadsService {
         }
     }
 
+    public String reCreateCap(String rawContent) {
+        GroqService groqService = new GroqService();
+        String prompt = "Act as a Threads user. Context: '" + rawContent + "'. " +
+                "Task: Rewrite the context for Threads while keeping 90% of the original meaning. " +
+                "Style: Direct, concise, and almost identical to the source. " +
+                "Tone: Personal, natural, and low-key. No marketing fluff. " +
+                "Rule: Do NOT add new information. Keep it to 1-2 short sentences. " +
+                "Output: Return ONLY the rewritten text. Language: English.";
+            String aiResponse = groqService.generateThreadsContent(prompt);
+        return aiResponse.trim().replaceAll("^\"|\"$", "");
+    }
+
     private void parseAndUpload(String html, AmazonPostRequest amazonPostRequest, String threadId) {
 
         Document doc = Jsoup.parse(html);
