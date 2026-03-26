@@ -417,9 +417,8 @@ public class ThreadsService {
         try {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = restTemplate.headForHeaders(shortUrl);
-            String longUrl = headers.getLocation().toString();
+            String longUrl = Objects.requireNonNull(headers.getLocation()).toString();
 
-            // Dùng Regex lấy ASIN như đã bàn
             Pattern pattern = Pattern.compile("/(?:dp|gp/product)/([A-Z0-9]{10})");
             Matcher matcher = pattern.matcher(longUrl);
             if (matcher.find()) {
