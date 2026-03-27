@@ -67,7 +67,7 @@ async function scrapeThreadsWithAmz(maxPosts = 10) {
             const href = threadLinkEl.getAttribute("href");
             threadUrl = href.startsWith("http")
               ? href
-              : "https://www.threads.net" + href;
+              : "https://www.threads.com" + href;
           }
 
           processedLinks.add(finalAmzUrl);
@@ -94,7 +94,7 @@ async function scrapeThreadsWithAmz(maxPosts = 10) {
   console.table(results);
 
   if (results.length > 0) {
-    fetch("http://srv947597.hstgr.cloud/api/v1/admin/amazon/collect", {
+    fetch("http://srv947597.hstgr.cloud/api/v1/amazon/collect", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(results),
