@@ -20,6 +20,7 @@ async function scrapeThreadsWithAmz(maxPosts = 10) {
       const amzLinkEl = currentContainer.querySelector('a[href*="amzn.to"]');
 
       if (amzLinkEl) {
+        const previousContainer = containers[i-1];
         let finalAmzUrl = "";
         const rawHref = amzLinkEl.href;
 
@@ -51,7 +52,7 @@ async function scrapeThreadsWithAmz(maxPosts = 10) {
             }
           }
 
-          const threadLinkEl = currentContainer.querySelector('a[href*="/post/"]');
+          const threadLinkEl = previousContainer.querySelector('a[href*="/post/"]');
           let threadUrl = threadLinkEl ? (threadLinkEl.href.startsWith("http") ? threadLinkEl.href : "https://www.threads.com" + threadLinkEl.getAttribute("href")) : "";
 
           processedLinks.add(finalAmzUrl);
