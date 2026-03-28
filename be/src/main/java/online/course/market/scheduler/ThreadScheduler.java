@@ -28,27 +28,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class ThreadScheduler {
-    @Value("${thread.account-1}")
-    private String account1;
-    @Value("${thread.account-1-id}")
-    private String accountId1;
-    @Value("${thread.account-2}")
-    private String account2;
-    @Value("${thread.account-2-id}")
-    private String accountId2;
-    @Value("${thread.account-3}")
-    private String account3;
-    @Value("${thread.account-3-id}")
-    private String accountId3;
-    @Value("${thread.account-4}")
-    private String account4;
-    @Value("${thread.account-4-id}")
-    private String accountId4;
-    @Value("${thread.account-5}")
-    private String account5;
-    @Value("${thread.account-5-id}")
-    private String accountId5;
-
     private final ThreadsService threadsService;
     private final PostRepository postRepository;
     private final UserRepository userRepository;

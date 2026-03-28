@@ -25,16 +25,19 @@ import java.util.stream.Collectors;
 public class ThreadController {
     private final ThreadsService service;
 
-    @CrossOrigin(origins = "*")
     @PostMapping("/collect")
-    public ResponseEntity<String> collectData(@RequestBody List<AmazonPostRequest> posts) {
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<String> collectData(
+            @RequestBody List<AmazonPostRequest> posts,
+            @RequestParam(name = "threadId", required = true) String threadId
+    ) {
         try {
             for (AmazonPostRequest post : posts) {
                 post.setCaption(service.reCreateCap(post.getCaption()));
                 post.setAmzUrl(service.resolveAmazonLink(post.getAmzUrl()));
-                service.downloadAndUpload(post, "25978367705192214");
+                service.downloadAndUpload(post, threadId);
             }
-            return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết thành công!");
+            return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết cho Thread: " + threadId);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Lỗi hệ thống: " + e.getMessage());
         }
