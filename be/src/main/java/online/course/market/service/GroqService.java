@@ -1,6 +1,7 @@
 package online.course.market.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class GroqService {
     @Value("${groq.api.key}")
@@ -46,7 +48,10 @@ public class GroqService {
             return response.path("choices").get(0).path("message").path("content").asText();
 
         } catch (Exception e) {
-            return "Lỗi gọi Groq: " + e.getMessage();
+            log.error("apikey: "+apiKey);
+            log.error("apiUrl: "+apiUrl);
+            log.error("model: "+model);
+            throw new RuntimeException(e);
         }
     }
 }
