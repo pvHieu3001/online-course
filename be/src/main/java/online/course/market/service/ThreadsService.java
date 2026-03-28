@@ -436,7 +436,7 @@ public class ThreadsService {
 
         try {
             if(postRepository.existsBySourceUrl(amazonPostRequest.getSourceUrl())){
-                log.error("Nội dung đã tồn tại");
+                log.error("Nội dung đã tồn tại: {}", amazonPostRequest.getSourceUrl());
                 return;
             }
             HttpHeaders headers = new HttpHeaders();
