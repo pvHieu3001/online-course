@@ -64,7 +64,7 @@ public class AdminThreadController {
     public ResponseEntity<ApiResponse<?>> cloneThreadPost(@RequestBody AmazonPostRequest request, Authentication authentication) {
         try {
             UserModel userModel = userService.getByUserName(authentication.getName());
-            service.downloadAndUpload(request, userModel.getThreadId());
+            service.downloadAndUpload(request, userModel.getThreadId(), false);
             return ResponseEntity.ok(ApiResponse.success());
         } catch (Exception e) {
             throw new RuntimeException("Failed to create category: " + e.getMessage(), e);

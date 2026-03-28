@@ -431,7 +431,7 @@ public class ThreadsService {
     }
 
     @Transactional
-    public void downloadAndUpload(AmazonPostRequest amazonPostRequest, String threadId) {
+    public void downloadAndUpload(AmazonPostRequest amazonPostRequest, String threadId, boolean isUsingGrok) {
         String apiUrl = "https://savethr.com/process";
 
         try {
@@ -439,6 +439,11 @@ public class ThreadsService {
                 log.error("Nội dung đã tồn tại: {}", amazonPostRequest.getSourceUrl());
                 return;
             }
+            if(isUsingGrok){
+                amazonPostRequest.setCaption(reCreateCap(amazonPostRequest.getCaption()));
+                amazonPostRequest.setAmzUrl(resolveAmazonLink(amazonPostRequest.getAmzUrl()));
+            }
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             headers.add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");

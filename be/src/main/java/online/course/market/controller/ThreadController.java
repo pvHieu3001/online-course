@@ -33,9 +33,7 @@ public class ThreadController {
     ) {
         try {
             for (AmazonPostRequest post : posts) {
-                post.setCaption(service.reCreateCap(post.getCaption()));
-                post.setAmzUrl(service.resolveAmazonLink(post.getAmzUrl()));
-                service.downloadAndUpload(post, threadId);
+                service.downloadAndUpload(post, threadId, true);
                 Thread.sleep(4000);
             }
             return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết cho Thread: " + threadId);
