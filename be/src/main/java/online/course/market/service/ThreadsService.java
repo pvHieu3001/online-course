@@ -461,7 +461,6 @@ public class ThreadsService {
     }
 
     public String reCreateCap(String rawContent) {
-        GroqService groqService = new GroqService();
         String prompt = "Act as a Threads user. Context: '" + rawContent + "'. " +
                 "Task: Rewrite the context for Threads while keeping 90% of the original meaning. " +
                 "Style: Direct, concise, and almost identical to the source. " +
