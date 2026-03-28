@@ -34,7 +34,6 @@ public class ThreadController {
         try {
             for (AmazonPostRequest post : posts) {
                 service.downloadAndUpload(post, threadId, true);
-                Thread.sleep(4000);
             }
             return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết cho Thread: " + threadId);
         } catch (Exception e) {
