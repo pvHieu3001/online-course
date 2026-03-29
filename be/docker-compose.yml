@@ -31,16 +31,6 @@ services:
       - SPRING_DATA_REDIS_HOST=${REDIS_HOST}
       - SPRING_DATA_REDIS_PORT=${REDIS_PORT}
       - GROQ_API_KEY=${GROQ_API_KEY}
-      - ACCOUNT_1=${ACCOUNT_1}
-      - ACCOUNT_1_ID=${ACCOUNT_1_ID}
-      - ACCOUNT_2=${ACCOUNT_2}
-      - ACCOUNT_2_ID=${ACCOUNT_2_ID}
-      - ACCOUNT_3=${ACCOUNT_3}
-      - ACCOUNT_3_ID=${ACCOUNT_3_ID}
-      - ACCOUNT_4=${ACCOUNT_4}
-      - ACCOUNT_4_ID=${ACCOUNT_4_ID}
-      - ACCOUNT_5=${ACCOUNT_5}
-      - ACCOUNT_5_ID=${ACCOUNT_5_ID}
     volumes:
       - /var/www/html/online-course/uploads:/app/uploads
     depends_on:
