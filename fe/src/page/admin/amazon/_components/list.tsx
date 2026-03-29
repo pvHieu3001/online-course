@@ -1,6 +1,6 @@
 import type { TableProps } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import { Button, Input, Popconfirm, Space, Table, Tag, Typography, message } from 'antd'
+import { Button, Input, Popconfirm, Space, Table, Tag, Tooltip, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
@@ -49,13 +49,31 @@ export default function ListAmazon() {
     },
     {
       title: 'Trạng thái',
-      dataIndex: 'isPublished',
-      key: 'isPublished',
+      dataIndex: 'status',
+      key: 'status',
       width: 110,
       align: 'center',
       render: (status) => {
-        const color = !status ? 'volcano' : 'green'
-        const text = !status ? 'Chưa đăng' : 'Đã đăng'
+        let color
+        let text
+
+        switch (status) {
+          case 'SUCCESS':
+            color = 'green'
+            text = 'Thành công'
+            break
+          case 'FAILED':
+            color = 'volcano'
+            text = 'Thất bại'
+            break
+          case 'PROCESSING':
+            color = 'blue'
+            text = 'Đang xử lý'
+            break
+          default:
+            color = 'default'
+            text = 'Chưa đăng'
+        }
         return <Tag color={color}>{text.toUpperCase()}</Tag>
       }
     },
@@ -77,6 +95,33 @@ export default function ListAmazon() {
           {text}
         </a>
       )
+    },
+    {
+      title: 'Lỗi cuối',
+      dataIndex: 'lastError',
+      key: 'lastError',
+      width: 250,
+      render: (error) => {
+        if (!error) return <span style={{ color: '#bfbfbf' }}>-</span>
+
+        return (
+          <Tooltip title={error}>
+            <span
+              style={{
+                color: '#ff4d4f',
+                display: 'block',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                maxWidth: '240px'
+              }}
+            >
+              {error}
+            </span>
+          </Tooltip>
+        )
+      }
     },
     {
       title: 'Hành động',
@@ -109,7 +154,6 @@ export default function ListAmazon() {
 
   return (
     <div className='p-2 sm:p-4'>
-      {/* Header section: Chuyển từ hàng ngang sang hàng dọc trên Mobile */}
       <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-4'>
         <Typography.Title level={3} style={{ margin: 0 }}>
           Danh sách Amazon
@@ -122,7 +166,6 @@ export default function ListAmazon() {
       </div>
 
       <div className='bg-white rounded-lg shadow-sm'>
-        {/* Thanh tìm kiếm: Co giãn theo màn hình */}
         <div className='p-4'>
           <Input
             className='w-full sm:w-[300px]'

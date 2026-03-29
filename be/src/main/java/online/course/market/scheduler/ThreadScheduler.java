@@ -33,7 +33,7 @@ public class ThreadScheduler {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-     @Scheduled(cron = "0 0 1,2,3,6,9,11,12,18,20,21 * * *", zone = "Asia/Ho_Chi_Minh")
+     @Scheduled(cron = "0 0 1,3,6,9,11,18,21 * * *", zone = "Asia/Ho_Chi_Minh")
     public void runMultiAccountPost() {
         log.info("Bắt đầu tiến trình đăng bài phân tách thời gian: {}", LocalDateTime.now());
 
@@ -67,7 +67,7 @@ public class ThreadScheduler {
 
     @Transactional
     public void processSingleAccountPost(ThreadAccount account) {
-        Optional<PostEntity> postOpt = postRepository.findFirstByIsPublishedFalseAndThreadIdOrderByIdAsc(account.getThreadId());
+        Optional<PostEntity> postOpt = postRepository.findRandomByIsPublishedFalseAndThreadId(account.getThreadId());
         if (postOpt.isPresent()) {
             PostEntity post = postOpt.get();
             try {

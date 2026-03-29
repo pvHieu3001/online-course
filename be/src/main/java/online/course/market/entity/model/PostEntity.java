@@ -35,6 +35,7 @@ public class PostEntity{
     private LocalDateTime publishedAt;
 
     private String status;
+    @Column(columnDefinition = "TEXT CHARACTER SET utf8mb4")
     private String lastError;
     private Integer retryCount = 0;
     private String threadId;

@@ -31,6 +31,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -175,8 +176,10 @@ public class ThreadsService {
             postRepository.save(post);
 
         } catch (Exception e) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM HH:mm");
+            String timestamp = dtf.format(LocalDateTime.now());
+            post.setLastError(String.format("[%s] %s", timestamp, e.getMessage()));
             post.setStatus("FAILED");
-            post.setLastError(e.getMessage());
             post.setRetryCount(post.getRetryCount() + 1);
             postRepository.save(post);
             log.error("Thất bại khi đăng bài ID {}: {}", post.getId(), e.getMessage());
@@ -546,10 +549,12 @@ public class ThreadsService {
     }
 
     public void handleFailedPost(PostEntity post, String reason) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM HH:mm");
+        String timestamp = dtf.format(LocalDateTime.now());
+        post.setLastError(String.format("[%s] %s", timestamp, reason));
         post.setIsPublished(true);
         post.setPublishedAt(LocalDateTime.now());
         post.setStatus("FAILED");
-        post.setLastError(reason);
         post.setRetryCount(1);
         postRepository.save(post);
         log.warn("Bài viết ID {} bị từ chối: {}", post.getId(), reason);
