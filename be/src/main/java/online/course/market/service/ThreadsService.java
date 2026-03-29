@@ -186,42 +186,63 @@ public class ThreadsService {
     }
 
     private String createCarouselWithRetry(String userId, String text, List<String> children, String accessToken) throws InterruptedException {
-        for (int i = 0; i < 5; i++) {
+        int maxRetries = 5;
+        long waitTime = 10000;
+
+        for (int i = 0; i < maxRetries; i++) {
             try {
                 return createCarouselContainer(userId, text, children, accessToken);
             } catch (HttpClientErrorException.BadRequest e) {
                 String errorBody = e.getResponseBodyAsString();
+
                 if (errorBody.contains("\"code\": 17") || errorBody.contains("\"code\": 32")) {
-                    log.error("CHẠM RATE LIMIT! Dừng đăng bài trong 1 giờ.");
+                    log.error("🛑 CHẠM RATE LIMIT! Ngừng gọi API để bảo vệ App. Body: {}", errorBody);
                     throw new RuntimeException("Rate limit reached");
                 }
-
-                if (e.getResponseBodyAsString().contains("4279009")) {
-                    log.warn("Meta chưa đồng bộ ID con (Lần {}), đợi 5s...", i + 1);
-                    Thread.sleep(5000);
-                } else throw e;
+                if (errorBody.contains("4279009")) {
+                    log.warn("⏳ ID con chưa đồng bộ (Lần {}/{}). Đợi {}s rồi thử lại...",
+                            i + 1, maxRetries, waitTime / 1000);
+                    Thread.sleep(waitTime);
+                    waitTime = Math.min(waitTime + 10000, 40000);
+                } else {
+                    log.error("❌ Lỗi BadRequest không thể retry: {}", errorBody);
+                    throw e;
+                }
             }
         }
-        throw new RuntimeException("Lỗi 4279009 kéo dài quá lâu.");
+        throw new RuntimeException("Tạo Carousel thất bại: Lỗi đồng bộ ID con (4279009) kéo dài quá " + (waitTime * maxRetries / 1000) + "s");
     }
 
     private String publishWithRetry(String userId, String creationId, String accessToken) throws InterruptedException {
         int maxRetries = 3;
+        long retryDelay = 10000;
+
         for (int i = 0; i < maxRetries; i++) {
             try {
                 return publishContainer(userId, creationId, accessToken);
             } catch (HttpClientErrorException.BadRequest e) {
                 String errorBody = e.getResponseBodyAsString();
                 if (errorBody.contains("\"code\": 17") || errorBody.contains("\"code\": 32")) {
-                    log.error("CHẠM RATE LIMIT! Dừng đăng bài trong 1 giờ.");
-                    throw new RuntimeException("Rate limit reached");
+                    log.error("🛑 CHẠM RATE LIMIT META! Dừng toàn bộ tiến trình. Chi tiết: {}", errorBody);
+                    throw new RuntimeException("Rate limit reached - Stop all activities");
                 }
 
-                log.warn("Lệnh Publish chưa nhận được ID, thử lại sau 3s...");
-                Thread.sleep(3000);
+                if (errorBody.contains("\"code\": 368")) {
+                    log.error("❌ Nội dung bị Meta đánh dấu SPAM/Vi phạm chính sách. Không retry bài này.");
+                    throw new RuntimeException("Content blocked by Meta spam filter");
+                }
+
+                log.warn("⚠️ Lần {}: Container {} chưa sẵn sàng để Publish. Thử lại sau {}s...",
+                        i + 1, creationId, retryDelay / 1000);
+
+                Thread.sleep(retryDelay);
+                retryDelay += 5000;
+            } catch (Exception e) {
+                log.error("💥 Lỗi không xác định khi Publish: {}", e.getMessage());
+                throw e;
             }
         }
-        throw new RuntimeException("Không thể Publish bài viết.");
+        throw new RuntimeException("Không thể Publish bài viết sau " + maxRetries + " lần thử.");
     }
 
     private String createCarouselContainer(String userId, String text, List<String> children, String accessToken) {
