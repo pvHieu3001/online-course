@@ -50,7 +50,7 @@
     "chart.js": "^4.4.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "dayjs": "^1.11.12",
+    "dayjs": "^1.11.20",
     "debounce": "^2.1.0",
     "docx": "^8.5.0",
     "file-saver": "^2.0.5",

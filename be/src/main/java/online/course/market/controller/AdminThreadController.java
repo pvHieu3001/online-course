@@ -14,9 +14,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -53,9 +55,12 @@ public class AdminThreadController {
     }
 
     @Operation(description = "Get by id endpoint for Category", summary = "Get Category by id")
-    @PostMapping("/{id}")
+    @PostMapping("/publish/{id}")
     public ResponseEntity<ApiResponse<?>> publishPost(@PathVariable Long id, Authentication authentication) {
         UserModel userModel = userService.getByUserName(authentication.getName());
+        if (userModel == null || Objects.equals(userModel.getIsThreadPending(), true) || !StringUtils.hasText(userModel.getThreadId()) || !StringUtils.hasText(userModel.getThreadToken())) {
+            throw new RuntimeException("Thiếu thông tin định danh, token hoặc pending.");
+        }
         service.publishPost(id, userModel);
         return ResponseEntity.ok(ApiResponse.success());
     }

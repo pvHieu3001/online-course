@@ -1,5 +1,5 @@
 import type { TableProps } from 'antd'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { EditOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons'
 import { Button, Input, Popconfirm, Space, Table, Tag, Tooltip, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -10,6 +10,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { IAmazon } from '@/common/types.interface'
 import { RootState } from '@/app/store'
+import dayjs from 'dayjs'
 
 export default function ListAmazon() {
   const dispatch = useDispatch()
@@ -23,6 +24,16 @@ export default function ListAmazon() {
   const handlerDistableAmazon = async (id: string) => {
     try {
       dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
+      message.success('Vô hiệu hoá danh mục thành công!')
+    } catch (error) {
+      message.error('Vô hiệu hoá danh mục thất bại!')
+    }
+  }
+
+  const handlePublish = async (id: string) => {
+    try {
+      dispatch(amazonActions.publishPost(id) as unknown as AnyAction)
       dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error) {
@@ -124,13 +135,29 @@ export default function ListAmazon() {
       }
     },
     {
+      title: 'Published Time',
+      dataIndex: 'publishedAt',
+      key: 'publishedAt',
+      width: 150,
+      ellipsis: true,
+      render: (text) => <span className='line-clamp-2'>{text ? dayjs(text).format('DD/MM/YYYY HH:mm') : '_'}</span>
+    },
+    {
       title: 'Hành động',
       key: 'action',
-      width: 50,
+      width: 100,
       align: 'center',
       fixed: 'right',
       render: (record) => (
         <Space size={0}>
+          <Tooltip title='Đăng bài'>
+            <Button
+              type='text'
+              size='small'
+              icon={<SendOutlined style={{ color: '#52c41a', fontSize: '16px' }} />}
+              onClick={() => handlePublish(record.id)}
+            />
+          </Tooltip>
           <Link to={'' + record.id}>
             <Button type='text' size='small' icon={<EditOutlined style={{ color: '#1677ff', fontSize: '16px' }} />} />
           </Link>

@@ -70,6 +70,14 @@ const amazonSlice = createSlice({
     deleteFailure: (state) => {
       state.error_message = 'Xóa Link Amazon Thất Bại'
       state.isLoading = false
+    },
+    publishSuccessfully: (state) => {
+      state.message = 'Publish Thành Công'
+      state.isLoading = false
+    },
+    publishFailure: (state) => {
+      state.error_message = 'Publish Thất Bại'
+      state.isLoading = false
     }
   }
 })
@@ -88,6 +96,8 @@ export const {
   updateFailure,
   updateSuccessfully,
   deleteFailure,
-  deleteSuccessfully
+  deleteSuccessfully,
+  publishSuccessfully,
+  publishFailure
 } = amazonSlice.actions
 export default amazonSlice.reducer

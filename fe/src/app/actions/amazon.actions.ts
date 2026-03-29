@@ -14,7 +14,9 @@ import {
   getByIdSuccessFailure,
   getByIdSuccessFully,
   getRandomAmazonSuccessFully,
-  getRandomAmazonSuccessFailure
+  getRandomAmazonSuccessFailure,
+  publishSuccessfully,
+  publishFailure
 } from '../slices/amazon.reducer'
 
 export const getAmazons = (searchValue: string) => (dispatch: Dispatch) => {
@@ -113,6 +115,22 @@ export const updateAmazon = (id?: string, data?: FormData) => (dispatch: Dispatc
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const publishPost = (id: string) => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return amazonServices
+    .publishPost(id)
+    .then((res) => {
+      dispatch(publishSuccessfully())
+      return res
+    })
+    .catch((error) => {
+      dispatch(publishFailure())
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
 export const deleteAmazon = (id: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
@@ -136,5 +154,6 @@ export const amazonActions = {
   getRandomAmazon,
   createAmazon,
   updateAmazon,
-  deleteAmazon
+  deleteAmazon,
+  publishPost
 }

@@ -21,6 +21,11 @@ function createAmazon(data: FormData) {
 function deleteAmazon(id: string) {
   return http.delete(`/api/v1/admin/amazon/${id}`)
 }
+
+function publishPost(id: string) {
+  return http.post(`/api/v1/admin/amazon/publish/${id}`)
+}
+
 function getPageAmazon(page: string, size: string, sort: string) {
   return http.get(`/api/v1/user/amazon/pageable/?page=${page}&size=${size}&sort=${sort}`)
 }
@@ -33,5 +38,6 @@ export const amazonServices = {
   updateAmazon,
   createAmazon,
   deleteAmazon,
-  getPageAmazon
+  getPageAmazon,
+  publishPost
 }
