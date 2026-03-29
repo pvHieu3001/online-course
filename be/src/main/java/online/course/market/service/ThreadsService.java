@@ -324,8 +324,17 @@ public class ThreadsService {
 
     private boolean waitForMediaReady(String containerId, String accessToken) {
         int attempts = 0;
-        long waitTime = 5000;
-        while (attempts < 12) {
+        long waitTime = 30000;
+
+        while (attempts < 6) {
+            try {
+                log.info("Đang đợi {} giây trước khi kiểm tra trạng thái ID: {} (Lần {})", waitTime / 1000, containerId, attempts + 1);
+                Thread.sleep(waitTime);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                return false;
+            }
+
             try {
                 String statusUrl = String.format("https://graph.threads.net/v1.0/%s?fields=status,id&access_token=%s",
                         containerId, accessToken);
@@ -334,24 +343,28 @@ public class ThreadsService {
 
                 if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                     String status = response.getBody().path("status").asText();
-                    if ("FINISHED".equals(status)) return true;
-                    if ("IN_PROGRESS".equals(status)) {
-                    } else {
+
+                    if ("FINISHED".equals(status)) {
+                        log.info("✅ ID {} đã sẵn sàng (FINISHED).", containerId);
+                        return true;
+                    }
+
+                    if ("ERROR".equals(status)) {
+                        log.error("❌ ID {} bị lỗi xử lý trên Threads Server.", containerId);
                         return false;
                     }
+
+                    log.info("⏳ ID {} vẫn đang xử lý (IN_PROGRESS)...", containerId);
                 }
             } catch (Exception e) {
-                log.warn("ID {} chưa sẵn sàng trên hệ thống, đang thử lại...", containerId);
+                log.warn("⚠️ Không thể kết nối API để check status ID {}. Có thể do nghẽn mạng.", containerId);
             }
 
-            try {
-                Thread.sleep(waitTime);
-                waitTime = Math.min(waitTime * 2, 40000);
-            } catch (InterruptedException ie) {
-                Thread.currentThread().interrupt();
-            }
             attempts++;
+            waitTime = 40000;
         }
+
+        log.error("Timeout: ID {} không hoàn thành sau nhiều lần đợi.", containerId);
         return false;
     }
 
