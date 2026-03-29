@@ -207,12 +207,12 @@ jobs:
             #   git config --global --add safe.directory ${DATABASE_PATH} && cd ${DATABASE_PATH} && git pull "
 
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
-              CONTAINER_ID=\$(docker ps -q -f \"label=com.docker.compose.service=db-mysql\" -f \"label=com.docker.compose.project=online-course\")
+              CONTAINER_ID=\$(docker ps -q -f 'label=com.docker.compose.service=db-mysql')
               if [ ! -z \"\$CONTAINER_ID\" ]; then
                 echo '✅ Found MySQL container. Creating backup...'
-                docker exec \$CONTAINER_ID mysqldump -u ${DB_USER} -p\${DB_PASSWORD} ${DB_NAME} | gzip > ${DATABASE_PATH}/db_backup.sql.gz
+                docker exec \$CONTAINER_ID mysqldump -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} | gzip > ${DATABASE_PATH}/db_backup.sql.gz
               else
-                echo '🤔 MySQL container not found. Skipping backup.'
+                echo '🤔 MySQL container not found.'
               fi
             "
 
