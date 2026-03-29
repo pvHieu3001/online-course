@@ -121,30 +121,27 @@ public class ThreadsService {
             String containerId;
             List<String> childrenIds = new ArrayList<>();
 
-            // 1. Xử lý gom tất cả Media (Images + Videos) vào danh sách children
             if (videoUrls != null) {
                 for (String url : videoUrls) {
                     childrenIds.add(createMediaContainer(userId, "VIDEO", url, true, accessToken));
+                    Thread.sleep(1000);
                 }
             }
             if (imageUrls != null) {
                 for (String url : imageUrls) {
                     childrenIds.add(createMediaContainer(userId, "IMAGE", url, true, accessToken));
+                    Thread.sleep(1000);
                 }
             }
 
-            // 2. Logic đăng bài dựa trên số lượng Media
             if (childrenIds.size() > 1) {
                 log.info("Bắt đầu tạo Carousel cho bài viết ID: {}", post.getId());
 
-                // Đợi tất cả item con sẵn sàng (Wait for ready)
                 for (String id : childrenIds) {
                     if (!waitForMediaReady(id, accessToken)) {
                         throw new RuntimeException("Media item " + id + " không sẵn sàng sau thời gian chờ.");
                     }
                 }
-
-                // Tạo Carousel container từ danh sách IDs
                 containerId = createCarouselWithRetry(userId, text, childrenIds, accessToken);
 
             } else if (childrenIds.size() == 1) {
@@ -166,6 +163,8 @@ public class ThreadsService {
             log.info("--- ĐÃ ĐĂNG BÀI THÀNH CÔNG! ID: {} ---", postId);
 
             if (amzUrl != null && !amzUrl.trim().isEmpty()) {
+                log.info("Đợi 30s trước khi chèn link comment...");
+                Thread.sleep(60000);
                 String comment = generateRandomComment(amzUrl);
                 publishComment(userId, postId, comment, accessToken);
             }
@@ -191,6 +190,12 @@ public class ThreadsService {
             try {
                 return createCarouselContainer(userId, text, children, accessToken);
             } catch (HttpClientErrorException.BadRequest e) {
+                String errorBody = e.getResponseBodyAsString();
+                if (errorBody.contains("\"code\": 17") || errorBody.contains("\"code\": 32")) {
+                    log.error("CHẠM RATE LIMIT! Dừng đăng bài trong 1 giờ.");
+                    throw new RuntimeException("Rate limit reached");
+                }
+
                 if (e.getResponseBodyAsString().contains("4279009")) {
                     log.warn("Meta chưa đồng bộ ID con (Lần {}), đợi 5s...", i + 1);
                     Thread.sleep(5000);
@@ -206,6 +211,12 @@ public class ThreadsService {
             try {
                 return publishContainer(userId, creationId, accessToken);
             } catch (HttpClientErrorException.BadRequest e) {
+                String errorBody = e.getResponseBodyAsString();
+                if (errorBody.contains("\"code\": 17") || errorBody.contains("\"code\": 32")) {
+                    log.error("CHẠM RATE LIMIT! Dừng đăng bài trong 1 giờ.");
+                    throw new RuntimeException("Rate limit reached");
+                }
+
                 log.warn("Lệnh Publish chưa nhận được ID, thử lại sau 3s...");
                 Thread.sleep(3000);
             }
@@ -313,6 +324,7 @@ public class ThreadsService {
 
     private boolean waitForMediaReady(String containerId, String accessToken) {
         int attempts = 0;
+        long waitTime = 5000;
         while (attempts < 12) {
             try {
                 String statusUrl = String.format("https://graph.threads.net/v1.0/%s?fields=status,id&access_token=%s",
@@ -322,18 +334,19 @@ public class ThreadsService {
 
                 if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                     String status = response.getBody().path("status").asText();
-                    if ("FINISHED".equals(status)) {
-                        Thread.sleep(2000);
-                        return true;
+                    if ("FINISHED".equals(status)) return true;
+                    if ("IN_PROGRESS".equals(status)) {
+                    } else {
+                        return false;
                     }
-                    if ("ERROR".equals(status)) return false;
                 }
             } catch (Exception e) {
                 log.warn("ID {} chưa sẵn sàng trên hệ thống, đang thử lại...", containerId);
             }
 
             try {
-                Thread.sleep(10000 + new Random().nextInt(5000));
+                Thread.sleep(waitTime);
+                waitTime = Math.min(waitTime * 2, 40000);
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }
@@ -385,6 +398,11 @@ public class ThreadsService {
                     log.info("Đã gắn link dưới comment thành công!");
                     break;
                 } catch (HttpClientErrorException.BadRequest e) {
+                    String errorBody = e.getResponseBodyAsString();
+                    if (errorBody.contains("\"code\": 17") || errorBody.contains("\"code\": 32")) {
+                        log.error("CHẠM RATE LIMIT! Dừng đăng bài trong 1 giờ.");
+                        throw new RuntimeException("Rate limit reached");
+                    }
                     if (e.getResponseBodyAsString().contains("4279009")) {
                         log.warn("Comment ID chưa sẵn sàng, đang thử lại lần {}...", i + 1);
                     } else {

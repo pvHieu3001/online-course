@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { Form, Input, Button, Drawer, Col, Row } from 'antd'
+import { Form, Input, Button, Drawer, Col, Row, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ErrorLoad from '../../components/util/ErrorLoad'
@@ -139,12 +139,15 @@ export default function EditAmazon() {
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <Form.Item
-                        name='amzUrl'
-                        label='Link Amazon'
-                        rules={[{ message: 'Vui lòng nhập link affiliate!' }]}
-                      >
-                        <Input size='large' placeholder='Nhập link afiliate...' />
+                      <Form.Item label='Link Amazon'>
+                        <Space.Compact style={{ width: '100%' }}>
+                          <Form.Item name='amzUrl' noStyle rules={[{ message: 'Vui lòng nhập link affiliate!' }]}>
+                            <Input size='large' placeholder='Nhập link affiliate...' />
+                          </Form.Item>
+                          <Button size='large' type='primary' href={form.getFieldValue('amzUrl')} target='_blank'>
+                            Rút gọn
+                          </Button>
+                        </Space.Compact>
                       </Form.Item>
                     </Col>
                     <Col span={24}>

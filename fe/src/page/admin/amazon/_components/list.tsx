@@ -31,13 +31,18 @@ export default function ListAmazon() {
     }
   }
 
-  const handlePublish = async (id: string) => {
+  const handlePublish = async (id: string, amzUrl: string) => {
+    const isShortened = /^(https?:\/\/)?(amzn\.to|bit\.ly|tinyurl\.com)\/.*$/.test(amzUrl)
+    if (!isShortened) {
+      message.warning('Vui lòng sử dụng link rút gọn (amzn.to) để tránh bị khóa bài!')
+      return
+    }
     try {
       dispatch(amazonActions.publishPost(id) as unknown as AnyAction)
       dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
-      message.success('Vô hiệu hoá danh mục thành công!')
+      message.success('Đang đăng!')
     } catch (error) {
-      message.error('Vô hiệu hoá danh mục thất bại!')
+      message.error('Đăng bài thất bại!')
     }
   }
 
@@ -150,14 +155,20 @@ export default function ListAmazon() {
       fixed: 'right',
       render: (record) => (
         <Space size={0}>
-          <Tooltip title='Đăng bài'>
+          <Popconfirm
+            placement='topRight'
+            title='Xác nhận đăng?'
+            onConfirm={() => handlePublish(record.id, record.amzUrl)}
+            okText='Có'
+            cancelText='Không'
+          >
             <Button
               type='text'
+              danger
               size='small'
               icon={<SendOutlined style={{ color: '#52c41a', fontSize: '16px' }} />}
-              onClick={() => handlePublish(record.id)}
             />
-          </Tooltip>
+          </Popconfirm>
           <Link to={'' + record.id}>
             <Button type='text' size='small' icon={<EditOutlined style={{ color: '#1677ff', fontSize: '16px' }} />} />
           </Link>
