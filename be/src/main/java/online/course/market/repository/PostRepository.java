@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +21,8 @@ public interface PostRepository extends JpaRepository<PostEntity, Long>{
     Optional<PostEntity> findPostWithMediasById(@Param("id") Long id);
 
     @EntityGraph(attributePaths = {"medias"})
-    @Query(value = "SELECT * FROM posts p WHERE p.is_published = false AND p.thread_id = :threadId ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
-    Optional<PostEntity> findRandomByIsPublishedFalseAndThreadId(@Param("threadId") String threadId);
+    @Query(value = "SELECT p FROM PostEntity p WHERE p.isPublished = false AND p.threadId = :threadId ORDER BY function('RANDOM')")
+    Optional<PostEntity> findRandomByIsPublishedFalseAndThreadId(@Param("threadId") String threadId, Pageable pageable);
 
     @Query(value = "SELECT * FROM posts p " +
             "WHERE p.thread_id = :threadId " +
