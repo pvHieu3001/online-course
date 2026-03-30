@@ -1,19 +1,17 @@
 package online.course.market.scheduler;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.thread.ThreadAccount;
-import online.course.market.entity.dto.user.UserDto;
 import online.course.market.entity.model.MediaEntity;
 import online.course.market.entity.model.PostEntity;
 import online.course.market.entity.model.UserModel;
 import online.course.market.repository.PostRepository;
 import online.course.market.repository.UserRepository;
-import online.course.market.service.GroqService;
 import online.course.market.service.ThreadsService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +31,8 @@ public class ThreadScheduler {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-     @Scheduled(cron = "0 0 0,2,4,6,8,10,12,14,16,18,20,22 * * *", zone = "Asia/Ho_Chi_Minh")
+//     @Scheduled(cron = "0 0 0,2,4,6,8,10,12,14,16,18,20,22 * * *", zone = "Asia/Ho_Chi_Minh")
+     @Scheduled(cron = "0 * * * * *", zone = "Asia/Ho_Chi_Minh")
     public void runMultiAccountPost() {
         log.info("Bắt đầu tiến trình đăng bài phân tách thời gian: {}", LocalDateTime.now());
 
@@ -67,8 +66,8 @@ public class ThreadScheduler {
 
     @Transactional
     public void processSingleAccountPost(ThreadAccount account) {
-	Pageable singleRandomResult = PageRequest.of(0, 1);
-        List<PostEntity> postOpt = postRepository.findRandomByIsPublishedFalseAndThreadId(account.getThreadId(),singleRandomResult);
+        Pageable limitOne = PageRequest.of(0, 1);
+        List<PostEntity> postOpt = postRepository.findRandomByIsPublishedFalseAndThreadId(account.getThreadId(), limitOne);
         if (!postOpt.isEmpty()) {
             PostEntity post = postOpt.get(0);
             try {
