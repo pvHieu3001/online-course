@@ -203,8 +203,8 @@ jobs:
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "mkdir -p ${BACKEND_PATH}"
 
             # Backup database
-            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
-              git config --global --add safe.directory ${DATABASE_PATH} && cd ${DATABASE_PATH} && git pull "
+            # ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
+            #   git config --global --add safe.directory ${DATABASE_PATH} && cd ${DATABASE_PATH} && git pull "
 
             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_HOST} "
               CONTAINER_ID=\$(docker ps -q -f 'label=com.docker.compose.service=db-mysql')
