@@ -66,10 +66,9 @@ public class ThreadScheduler {
 
     @Transactional
     public void processSingleAccountPost(ThreadAccount account) {
-        Pageable limitOne = PageRequest.of(0, 1);
-        List<PostEntity> postOpt = postRepository.findRandomByIsPublishedFalseAndThreadId(account.getThreadId(), limitOne);
-        if (!postOpt.isEmpty()) {
-            PostEntity post = postOpt.get(0);
+        Optional<PostEntity> postOpt = postRepository.findFirstByIsPublishedFalseAndThreadId(account.getThreadId());
+        if (postOpt.isPresent()) {
+            PostEntity post = postOpt.get();
             try {
                 List<String> videoUrls = List.of();
                 List<String> imageUrls = List.of();

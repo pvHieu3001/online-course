@@ -19,8 +19,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Long>{
     Optional<PostEntity> findPostWithMediasById(@Param("id") Long id);
 
     @EntityGraph(attributePaths = {"medias"})
-    @Query("SELECT p FROM PostEntity p WHERE p.isPublished = false AND p.threadId = :threadId ORDER BY function('RANDOM')")
-    List<PostEntity> findRandomByIsPublishedFalseAndThreadId(@Param("threadId") String threadId, Pageable pageable);
+    Optional<PostEntity> findFirstByIsPublishedFalseAndThreadId(@Param("threadId") String threadId);
 
     @Query(value = "SELECT * FROM posts p " +
             "WHERE p.thread_id = :threadId " +
