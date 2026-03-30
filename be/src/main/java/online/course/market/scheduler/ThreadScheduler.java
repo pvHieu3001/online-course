@@ -46,7 +46,7 @@ public class ThreadScheduler {
                 continue;
             }
             Random rand = new Random();
-            int delayInMinutes = rand.nextInt(60);
+            int delayInMinutes = rand.nextInt(30);
             CompletableFuture.runAsync(() -> {
                 try {
                     if (delayInMinutes > 0) {
