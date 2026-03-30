@@ -124,26 +124,17 @@ public class ThreadsService {
             if (videoUrls != null) {
                 for (String url : videoUrls) {
                     childrenIds.add(createMediaContainer(userId, "VIDEO", url, true, accessToken));
-                    Thread.sleep(1000);
                 }
             }
             if (imageUrls != null) {
                 for (String url : imageUrls) {
                     childrenIds.add(createMediaContainer(userId, "IMAGE", url, true, accessToken));
-                    Thread.sleep(1000);
                 }
             }
 
             if (childrenIds.size() > 1) {
                 log.info("Bắt đầu tạo Carousel cho bài viết ID: {}", post.getId());
-
-                for (String id : childrenIds) {
-                    if (!waitForMediaReady(id, accessToken)) {
-                        throw new RuntimeException("Media item " + id + " không sẵn sàng sau thời gian chờ.");
-                    }
-                }
                 containerId = createCarouselWithRetry(userId, text, childrenIds, accessToken);
-
             } else if (childrenIds.size() == 1) {
                 log.info("Bắt đầu tạo Single Post cho bài viết ID: {}", post.getId());
                 String singleMediaUrl = (videoUrls != null && !videoUrls.isEmpty()) ? videoUrls.get(0) : imageUrls.get(0);
@@ -164,7 +155,7 @@ public class ThreadsService {
 
             if (amzUrl != null && !amzUrl.trim().isEmpty()) {
                 log.info("Đợi 30s trước khi chèn link comment...");
-                Thread.sleep(60000);
+                Thread.sleep(15000);
                 String comment = generateRandomComment(amzUrl);
                 publishComment(userId, postId, comment, accessToken);
             }
@@ -345,9 +336,9 @@ public class ThreadsService {
 
     private boolean waitForMediaReady(String containerId, String accessToken) {
         int attempts = 0;
-        long waitTime = 30000;
+        long waitTime = 40000;
 
-        while (attempts < 6) {
+        while (attempts < 5) {
             try {
                 log.info("Đang đợi {} giây trước khi kiểm tra trạng thái ID: {} (Lần {})", waitTime / 1000, containerId, attempts + 1);
                 Thread.sleep(waitTime);
@@ -382,7 +373,7 @@ public class ThreadsService {
             }
 
             attempts++;
-            waitTime = 40000;
+            waitTime = 20000;
         }
 
         log.error("Timeout: ID {} không hoàn thành sau nhiều lần đợi.", containerId);
