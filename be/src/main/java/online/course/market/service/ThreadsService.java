@@ -134,6 +134,12 @@ public class ThreadsService {
 
             if (childrenIds.size() > 1) {
                 log.info("Bắt đầu tạo Carousel cho bài viết ID: {}", post.getId());
+                for (String childId : childrenIds) {
+                    boolean isReady = waitForMediaReady(childId, accessToken);
+                    if (!isReady) {
+                        throw new RuntimeException("Media con " + childId + " không sẵn sàng (ERROR hoặc Timeout)");
+                    }
+                }
                 containerId = createCarouselWithRetry(userId, text, childrenIds, accessToken);
             } else if (childrenIds.size() == 1) {
                 log.info("Bắt đầu tạo Single Post cho bài viết ID: {}", post.getId());
