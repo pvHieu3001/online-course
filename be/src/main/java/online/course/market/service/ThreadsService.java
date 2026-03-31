@@ -492,8 +492,13 @@ public class ThreadsService {
                 return;
             }
             if(isUsingGrok){
+                String affiliateUrl = resolveAmazonLink(amazonPostRequest.getAmzUrl());
+                String regex = "^https://www\\.amazon\\.com/dp/[A-Z0-9]{10}\\?tag=[\\w-]+$";
+                if (affiliateUrl == null || !affiliateUrl.matches(regex)) {
+                    return;
+                }
                 amazonPostRequest.setCaption(reCreateCap(amazonPostRequest.getCaption()));
-                amazonPostRequest.setAmzUrl(resolveAmazonLink(amazonPostRequest.getAmzUrl()));
+                amazonPostRequest.setAmzUrl(affiliateUrl);
             }
 
             HttpHeaders headers = new HttpHeaders();

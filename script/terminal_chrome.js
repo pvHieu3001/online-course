@@ -1,21 +1,43 @@
-async function scrapeThreadsWithAmz(maxPosts = 10) {
+let scraperController = new AbortController();
+let currentResults = [];
+
+async function scrapeThreadsWithAmz(maxPosts = 10, { signal }) {
   let results = [];
   let processedLinks = new Set();
-  
+
   // Lấy threadId động từ URL (ví dụ: threads.net/@username -> username)
-  const threadId = window.location.pathname.split('/')[1]?.replace('@', '') || "default_user";
+  const threadId =
+    window.location.pathname.split("/")[1]?.replace("@", "") || "default_user";
+
+  signal.addEventListener("abort", () => {
+    console.log(
+      "%c🛑 Lệnh dừng được kích hoạt! Kết quả thu thập được cho đến nay:",
+      "color: #ff4757; font-weight: bold;",
+    );
+    if (results.length > 0) {
+      console.table(results);
+    } else {
+      console.log("Chưa thu thập được bài nào.");
+    }
+  });
 
   console.log(
     `%c--- 🚀 Đang quét cho Thread: ${threadId} (Max: ${maxPosts} bài) ---`,
-    "color: #007bff; font-weight: bold;"
+    "color: #007bff; font-weight: bold;",
   );
 
   while (results.length < maxPosts) {
+    if (signal.aborted) {
+      console.error("🛑 Scraper đã dừng.");
+      return;
+    }
+
     const containers = Array.from(
       document.querySelectorAll('div[data-pressable-container="true"]')
     );
 
     for (let i = 0; i < containers.length; i++) {
+      if (signal.aborted) break;
       const currentContainer = containers[i];
       const amzLinkEl = currentContainer.querySelector('a[href*="amzn.to"]');
 
@@ -72,26 +94,33 @@ async function scrapeThreadsWithAmz(maxPosts = 10) {
 
     console.log("%c... Đang cuộn xuống để lấy thêm bài ...", "color: #888");
     window.scrollBy({
-        top: window.innerHeight * 1.5,
-        left: 0,
+      top: window.innerHeight * 1.5,
+      left: 0,
         behavior: 'smooth'
     });
-    await new Promise((r) => setTimeout(r, 3000 + Math.random() * 2000)); 
+    await new Promise((r) => setTimeout(r, 3000 + Math.random() * 2000));
   }
 
-  console.table(results);
-
-  if (results.length > 0) {
-    const apiUrl = `http://srv947597.hstgr.cloud/api/v1/amazon/collect?threadId=${threadId}`;
-    fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(results),
-    })
-    .then(res => res.text())
-    .then(msg => console.log(`%c[Backend] ${msg}`, "color: #25d366; font-weight: bold;"))
-    .catch(err => console.error("❌ Lỗi gửi Backend:", err));
+  if (!signal.aborted) {
+    console.log("%c✅ Đã hoàn thành mục tiêu!", "color: #25d366; font-weight: bold;");
+    console.table(results);
   }
+
+  // if (results.length > 0) {
+  //   const apiUrl = `http://srv947597.hstgr.cloud/api/v1/amazon/collect?threadId=${threadId}`;
+  //   fetch(apiUrl, {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify(results),
+  //   })
+  //     .then((res) => res.text())
+  //     .then((msg) =>
+  //       console.log(`%c[Backend] ${msg}`, "color: #25d366; font-weight: bold;"),
+  //     )
+  //     .catch((err) => console.error("❌ Lỗi gửi Backend:", err));
+  // }
 }
 
-scrapeThreadsWithAmz(5);
+scrapeThreadsWithAmz(5, { signal: scraperController.signal });
+
+//scraperController.abort();
