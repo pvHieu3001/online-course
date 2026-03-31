@@ -1,111 +1,97 @@
 let scraperController = new AbortController();
-let currentResults = [];
 
 async function scrapeThreadsWithAmz(maxPosts = 10, { signal }) {
   let results = [];
-  let processedLinks = new Set();
-
-  // Lấy threadId động từ URL (ví dụ: threads.net/@username -> username)
-  const threadId =
-    window.location.pathname.split("/")[1]?.replace("@", "") || "default_user";
+  let processedPosts = new Set(); // Dùng Set để lưu Source URL hoặc Caption tránh trùng
+  const threadId = window.location.pathname.split("/")[1]?.replace("@", "") || "user";
 
   signal.addEventListener("abort", () => {
-    console.log(
-      "%c🛑 Lệnh dừng được kích hoạt! Kết quả thu thập được cho đến nay:",
-      "color: #ff4757; font-weight: bold;",
-    );
-    if (results.length > 0) {
-      console.table(results);
-    } else {
-      console.log("Chưa thu thập được bài nào.");
-    }
+    console.log("%c🛑 ĐÃ DỪNG! Kết quả hiện tại:", "color: red; font-weight: bold;");
+    console.table(results);
   });
 
-  console.log(
-    `%c--- 🚀 Đang quét cho Thread: ${threadId} (Max: ${maxPosts} bài) ---`,
-    "color: #007bff; font-weight: bold;",
-  );
-
   while (results.length < maxPosts) {
-    if (signal.aborted) {
-      console.error("🛑 Scraper đã dừng.");
-      return;
-    }
+    if (signal.aborted) return;
 
-    const containers = Array.from(
-      document.querySelectorAll('div[data-pressable-container="true"]')
-    );
+    // Quét các cụm bài viết dựa trên thuộc tính data-virtualized từ ảnh bạn cung cấp
+    const parentContainers = document.querySelectorAll('div[data-virtualized]');
 
-    for (let i = 0; i < containers.length; i++) {
+    for (const parent of parentContainers) {
       if (signal.aborted) break;
-      const currentContainer = containers[i];
-      const amzLinkEl = currentContainer.querySelector('a[href*="amzn.to"]');
 
-      if (amzLinkEl) {
-        const previousContainer = containers[i-1];
-        let finalAmzUrl = "";
-        const rawHref = amzLinkEl.href;
+      const blocks = Array.from(parent.querySelectorAll('div[data-pressable-container]'));
+      if (blocks.length === 0) continue;
 
-        // Giải mã Link Threads Redirect
-        if (rawHref.includes("l.threads.net") || rawHref.includes("l.threads.com")) {
+      let currentCaption = "";
+      let currentAmzUrl = "";
+      let currentSourceUrl = "";
+
+      blocks.forEach(block => {
+        // 1. Tìm link Amazon (nếu có)
+        const amzLinkEl = block.querySelector('a[href*="amzn.to"], a[href*="amazon.com"]');
+        if (amzLinkEl) {
+          const rawHref = amzLinkEl.href;
           try {
-            const urlObj = new URL(rawHref);
-            const encodedUrl = urlObj.searchParams.get("u");
-            if (encodedUrl) {
-              finalAmzUrl = decodeURIComponent(encodedUrl).split("?")[0];
-            }
-          } catch (e) {
-            console.error("Lỗi giải mã:", rawHref);
-          }
-        } else {
-          finalAmzUrl = rawHref.split("?")[0];
+            const u = new URL(rawHref).searchParams.get("u");
+            currentAmzUrl = u ? decodeURIComponent(u).split("?")[0] : rawHref.split("?")[0];
+          } catch (e) { currentAmzUrl = rawHref.split("?")[0]; }
         }
 
-        if (finalAmzUrl && finalAmzUrl.includes("amzn.to") && !processedLinks.has(finalAmzUrl)) {
-          let caption = "";
-          if (i > 0) {
-            const prevContainer = containers[i - 1];
-            const captionEl = prevContainer.querySelector("div.xat24cr.xdj266r span");
-            if (captionEl) {
-              caption = captionEl.innerText.trim()
-                .replace(/\d+\s*\/\s*\d+/g, "") // Xóa 1/10
-                .replace(/\n\d+$/g, "")
-                .trim();
-            }
-          }
-
-          const threadLinkEl = previousContainer.querySelector('a[href*="/post/"]');
-          let threadUrl = threadLinkEl ? (threadLinkEl.href.startsWith("http") ? threadLinkEl.href : "https://www.threads.com" + threadLinkEl.getAttribute("href")) : "";
-
-          processedLinks.add(finalAmzUrl);
-          results.push({
-            caption: caption,
-            amzUrl: finalAmzUrl,
-            sourceUrl: threadUrl,
-          });
-
-          console.log(`%c[OK] +1: ${finalAmzUrl}`, "color: #25d366");
+        // 2. Tìm Source URL của bài post (Dùng làm ID định danh bài viết)
+        const postLinkEl = block.querySelector('a[href*="/post/"]');
+        if (postLinkEl) {
+          currentSourceUrl = postLinkEl.href.startsWith("http") 
+            ? postLinkEl.href 
+            : window.location.origin + postLinkEl.getAttribute("href");
         }
+
+        // 3. Tìm Caption
+        const spans = Array.from(block.querySelectorAll("div.xat24cr.xdj266r span"));
+        // Tìm span chứa nội dung text (loại bỏ span chứa link hoặc span quá ngắn)
+        const textSpan = spans[0]; 
+        if (textSpan) {
+          const content = textSpan.innerText.trim()
+            .replace(/\d+\s*\/\s*\d+/g, "") // Xóa 1/10...
+            .replace(/\n\d+$/g, "");
+          
+          // Chỉ lấy caption nếu nó không phải là URL
+          if (!content.includes("http") && content.length > currentCaption.length) {
+            currentCaption = content;
+          }
+        }
+      });
+
+      // ID định danh để check trùng: Ưu tiên SourceUrl, nếu không có thì dùng Caption
+      const postId = currentSourceUrl || currentCaption;
+
+      // ĐIỀU KIỆN LƯU: Chỉ cần có Caption HOẶC có Amazon URL
+      if (postId && (currentCaption || currentAmzUrl) && !processedPosts.has(postId)) {
+        processedPosts.add(postId);
+        
+        results.push({
+          caption: currentCaption || "",
+          amzUrl: currentAmzUrl || "",
+          sourceUrl: currentSourceUrl || ""
+        });
+
+        const logColor = currentAmzUrl ? "#2ecc71" : "#3498db"; // Xanh lá nếu có link, xanh dương nếu không
+        console.log(`%c[${currentAmzUrl ? 'LINK' : 'TEXT'}] ${results.length}: ${currentCaption.substring(0, 30)}...`, `color: ${logColor}`);
       }
+
       if (results.length >= maxPosts) break;
     }
 
-    if (results.length >= maxPosts) break;
+    if (results.length >= maxPosts || signal.aborted) break;
 
-    console.log("%c... Đang cuộn xuống để lấy thêm bài ...", "color: #888");
-    window.scrollBy({
-      top: window.innerHeight * 1.5,
-      left: 0,
-        behavior: 'smooth'
-    });
-    await new Promise((r) => setTimeout(r, 3000 + Math.random() * 2000));
+    window.scrollBy(0, window.innerHeight * 1.5);
+    await new Promise(r => setTimeout(r, 2000 + Math.random() * 1000));
   }
 
   if (!signal.aborted) {
-    console.log("%c✅ Đã hoàn thành mục tiêu!", "color: #25d366; font-weight: bold;");
+    console.log("%c✅ HOÀN THÀNH!", "color: #2ecc71; font-weight: bold;");
     console.table(results);
   }
-
+  
   // if (results.length > 0) {
   //   const apiUrl = `http://srv947597.hstgr.cloud/api/v1/amazon/collect?threadId=${threadId}`;
   //   fetch(apiUrl, {
@@ -121,6 +107,5 @@ async function scrapeThreadsWithAmz(maxPosts = 10, { signal }) {
   // }
 }
 
-scrapeThreadsWithAmz(5, { signal: scraperController.signal });
-
+scrapeThreadsWithAmz(15, { signal: scraperController.signal });
 //scraperController.abort();

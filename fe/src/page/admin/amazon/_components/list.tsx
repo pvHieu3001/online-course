@@ -11,6 +11,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IAmazon } from '@/common/types.interface'
 import { RootState } from '@/app/store'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 export default function ListAmazon() {
   const dispatch = useDispatch()
@@ -145,7 +148,9 @@ export default function ListAmazon() {
       key: 'publishedAt',
       width: 150,
       ellipsis: true,
-      render: (text) => <span className='line-clamp-2'>{text ? dayjs(text).format('DD/MM/YYYY HH:mm') : '_'}</span>
+      render: (text) => (
+        <span className='line-clamp-2'>{text ? dayjs.utc(text).local().format('DD/MM/YYYY HH:mm') : '_'}</span>
+      )
     },
     {
       title: 'Hành động',
