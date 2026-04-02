@@ -36,10 +36,10 @@ export default function ListAmazon() {
 
   const handlePublish = async (id: string, amzUrl: string) => {
     const isShortened = /^(https?:\/\/)?(amzn\.to|bit\.ly|tinyurl\.com)\/.*$/.test(amzUrl)
-    if (!isShortened) {
-      message.warning('Vui lòng sử dụng link rút gọn (amzn.to) để tránh bị khóa bài!')
-      return
-    }
+    //if (!isShortened) {
+      //message.warning('Vui lòng sử dụng link rút gọn (amzn.to) để tránh bị khóa bài!')
+      //return
+    //}
     try {
       dispatch(amazonActions.publishPost(id) as unknown as AnyAction)
       dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
