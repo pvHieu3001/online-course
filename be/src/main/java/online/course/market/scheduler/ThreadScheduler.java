@@ -25,6 +25,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(
+    value = "app.scheduling.enabled", 
+    havingValue = "true", 
+    matchIfMissing = false
+)
 public class ThreadScheduler {
     private final ThreadsService threadsService;
     private final PostRepository postRepository;
