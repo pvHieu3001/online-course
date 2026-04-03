@@ -38,9 +38,10 @@ public class AdminThreadController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<PostDto>>> getAll(
             @RequestParam(required = false) String search,
+            @RequestParam(required = false) Boolean isPublished,
             Authentication authentication) {
         String currentUsername = authentication.getName();
-        List<PostDto> dtos = service.getPostsByUser(currentUsername, search)
+        List<PostDto> dtos = service.getPostsByUser(currentUsername, search, isPublished)
                 .stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());

@@ -90,9 +90,9 @@ public class ThreadsService {
         }
     }
 
-    public List<PostEntity> getPostsByUser(String currentUsername, String search) {
+    public List<PostEntity> getPostsByUser(String currentUsername, String search, Boolean isPublished) {
         UserModel userModel = userService.getByUserName(currentUsername);
-        return postRepository.findAllByThreadIdAndCaption(userModel.getThreadId(), search);
+        return postRepository.findAllByThreadIdAndCaption(userModel.getThreadId(), search, isPublished);
     }
 
     public PostEntity getPostById(Long id) {
@@ -184,7 +184,7 @@ public class ThreadsService {
 
     private String createCarouselWithRetry(String userId, String text, List<String> children, String accessToken) throws InterruptedException {
         int maxRetries = 5;
-        long waitTime = 10000;
+        long waitTime = 20000;
 
         for (int i = 0; i < maxRetries; i++) {
             try {
@@ -212,7 +212,7 @@ public class ThreadsService {
 
     private String publishWithRetry(String userId, String creationId, String accessToken) throws InterruptedException {
         int maxRetries = 3;
-        long retryDelay = 10000;
+        long retryDelay = 20000;
 
         for (int i = 0; i < maxRetries; i++) {
             try {
@@ -342,7 +342,7 @@ public class ThreadsService {
 
     private boolean waitForMediaReady(String containerId, String accessToken) {
         int attempts = 0;
-        long waitTime = 40000;
+        long waitTime = 60000;
 
         while (attempts < 5) {
             try {
@@ -417,7 +417,7 @@ public class ThreadsService {
             boolean published = false;
             for (int i = 0; i < 5; i++) {
                 try {
-                    Thread.sleep(3000 + (i * 2000));
+                    Thread.sleep(20000 + (i * 2000));
 
                     String publishUrl = String.format("https://graph.threads.net/v1.0/%s/threads_publish", userId);
                     MultiValueMap<String, String> publishParams = new LinkedMultiValueMap<>();

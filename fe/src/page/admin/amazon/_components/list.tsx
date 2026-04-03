@@ -1,6 +1,6 @@
 import type { TableProps } from 'antd'
 import { EditOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons'
-import { Button, Input, Popconfirm, Space, Table, Tag, Tooltip, Typography, message } from 'antd'
+import { Button, Input, Popconfirm, Select, Space, Table, Tag, Tooltip, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
@@ -18,16 +18,17 @@ dayjs.extend(utc)
 export default function ListAmazon() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
+  const [isPublished, setIsPublished] = useState('')
   const amazons = useSelector((state: RootState) => state.amazon)
 
   useEffect(() => {
-    dispatch(amazonActions.getAdminAmazons(searchValue) as unknown as AnyAction)
-  }, [dispatch, searchValue])
+    dispatch(amazonActions.getAdminAmazons(searchValue, isPublished) as unknown as AnyAction)
+  }, [dispatch, searchValue, isPublished])
 
   const handlerDistableAmazon = async (id: string) => {
     try {
       dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons('', '') as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error) {
       message.error('Vô hiệu hoá danh mục thất bại!')
@@ -37,8 +38,8 @@ export default function ListAmazon() {
   const handlePublish = async (id: string, amzUrl: string) => {
     const isShortened = /^(https?:\/\/)?(amzn\.to|bit\.ly|tinyurl\.com)\/.*$/.test(amzUrl)
     //if (!isShortened) {
-      //message.warning('Vui lòng sử dụng link rút gọn (amzn.to) để tránh bị khóa bài!')
-      //return
+    //message.warning('Vui lòng sử dụng link rút gọn (amzn.to) để tránh bị khóa bài!')
+    //return
     //}
     try {
       dispatch(amazonActions.publishPost(id) as unknown as AnyAction)
@@ -100,7 +101,7 @@ export default function ListAmazon() {
       title: 'Caption',
       dataIndex: 'caption',
       key: 'caption',
-      width: 150,
+      width: 200,
       ellipsis: true,
       render: (text) => <span className='line-clamp-2'>{text ?? 'N/A'}</span>
     },
@@ -108,7 +109,7 @@ export default function ListAmazon() {
       title: 'Link clone',
       dataIndex: 'sourceUrl',
       key: 'sourceUrl',
-      width: 300,
+      width: 150,
       render: (text) => (
         <a href={text} target='_blank' className='block w-40 truncate text-blue-600 hover:underline'>
           {text}
@@ -209,7 +210,7 @@ export default function ListAmazon() {
       </div>
 
       <div className='bg-white rounded-lg shadow-sm'>
-        <div className='p-4'>
+        <div className='p-4 flex flex-wrap items-center gap-3'>
           <Input
             className='w-full sm:w-[300px]'
             prefix={<SearchRoundedIcon className='text-gray-400' />}
@@ -217,8 +218,21 @@ export default function ListAmazon() {
             allowClear
             onChange={handleChangeSearch}
             placeholder='Tìm kiếm bài viết...'
-            style={{ borderRadius: '1rem' }}
+            style={{ borderRadius: '0.75rem' }}
           />
+
+          <Select
+            className='w-full sm:w-44'
+            onChange={(value) => setIsPublished(value)}
+            value={isPublished}
+            placeholder='Trạng thái'
+            size='large'
+            style={{ borderRadius: '0.75rem' }}
+          >
+            <Select.Option value=''>Tất cả trạng thái</Select.Option>
+            <Select.Option value='1'>Đã đăng</Select.Option>
+            <Select.Option value='0'>Chưa đăng</Select.Option>
+          </Select>
         </div>
 
         <Table

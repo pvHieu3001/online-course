@@ -24,9 +24,10 @@ public interface PostRepository extends JpaRepository<PostEntity, Long>{
     @Query(value = "SELECT * FROM posts p " +
             "WHERE p.thread_id = :threadId " +
             "AND (:search IS NULL OR :search = '' OR LOWER(p.caption) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+            "AND (:isPublished IS NULL OR p.is_published = :isPublished)" +
             "ORDER BY p.published_at desc",
             nativeQuery = true)
-    List<PostEntity> findAllByThreadIdAndCaption(@Param("threadId") String threadId, @Param("search") String search);
+    List<PostEntity> findAllByThreadIdAndCaption(@Param("threadId") String threadId, @Param("search") String search, @Param("isPublished") Boolean isPublished);
 
     boolean existsBySourceUrl(String sourceUrl);
 }
