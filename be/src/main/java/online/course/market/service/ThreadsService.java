@@ -497,7 +497,7 @@ public class ThreadsService {
                 if (affiliateUrl == null || !affiliateUrl.matches(regex)) {
                     return;
                 }
-                amazonPostRequest.setCaption(reCreateCap(amazonPostRequest.getCaption()));
+                amazonPostRequest.setCaption(reCreateCap(amazonPostRequest.getCaption(), affiliateUrl));
                 amazonPostRequest.setAmzUrl(affiliateUrl);
             }
 
@@ -522,14 +522,18 @@ public class ThreadsService {
         }
     }
 
-    public String reCreateCap(String rawContent) {
+    public String reCreateCap(String rawContent, String amzUrl) {
         String prompt = "Act as a Threads user. Context: '" + rawContent + "'. " +
                 "Task: Rewrite the context for Threads while keeping 90% of the original meaning. " +
                 "Style: Direct, concise, and almost identical to the source. " +
                 "Tone: Personal, natural, and low-key. No marketing fluff. " +
                 "Rule: Do NOT add new information. Keep it to 1-2 short sentences. " +
+                "Constraint: Do NOT include any links in your response. " +
                 "Output: Return ONLY the rewritten text. Language: English.";
-            String aiResponse = groqService.generateThreadsContent(prompt);
+        String aiResponse = groqService.generateThreadsContent(prompt);
+//      if (amzUrl != null && !amzUrl.isEmpty()) {
+//          return cleanedContent + "\n\nAmazon finds: " + amzUrl;
+//      }
         return aiResponse.trim().replaceAll("^\"|\"$", "");
     }
 
