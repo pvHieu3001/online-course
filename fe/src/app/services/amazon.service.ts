@@ -23,7 +23,7 @@ function deleteAmazon(id: string) {
 }
 
 function publishPost(id: string, threadId: string) {
-  return http.post(`/api/v1/admin/amazon/publish/${id}/`)
+  return http.post(`/api/v1/admin/amazon/publish/${id}/${threadId}`)
 }
 
 function getPageAmazon(page: string, size: string, sort: string) {
