@@ -39,6 +39,7 @@ public class PostEntity{
     private String lastError;
     private Integer retryCount = 0;
     private String accountThread;
+    private Boolean isCaptionLink;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

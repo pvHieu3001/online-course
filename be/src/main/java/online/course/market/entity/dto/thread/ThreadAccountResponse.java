@@ -12,6 +12,5 @@ public class ThreadAccountResponse {
     private String accountName;
     private String threadId;
     private String threadToken;
-    private Boolean isCaptionLink;
     private Boolean isThreadPending;
 }

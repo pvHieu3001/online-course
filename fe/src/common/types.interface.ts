@@ -149,6 +149,7 @@ export interface IAmazon {
   lastError: string
   retryCount: number
   accountThread: string
+  isCaptionLink: boolean
 }
 
 export interface IThreadAccount {
@@ -156,7 +157,6 @@ export interface IThreadAccount {
   accountName: string
   threadId: string
   threadToken: string
-  isCaptionLink: boolean
   isThreadPending: boolean
 }
 

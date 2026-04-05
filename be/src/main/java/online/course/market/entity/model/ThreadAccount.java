@@ -17,6 +17,5 @@ public class ThreadAccount extends BaseEntity {
     private String accountName;
     private String threadId;
     private String threadToken;
-    private Boolean isCaptionLink;
     private Boolean isThreadPending;
 }

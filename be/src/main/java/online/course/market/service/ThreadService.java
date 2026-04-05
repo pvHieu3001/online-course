@@ -497,8 +497,12 @@ public class ThreadService {
                 if (affiliateUrl == null || !affiliateUrl.matches(regex)) {
                     return;
                 }
-                amazonPostRequest.setCaption(reCreateCap(amazonPostRequest.getCaption(), affiliateUrl));
-                amazonPostRequest.setAmzUrl(affiliateUrl);
+                amazonPostRequest.setCaption(reCreateCap(amazonPostRequest.getCaption(), affiliateUrl, amazonPostRequest.getIsCaptionLink()));
+                if(amazonPostRequest.getIsCaptionLink()){
+                    amazonPostRequest.setAmzUrl("");
+                }else{
+                    amazonPostRequest.setAmzUrl(affiliateUrl);
+                }
             }
 
             HttpHeaders headers = new HttpHeaders();
@@ -522,7 +526,7 @@ public class ThreadService {
         }
     }
 
-    public String reCreateCap(String rawContent, String amzUrl) {
+    public String reCreateCap(String rawContent, String amzUrl, Boolean isCaptionLink) {
         String prompt = "Act as a Threads user. Context: '" + rawContent + "'. " +
                 "Task: Rewrite the context for Threads while keeping 90% of the original meaning. " +
                 "Style: Direct, concise, and almost identical to the source. " +
@@ -531,11 +535,29 @@ public class ThreadService {
                 "Constraint: Remove any affiliate-related calls to action, 'link in bio', or 'buy here' phrases. " +
                 "Constraint: Do NOT include any links in your response. " +
                 "Output: Return ONLY the rewritten text. Language: English.";
+
         String aiResponse = groqService.generateThreadsContent(prompt);
-//      if (amzUrl != null && !amzUrl.isEmpty()) {
-//          return cleanedContent + "\n\nAmazon finds: " + amzUrl;
-//      }
-        return aiResponse.trim().replaceAll("^\"|\"$", "");
+        String cleanedContent = aiResponse.trim().replaceAll("^\"|\"$", "");
+        if (amzUrl != null && !amzUrl.isEmpty() && Boolean.TRUE.equals(isCaptionLink)) {
+            String hashtags = generateHashtags(rawContent);
+            return cleanedContent +
+                    "\n\nAmazon finds: " + amzUrl +
+                    "\n\n" + hashtags;
+        }
+        return cleanedContent;
+    }
+
+    private String generateHashtags(String content) {
+        String lowerContent = content.toLowerCase();
+        StringBuilder tags = new StringBuilder("#amazonfinds #threads");
+
+        if (lowerContent.contains("kitchen") || lowerContent.contains("cook")) tags.append(" #kitchenhacks");
+        if (lowerContent.contains("decor") || lowerContent.contains("home")) tags.append(" #homedecor");
+        if (lowerContent.contains("gadget") || lowerContent.contains("tech")) tags.append(" #techgadgets");
+        if (lowerContent.contains("beauty") || lowerContent.contains("skincare")) tags.append(" #beautytips");
+        if (lowerContent.contains("fashion") || lowerContent.contains("outfit")) tags.append(" #ootd");
+
+        return tags.toString();
     }
 
     private void parseAndUpload(String html, AmazonPostRequest amazonPostRequest) {
@@ -559,6 +581,7 @@ public class ThreadService {
         post.setCaption(rawContent);
         post.setSourceUrl(amazonPostRequest.getSourceUrl());
         post.setAmzUrl(amazonPostRequest.getAmzUrl());
+        post.setIsCaptionLink(amazonPostRequest.getIsCaptionLink());
         post.setIsPublished(false);
         post = postRepository.save(post);
 

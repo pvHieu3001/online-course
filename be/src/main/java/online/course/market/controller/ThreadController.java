@@ -16,15 +16,12 @@ public class ThreadController {
 
     @PostMapping("/collect")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<String> collectData(
-            @RequestBody List<AmazonPostRequest> posts,
-            @RequestParam(name = "threadId", required = true) String threadId
-    ) {
+    public ResponseEntity<String> collectData(@RequestBody List<AmazonPostRequest> posts) {
         try {
             for (AmazonPostRequest post : posts) {
                 service.downloadAndUpload(post, true);
             }
-            return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết cho Thread: " + threadId);
+            return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết ");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Lỗi hệ thống: " + e.getMessage());
         }

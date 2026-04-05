@@ -9,4 +9,5 @@ public class AmazonPostRequest {
     private String sourceUrl;
     private String amzUrl;
     private String caption;
+    private Boolean isCaptionLink = false;
 }

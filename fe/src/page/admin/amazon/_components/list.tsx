@@ -126,9 +126,20 @@ export default function ListAmazon() {
       key: 'caption',
       width: 200,
       ellipsis: true,
-      render: (text) => <span className='line-clamp-2'>{text ?? 'N/A'}</span>
+      render: (text, record) => {
+        return (
+          <span
+            className='line-clamp-2'
+            style={{
+              color: record.isCaptionLink ? '#ff4d4f' : 'inherit',
+              fontWeight: record.isCaptionLink ? '500' : 'normal'
+            }}
+          >
+            {text ?? '_'}
+          </span>
+        )
+      }
     },
-
     {
       title: 'Link clone',
       dataIndex: 'sourceUrl',

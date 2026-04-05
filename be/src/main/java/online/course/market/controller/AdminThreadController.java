@@ -81,6 +81,17 @@ public class AdminThreadController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
+    @PostMapping
+    public ResponseEntity<ApiResponse<?>> cloneThreadPost(@RequestBody AmazonPostRequest request, Authentication authentication) {
+        try {
+            UserModel userModel = userService.getByUserName(authentication.getName());
+            service.downloadAndUpload(request, false);
+            return ResponseEntity.ok(ApiResponse.success());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create category: " + e.getMessage(), e);
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<PostDto>> updateLink(@PathVariable Long id, @RequestBody AmazonPutRequest request) {
         try {
