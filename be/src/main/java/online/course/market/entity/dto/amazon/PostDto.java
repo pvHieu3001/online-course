@@ -21,5 +21,5 @@ public class PostDto {
     private String status;
     private String lastError;
     private Integer retryCount = 0;
-    private LocalDateTime createdAt;
+    private String accountThread;
 }

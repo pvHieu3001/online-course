@@ -22,12 +22,16 @@ function deleteAmazon(id: string) {
   return http.delete(`/api/v1/admin/amazon/${id}`)
 }
 
-function publishPost(id: string) {
-  return http.post(`/api/v1/admin/amazon/publish/${id}`)
+function publishPost(id: string, threadId: string) {
+  return http.post(`/api/v1/admin/amazon/publish/${id}/`)
 }
 
 function getPageAmazon(page: string, size: string, sort: string) {
   return http.get(`/api/v1/user/amazon/pageable/?page=${page}&size=${size}&sort=${sort}`)
+}
+
+function getThreadAccount() {
+  return http.get(`/api/v1/admin/amazon/get-thread-account`)
 }
 
 export const amazonServices = {
@@ -39,5 +43,6 @@ export const amazonServices = {
   createAmazon,
   deleteAmazon,
   getPageAmazon,
-  publishPost
+  publishPost,
+  getThreadAccount
 }

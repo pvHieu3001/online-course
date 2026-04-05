@@ -16,7 +16,9 @@ import {
   getRandomAmazonSuccessFully,
   getRandomAmazonSuccessFailure,
   publishSuccessfully,
-  publishFailure
+  publishFailure,
+  getAccountThreadSuccessfully,
+  getAccountThreadFailure
 } from '../slices/amazon.reducer'
 
 export const getAmazons = (searchValue: string) => (dispatch: Dispatch) => {
@@ -115,11 +117,11 @@ export const updateAmazon = (id?: string, data?: FormData) => (dispatch: Dispatc
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const publishPost = (id: string) => (dispatch: Dispatch) => {
+export const publishPost = (id: string, threadId: string) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return amazonServices
-    .publishPost(id)
+    .publishPost(id, threadId)
     .then((res) => {
       dispatch(publishSuccessfully())
       return res
@@ -147,6 +149,22 @@ export const deleteAmazon = (id: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
+export const getThreadAccount = () => (dispatch: Dispatch) => {
+  dispatch(isFetching())
+
+  return amazonServices
+    .getThreadAccount()
+    .then((res) => {
+      dispatch(getAccountThreadSuccessfully(res.data))
+      return res
+    })
+    .catch((error) => {
+      dispatch(getAccountThreadFailure())
+      throw error
+    })
+    .finally(() => dispatch(fetchedDone()))
+}
+
 export const amazonActions = {
   getAmazons,
   getAdminAmazons,
@@ -155,5 +173,6 @@ export const amazonActions = {
   createAmazon,
   updateAmazon,
   deleteAmazon,
-  publishPost
+  publishPost,
+  getThreadAccount
 }

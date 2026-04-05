@@ -1,4 +1,4 @@
-import { IAmazon } from '@/common/types.interface'
+import { IAmazon, IThreadAccount } from '@/common/types.interface'
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -8,7 +8,8 @@ const initialState = {
   error_message: '',
   data: <IAmazon>(<unknown>null),
   dataRandom: <IAmazon>(<unknown>null),
-  dataList: <IAmazon[]>(<unknown>null)
+  dataList: <IAmazon[]>(<unknown>null),
+  dataThreadAccount: <IThreadAccount[]>(<unknown>null)
 }
 
 const amazonSlice = createSlice({
@@ -78,6 +79,15 @@ const amazonSlice = createSlice({
     publishFailure: (state) => {
       state.error_message = 'Publish Thất Bại'
       state.isLoading = false
+    },
+    getAccountThreadSuccessfully: (state, { payload }) => {
+      state.dataThreadAccount = payload.data
+      state.message = 'Lấy account thread Thành Công'
+      state.isLoading = false
+    },
+    getAccountThreadFailure: (state) => {
+      state.error_message = 'Lấy account thread Thất Bại'
+      state.isLoading = false
     }
   }
 })
@@ -98,6 +108,8 @@ export const {
   deleteFailure,
   deleteSuccessfully,
   publishSuccessfully,
-  publishFailure
+  publishFailure,
+  getAccountThreadSuccessfully,
+  getAccountThreadFailure
 } = amazonSlice.actions
 export default amazonSlice.reducer

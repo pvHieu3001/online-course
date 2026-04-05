@@ -8,7 +8,7 @@ import ErrorLoad from '../../components/util/ErrorLoad'
 import { amazonActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
-import { IAmazon } from '@/common/types.interface'
+import { IAmazon, IThreadAccount } from '@/common/types.interface'
 import { RootState } from '@/app/store'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -20,10 +20,23 @@ export default function ListAmazon() {
   const [searchValue, setSearchValue] = useState('')
   const [isPublished, setIsPublished] = useState('')
   const amazons = useSelector((state: RootState) => state.amazon)
+  const [selectedAccount, setSelectedAccount] = useState(null)
+  const [accounts, setAccounts] = useState([])
 
   useEffect(() => {
     dispatch(amazonActions.getAdminAmazons(searchValue, isPublished) as unknown as AnyAction)
+    dispatch(amazonActions.getThreadAccount() as unknown as AnyAction)
   }, [dispatch, searchValue, isPublished])
+
+  useEffect(() => {
+    if (amazons?.dataThreadAccount && amazons?.dataThreadAccount.length > 0) {
+      const optionData = amazons.dataThreadAccount.map((item: IThreadAccount) => ({
+        label: item.accountName,
+        value: item.threadId
+      }))
+      setAccounts(optionData)
+    }
+  }, [amazons])
 
   const handlerDistableAmazon = async (id: string) => {
     try {
@@ -35,15 +48,15 @@ export default function ListAmazon() {
     }
   }
 
-  const handlePublish = async (id: string, amzUrl: string) => {
-    const isShortened = /^(https?:\/\/)?(amzn\.to|bit\.ly|tinyurl\.com)\/.*$/.test(amzUrl)
+  const handlePublish = async (id: string, amzUrl: string, selectedAccount: string) => {
+    // const isShortened = /^(https?:\/\/)?(amzn\.to|bit\.ly|tinyurl\.com)\/.*$/.test(amzUrl)
     //if (!isShortened) {
     //message.warning('Vui lòng sử dụng link rút gọn (amzn.to) để tránh bị khóa bài!')
     //return
     //}
     try {
-      dispatch(amazonActions.publishPost(id) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
+      dispatch(amazonActions.publishPost(id, selectedAccount) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons('', '') as unknown as AnyAction)
       message.success('Đang đăng!')
     } catch (error) {
       message.error('Đăng bài thất bại!')
@@ -62,13 +75,13 @@ export default function ListAmazon() {
       title: '#',
       dataIndex: 'key',
       key: 'key',
-      width: 50,
+      width: 30,
       align: 'center',
       fixed: 'left',
       responsive: ['sm']
     },
     {
-      title: 'Trạng thái',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       width: 110,
@@ -80,22 +93,32 @@ export default function ListAmazon() {
         switch (status) {
           case 'SUCCESS':
             color = 'green'
-            text = 'Thành công'
+            text = 'SUCCESS'
             break
           case 'FAILED':
             color = 'volcano'
-            text = 'Thất bại'
+            text = 'FAILED'
             break
           case 'PROCESSING':
             color = 'blue'
-            text = 'Đang xử lý'
+            text = 'PROCESSING'
             break
           default:
             color = 'default'
-            text = 'Chưa đăng'
+            text = 'default'
         }
         return <Tag color={color}>{text.toUpperCase()}</Tag>
       }
+    },
+    {
+      title: 'Published At',
+      dataIndex: 'publishedAt',
+      key: 'publishedAt',
+      width: 150,
+      ellipsis: true,
+      render: (text) => (
+        <span className='line-clamp-2'>{text ? dayjs.utc(text).local().format('DD/MM/YY HH:mm') : '_'}</span>
+      )
     },
     {
       title: 'Caption',
@@ -105,22 +128,23 @@ export default function ListAmazon() {
       ellipsis: true,
       render: (text) => <span className='line-clamp-2'>{text ?? 'N/A'}</span>
     },
+
     {
       title: 'Link clone',
       dataIndex: 'sourceUrl',
       key: 'sourceUrl',
-      width: 150,
+      width: 100,
       render: (text) => (
         <a href={text} target='_blank' className='block w-40 truncate text-blue-600 hover:underline'>
-          {text}
+          link
         </a>
       )
     },
     {
-      title: 'Lỗi cuối',
+      title: 'Error',
       dataIndex: 'lastError',
       key: 'lastError',
-      width: 250,
+      width: 100,
       render: (error) => {
         if (!error) return <span style={{ color: '#bfbfbf' }}>-</span>
 
@@ -144,36 +168,46 @@ export default function ListAmazon() {
       }
     },
     {
-      title: 'Published Time',
-      dataIndex: 'publishedAt',
-      key: 'publishedAt',
-      width: 150,
+      title: 'Account',
+      dataIndex: 'accountThread',
+      key: 'accountThread',
+      width: 100,
       ellipsis: true,
-      render: (text) => (
-        <span className='line-clamp-2'>{text ? dayjs.utc(text).local().format('DD/MM/YYYY HH:mm') : '_'}</span>
-      )
+      render: (text) => <span className='line-clamp-2'>{text ?? '_'}</span>
     },
     {
-      title: 'Hành động',
+      title: 'Action',
       key: 'action',
-      width: 100,
+      width: 90,
       align: 'center',
       fixed: 'right',
       render: (record) => (
         <Space size={0}>
           <Popconfirm
             placement='topRight'
-            title='Xác nhận đăng?'
-            onConfirm={() => handlePublish(record.id, record.amzUrl)}
-            okText='Có'
-            cancelText='Không'
+            title={
+              <div style={{ width: 200 }}>
+                <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Chọn account để đăng:</div>
+                <Select
+                  placeholder='Chọn tài khoản'
+                  style={{ width: '100%' }}
+                  onChange={(val) => setSelectedAccount(val)}
+                  options={accounts}
+                />
+              </div>
+            }
+            onConfirm={() => {
+              if (!selectedAccount) {
+                return message.warning('Vui lòng chọn tài khoản trước!')
+              }
+              handlePublish(record.id, record.amzUrl, selectedAccount)
+              setSelectedAccount(null)
+            }}
+            onCancel={() => setSelectedAccount(null)}
+            okText='Đăng ngay'
+            cancelText='Hủy'
           >
-            <Button
-              type='text'
-              danger
-              size='small'
-              icon={<SendOutlined style={{ color: '#52c41a', fontSize: '16px' }} />}
-            />
+            <Button type='text' size='small' icon={<SendOutlined style={{ color: '#52c41a', fontSize: '16px' }} />} />
           </Popconfirm>
           <Link to={'' + record.id}>
             <Button type='text' size='small' icon={<EditOutlined style={{ color: '#1677ff', fontSize: '16px' }} />} />

@@ -33,34 +33,13 @@ async function scrapeThreadsWithAmz(maxPosts = 10, { signal }) {
       let currentSourceUrl = "";
 
       blocks.forEach((block, index) => {
-        if (index == 0) {
-          // 3. Tìm Caption
-          const spans = Array.from(
-            block.querySelectorAll("div.xat24cr.xdj266r span"),
-          );
-          // Tìm span chứa nội dung text (loại bỏ span chứa link hoặc span quá ngắn)
-          const textSpan = spans[0];
-          if (textSpan) {
-            const content = textSpan.innerText
-              .trim()
-              .replace(/\d+\s*\/\s*\d+/g, "") // Xóa 1/10...
-              .replace(/\n\d+$/g, "");
-
-            // Chỉ lấy caption nếu nó không phải là URL
-            if (
-              !content.includes("http") &&
-              content.length > currentCaption.length
-            ) {
-              currentCaption = content;
-            }
-          }
-        }
-
-        if (index == 1) {
-          // 1. Tìm link Amazon (nếu có)
+        // --- BƯỚC 1: TÌM LINK AMZ Ở INDEX 0 ---
+        if (index === 0) {
+          // Tìm link Amazon ngay trong khối đầu tiên
           const amzLinkEl = block.querySelector(
             'a[href*="amzn.to"], a[href*="amazon.com"]',
           );
+
           if (amzLinkEl) {
             const rawHref = amzLinkEl.href;
             try {
@@ -73,12 +52,58 @@ async function scrapeThreadsWithAmz(maxPosts = 10, { signal }) {
             }
           }
 
-          // 2. Tìm Source URL của bài post (Dùng làm ID định danh bài viết)
+          // Vẫn lấy Caption ở index 0
+          const textSpan = block.querySelector("div.xat24cr.xdj266r span");
+          if (textSpan) {
+            let content = textSpan.innerText
+              .trim()
+              .replace(/\d+\s*\/\s*\d+/g, "")
+              .replace(/\n\d+$/g, "");
+
+            // Nếu link nằm trong text của index 0, xóa nó đi để caption sạch
+            if (currentAmzUrl && content.includes(currentAmzUrl)) {
+              content = content.replace(currentAmzUrl, "").trim();
+            }
+
+            if (!content.includes("http")) {
+              currentCaption = content;
+            }
+          }
+
+          // Tìm Source URL (luôn lấy để làm ID)
           const postLinkEl = block.querySelector('a[href*="/post/"]');
           if (postLinkEl) {
             currentSourceUrl = postLinkEl.href.startsWith("http")
               ? postLinkEl.href
               : window.location.origin + postLinkEl.getAttribute("href");
+          }
+        }
+
+        // --- BƯỚC 2: XỬ LÝ INDEX 1 ---
+        if (index === 1) {
+          // Nếu index 0 CHƯA có link, mới tìm link ở index 1
+          if (!currentAmzUrl) {
+            const amzLinkEl = block.querySelector(
+              'a[href*="amzn.to"], a[href*="amazon.com"]',
+            );
+            if (amzLinkEl) {
+              const rawHref = amzLinkEl.href;
+              try {
+                const u = new URL(rawHref).searchParams.get("u");
+                currentAmzUrl = u
+                  ? decodeURIComponent(u).split("?")[0]
+                  : rawHref.split("?")[0];
+              } catch (e) {
+                currentAmzUrl = rawHref.split("?")[0];
+              }
+            }
+          } else {
+            const redundantLink = block.querySelector(
+              `a[href*="${currentAmzUrl.split(".to/")[1] || "amazon.com"}"]`,
+            );
+            if (redundantLink) {
+              redundantLink.remove(); // Xóa element chứa link thừa ở index 1
+            }
           }
         }
       });

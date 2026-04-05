@@ -6,9 +6,11 @@ import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.amazon.AmazonPutRequest;
 import online.course.market.entity.dto.amazon.PostDto;
 import online.course.market.entity.dto.amazon.AmazonPostRequest;
+import online.course.market.entity.dto.thread.ThreadAccountResponse;
 import online.course.market.entity.model.PostEntity;
+import online.course.market.entity.model.ThreadAccount;
 import online.course.market.entity.model.UserModel;
-import online.course.market.service.ThreadsService;
+import online.course.market.service.ThreadService;
 import online.course.market.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -25,13 +27,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin/amazon")
 public class AdminThreadController {
-    private final ThreadsService service;
+    private final ThreadService service;
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final ThreadService threadService;
 
 
     private PostDto toDto(PostEntity post) {
         return modelMapper.map(post, PostDto.class);
+    }
+    private ThreadAccountResponse toDto(ThreadAccount threadAccount) {
+        return modelMapper.map(threadAccount, ThreadAccountResponse.class);
     }
 
     @Operation(description = "Get all posts for the logged-in user", summary = "Get user posts")
@@ -40,8 +46,17 @@ public class AdminThreadController {
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Boolean isPublished,
             Authentication authentication) {
-        String currentUsername = authentication.getName();
-        List<PostDto> dtos = service.getPostsByUser(currentUsername, search, isPublished)
+        List<PostDto> dtos = service.getPostsByUser(search, isPublished)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.success(dtos));
+    }
+
+    @Operation(description = "Get all thread acc for the logged-in user", summary = "Get user posts")
+    @GetMapping("/get-thread-account")
+    public ResponseEntity<ApiResponse<List<ThreadAccountResponse>>> getAllThreadAccount(Authentication authentication) {
+        List<ThreadAccountResponse> dtos = threadService.getAllThreadAccount()
                 .stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
@@ -56,25 +71,14 @@ public class AdminThreadController {
     }
 
     @Operation(description = "Get by id endpoint for Category", summary = "Get Category by id")
-    @PostMapping("/publish/{id}")
-    public ResponseEntity<ApiResponse<?>> publishPost(@PathVariable Long id, Authentication authentication) {
-        UserModel userModel = userService.getByUserName(authentication.getName());
-        if (userModel == null || Objects.equals(userModel.getIsThreadPending(), true) || !StringUtils.hasText(userModel.getThreadId()) || !StringUtils.hasText(userModel.getThreadToken())) {
+    @PostMapping("/publish/{id}/{threadId}")
+    public ResponseEntity<ApiResponse<?>> publishPost(@PathVariable Long id, @PathVariable String threadId) {
+        ThreadAccount threadAccount = threadService.getThreadAccountByThreadId(threadId);
+        if (threadAccount == null || Objects.equals(threadAccount.getIsThreadPending(), true) || !StringUtils.hasText(threadAccount.getThreadId()) || !StringUtils.hasText(threadAccount.getThreadToken())) {
             throw new RuntimeException("Thiếu thông tin định danh, token hoặc pending.");
         }
-        service.publishPost(id, userModel);
+        service.publishPost(id, threadAccount);
         return ResponseEntity.ok(ApiResponse.success());
-    }
-    
-    @PostMapping
-    public ResponseEntity<ApiResponse<?>> cloneThreadPost(@RequestBody AmazonPostRequest request, Authentication authentication) {
-        try {
-            UserModel userModel = userService.getByUserName(authentication.getName());
-            service.downloadAndUpload(request, userModel.getThreadId(), false);
-            return ResponseEntity.ok(ApiResponse.success());
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create category: " + e.getMessage(), e);
-        }
     }
 
     @PutMapping("/{id}")

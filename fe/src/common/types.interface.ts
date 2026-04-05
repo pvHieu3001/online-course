@@ -148,7 +148,16 @@ export interface IAmazon {
   publishedAt: string
   lastError: string
   retryCount: number
-  createdAt: string
+  accountThread: string
+}
+
+export interface IThreadAccount {
+  id: number
+  accountName: string
+  threadId: string
+  threadToken: string
+  isCaptionLink: boolean
+  isThreadPending: boolean
 }
 
 export type ContextType = {

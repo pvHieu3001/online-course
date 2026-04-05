@@ -38,7 +38,7 @@ public class PostEntity{
     @Column(columnDefinition = "TEXT CHARACTER SET utf8mb4")
     private String lastError;
     private Integer retryCount = 0;
-    private String threadId;
+    private String accountThread;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

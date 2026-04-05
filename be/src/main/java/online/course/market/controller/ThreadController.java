@@ -1,29 +1,18 @@
 package online.course.market.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.amazon.AmazonPostRequest;
-import online.course.market.entity.dto.amazon.AmazonPutRequest;
-import online.course.market.entity.dto.amazon.PostDto;
-import online.course.market.entity.model.PostEntity;
-import online.course.market.entity.model.UserModel;
-import online.course.market.service.ThreadsService;
-import online.course.market.service.UserService;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
+import online.course.market.service.ThreadService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/amazon")
 public class ThreadController {
-    private final ThreadsService service;
+    private final ThreadService service;
 
     @PostMapping("/collect")
     @CrossOrigin(origins = "*")
@@ -33,7 +22,7 @@ public class ThreadController {
     ) {
         try {
             for (AmazonPostRequest post : posts) {
-                service.downloadAndUpload(post, threadId, true);
+                service.downloadAndUpload(post, true);
             }
             return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết cho Thread: " + threadId);
         } catch (Exception e) {

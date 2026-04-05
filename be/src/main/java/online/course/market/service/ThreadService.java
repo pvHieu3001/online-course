@@ -5,17 +5,15 @@ import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import online.course.market.entity.dto.affiliate.link.AffiliateLinkPostRequest;
-import online.course.market.entity.dto.affiliate.link.AffiliateLinkPutRequest;
 import online.course.market.entity.dto.amazon.AmazonPostRequest;
 import online.course.market.entity.dto.amazon.AmazonPutRequest;
-import online.course.market.entity.model.AffiliateLink;
 import online.course.market.entity.model.MediaEntity;
 import online.course.market.entity.model.PostEntity;
-import online.course.market.entity.model.UserModel;
+import online.course.market.entity.model.ThreadAccount;
 import online.course.market.framework.exception.CJNotFoundException;
 import online.course.market.repository.MediaRepository;
 import online.course.market.repository.PostRepository;
+import online.course.market.repository.ThreadAccountRepository;
 import online.course.market.utils.CustomCodeException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,16 +38,17 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class ThreadsService {
+public class ThreadService {
     private final RestTemplate restTemplate;
     private final Cloudinary cloudinary;
     private final MediaRepository mediaRepository;
     private final PostRepository postRepository;
     private final GroqService groqService;
     private final UserService userService;
+    private final ThreadAccountRepository threadAccountRepository;
 
 
-    public void publishPost(Long id, UserModel account) {
+    public void publishPost(Long id, ThreadAccount threadAccount) {
         Optional<PostEntity> postOpt = postRepository.findPostWithMediasById(id);
 
         if (postOpt.isPresent()) {
@@ -70,8 +69,8 @@ public class ThreadsService {
                     imageUrls = mediaMap.getOrDefault("IMAGE", List.of());
                 }
 
-                if ((post.getCaption() == null || post.getCaption().isBlank()) && imageUrls.isEmpty() && videoUrls.isEmpty()) {
-                    handleFailedPost(post, "Post nội dung trống (không có chữ cũng không có media)");
+                if (post.getCaption() == null || (imageUrls.isEmpty() && videoUrls.isEmpty())) {
+                    handleFailedPost(post, "Post nội dung trống");
                     return;
                 }
                 postToThreads(
@@ -80,19 +79,19 @@ public class ThreadsService {
                         videoUrls,
                         post.getAmzUrl(),
                         post,
-                        account.getThreadToken(),
-                        account.getThreadId()
+                        threadAccount.getThreadToken(),
+                        threadAccount.getThreadId(),
+                        threadAccount.getAccountName()
                 );
-                log.info("Account {} đã xử lý bài bài ID {}.", account.getId(), post.getId());
+                log.info("Account {} đã xử lý bài bài ID {}.", threadAccount.getId(), post.getId());
             } catch (Exception e) {
-                log.error("Lỗi hệ thống khi xử lý bài ID {} cho Account {}: {}", post.getId(), account.getId(), e.getMessage());
+                log.error("Lỗi hệ thống khi xử lý bài ID {} cho Account {}: {}", post.getId(), threadAccount.getId(), e.getMessage());
             }
         }
     }
 
-    public List<PostEntity> getPostsByUser(String currentUsername, String search, Boolean isPublished) {
-        UserModel userModel = userService.getByUserName(currentUsername);
-        return postRepository.findAllByThreadIdAndCaption(userModel.getThreadId(), search, isPublished);
+    public List<PostEntity> getPostsByUser(String search, Boolean isPublished) {
+        return postRepository.findAllByThreadIdAndCaption(search, isPublished);
     }
 
     public PostEntity getPostById(Long id) {
@@ -113,7 +112,7 @@ public class ThreadsService {
         postRepository.delete(postEntity);
     }
 
-    public void postToThreads(String text, List<String> imageUrls, List<String> videoUrls, String amzUrl, PostEntity post, String accessToken, String userId) {
+    public void postToThreads(String text, List<String> imageUrls, List<String> videoUrls, String amzUrl, PostEntity post, String accessToken, String threadId, String accountName) {
         try {
             post.setStatus("PROCESSING");
             postRepository.save(post);
@@ -123,12 +122,12 @@ public class ThreadsService {
 
             if (videoUrls != null) {
                 for (String url : videoUrls) {
-                    childrenIds.add(createMediaContainer(userId, "VIDEO", url, true, accessToken));
+                    childrenIds.add(createMediaContainer(threadId, "VIDEO", url, true, accessToken));
                 }
             }
             if (imageUrls != null) {
                 for (String url : imageUrls) {
-                    childrenIds.add(createMediaContainer(userId, "IMAGE", url, true, accessToken));
+                    childrenIds.add(createMediaContainer(threadId, "IMAGE", url, true, accessToken));
                 }
             }
 
@@ -140,35 +139,36 @@ public class ThreadsService {
                         throw new RuntimeException("Media con " + childId + " không sẵn sàng (ERROR hoặc Timeout)");
                     }
                 }
-                containerId = createCarouselWithRetry(userId, text, childrenIds, accessToken);
+                containerId = createCarouselWithRetry(threadId, text, childrenIds, accessToken);
             } else if (childrenIds.size() == 1) {
                 log.info("Bắt đầu tạo Single Post cho bài viết ID: {}", post.getId());
                 String singleMediaUrl = (videoUrls != null && !videoUrls.isEmpty()) ? videoUrls.get(0) : imageUrls.get(0);
                 String type = (videoUrls != null && !videoUrls.isEmpty()) ? "VIDEO" : "IMAGE";
 
-                containerId = createMediaContainerWithText(userId, type, singleMediaUrl, text, accessToken);
+                containerId = createMediaContainerWithText(threadId, type, singleMediaUrl, text, accessToken);
             } else {
                 log.info("Bắt đầu tạo Text-only Post cho bài viết ID: {}", post.getId());
-                containerId = createTextContainer(userId, text, accessToken);
+                containerId = createTextContainer(threadId, text, accessToken);
             }
 
             if (!waitForMediaReady(containerId, accessToken)) {
                 throw new RuntimeException("Container chính không sẵn sàng để publish.");
             }
 
-            String postId = publishWithRetry(userId, containerId, accessToken);
+            String postId = publishWithRetry(threadId, containerId, accessToken);
             log.info("--- ĐÃ ĐĂNG BÀI THÀNH CÔNG! ID: {} ---", postId);
 
             if (amzUrl != null && !amzUrl.trim().isEmpty()) {
                 log.info("Đợi 30s trước khi chèn link comment...");
                 Thread.sleep(15000);
                 String comment = generateRandomComment(amzUrl);
-                publishComment(userId, postId, comment, accessToken);
+                publishComment(threadId, postId, comment, accessToken);
             }
 
             post.setStatus("SUCCESS");
             post.setIsPublished(true);
             post.setPublishedAt(LocalDateTime.now());
+            post.setAccountThread(accountName);
             postRepository.save(post);
 
         } catch (Exception e) {
@@ -483,7 +483,7 @@ public class ThreadsService {
     }
 
     @Transactional
-    public void downloadAndUpload(AmazonPostRequest amazonPostRequest, String threadId, boolean isUsingGrok) {
+    public void downloadAndUpload(AmazonPostRequest amazonPostRequest, boolean isUsingGrok) {
         String apiUrl = "https://savethr.com/process";
 
         try {
@@ -514,7 +514,7 @@ public class ThreadsService {
             ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                parseAndUpload(response.getBody(), amazonPostRequest, threadId);
+                parseAndUpload(response.getBody(), amazonPostRequest);
             }
 
         } catch (Exception e) {
@@ -528,6 +528,7 @@ public class ThreadsService {
                 "Style: Direct, concise, and almost identical to the source. " +
                 "Tone: Personal, natural, and low-key. No marketing fluff. " +
                 "Rule: Do NOT add new information. Keep it to 1-2 short sentences. " +
+                "Constraint: Remove any affiliate-related calls to action, 'link in bio', or 'buy here' phrases. " +
                 "Constraint: Do NOT include any links in your response. " +
                 "Output: Return ONLY the rewritten text. Language: English.";
         String aiResponse = groqService.generateThreadsContent(prompt);
@@ -537,7 +538,7 @@ public class ThreadsService {
         return aiResponse.trim().replaceAll("^\"|\"$", "");
     }
 
-    private void parseAndUpload(String html, AmazonPostRequest amazonPostRequest, String threadId) {
+    private void parseAndUpload(String html, AmazonPostRequest amazonPostRequest) {
 
         Document doc = Jsoup.parse(html);
         Elements links = doc.select("a.download_link");
@@ -559,7 +560,6 @@ public class ThreadsService {
         post.setSourceUrl(amazonPostRequest.getSourceUrl());
         post.setAmzUrl(amazonPostRequest.getAmzUrl());
         post.setIsPublished(false);
-        post.setThreadId(threadId);
         post = postRepository.save(post);
 
         List<MediaEntity> mediaList = new ArrayList<>();
@@ -616,5 +616,12 @@ public class ThreadsService {
         post.setRetryCount(1);
         postRepository.save(post);
         log.warn("Bài viết ID {} bị từ chối: {}", post.getId(), reason);
+    }
+
+    public List<ThreadAccount> getAllThreadAccount() {
+        return threadAccountRepository.findAll();
+    }
+    public ThreadAccount getThreadAccountByThreadId(String threadId) {
+        return threadAccountRepository.findByThreadId(threadId).orElseThrow();
     }
 }
