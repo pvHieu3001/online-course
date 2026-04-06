@@ -133,11 +133,18 @@ public class ThreadService {
 
             if (childrenIds.size() > 1) {
                 log.info("Bắt đầu tạo Carousel cho bài viết ID: {}", post.getId());
-                for (String childId : childrenIds) {
-                    boolean isReady = waitForMediaReady(childId, accessToken);
-                    if (!isReady) {
-                        throw new RuntimeException("Media con " + childId + " không sẵn sàng (ERROR hoặc Timeout)");
-                    }
+//                for (String childId : childrenIds) {
+//                    boolean isReady = waitForMediaReady(childId, accessToken);
+//                    if (!isReady) {
+//                        throw new RuntimeException("Media con " + childId + " không sẵn sàng (ERROR hoặc Timeout)");
+//                    }
+//                }
+                try {
+                    log.info("Đang đợi 2p trước khi tạo Carousel");
+                    Thread.sleep(120000);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    return;
                 }
                 containerId = createCarouselWithRetry(threadId, text, childrenIds, accessToken);
             } else if (childrenIds.size() == 1) {
@@ -151,8 +158,16 @@ public class ThreadService {
                 containerId = createTextContainer(threadId, text, accessToken);
             }
 
-            if (!waitForMediaReady(containerId, accessToken)) {
-                throw new RuntimeException("Container chính không sẵn sàng để publish.");
+//            if (!waitForMediaReady(containerId, accessToken)) {
+//                throw new RuntimeException("Container chính không sẵn sàng để publish.");
+//            }
+
+            try {
+                log.info("Đang đợi 2p trước khi tạo publish bài viết");
+                Thread.sleep(120000);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                return;
             }
 
             String postId = publishWithRetry(threadId, containerId, accessToken);
