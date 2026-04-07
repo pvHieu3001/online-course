@@ -73,7 +73,7 @@ export default function EditAmazon() {
 
     try {
       await dispatch(amazonActions.updateAmazon(params.id, formData) as unknown as AnyAction)
-      await dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
+      await dispatch(amazonActions.getAdminAmazons('', '') as unknown as AnyAction)
       popupSuccess('Cập nhật link afiliate thành công')
       setIsDirty(false)
       navigate('..')

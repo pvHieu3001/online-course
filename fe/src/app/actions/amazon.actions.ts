@@ -117,11 +117,11 @@ export const updateAmazon = (id?: string, data?: FormData) => (dispatch: Dispatc
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const publishPost = (id: string, threadId: string) => (dispatch: Dispatch) => {
+export const publishPost = (data?: FormData) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return amazonServices
-    .publishPost(id, threadId)
+    .publishPost(data)
     .then((res) => {
       dispatch(publishSuccessfully())
       return res

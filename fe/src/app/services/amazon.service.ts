@@ -22,8 +22,8 @@ function deleteAmazon(id: string) {
   return http.delete(`/api/v1/admin/amazon/${id}`)
 }
 
-function publishPost(id: string, threadId: string) {
-  return http.post(`/api/v1/admin/amazon/publish/${id}/${threadId}`)
+function publishPost(data: FormData) {
+  return http.post(`/api/v1/admin/amazon/publish`, data)
 }
 
 function getPageAmazon(page: string, size: string, sort: string) {

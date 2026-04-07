@@ -3,6 +3,7 @@ package online.course.market.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import online.course.market.entity.dto.ApiResponse;
+import online.course.market.entity.dto.amazon.AmazonPublishRequest;
 import online.course.market.entity.dto.amazon.AmazonPutRequest;
 import online.course.market.entity.dto.amazon.PostDto;
 import online.course.market.entity.dto.amazon.AmazonPostRequest;
@@ -71,13 +72,13 @@ public class AdminThreadController {
     }
 
     @Operation(description = "Get by id endpoint for Category", summary = "Get Category by id")
-    @PostMapping("/publish/{id}/{threadId}")
-    public ResponseEntity<ApiResponse<?>> publishPost(@PathVariable Long id, @PathVariable String threadId) {
-        ThreadAccount threadAccount = threadService.getThreadAccountByThreadId(threadId);
+    @PostMapping("/publish")
+    public ResponseEntity<ApiResponse<?>> publishPost(@RequestBody AmazonPublishRequest request) {
+        ThreadAccount threadAccount = threadService.getThreadAccountByThreadId(request.getThreadId());
         if (threadAccount == null || Objects.equals(threadAccount.getIsThreadPending(), true) || !StringUtils.hasText(threadAccount.getThreadId()) || !StringUtils.hasText(threadAccount.getThreadToken())) {
             throw new RuntimeException("Thiếu thông tin định danh, token hoặc pending.");
         }
-        service.publishPost(id, threadAccount);
+        service.publishPost(request.getId(), threadAccount, request.getIsCaptionLink());
         return ResponseEntity.ok(ApiResponse.success());
     }
 

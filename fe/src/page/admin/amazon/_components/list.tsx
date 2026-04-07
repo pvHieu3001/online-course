@@ -22,6 +22,7 @@ export default function ListAmazon() {
   const amazons = useSelector((state: RootState) => state.amazon)
   const [selectedAccount, setSelectedAccount] = useState(null)
   const [accounts, setAccounts] = useState([])
+  const [isCationLink, setIsCaptionLink] = useState(0)
 
   useEffect(() => {
     dispatch(amazonActions.getAdminAmazons(searchValue, isPublished) as unknown as AnyAction)
@@ -48,14 +49,14 @@ export default function ListAmazon() {
     }
   }
 
-  const handlePublish = async (id: string, amzUrl: string, selectedAccount: string) => {
-    // const isShortened = /^(https?:\/\/)?(amzn\.to|bit\.ly|tinyurl\.com)\/.*$/.test(amzUrl)
-    //if (!isShortened) {
-    //message.warning('Vui lòng sử dụng link rút gọn (amzn.to) để tránh bị khóa bài!')
-    //return
-    //}
+  const handlePublish = async (id: string, selectedAccount: string, isCaptionLink: number) => {
+    const formData = new FormData()
+
+    formData.append('id', id)
+    formData.append('threadId', selectedAccount)
+    formData.append('isCaptionLink', isCaptionLink + '')
     try {
-      dispatch(amazonActions.publishPost(id, selectedAccount) as unknown as AnyAction)
+      dispatch(amazonActions.publishPost(formData) as unknown as AnyAction)
       dispatch(amazonActions.getAdminAmazons('', '') as unknown as AnyAction)
       message.success('Đang đăng!')
     } catch (error) {
@@ -197,13 +198,25 @@ export default function ListAmazon() {
           <Popconfirm
             placement='topRight'
             title={
-              <div style={{ width: 200 }}>
-                <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Chọn account để đăng:</div>
+              <div style={{ width: 220 }}>
+                <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Cấu hình đăng bài:</div>
+                <div style={{ marginBottom: 4 }}>Tài khoản:</div>
                 <Select
                   placeholder='Chọn tài khoản'
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', marginBottom: 12 }}
                   onChange={(val) => setSelectedAccount(val)}
                   options={accounts}
+                />
+
+                <div style={{ marginBottom: 4 }}>Nơi gắn link:</div>
+                <Select
+                  defaultValue={0}
+                  style={{ width: '100%' }}
+                  onChange={(val: number) => setIsCaptionLink(val)}
+                  options={[
+                    { label: 'Gắn ở Comment', value: 0 },
+                    { label: 'Gắn ở Caption', value: 1 }
+                  ]}
                 />
               </div>
             }
@@ -211,10 +224,15 @@ export default function ListAmazon() {
               if (!selectedAccount) {
                 return message.warning('Vui lòng chọn tài khoản trước!')
               }
-              handlePublish(record.id, record.amzUrl, selectedAccount)
+              handlePublish(record.id, selectedAccount, isCationLink)
+
               setSelectedAccount(null)
+              setIsCaptionLink(1)
             }}
-            onCancel={() => setSelectedAccount(null)}
+            onCancel={() => {
+              setSelectedAccount(null)
+              setIsCaptionLink(0)
+            }}
             okText='Đăng ngay'
             cancelText='Hủy'
           >

@@ -48,7 +48,7 @@ public class ThreadService {
     private final ThreadAccountRepository threadAccountRepository;
 
 
-    public void publishPost(Long id, ThreadAccount threadAccount) {
+    public void publishPost(Long id, ThreadAccount threadAccount, Boolean isCaptionLink) {
         Optional<PostEntity> postOpt = postRepository.findPostWithMediasById(id);
 
         if (postOpt.isPresent()) {
@@ -73,16 +73,31 @@ public class ThreadService {
                     handleFailedPost(post, "Post nội dung trống");
                     return;
                 }
+
+
+                String finalCaption = post.getCaption();
+                String finalLink = post.getAmzUrl();
+
+                if (!isCaptionLink && post.getIsCaptionLink()) {
+                    String extracted = extractLink(post.getCaption());
+                    if (extracted != null && !extracted.isEmpty()) {
+                        finalLink = extracted;
+                    }
+                    finalCaption = cleanCaption(post.getCaption());
+                }
+
                 postToThreads(
-                        post.getCaption(),
+                        finalCaption,
                         imageUrls,
                         videoUrls,
-                        post.getAmzUrl(),
+                        finalLink,
                         post,
                         threadAccount.getThreadToken(),
                         threadAccount.getThreadId(),
                         threadAccount.getAccountName()
                 );
+
+
                 log.info("Account {} đã xử lý bài bài ID {}.", threadAccount.getId(), post.getId());
             } catch (Exception e) {
                 log.error("Lỗi hệ thống khi xử lý bài ID {} cho Account {}: {}", post.getId(), threadAccount.getId(), e.getMessage());
@@ -661,5 +676,19 @@ public class ThreadService {
     }
     public ThreadAccount getThreadAccountByThreadId(String threadId) {
         return threadAccountRepository.findByThreadId(threadId).orElseThrow();
+    }
+    public static String extractLink(String text) {
+        Pattern pattern = Pattern.compile("https?://\\S+");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        return null;
+    }
+    public static String cleanCaption(String text) {
+        if (text == null) return "";
+        String regex = "(?i)(Amazon finds:?\\s*)?https?://\\S+[\\s\\S]*";
+
+        return text.replaceAll(regex, "").trim();
     }
 }
