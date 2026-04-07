@@ -210,7 +210,9 @@ jobs:
               CONTAINER_ID=\$(docker ps -q -f 'label=com.docker.compose.service=db-mysql')
               if [ ! -z \"\$CONTAINER_ID\" ]; then
                 echo '✅ Found MySQL container. Creating backup...'
+                sudo chown ${SERVER_USER}:${SERVER_USER} ${DATABASE_PATH}/db_backup.sql.gz
                 docker exec \$CONTAINER_ID mysqldump -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} | gzip > ${DATABASE_PATH}/db_backup.sql.gz
+                sudo chown ${SERVER_USER}:${SERVER_USER} ${DATABASE_PATH}/db_backup.sql.gz
               else
                 echo '🤔 MySQL container not found.'
               fi
