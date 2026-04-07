@@ -22,7 +22,7 @@ export default function ListAmazon() {
   const amazons = useSelector((state: RootState) => state.amazon)
   const [selectedAccount, setSelectedAccount] = useState(null)
   const [accounts, setAccounts] = useState([])
-  const [isCationLink, setIsCaptionLink] = useState(0)
+  const [isCationLink, setIsCaptionLink] = useState('false')
 
   useEffect(() => {
     dispatch(amazonActions.getAdminAmazons(searchValue, isPublished) as unknown as AnyAction)
@@ -49,12 +49,12 @@ export default function ListAmazon() {
     }
   }
 
-  const handlePublish = async (id: string, selectedAccount: string, isCaptionLink: number) => {
+  const handlePublish = async (id: string, selectedAccount: string, isCaptionLink: string) => {
     const formData = new FormData()
 
     formData.append('id', id)
     formData.append('threadId', selectedAccount)
-    formData.append('isCaptionLink', isCaptionLink + '')
+    formData.append('isCaptionLink', isCaptionLink)
     try {
       dispatch(amazonActions.publishPost(formData) as unknown as AnyAction)
       dispatch(amazonActions.getAdminAmazons('', '') as unknown as AnyAction)
@@ -210,12 +210,12 @@ export default function ListAmazon() {
 
                 <div style={{ marginBottom: 4 }}>Nơi gắn link:</div>
                 <Select
-                  defaultValue={0}
+                  defaultValue='false'
                   style={{ width: '100%' }}
-                  onChange={(val: number) => setIsCaptionLink(val)}
+                  onChange={(val: string) => setIsCaptionLink(val)}
                   options={[
-                    { label: 'Gắn ở Comment', value: 0 },
-                    { label: 'Gắn ở Caption', value: 1 }
+                    { label: 'Gắn ở Comment', value: 'false' },
+                    { label: 'Gắn ở Caption', value: 'true' }
                   ]}
                 />
               </div>
@@ -227,11 +227,11 @@ export default function ListAmazon() {
               handlePublish(record.id, selectedAccount, isCationLink)
 
               setSelectedAccount(null)
-              setIsCaptionLink(1)
+              setIsCaptionLink('false')
             }}
             onCancel={() => {
               setSelectedAccount(null)
-              setIsCaptionLink(0)
+              setIsCaptionLink('false')
             }}
             okText='Đăng ngay'
             cancelText='Hủy'
