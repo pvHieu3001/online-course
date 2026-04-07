@@ -142,6 +142,14 @@ export default function ListAmazon() {
       }
     },
     {
+      title: 'Account',
+      dataIndex: 'accountThread',
+      key: 'accountThread',
+      width: 100,
+      ellipsis: true,
+      render: (text) => <span className='line-clamp-2'>{text ?? '_'}</span>
+    },
+    {
       title: 'Link clone',
       dataIndex: 'sourceUrl',
       key: 'sourceUrl',
@@ -178,14 +186,6 @@ export default function ListAmazon() {
           </Tooltip>
         )
       }
-    },
-    {
-      title: 'Account',
-      dataIndex: 'accountThread',
-      key: 'accountThread',
-      width: 100,
-      ellipsis: true,
-      render: (text) => <span className='line-clamp-2'>{text ?? '_'}</span>
     },
     {
       title: 'Action',
@@ -263,11 +263,11 @@ export default function ListAmazon() {
     <div className='p-2 sm:p-4'>
       <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-4'>
         <Typography.Title level={3} style={{ margin: 0 }}>
-          Danh sách Amazon
+          Danh sách bài viết
         </Typography.Title>
         <Link to='add' className='w-full sm:w-auto'>
           <Button type='primary' block>
-            Thêm danh mục
+            Thêm bài viết
           </Button>
         </Link>
       </div>

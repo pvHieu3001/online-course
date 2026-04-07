@@ -211,7 +211,7 @@ jobs:
               if [ ! -z \"\$CONTAINER_ID\" ]; then
                 echo '✅ Found MySQL container. Creating backup...'
                 TIMESTAMP=\$(date +%F_%H%M%S)
-                docker exec \$CONTAINER_ID mysqldump -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} | gzip > ${DATABASE_PATH}/db_backup_${TIMESTAMP}.sql.gz
+                docker exec \$CONTAINER_ID mysqldump -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} | gzip > ${DATABASE_PATH}/db_backup_\${TIMESTAMP}.sql.gz
               else
                 echo '🤔 MySQL container not found.'
               fi
