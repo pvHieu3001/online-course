@@ -561,10 +561,11 @@ public class ThreadService {
                 "Task: Rewrite the context for Threads while keeping 90% of the original meaning. " +
                 "Style: Direct, concise, and almost identical to the source. " +
                 "Tone: Personal, natural, and low-key. No marketing fluff. " +
-                "Rule: Do NOT add new information. Keep it to 1-2 short sentences. " +
+                "Formatting: Use 1-2 line breaks between sentences to create vertical space and make it easy to read. " +
+                "Rule: Do NOT add new information. Keep it to 2-3 short, punchy lines. " +
                 "Constraint: Remove any affiliate-related calls to action, 'link in bio', or 'buy here' phrases. " +
                 "Constraint: Do NOT include any links in your response. " +
-                "Output: Return ONLY the rewritten text. Language: English.";
+                "Output: Return ONLY the rewritten text with line breaks. Language: English.";
 
         String aiResponse = groqService.generateThreadsContent(prompt);
         String cleanedContent = aiResponse.trim().replaceAll("^\"|\"$", "");
