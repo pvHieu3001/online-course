@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -51,7 +52,7 @@ public class ThreadService {
     private final UserService userService;
     private final ThreadAccountRepository threadAccountRepository;
 
-
+    @Async
     public void publishPost(Long id, ThreadAccount threadAccount, Boolean isCaptionLink) {
         Optional<PostEntity> postOpt = postRepository.findPostWithMediasById(id);
 
