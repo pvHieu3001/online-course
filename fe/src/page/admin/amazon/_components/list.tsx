@@ -18,16 +18,17 @@ dayjs.extend(utc)
 export default function ListAmazon() {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState('')
-  const [isPublished, setIsPublished] = useState('')
+  const [status, setStatus] = useState('')
   const amazons = useSelector((state: RootState) => state.amazon)
   const [selectedAccount, setSelectedAccount] = useState(null)
   const [accounts, setAccounts] = useState([])
-  const [isCationLink, setIsCaptionLink] = useState('false')
+  const [isCaptionLink, setIsCaptionLink] = useState('false')
+  const [isCapLink, setIsCapLink] = useState('')
 
   useEffect(() => {
-    dispatch(amazonActions.getAdminAmazons(searchValue, isPublished, 1, 10) as unknown as AnyAction)
+    dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, 1, 10) as unknown as AnyAction)
     dispatch(amazonActions.getThreadAccount() as unknown as AnyAction)
-  }, [dispatch, searchValue, isPublished])
+  }, [dispatch, searchValue, status, isCapLink])
 
   useEffect(() => {
     if (amazons?.dataThreadAccount && amazons?.dataThreadAccount.length > 0) {
@@ -42,7 +43,7 @@ export default function ListAmazon() {
   const handlerDistableAmazon = async (id: string) => {
     try {
       dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons('', '', 1, 10) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons('', '', '', 1, 10) as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error) {
       message.error('Vô hiệu hoá danh mục thất bại!')
@@ -57,7 +58,7 @@ export default function ListAmazon() {
     formData.append('isCaptionLink', isCaptionLink)
     try {
       dispatch(amazonActions.publishPost(formData) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons('', '', 1, 10) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons('', '', '', 1, 10) as unknown as AnyAction)
       message.success('Đang đăng!')
     } catch (error) {
       message.error('Đăng bài thất bại!')
@@ -115,31 +116,19 @@ export default function ListAmazon() {
       title: 'Published At',
       dataIndex: 'publishedAt',
       key: 'publishedAt',
-      width: 150,
+      width: 130,
       ellipsis: true,
-      render: (text) => (
-        <span className='line-clamp-2'>{text ? dayjs.utc(text).local().format('DD/MM/YY HH:mm') : '_'}</span>
+      render: (text, record) => (
+        <span
+          className='line-clamp-2'
+          style={{
+            color: record.isCaptionLink ? '#ff4d4f' : 'inherit',
+            fontWeight: record.isCaptionLink ? '500' : 'normal'
+          }}
+        >
+          {text ? dayjs.utc(text).local().format('DD/MM/YY HH:mm') : '_'}
+        </span>
       )
-    },
-    {
-      title: 'Caption',
-      dataIndex: 'caption',
-      key: 'caption',
-      width: 200,
-      ellipsis: true,
-      render: (text, record) => {
-        return (
-          <span
-            className='line-clamp-2'
-            style={{
-              color: record.isCaptionLink ? '#ff4d4f' : 'inherit',
-              fontWeight: record.isCaptionLink ? '500' : 'normal'
-            }}
-          >
-            {text ?? '_'}
-          </span>
-        )
-      }
     },
     {
       title: 'Account',
@@ -148,6 +137,16 @@ export default function ListAmazon() {
       width: 100,
       ellipsis: true,
       render: (text) => <span className='line-clamp-2'>{text ?? '_'}</span>
+    },
+    {
+      title: 'Caption',
+      dataIndex: 'caption',
+      key: 'caption',
+      width: 200,
+      ellipsis: true,
+      render: (text) => {
+        return <span className='line-clamp-2'>{text ?? '_'}</span>
+      }
     },
     {
       title: 'Link clone',
@@ -224,7 +223,7 @@ export default function ListAmazon() {
               if (!selectedAccount) {
                 return message.warning('Vui lòng chọn tài khoản trước!')
               }
-              handlePublish(record.id, selectedAccount, isCationLink)
+              handlePublish(record.id, selectedAccount, isCaptionLink)
 
               setSelectedAccount(null)
               setIsCaptionLink('false')
@@ -286,15 +285,30 @@ export default function ListAmazon() {
 
           <Select
             className='w-full sm:w-44'
-            onChange={(value) => setIsPublished(value)}
-            value={isPublished}
+            onChange={(value) => setStatus(value)}
+            value={status}
             placeholder='Trạng thái'
             size='large'
             style={{ borderRadius: '0.75rem' }}
           >
             <Select.Option value=''>Tất cả trạng thái</Select.Option>
-            <Select.Option value='1'>Đã đăng</Select.Option>
-            <Select.Option value='0'>Chưa đăng</Select.Option>
+            <Select.Option value='DEFAULT'>DEFAULT</Select.Option>
+            <Select.Option value='SUCCESS'>SUCCESS</Select.Option>
+            <Select.Option value='PROCESSING'>PROCESSING</Select.Option>
+            <Select.Option value='FAILED'>FAILED</Select.Option>
+          </Select>
+
+          <Select
+            className='w-full sm:w-44'
+            onChange={(value) => setIsCapLink(value)}
+            value={isCapLink}
+            placeholder='Loại bài đăng'
+            size='large'
+            style={{ borderRadius: '0.75rem' }}
+          >
+            <Select.Option value=''>Tất loại bài</Select.Option>
+            <Select.Option value='1'>CapLink</Select.Option>
+            <Select.Option value='0'>CommentLink</Select.Option>
           </Select>
         </div>
 
@@ -314,7 +328,7 @@ export default function ListAmazon() {
             total: amazons.pagination?.totalElements || 0,
             onChange: (page, pageSize) => {
               dispatch(
-                amazonActions.getAdminAmazons(searchValue, isPublished, page - 1, pageSize) as unknown as AnyAction
+                amazonActions.getAdminAmazons(searchValue, isPublished, '', page - 1, pageSize) as unknown as AnyAction
               )
             }
           }}

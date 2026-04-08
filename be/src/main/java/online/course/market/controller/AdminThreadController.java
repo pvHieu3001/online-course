@@ -46,10 +46,11 @@ public class AdminThreadController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<PostDto>>> getAll(
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) Boolean isPublished,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Boolean isCaptionLink,
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "10") Integer size) {
-        Page<PostDto> data = service.getPostsByUser(search, isPublished, page, size)
+        Page<PostDto> data = service.getPostsByUser(search, status, isCaptionLink, page, size)
                 .map(this::toDto);
         return ResponseEntity.ok(ApiResponse.success(data));
     }

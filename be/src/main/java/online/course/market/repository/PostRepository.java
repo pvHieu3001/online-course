@@ -17,14 +17,17 @@ public interface PostRepository extends JpaRepository<PostEntity, Long>{
 
     @Query(value = "SELECT * FROM posts p " +
             "WHERE (:search IS NULL OR :search = '' OR LOWER(p.caption) LIKE LOWER(CONCAT('%', :search, '%'))) " +
-            "AND (:isPublished IS NULL OR p.is_published = :isPublished)",
+            "AND (:status IS NULL OR :status = '' OR p.status = :status) " +
+            "AND (:isCaptionLink IS NULL OR p.is_caption_link = :isCaptionLink)",
             countQuery = "SELECT count(*) FROM posts p " +
                     "WHERE (:search IS NULL OR :search = '' OR LOWER(p.caption) LIKE LOWER(CONCAT('%', :search, '%'))) " +
-                    "AND (:isPublished IS NULL OR p.is_published = :isPublished)",
+                    "AND (:status IS NULL OR :status = '' OR p.status = :status) " +
+                    "AND (:isCaptionLink IS NULL OR p.is_caption_link = :isCaptionLink)",
             nativeQuery = true)
     Page<PostEntity> getPagePosts(
             @Param("search") String search,
-            @Param("isPublished") Boolean isPublished,
+            @Param("status") String status,
+            @Param("isCaptionLink") Boolean isCaptionLink,
             Pageable pageable
     );
 

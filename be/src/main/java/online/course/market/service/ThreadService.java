@@ -110,9 +110,9 @@ public class ThreadService {
         }
     }
 
-    public Page<PostEntity> getPostsByUser(String search, Boolean isPublished, Integer page, Integer size) {
+    public Page<PostEntity> getPostsByUser(String search, String status, Boolean isCaptionLink, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("published_at").descending());
-        return postRepository.getPagePosts(search, isPublished, pageable);
+        return postRepository.getPagePosts(search, status, isCaptionLink, pageable);
     }
 
     public PostEntity getPostById(Long id) {
@@ -606,20 +606,13 @@ public class ThreadService {
                 ? amazonPostRequest.getCaption()
                 : doc.select("p.text-sm.text-gray-700.leading-relaxed").text();
 
-//        String finalThreadsCaption = "";
-//        if (!rawContent.isEmpty()) {
-//            String prompt = "Act as a Threads expert. Turn this into a relatable hot take or a question: \"" + rawContent + "\". " +
-//                    "Keep it friendly but provocative. Return ONLY the caption text. Language: English.";
-//            String aiResponse = groqService.generateThreadsContent(prompt);
-//            finalThreadsCaption = aiResponse.trim().replaceAll("^\"|\"$", "");
-//        }
-
         PostEntity post = new PostEntity();
         post.setCaption(rawContent);
         post.setSourceUrl(amazonPostRequest.getSourceUrl());
         post.setAmzUrl(amazonPostRequest.getAmzUrl());
         post.setIsCaptionLink(amazonPostRequest.getIsCaptionLink());
         post.setIsPublished(false);
+        post.setStatus("DEFAULT");
         post = postRepository.save(post);
 
         List<MediaEntity> mediaList = new ArrayList<>();
