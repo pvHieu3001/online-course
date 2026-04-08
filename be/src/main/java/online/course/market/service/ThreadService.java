@@ -78,7 +78,7 @@ public class ThreadService {
                 String finalCaption = post.getCaption();
                 String finalLink = post.getAmzUrl();
 
-                if (!isCaptionLink && post.getIsCaptionLink()) {
+                if (!isCaptionLink && Boolean.TRUE.equals(post.getIsCaptionLink())) {
                     String extracted = extractLink(post.getCaption());
                     if (extracted != null && !extracted.isEmpty()) {
                         finalLink = extracted;
@@ -572,8 +572,8 @@ public class ThreadService {
         if (amzUrl != null && !amzUrl.isEmpty() && Boolean.TRUE.equals(isCaptionLink)) {
             String hashtags = generateHashtags(rawContent);
             return cleanedContent +
-                    "\n\nAmazon finds: " + amzUrl +
-                    "\n\n" + hashtags;
+                    "\nAmazon finds: " + amzUrl +
+                    "\n" + hashtags;
         }
         return cleanedContent;
     }
