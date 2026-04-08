@@ -25,7 +25,7 @@ export default function ListAmazon() {
   const [isCationLink, setIsCaptionLink] = useState('false')
 
   useEffect(() => {
-    dispatch(amazonActions.getAdminAmazons(searchValue, isPublished) as unknown as AnyAction)
+    dispatch(amazonActions.getAdminAmazons(searchValue, isPublished, 1, 10) as unknown as AnyAction)
     dispatch(amazonActions.getThreadAccount() as unknown as AnyAction)
   }, [dispatch, searchValue, isPublished])
 
@@ -42,7 +42,7 @@ export default function ListAmazon() {
   const handlerDistableAmazon = async (id: string) => {
     try {
       dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons('', '') as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons('', '', 1, 10) as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error) {
       message.error('Vô hiệu hoá danh mục thất bại!')
@@ -57,7 +57,7 @@ export default function ListAmazon() {
     formData.append('isCaptionLink', isCaptionLink)
     try {
       dispatch(amazonActions.publishPost(formData) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons('', '') as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons('', '', 1, 10) as unknown as AnyAction)
       message.success('Đang đăng!')
     } catch (error) {
       message.error('Đăng bài thất bại!')
@@ -302,13 +302,21 @@ export default function ListAmazon() {
           columns={columns}
           dataSource={amazons?.dataList?.map((item: IAmazon, index: number) => ({
             ...item,
-            key: index + 1
+            key: item.id || index
           }))}
           loading={amazons.isLoading}
           scroll={{ x: 800 }}
           pagination={{
             size: 'small',
-            showSizeChanger: false
+            showSizeChanger: false,
+            current: (amazons.pagination?.pageNumber || 0) + 1,
+            pageSize: amazons.pagination?.pageSize || 10,
+            total: amazons.pagination?.totalElements || 0,
+            onChange: (page, pageSize) => {
+              dispatch(
+                amazonActions.getAdminAmazons(searchValue, isPublished, page - 1, pageSize) as unknown as AnyAction
+              )
+            }
           }}
           className='responsive-table'
         />

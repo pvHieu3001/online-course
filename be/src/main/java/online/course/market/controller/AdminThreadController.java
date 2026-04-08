@@ -14,6 +14,7 @@ import online.course.market.entity.model.UserModel;
 import online.course.market.service.ThreadService;
 import online.course.market.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -43,15 +44,14 @@ public class AdminThreadController {
 
     @Operation(description = "Get all posts for the logged-in user", summary = "Get user posts")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<PostDto>>> getAll(
+    public ResponseEntity<ApiResponse<Page<PostDto>>> getAll(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Boolean isPublished,
-            Authentication authentication) {
-        List<PostDto> dtos = service.getPostsByUser(search, isPublished)
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(ApiResponse.success(dtos));
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer size) {
+        Page<PostDto> data = service.getPostsByUser(search, isPublished, page, size)
+                .map(this::toDto);
+        return ResponseEntity.ok(ApiResponse.success(data));
     }
 
     @Operation(description = "Get all thread acc for the logged-in user", summary = "Get user posts")

@@ -3,8 +3,8 @@ import http from '../http-common'
 function getAmazons(search: string) {
   return http.get('/api/v1/user/amazon?search=' + search)
 }
-function getAdminAmazons(search: string, isPublished: string) {
-  return http.get('/api/v1/admin/amazon?search=' + search + '&isPublished=' + isPublished)
+function getAdminAmazons(search: string, isPublished: string, page: number, pageSize: number) {
+  return http.get(`/api/v1/admin/amazon?search=${search}&isPublished=${isPublished}&page=${page}&size=${pageSize}`)
 }
 function getAmazonById(id: string) {
   return http.get(`/api/v1/admin/amazon/${id}`)

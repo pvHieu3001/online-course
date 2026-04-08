@@ -1,4 +1,4 @@
-import { IAmazon, IThreadAccount } from '@/common/types.interface'
+import { IAmazon, IPagination, IThreadAccount } from '@/common/types.interface'
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -9,7 +9,8 @@ const initialState = {
   data: <IAmazon>(<unknown>null),
   dataRandom: <IAmazon>(<unknown>null),
   dataList: <IAmazon[]>(<unknown>null),
-  dataThreadAccount: <IThreadAccount[]>(<unknown>null)
+  dataThreadAccount: <IThreadAccount[]>(<unknown>null),
+  pagination: <IPagination>(<unknown>null)
 }
 
 const amazonSlice = createSlice({
@@ -23,7 +24,15 @@ const amazonSlice = createSlice({
       state.isLoading = false
     },
     getAmazonsSuccessFully: (state, { payload }) => {
-      state.dataList = payload.data
+      state.dataList = payload.data.content
+      state.pagination = {
+        totalElements: payload.data.totalElements,
+        totalPages: payload.data.totalPages,
+        pageNumber: payload.data.number,
+        pageSize: payload.data.size,
+        isFirst: payload.data.first,
+        isLast: payload.data.last
+      }
       state.isLoading = false
     },
     getAmazonsSuccessFailure: (state, { payload }) => {

@@ -1,6 +1,8 @@
 package online.course.market.repository;
 
 import online.course.market.entity.model.PostEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,10 +17,16 @@ public interface PostRepository extends JpaRepository<PostEntity, Long>{
 
     @Query(value = "SELECT * FROM posts p " +
             "WHERE (:search IS NULL OR :search = '' OR LOWER(p.caption) LIKE LOWER(CONCAT('%', :search, '%'))) " +
-            "AND (:isPublished IS NULL OR p.is_published = :isPublished)" +
-            "ORDER BY p.published_at desc",
+            "AND (:isPublished IS NULL OR p.is_published = :isPublished)",
+            countQuery = "SELECT count(*) FROM posts p " +
+                    "WHERE (:search IS NULL OR :search = '' OR LOWER(p.caption) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+                    "AND (:isPublished IS NULL OR p.is_published = :isPublished)",
             nativeQuery = true)
-    List<PostEntity> findAllByThreadIdAndCaption(@Param("search") String search, @Param("isPublished") Boolean isPublished);
+    Page<PostEntity> getPagePosts(
+            @Param("search") String search,
+            @Param("isPublished") Boolean isPublished,
+            Pageable pageable
+    );
 
     boolean existsBySourceUrl(String sourceUrl);
 }

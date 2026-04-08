@@ -160,6 +160,15 @@ export interface IThreadAccount {
   isThreadPending: boolean
 }
 
+export interface IPagination {
+  totalElements: number
+  totalPages: number
+  pageNumber: number
+  pageSize: number
+  isFirst: number
+  isLast: number
+}
+
 export type ContextType = {
   setIsShowRecommendCourses: (value: boolean) => void
 }
