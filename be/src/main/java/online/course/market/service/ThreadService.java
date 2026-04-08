@@ -691,4 +691,8 @@ public class ThreadService {
 
         return text.replaceAll(regex, "").trim();
     }
+
+    public void cleanData() {
+        postRepository.cleanData();
+    }
 }

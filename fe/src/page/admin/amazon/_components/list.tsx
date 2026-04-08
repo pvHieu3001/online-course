@@ -328,7 +328,7 @@ export default function ListAmazon() {
             total: amazons.pagination?.totalElements || 0,
             onChange: (page, pageSize) => {
               dispatch(
-                amazonActions.getAdminAmazons(searchValue, isPublished, '', page - 1, pageSize) as unknown as AnyAction
+                amazonActions.getAdminAmazons(searchValue, status, '', page - 1, pageSize) as unknown as AnyAction
               )
             }
           }}

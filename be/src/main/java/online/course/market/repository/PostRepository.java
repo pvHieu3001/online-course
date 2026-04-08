@@ -32,4 +32,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Long>{
     );
 
     boolean existsBySourceUrl(String sourceUrl);
+
+    @Query(value = "DELETE FROM posts WHERE id NOT IN (SELECT post_id FROM media)", nativeQuery = true)
+    void cleanData();
 }

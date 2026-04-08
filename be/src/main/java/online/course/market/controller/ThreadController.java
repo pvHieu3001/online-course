@@ -21,6 +21,7 @@ public class ThreadController {
             for (AmazonPostRequest post : posts) {
                 service.downloadAndUpload(post, true);
             }
+            service.cleanData();
             return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết ");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Lỗi hệ thống: " + e.getMessage());
