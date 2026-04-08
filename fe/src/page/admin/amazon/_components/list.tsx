@@ -26,7 +26,7 @@ export default function ListAmazon() {
   const [isCapLink, setIsCapLink] = useState('')
 
   useEffect(() => {
-    dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, 1, 10) as unknown as AnyAction)
+    dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, 0, 10) as unknown as AnyAction)
     dispatch(amazonActions.getThreadAccount() as unknown as AnyAction)
   }, [dispatch, searchValue, status, isCapLink])
 
@@ -43,7 +43,7 @@ export default function ListAmazon() {
   const handlerDistableAmazon = async (id: string) => {
     try {
       dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons('', '', '', 1, 10) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons('', '', '', 0, 10) as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error) {
       message.error('Vô hiệu hoá danh mục thất bại!')
@@ -58,7 +58,7 @@ export default function ListAmazon() {
     formData.append('isCaptionLink', isCaptionLink)
     try {
       dispatch(amazonActions.publishPost(formData) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons('', '', '', 1, 10) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons('', '', '', 0, 10) as unknown as AnyAction)
       message.success('Đang đăng!')
     } catch (error) {
       message.error('Đăng bài thất bại!')
@@ -136,7 +136,17 @@ export default function ListAmazon() {
       key: 'accountThread',
       width: 100,
       ellipsis: true,
-      render: (text) => <span className='line-clamp-2'>{text ?? '_'}</span>
+      render: (text, record) => (
+        <span
+          className='line-clamp-2'
+          style={{
+            color: record.isCaptionLink ? '#ff4d4f' : 'inherit',
+            fontWeight: record.isCaptionLink ? '500' : 'normal'
+          }}
+        >
+          {text ?? '_'}
+        </span>
+      )
     },
     {
       title: 'Caption',
@@ -144,8 +154,18 @@ export default function ListAmazon() {
       key: 'caption',
       width: 200,
       ellipsis: true,
-      render: (text) => {
-        return <span className='line-clamp-2'>{text ?? '_'}</span>
+      render: (text, record) => {
+        return (
+          <span
+            className='line-clamp-2'
+            style={{
+              color: record.isCaptionLink ? '#ff4d4f' : 'inherit',
+              fontWeight: record.isCaptionLink ? '500' : 'normal'
+            }}
+          >
+            {text ?? '_'}
+          </span>
+        )
       }
     },
     {
