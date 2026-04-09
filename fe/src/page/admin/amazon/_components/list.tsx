@@ -43,7 +43,7 @@ export default function ListAmazon() {
   const handlerDistableAmazon = async (id: string) => {
     try {
       dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons('', '', '', 0, 10) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, 0, 10) as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error) {
       message.error('Vô hiệu hoá danh mục thất bại!')
@@ -58,7 +58,7 @@ export default function ListAmazon() {
     formData.append('isCaptionLink', isCaptionLink)
     try {
       dispatch(amazonActions.publishPost(formData) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons('', '', '', 0, 10) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, 0, 10) as unknown as AnyAction)
       message.success('Đang đăng!')
     } catch (error) {
       message.error('Đăng bài thất bại!')
