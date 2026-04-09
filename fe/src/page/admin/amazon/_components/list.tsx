@@ -231,7 +231,7 @@ export default function ListAmazon() {
 
                 <div style={{ marginBottom: 4 }}>Nơi gắn link:</div>
                 <Select
-                  defaultValue='false'
+                  defaultValue={record.isCaptionLink ? 'true' : 'false'}
                   style={{ width: '100%' }}
                   onChange={(val: string) => setIsCaptionLink(val)}
                   options={[
