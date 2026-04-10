@@ -231,7 +231,7 @@ export default function ListAmazon() {
 
                 <div style={{ marginBottom: 4 }}>Nơi gắn link:</div>
                 <Select
-                  defaultValue={record.isCaptionLink ? 'true' : 'false'}
+                  value={record.isCaptionLink ? 'true' : 'false'}
                   style={{ width: '100%' }}
                   onChange={(val: string) => setIsCaptionLink(val)}
                   options={[
@@ -246,12 +246,14 @@ export default function ListAmazon() {
                 return message.warning('Vui lòng chọn tài khoản trước!')
               }
               handlePublish(record.id, selectedAccount, isCaptionLink)
-
-              setSelectedAccount(null)
               setIsCaptionLink('false')
             }}
+            onOpenChange={(visible) => {
+              if (visible) {
+                setIsCaptionLink(record.isCaptionLink ? 'true' : 'false')
+              }
+            }}
             onCancel={() => {
-              setSelectedAccount(null)
               setIsCaptionLink('false')
             }}
             okText='Đăng ngay'
