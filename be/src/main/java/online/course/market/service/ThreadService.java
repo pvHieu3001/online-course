@@ -111,7 +111,11 @@ public class ThreadService {
     }
 
     public Page<PostEntity> getPostsByUser(String search, String status, Boolean isCaptionLink, Boolean hasLink, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("published_at").descending());
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("published_at").descending().and(Sort.by("id").descending())
+        );
         return postRepository.getPagePosts(search, status, isCaptionLink, hasLink, pageable);
     }
 
