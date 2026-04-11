@@ -76,7 +76,6 @@ public class AdminCourseController {
     public void init() {
         try {
             uploadDir = Paths.get(resourceFolder);
-            // Create directory if it doesn't exist
             if (!Files.exists(uploadDir)) {
                 Files.createDirectories(uploadDir);
             }
@@ -85,7 +84,6 @@ public class AdminCourseController {
         }
     }
 
-    // Helper: map Course sang GetCourseDto
     private CourseDto toDto(Course course) {
         CourseDto courseDto = modelMapper.map(course, CourseDto.class);
         Optional.ofNullable(course.getCategory())

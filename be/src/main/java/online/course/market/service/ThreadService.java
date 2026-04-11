@@ -92,7 +92,7 @@ public class ThreadService {
                 }
 
                 postToThreads(
-                        finalCaption,
+                        reCreateCap(finalCaption),
                         imageUrls,
                         videoUrls,
                         finalLink,
@@ -110,9 +110,9 @@ public class ThreadService {
         }
     }
 
-    public Page<PostEntity> getPostsByUser(String search, String status, Boolean isCaptionLink, Integer page, Integer size) {
+    public Page<PostEntity> getPostsByUser(String search, String status, Boolean isCaptionLink, Boolean hasLink, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("published_at").descending());
-        return postRepository.getPagePosts(search, status, isCaptionLink, pageable);
+        return postRepository.getPagePosts(search, status, isCaptionLink, hasLink, pageable);
     }
 
     public PostEntity getPostById(Long id) {
@@ -490,11 +490,18 @@ public class ThreadService {
 
     public String generateRandomComment(String amzLink) {
         String[] templates = {
-                "Check out the product here:: %s 🚀 -- Affiliate link",
-                "Found this on Amazon, highly recommend! %s ✨ -- Affiliate link",
-                "Grab yours here before it's gone: %s 📌 -- Affiliate link",
-                "Full details and price here: %s 💡 -- Affiliate link",
-                "Best deal I've found today: %s 🔥 -- Affiliate link"
+                "Found that viral item everyone’s talking about. Quality is actually 10/10: %s 🔥",
+                "Just a little something to upgrade your daily routine. Link for those asking: %s 📌",
+                "I don't usually post deals, but this price is too good to ignore right now: %s 🚀",
+                "Lowest price I've seen. Don't miss out: %s 📉🔥",
+                "Price drop! Grab it before it bounces back: %s 💸⚡",
+                "Flash deal! These are selling fast: %s 🏃‍♂️💨",
+                "Almost gone. Get yours while it's in stock: %s 🛒⏳",
+                "Absolute steal at this price. Link here: %s 😱💎",
+                "This deal is too good to pass up: %s 🛑✨",
+                "Limited time offer. Check it out now: %s 🚀📌",
+                "Final call for this discount! Link: %s 📣🔥",
+                "Lowest price in 30 days. Buy it here: %s ⏳✨"
         };
 
         int randomIndex = new Random().nextInt(templates.length);
@@ -527,17 +534,26 @@ public class ThreadService {
                 log.error("Nội dung đã tồn tại: {}", amazonPostRequest.getSourceUrl());
                 return;
             }
-            if(isUsingGrok){
-                String affiliateUrl = resolveAmazonLink(amazonPostRequest.getAmzUrl());
-                String regex = "^https://www\\.amazon\\.com/dp/[A-Z0-9]{10}\\?tag=[\\w-]+$";
-                if (affiliateUrl == null || !affiliateUrl.matches(regex)) {
-                    return;
+            if (isUsingGrok) {
+                String rawUrl = amazonPostRequest.getAmzUrl();
+                String affiliateUrl = null;
+
+                if (rawUrl != null && !rawUrl.isEmpty()) {
+                    affiliateUrl = resolveAmazonLink(rawUrl);
+                    String regex = "^https://www\\.amazon\\.com/dp/[A-Z0-9]{10}\\?tag=[\\w-]+$";
+                    if (affiliateUrl == null || !affiliateUrl.matches(regex)) {
+                        affiliateUrl = null;
+                    }
                 }
-                amazonPostRequest.setCaption(reCreateCap(amazonPostRequest.getCaption(), affiliateUrl, amazonPostRequest.getIsCaptionLink()));
-                if(amazonPostRequest.getIsCaptionLink()){
+                String newCaption = reCreateCap(amazonPostRequest.getCaption(), affiliateUrl, amazonPostRequest.getIsCaptionLink());
+                amazonPostRequest.setCaption(newCaption);
+                if (amazonPostRequest.getIsCaptionLink()) {
                     amazonPostRequest.setAmzUrl("");
-                }else{
-                    amazonPostRequest.setAmzUrl(affiliateUrl);
+                } else {
+                    amazonPostRequest.setAmzUrl(affiliateUrl != null ? affiliateUrl : "");
+                }
+                if (affiliateUrl == null) {
+                    amazonPostRequest.setHasLink(false);
                 }
             }
 
@@ -584,6 +600,20 @@ public class ThreadService {
         return cleanedContent;
     }
 
+    public String reCreateCap(String rawContent) {
+        String prompt = "Act as a Threads user. Context: '" + rawContent + "'. " +
+                "Task: Rewrite this for Threads. Keep the core meaning and include any links ONLY if they exist in the source. " +
+                "Style: Minimalist, personal, and punchy. No generic marketing talk. " +
+                "Tone: Casual, like a quick thought or a discovery. " +
+                "Formatting: Use double line breaks between short sentences. 2-3 lines max. " +
+                "Rule: If there's a link, place it naturally at the end or in a new line. If no link, just focus on the message. " +
+                "Constraint: Do NOT invent any links. Do NOT use phrases like 'Link in bio'. " +
+                "Output: Return ONLY the rewritten text. Language: English.";
+
+        String aiResponse = groqService.generateThreadsContent(prompt);
+        return aiResponse.trim().replaceAll("^\"|\"$", "");
+    }
+
     private String generateHashtags(String content) {
         String lowerContent = content.toLowerCase();
         StringBuilder tags = new StringBuilder(" #amazonfinds #threads");
@@ -613,6 +643,7 @@ public class ThreadService {
         post.setIsCaptionLink(amazonPostRequest.getIsCaptionLink());
         post.setIsPublished(false);
         post.setStatus("DEFAULT");
+        post.setHasLink(amazonPostRequest.getHasLink());
         post = postRepository.save(post);
 
         List<MediaEntity> mediaList = new ArrayList<>();
@@ -621,7 +652,6 @@ public class ThreadService {
             Element link = links.get(i);
             String originalUrl = link.attr("href");
 
-            // 1. Bỏ qua MP3
             if (originalUrl.contains(".mp3") || link.hasClass("download_mp3")) {
                 continue;
             }

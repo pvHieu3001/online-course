@@ -24,13 +24,14 @@ export default function ListAmazon() {
   const [accounts, setAccounts] = useState([])
   const [isCaptionLink, setIsCaptionLink] = useState('false')
   const [isCapLink, setIsCapLink] = useState('')
+  const [hasLink, setHasLink] = useState('')
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
 
   useEffect(() => {
-    dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, page, size) as unknown as AnyAction)
+    dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
     dispatch(amazonActions.getThreadAccount() as unknown as AnyAction)
-  }, [dispatch, searchValue, status, isCapLink, page, size])
+  }, [dispatch, searchValue, status, isCapLink, page, size, hasLink])
 
   useEffect(() => {
     if (amazons?.dataThreadAccount && amazons?.dataThreadAccount.length > 0) {
@@ -45,7 +46,7 @@ export default function ListAmazon() {
   const handlerDistableAmazon = async (id: string) => {
     try {
       dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, page, size) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error) {
       message.error('Vô hiệu hoá danh mục thất bại!')
@@ -60,7 +61,7 @@ export default function ListAmazon() {
     formData.append('isCaptionLink', isCaptionLink)
     try {
       dispatch(amazonActions.publishPost(formData) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, page, size) as unknown as AnyAction)
+      dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
       message.success('Đang đăng!')
     } catch (error) {
       message.error('Đăng bài thất bại!')
@@ -138,17 +139,23 @@ export default function ListAmazon() {
       key: 'accountThread',
       width: 100,
       ellipsis: true,
-      render: (text, record) => (
-        <span
-          className='line-clamp-2'
-          style={{
-            color: record.isCaptionLink ? '#ff4d4f' : 'inherit',
-            fontWeight: record.isCaptionLink ? '500' : 'normal'
-          }}
-        >
-          {text ?? '_'}
-        </span>
-      )
+      render: (text, record) => {
+        const getStyle = () => {
+          if (record.hasLink === false) {
+            return { color: '#52c41a', fontWeight: '500' }
+          }
+          if (record.isCaptionLink) {
+            return { color: '#ff4d4f', fontWeight: '500' }
+          }
+          return { color: 'inherit', fontWeight: 'normal' }
+        }
+        const style = getStyle()
+        return (
+          <span className='line-clamp-2' style={style}>
+            {text ?? '_'}
+          </span>
+        )
+      }
     },
     {
       title: 'Caption',
@@ -157,14 +164,18 @@ export default function ListAmazon() {
       width: 200,
       ellipsis: true,
       render: (text, record) => {
+        const getStyle = () => {
+          if (record.hasLink === false) {
+            return { color: '#52c41a', fontWeight: '500' }
+          }
+          if (record.isCaptionLink) {
+            return { color: '#ff4d4f', fontWeight: '500' }
+          }
+          return { color: 'inherit', fontWeight: 'normal' }
+        }
+        const style = getStyle()
         return (
-          <span
-            className='line-clamp-2'
-            style={{
-              color: record.isCaptionLink ? '#ff4d4f' : 'inherit',
-              fontWeight: record.isCaptionLink ? '500' : 'normal'
-            }}
-          >
+          <span className='line-clamp-2' style={style}>
             {text ?? '_'}
           </span>
         )
@@ -330,9 +341,21 @@ export default function ListAmazon() {
             size='large'
             style={{ borderRadius: '0.75rem' }}
           >
-            <Select.Option value=''>Tất loại bài</Select.Option>
+            <Select.Option value=''>Chọn tất cả</Select.Option>
             <Select.Option value='1'>CapLink</Select.Option>
             <Select.Option value='0'>CommentLink</Select.Option>
+          </Select>
+          <Select
+            className='w-full sm:w-44'
+            onChange={(value) => setHasLink(value)}
+            value={hasLink}
+            placeholder='Bài đăng có link'
+            size='large'
+            style={{ borderRadius: '0.75rem' }}
+          >
+            <Select.Option value=''>Chọn tất cả</Select.Option>
+            <Select.Option value='1'>HasLink</Select.Option>
+            <Select.Option value='0'>NoLink</Select.Option>
           </Select>
         </div>
 

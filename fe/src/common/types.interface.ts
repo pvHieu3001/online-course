@@ -150,6 +150,7 @@ export interface IAmazon {
   retryCount: number
   accountThread: string
   isCaptionLink: boolean
+  hasLink: boolean
 }
 
 export interface IThreadAccount {

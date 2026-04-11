@@ -37,11 +37,11 @@ export const getAmazons = (searchValue: string) => (dispatch: Dispatch) => {
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const getAdminAmazons = (searchValue: string, isPublished: string, isCapLink: string, page: number, pageSize: number) => (dispatch: Dispatch) => {
+export const getAdminAmazons = (searchValue: string, isPublished: string, isCapLink: string, hasLink: string, page: number, pageSize: number) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return amazonServices
-    .getAdminAmazons(searchValue, isPublished, isCapLink, page, pageSize)
+    .getAdminAmazons(searchValue, isPublished, isCapLink, hasLink, page, pageSize)
     .then((res) => {
       dispatch(getAmazonsSuccessFully(res.data))
       return res
