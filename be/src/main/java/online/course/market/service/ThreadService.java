@@ -707,7 +707,7 @@ public class ThreadService {
     }
 
     public List<ThreadAccount> getAllThreadAccount() {
-        return threadAccountRepository.findAll(Sort.by(Sort.Direction.ASC, "is_caption_link"));
+        return threadAccountRepository.findAll(Sort.by(Sort.Direction.ASC, "isCaptionLink"));
     }
     public ThreadAccount getThreadAccountByThreadId(String threadId) {
         return threadAccountRepository.findByThreadId(threadId).orElseThrow();
