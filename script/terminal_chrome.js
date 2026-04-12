@@ -31,9 +31,21 @@ async function scrapeThreadsWithAmz(maxPosts = 10, { signal }) {
       let currentAmzUrl = "";
       let currentSourceUrl = "";
       let currentIsCaptionLink = false;
+      let isPopular = true;
 
-      blocks.forEach((block, index) => {
+      for (let index = 0; index < blocks.length; index++) {
+        const block = blocks[index];
         if (index === 0) {
+          const spans = block.querySelectorAll('span.x1o0tod.x10l6tqk.x13vifvy');
+          if (spans.length >= 1) {
+            const rawText = spans[0].innerText.trim().toLowerCase();
+            if (rawText.endsWith('k')) {
+              isPopular = true;
+              console.log(`%c🔥 Đạt điều kiện: ${rawText}`, "color: #f1c40f");
+            }
+          }
+          if (!isPopular) continue;
+          
           // 1. Tìm Link Amazon
           const amzLinkEl = block.querySelector(
             'a[href*="amzn.to"], a[href*="amazon.com"]',
@@ -98,7 +110,7 @@ async function scrapeThreadsWithAmz(maxPosts = 10, { signal }) {
             }
           }
         }
-      });
+      }
 
       // --- BƯỚC 3: KIỂM TRA VÀ LƯU ---
       const postId = currentSourceUrl || currentCaption;

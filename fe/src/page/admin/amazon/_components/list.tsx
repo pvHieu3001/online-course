@@ -31,7 +31,7 @@ export default function ListAmazon() {
   const isHighlight = currentAccount?.isCaptionLink === true;
 
   useEffect(() => {
-    dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
+    dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, 0, size) as unknown as AnyAction)
     dispatch(amazonActions.getThreadAccount() as unknown as AnyAction)
   }, [dispatch, searchValue, status, isCapLink, page, size, hasLink])
 
