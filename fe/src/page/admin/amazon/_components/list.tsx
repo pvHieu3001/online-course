@@ -21,12 +21,14 @@ export default function ListAmazon() {
   const [status, setStatus] = useState('')
   const amazons = useSelector((state: RootState) => state.amazon)
   const [selectedAccount, setSelectedAccount] = useState(null)
-  const [accounts, setAccounts] = useState([])
+  const [accounts, setAccounts] = useState<IThreadAccount[]>([])
   const [isCaptionLink, setIsCaptionLink] = useState('false')
   const [isCapLink, setIsCapLink] = useState('')
   const [hasLink, setHasLink] = useState('')
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
+  const currentAccount = accounts.find(acc => acc.threadId === selectedAccount);
+  const isHighlight = currentAccount?.isCaptionLink === true;
 
   useEffect(() => {
     dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
@@ -235,9 +237,16 @@ export default function ListAmazon() {
                 <div style={{ marginBottom: 4 }}>Tài khoản:</div>
                 <Select
                   placeholder='Chọn tài khoản'
-                  style={{ width: '100%', marginBottom: 12 }}
+                  style={{ 
+                    width: '100%', 
+                    marginBottom: 12,
+                    border: isHighlight ? '1px solid #ff4d4f' : '', 
+                    borderRadius: isHighlight ? '6px' : ''
+                  }}
+                  className={isHighlight ? 'highlight-select' : ''}
                   onChange={(val) => setSelectedAccount(val)}
                   options={accounts}
+                  value={selectedAccount}
                 />
 
                 <div style={{ marginBottom: 4 }}>Nơi gắn link:</div>

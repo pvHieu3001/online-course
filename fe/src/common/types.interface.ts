@@ -159,6 +159,7 @@ export interface IThreadAccount {
   threadId: string
   threadToken: string
   isThreadPending: boolean
+  isCaptionLink: boolean
 }
 
 export interface IPagination {
