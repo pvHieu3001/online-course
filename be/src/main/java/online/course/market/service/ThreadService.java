@@ -579,6 +579,7 @@ public class ThreadService {
 
         } catch (Exception e) {
             System.err.println("Lỗi khi call API savethr: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
