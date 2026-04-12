@@ -585,7 +585,8 @@ public class ThreadService {
 
     public String reCreateCap(String rawContent, String amzUrl, Boolean isCaptionLink) {
         String prompt = "Act as a Threads user. Context: '" + rawContent + "'. " +
-                "Task: Rewrite the context for Threads while keeping 90% of the original meaning. " +
+                "Task: Paraphrase the source context for Threads while preserving exactly 90% of its original essence. " +
+                "Instruction: Replace as many words as possible with creative synonyms. Reorder the sentence structure to make it feel fresh while keeping the core message intact. " +
                 "Style: Direct, concise, and almost identical to the source. " +
                 "Tone: Personal, natural, and low-key. No marketing fluff. " +
                 "Formatting: Use 1-2 line breaks between sentences to create vertical space and make it easy to read. " +
