@@ -1,5 +1,5 @@
 import type { TableProps } from 'antd'
-import { EditOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons'
+import { EditOutlined, DeleteOutlined, SendOutlined, ReloadOutlined } from '@ant-design/icons'
 import { Button, Input, Popconfirm, Select, Space, Table, Tag, Tooltip, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -31,7 +31,7 @@ export default function ListAmazon() {
   const isHighlight = currentAccount?.isCaptionLink === true;
 
   useEffect(() => {
-    dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, 0, size) as unknown as AnyAction)
+    dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
     dispatch(amazonActions.getThreadAccount() as unknown as AnyAction)
   }, [dispatch, searchValue, status, isCapLink, page, size, hasLink])
 
@@ -76,6 +76,10 @@ export default function ListAmazon() {
       setSearchValue(searchValue)
     }
   }
+
+  const handleReload = async () => {
+    await dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
+};
 
   const columns: TableProps<IAmazon>['columns'] = [
     {
@@ -366,6 +370,15 @@ export default function ListAmazon() {
             <Select.Option value='1'>HasLink</Select.Option>
             <Select.Option value='0'>NoLink</Select.Option>
           </Select>
+          <Button
+            type='primary'
+            icon={<ReloadOutlined />}
+            onClick={handleReload}
+            size='large'
+            style={{ borderRadius: '0.75rem' }}
+          >
+            Reload
+          </Button>
         </div>
 
         <Table

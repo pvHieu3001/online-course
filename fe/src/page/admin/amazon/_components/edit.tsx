@@ -17,7 +17,7 @@ export default function EditAmazon() {
   const amazonStore = useSelector((state: RootState) => state.amazon)
   useEffect(() => {
     dispatch(amazonActions.getAmazonById(params.id ?? '0') as unknown as AnyAction)
-    dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
+    dispatch(amazonActions.getAdminAmazons('', '', '', '', 0, 10) as unknown as AnyAction)
   }, [dispatch, params.id])
 
   const navigate = useNavigate()
@@ -73,7 +73,7 @@ export default function EditAmazon() {
 
     try {
       await dispatch(amazonActions.updateAmazon(params.id, formData) as unknown as AnyAction)
-      await dispatch(amazonActions.getAdminAmazons('', '') as unknown as AnyAction)
+      await dispatch(amazonActions.getAdminAmazons('', '', '', '', 0, 10) as unknown as AnyAction)
       popupSuccess('Cập nhật link afiliate thành công')
       setIsDirty(false)
       navigate('..')
