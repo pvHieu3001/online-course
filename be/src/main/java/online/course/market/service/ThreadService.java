@@ -622,7 +622,7 @@ public class ThreadService {
 
     private String generateHashtags(String content) {
         String lowerContent = content.toLowerCase();
-        StringBuilder tags = new StringBuilder(" #amazonfinds #threads");
+        StringBuilder tags = new StringBuilder("#viral #uniquefinds #amazon");
 
         if (lowerContent.contains("kitchen") || lowerContent.contains("cook")) tags.append(" #kitchenhacks");
         if (lowerContent.contains("decor") || lowerContent.contains("home")) tags.append(" #homedecor");
