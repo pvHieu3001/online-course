@@ -609,8 +609,8 @@ public class ThreadService {
     public String reCreateCap(String rawContent) {
         String prompt = "Act as a Threads user. Context: '" + rawContent + "'. " +
                 "Task: Rewrite this for Threads. Keep the core meaning and include any links ONLY if they exist in the source. " +
-                "Style: Minimalist, personal, and punchy. No generic marketing talk. " +
-                "Tone: Casual, like a quick thought or a discovery. " +
+                "Style: Direct, concise, and almost identical to the source. " +
+                "Tone: Personal, natural, and low-key. No marketing fluff. " +
                 "Formatting: Use double line breaks between short sentences. 2-3 lines max. " +
                 "Rule: If there's a link, place it naturally at the end or in a new line. If no link, just focus on the message. " +
                 "Constraint: Do NOT invent any links. Do NOT use phrases like 'Link in bio'. " +
