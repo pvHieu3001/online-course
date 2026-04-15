@@ -51,7 +51,7 @@ export default function AddAmazon() {
     try {
       setIsLoading(true)
       await dispatch(amazonActions.createAmazon(formData) as unknown as AnyAction)
-      await dispatch(amazonActions.getAdminAmazons('') as unknown as AnyAction)
+      await dispatch(amazonActions.getAdminAmazons('', '', '', '', 0, 10) as unknown as AnyAction)
       popupSuccess('Thêm link afiliate thành công')
       setIsDirty(false)
       navigate('..')
