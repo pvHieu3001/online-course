@@ -14,12 +14,12 @@ function Base() {
       <div className={styles.modules}>
         <Toaster />
         <ScrollToTop />
+        <Header isShowRecommendCourses={isShowRecommendCourses} />
         <main className={styles.container}>
-          <Header isShowRecommendCourses={isShowRecommendCourses} />
           <Outlet context={{ setIsShowRecommendCourses }} />
         </main>
+        <Footer />
       </div>
-      <Footer />
     </>
   )
 }

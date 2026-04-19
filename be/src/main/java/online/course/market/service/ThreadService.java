@@ -585,15 +585,14 @@ public class ThreadService {
 
     public String reCreateCap(String rawContent, String amzUrl, Boolean isCaptionLink) {
         String prompt = "Act as a Threads user. Context: '" + rawContent + "'. " +
-                "Task: Paraphrase the source context for Threads while preserving exactly 90% of its original essence. " +
-                "Instruction: Replace as many words as possible with creative synonyms. Reorder the sentence structure to make it feel fresh while keeping the core message intact. " +
-                "Style: Direct, concise, and almost identical to the source. " +
-                "Tone: Personal, natural, and low-key. No marketing fluff. " +
-                "Formatting: Use 1-2 line breaks between sentences to create vertical space and make it easy to read. " +
-                "Rule: Do NOT add new information. Keep it to 2-3 short, punchy lines. " +
-                "Constraint: Remove any affiliate-related calls to action, 'link in bio', or 'buy here' phrases. " +
-                "Constraint: Do NOT include any links in your response. " +
-                "Output: Return ONLY the rewritten text with line breaks. Language: English.";
+                "Task: Transform the context into ultra-short, punchy micro-sentences. " +
+                "Instruction: Use the fewest words possible. Replace complex phrases with simple, sharp synonyms. Strip away all fluff. " +
+                "Style: Minimalist. One thought per line. " +
+                "Tone: Low-key, personal, and blunt. " +
+                "Formatting: Double line breaks between every sentence. " +
+                "Rule: ABSOLUTELY NO sentences longer than 7 words. Return ONLY 2-3 tiny lines. No intro/outro. " +
+                "Constraint: Remove all CTA, 'link in bio', or shopping references. No links. " +
+                "Output: Return ONLY the rewritten text. Language: English.";
 
         String aiResponse = groqService.generateThreadsContent(prompt);
         String cleanedContent = aiResponse.trim().replaceAll("^\"|\"$", "");
@@ -608,13 +607,14 @@ public class ThreadService {
 
     public String reCreateCap(String rawContent) {
         String prompt = "Act as a Threads user. Context: '" + rawContent + "'. " +
-                "Task: Rewrite this for Threads. Keep the core meaning and include any links ONLY if they exist in the source. " +
-                "Style: Direct, concise, and almost identical to the source. " +
-                "Tone: Personal, natural, and low-key. No marketing fluff. " +
-                "Formatting: Use double line breaks between short sentences. 2-3 lines max. " +
-                "Rule: If there's a link, place it naturally at the end or in a new line. If no link, just focus on the message. " +
-                "Constraint: Do NOT invent any links. Do NOT use phrases like 'Link in bio'. " +
-                "Output: Return ONLY the rewritten text. Language: English.";
+                "Task: Shrink this to the absolute minimum. " +
+                "Instruction: Use 3-5 words per line. Strip all adjectives and fluff. Just the facts. " +
+                "Style: Ultra-minimalist and blunt. " +
+                "Tone: Personal and effortless. " +
+                "Formatting: Exactly 2-3 short lines. Double line breaks between them. " +
+                "Rule: Keep original links ONLY if present. Place them on the final line. No 'Link in bio'. " +
+                "Constraint: No marketing jargon. No hashtags. Return ONLY the text. " +
+                "Output: 2-3 tiny, punchy lines. Language: English.";
 
         String aiResponse = groqService.generateThreadsContent(prompt);
         return aiResponse.trim().replaceAll("^\"|\"$", "");

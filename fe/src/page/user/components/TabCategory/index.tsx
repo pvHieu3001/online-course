@@ -54,14 +54,14 @@ function TabCategory() {
           imageUrl={affiliateStore.dataRandom?.image || 'https://cf.shopee.vn/file/sg-11134201-22100-2p0q3k3l1e4d6e'}
           price={affiliateStore.dataRandom?.price}
           originalPrice={affiliateStore.dataRandom?.originalPrice}
-          alt='Mua ngay trên Shopee'
+          alt='Buy now on Shopee'
           width='100%'
         />
       )}
 
       {/* Tìm kiếm */}
       <div>
-        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Tìm kiếm khóa học</h2>
+        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Search courses</h2>
         <form
           onSubmit={handleSearch}
           className='flex rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500'
@@ -69,13 +69,13 @@ function TabCategory() {
           <Input
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            placeholder='Nhập từ khóa...'
+            placeholder='Enter keyword...'
             aria-label='Search for courses'
             suffix={
               <SearchOutlined
                 onClick={handleSearch}
                 style={{ color: '#1890ff', cursor: 'pointer' }}
-                aria-label='Tìm kiếm'
+                aria-label='Search'
               />
             }
             className='py-1 px-4'
@@ -85,7 +85,7 @@ function TabCategory() {
 
       {/* Loại khóa học */}
       <div>
-        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Loại khóa học</h2>
+        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Course Categories</h2>
         <ul className='space-y-2' role='list'>
           {categories?.dataList?.map((category: ICategory, index: number) => (
             <li

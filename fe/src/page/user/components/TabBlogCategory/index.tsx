@@ -16,10 +16,10 @@ function TabBlogCategory() {
   const router = useNavigate()
 
   const categories = [
-    { name: 'Chứng Khoán', href: '/chung-khoan' },
+    { name: 'Finance', href: '/chung-khoan' },
     { name: 'Crypto', href: '/crypto' },
-    { name: 'Tiện Ích', href: `/thu-thuat-huu-ich` },
-    { name: 'Sưu Tầm', href: `/suu-tam` }
+    { name: 'Utilities', href: `/thu-thuat-huu-ich` },
+    { name: 'Collections', href: `/suu-tam` }
   ]
 
   useEffect(() => {
@@ -49,14 +49,14 @@ function TabBlogCategory() {
           imageUrl={affiliateStore.dataRandom?.image || 'https://cf.shopee.vn/file/sg-11134201-22100-2p0q3k3l1e4d6e'}
           price={affiliateStore.dataRandom?.price}
           originalPrice={affiliateStore.dataRandom?.originalPrice}
-          alt='Mua ngay trên Shopee'
+          alt='Buy now on Shopee'
           width='100%'
         />
       )}
 
       {/* Tìm kiếm */}
       <div>
-        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Tìm kiếm bà viết</h2>
+        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Search blogs</h2>
         <form
           onSubmit={handleSearch}
           className='flex rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500'
@@ -64,13 +64,13 @@ function TabBlogCategory() {
           <Input
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            placeholder='Nhập từ khóa...'
+            placeholder='Enter keyword...'
             aria-label='Search for blogs'
             suffix={
               <SearchOutlined
                 onClick={handleSearch}
                 style={{ color: '#1890ff', cursor: 'pointer' }}
-                aria-label='Tìm kiếm'
+                aria-label='Search'
               />
             }
             className='py-1 px-4'
@@ -79,7 +79,7 @@ function TabBlogCategory() {
       </div>
 
       <div>
-        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Loại bài viết</h2>
+        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Blog Categories</h2>
         <ul className='space-y-2' role='list'>
           {categories.map((category, index: number) => (
             <li

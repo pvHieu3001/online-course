@@ -8,8 +8,8 @@ import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
-import HandleLoading from '@/page/admin/components/util/HandleLoading'
-import LoadingPage from '@/page/admin/components/util/LoadingPage'
+import HandleLoading from '../components/util/HandleLoading'
+import LoadingPage from '../components/util/LoadingPage'
 
 function CategoryDetailPage() {
   const { slug } = useParams()
@@ -95,17 +95,17 @@ function CategoryDetailPage() {
     <HandleLoading isLoading={coursesLoading} error_message={courseError}>
       <div className='bg-gray-100 py-8 min-h-screen px-4'>
         <Helmet>
-          <title>Học Free || {category.name}</title>
+          <title>Global Times || {category.name}</title>
           <meta
             name='description'
-            content={`Khám phá các khóa học miễn phí về ${category.name} trên Học Free — học từ cơ bản đến nâng cao, phù hợp cho người mới bắt đầu và người muốn nâng cao kỹ năng.`}
+            content={`Discover informative resources about ${category.name} on Global Times — read from basic to advanced, suitable for all types of readers.`}
           />
         </Helmet>
         <div className='max-w-7xl mx-auto'>
           <div className='flex flex-col lg:flex-row gap-8'>
             <div className='flex-1 bg-white rounded-lg shadow-md p-6'>
               <div>
-                <div className='text-xl font-semibold text-indigo-600 mb-2'>Khóa học - {category.name}</div>
+                <div className='text-xl font-semibold text-indigo-600 mb-2'>Courses - {category.name}</div>
                 <p className='text-gray-700 mb-6 text-base'>{category.description}</p>
               </div>
 
@@ -158,7 +158,7 @@ function CategoryDetailPage() {
                         disabled={currentPage === 1}
                         className='px-3 py-1 bg-white border rounded hover:bg-gray-100 disabled:opacity-50'
                       >
-                        Trước
+                        Previous
                       </button>
 
                       {getPageNumbers().map((pageNumber, index) => (
@@ -179,13 +179,13 @@ function CategoryDetailPage() {
                         disabled={currentPage === totalPages}
                         className='px-3 py-1 bg-white border rounded hover:bg-gray-100 disabled:opacity-50'
                       >
-                        Tiếp
+                        Next
                       </button>
                     </div>
                   )}
                 </div>
               ) : (
-                <div className='text-center text-gray-500'>Không tìm thấy khóa học nào trong danh mục này</div>
+                <div className='text-center text-gray-500'>No courses found in this category</div>
               )}
             </div>
 

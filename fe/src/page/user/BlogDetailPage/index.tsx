@@ -7,8 +7,8 @@ import { RootState } from '@/app/store'
 import { ContextType } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { formatDateTimeString, getFullName } from '@/utils/formatDate'
-import HandleLoading from '@/page/admin/components/util/HandleLoading'
-import LoadingPage from '@/page/admin/components/util/LoadingPage'
+import HandleLoading from '../components/util/HandleLoading'
+import LoadingPage from '../components/util/LoadingPage'
 import { Helmet } from 'react-helmet-async'
 import { getBlogInfoByType } from '@/utils/getBlogInfo'
 import TabBlogCategory from '../components/TabBlogCategory'
@@ -43,7 +43,7 @@ function BlogDetailPage() {
   }
 
   const breadcrumbs = [
-    { name: 'Trang chủ', href: '/' },
+    { name: 'Home', href: '/' },
     { name: getBlogInfoByType(blogData?.type).title, href: '/' + getBlogInfoByType(blogData?.type).path },
     { name: blogData?.title, href: `/bai-viet/${slug}` }
   ]
@@ -55,11 +55,11 @@ function BlogDetailPage() {
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <Helmet>
-        <title>Học Free || {blogData.title}</title>
+        <title>Global Times || {blogData.title}</title>
         <meta
           key='description'
           name='description'
-          content={blogData.description || `Đọc bài viết ${blogData.title} tại Học Free.`} // Ưu tiên dùng description
+          content={blogData.description || `Read the article ${blogData.title} at Global Times.`} // Ưu tiên dùng description
         />
       </Helmet>
       {Array.isArray(recommendList) && recommendList.length > 0 && (
@@ -137,12 +137,12 @@ function BlogDetailPage() {
               <h3 className='text-xl mb-4'>{blogData.description}</h3>
               <div className='text-sm text-gray-500 mb-6'>
                 <span>
-                  Đăng bởi &nbsp;
+                  Posted by &nbsp;
                   <strong className='text-gray-700'>
                     {getFullName(blogData.updatedBy?.firstname, blogData.updatedBy?.lastname)}
                   </strong>
                 </span>{' '}
-                ·<span>{formatDateTimeString(blogData.updatedAt) || 'Chưa cập nhật'}</span>
+                ·<span>{formatDateTimeString(blogData.updatedAt) || 'Not updated yet'}</span>
               </div>
 
               <img src={getImageUrl(blogData.image)} alt={blogData.title} className='w-full rounded-lg mb-8 shadow' />
@@ -162,7 +162,7 @@ function BlogDetailPage() {
 
               {/* Bài viết liên quan */}
               <section className='mt-16 border-t pt-10'>
-                <h3 className='text-xl font-semibold mb-6'>Bài viết liên quan</h3>
+                <h3 className='text-xl font-semibold mb-6'>Related blogs</h3>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
                   {relatedDatas &&
                     relatedDatas.length > 0 &&

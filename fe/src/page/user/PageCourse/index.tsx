@@ -9,7 +9,7 @@ import { RootState } from '@/app/store'
 import { ContextType, IProduct } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
-import HandleLoading from '@/page/admin/components/util/HandleLoading'
+import HandleLoading from '../components/util/HandleLoading'
 
 function PageCourse() {
   const navigate = useNavigate()
@@ -46,24 +46,25 @@ function PageCourse() {
     <HandleLoading isLoading={coursesLoading} error_message={error_message}>
       <div className='bg-gray-100 min-h-screen pb-16'>
         <Helmet>
-          <title>Học Free || Tất cả khóa học</title>
+          <title>Global Times || All Courses</title>
           <meta
             name='description'
-            content='Khám phá tất cả khóa học miễn phí trên Học Free — học lập trình, thiết kế, marketing và nhiều lĩnh vực khác hoàn toàn miễn phí.'
+            content='Discover all free courses and informative resources on Global Times — learn programming, design, marketing, and more, completely free.'
           />
         </Helmet>
         <div className='flex flex-col lg:flex-row gap-6 max-w-[1300px] mx-auto'>
-          <div className='min-h-screen w-full lg:w-[80%] bg-white flex-1 bg-white rounded-lg shadow-md p-6'>
+          <div className='min-h-screen w-full lg:w-[80%] bg-white flex-1 rounded-lg shadow-md p-6'>
             <div>
-              <div className='text-xl font-semibold text-indigo-600 mb-2'>Tất cả khóa học</div>
+              <div className='text-xl font-semibold text-indigo-600 mb-6'>All Courses</div>
             </div>
 
             <div>
               {coursesLoading ? (
-                <div className='text-center text-gray-500'>Đang tải khóa học...</div>
+                <div className='text-center text-gray-500'>Loading courses...</div>
               ) : courses && courses.length > 0 ? (
                 <>
-                  <div className='flex flex-col gap-6 mb-6'>
+                  {/* Thay đổi từ flex-col sang grid 4 cột trên màn hình lớn */}
+                  <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8'>
                     {courses.map((course) => {
                       const stripHtml = (html: string) => {
                         const tmp = document.createElement('div')
@@ -71,40 +72,42 @@ function PageCourse() {
                         return tmp.textContent || tmp.innerText || ''
                       }
 
-                      const shortDescription = course.description ? stripHtml(course.description).slice(0, 200) : ''
+                      const shortDescription = course.description ? stripHtml(course.description).slice(0, 100) : ''
+
                       return (
                         <div
                           key={course.id}
                           onClick={() => handleCourseClick(course)}
-                          className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4'
+                          className='group cursor-pointer flex flex-col items-center'
                         >
-                          <img
-                            src={getImageUrl(course.imageUrl)}
-                            alt={course.name}
-                            className='w-100 h-40 object-cover rounded-md flex-shrink-0'
-                          />
-                          <div>
-                            <div className='text-sm text-indigo-500 font-medium'>{course.category?.name}</div>
-                            <div className='text-lg font-semibold text-gray-800'>{course.name}</div>
-                            <div
-                              dangerouslySetInnerHTML={{ __html: shortDescription }}
-                              className='text-gray-600 text-base mt-1 [&_p]:mb-4 
-                                [&_p]:text-xl
-                                [&_h1]:text-4xl 
-                                [&_h2]:text-3xl 
-                                [&_h3]:text-2xl 
-                                [&_ul]:list-disc 
-                                [&_ul]:pl-6 
-                                [&_a]:text-blue-600 [&_a:hover]:underline'
-                            ></div>
+                          {/* Phần hình ảnh: Tỉ lệ dọc giống bìa sách trong hình */}
+                          <div className='relative w-full aspect-[3/4] mb-3 overflow-hidden rounded-md shadow-sm group-hover:shadow-lg transition-shadow duration-300'>
+                            <img
+                              src={getImageUrl(course.imageUrl)}
+                              alt={course.name}
+                              className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
+                            />
+                          </div>
+
+                          {/* Phần nội dung: Căn giữa giống trong hình */}
+                          <div className='text-center w-full'>
+                            {/* Category (tùy chọn hiện hoặc ẩn nếu muốn giống hệt hình) */}
+                            <div className='text-[12px] text-indigo-500 font-medium uppercase tracking-wider mb-1'>
+                              {course.category?.name}
+                            </div>
+
+                            {/* Tên khóa học/sách */}
+                            <div className='text-sm font-medium text-gray-700 line-clamp-2 leading-snug group-hover:text-indigo-600 transition-colors'>
+                              {course.name}
+                            </div>
                           </div>
                         </div>
                       )
                     })}
                   </div>
 
-                  {/* Sử dụng Pagination của Ant Design */}
-                  <div className='flex justify-center'>
+                  {/* Pagination */}
+                  <div className='flex justify-center mt-4'>
                     <Pagination
                       current={currentPage}
                       pageSize={coursesPerPage}
@@ -115,7 +118,7 @@ function PageCourse() {
                   </div>
                 </>
               ) : (
-                <div className='text-center text-gray-500'>Không tìm thấy khóa học nào trong danh mục này</div>
+                <div className='text-center text-gray-500'>No courses found in this category</div>
               )}
             </div>
           </div>

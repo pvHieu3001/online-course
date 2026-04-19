@@ -15,6 +15,24 @@ function Sidenav() {
       {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <TagsOutlined className='text-[18px] text-[#344767]' />
+            <span className='label font-bold text-[#344767]'>Bài Viết</span>
+          </Flex>
+        ),
+        link: '/admin/blogs'
+      },
+      {
+        label: (
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
+            <ReadOutlined className='text-[18px] text-[#344767]' />
+            <span className='label font-bold text-[#344767]'>Khóa Học</span>
+          </Flex>
+        ),
+        link: '/admin/books'
+      },
+      {
+        label: (
+          <Flex align='center' gap={10} justify='center' className='children-menu'>
             <ReadOutlined className='text-[18px] text-[#344767]' />
             <span className='label font-bold text-[#344767]'>Khóa Học</span>
           </Flex>
@@ -30,15 +48,7 @@ function Sidenav() {
         ),
         link: '/admin/categories'
       },
-      {
-        label: (
-          <Flex align='center' gap={10} justify='center' className='children-menu'>
-            <TagsOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Bài Viết</span>
-          </Flex>
-        ),
-        link: '/admin/blogs'
-      },
+
       {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>

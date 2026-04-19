@@ -9,10 +9,10 @@ import { useQuery } from '@/utils/useQuery'
 import Link from 'antd/es/typography/Link'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
-import HandleLoading from '@/page/admin/components/util/HandleLoading'
 import TabBlogCategory from '../components/TabBlogCategory'
 import { blogActions } from '@/app/actions'
 import { getBlogInfoByType } from '@/utils/getBlogInfo'
+import HandleLoading from '../components/util/HandleLoading'
 
 function PageBlogSearch() {
   const query = useQuery()
@@ -38,21 +38,21 @@ function PageBlogSearch() {
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <div className={styles.bg}>
         <Helmet>
-          <title>Học Free || Tìm Kiếm</title>
+          <title>Global Times || Search</title>
           <meta
             name='description'
-            content='Trang tìm kiếm của Học Free. Tìm kiếm các bài viết, bài giảng và tài liệu học tập miễn phí chất lượng cao về mọi lĩnh vực.'
+            content='Global Times search page. Search for high quality news, blogs, and profound insights on multiple topics.'
           />
         </Helmet>
         <main className={styles.mainContent} role='main'>
           <section className={styles.coursesWrapper} aria-label='Course listings'>
-            <h2 className={styles.courseListTitle}>Kết quả tìm kiếm</h2>
+            <h2 className={styles.courseListTitle}>Search Results</h2>
             <div className={styles.courses}>
-              {isLoading && <p>Đang tải bài viết...</p>}
+              {isLoading && <p>Loading blogs...</p>}
               {!isLoading && error_message && (
-                <p className={styles.error}>Đã xảy ra lỗi khi tải bài viết. Vui lòng thử lại sau.</p>
+                <p className={styles.error}>Error loading blogs. Please try again later.</p>
               )}
-              {!isLoading && !error_message && dataList?.length === 0 && <p>Không tìm thấy bài viết phù hợp.</p>}
+              {!isLoading && !error_message && dataList?.length === 0 && <p>No matching blogs found.</p>}
               {!isLoading &&
                 !error_message &&
                 dataList?.map((blog: IBlog) => (
