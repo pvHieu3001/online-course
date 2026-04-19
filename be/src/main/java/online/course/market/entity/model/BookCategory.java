@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -20,7 +22,7 @@ public class BookCategory extends BaseEntity {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String slug; // Ví dụ: /books, /chung-khoan
+    private String slug;
 
     private String description;
 
