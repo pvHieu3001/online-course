@@ -585,7 +585,7 @@ public class ThreadService {
 
     public String reCreateCap(String rawContent, String amzUrl, Boolean isCaptionLink) {
         String prompt = "Act as a Threads user. Context: '" + rawContent + "'. " +
-                "Task: Paraphrase the source context for Threads while preserving exactly 90% of its original essence. " +
+                "Task: Write a tiny story or a 'POV' (Point Of View) post inspired by the context." +
                 "Instruction: Replace as many words as possible with creative synonyms. Reorder the sentence structure to make it feel fresh while keeping the core message intact. " +
                 "Style: Direct, concise, and almost identical to the source. " +
                 "Tone: Personal, natural, and low-key. No marketing fluff. " +
@@ -671,13 +671,24 @@ public class ThreadService {
 
             try {
                 String customPublicId = "thread_" + post.getId() + "_" + System.currentTimeMillis();
-                Map uploadResult = cloudinary.uploader().upload(originalUrl,
-                        ObjectUtils.asMap(
-                                "resource_type", resourceType,
-                                "folder", "threads_clones",
-                                "public_id", customPublicId,
-                                "overwrite", true
-                        ));
+
+                Map<String, Object> params = new HashMap<>();
+                params.put("resource_type", resourceType);
+                params.put("folder", "threads_clones");
+                params.put("public_id", customPublicId);
+                params.put("overwrite", true);
+
+                String watermarkId = "threads_clones/logo_watermask/satoru";
+                String formattedWatermarkId = watermarkId.replace("/", ":");
+
+                String transformationStr = String.format(
+                        "a_hflip/e_brightness:5,e_contrast:5,e_volume:-5/w_0.12,o_50,g_south_east,l_%s",
+                        formattedWatermarkId
+                );
+
+                params.put("transformation", transformationStr);
+
+                Map uploadResult = cloudinary.uploader().upload(originalUrl, params);
                 String secureUrl = (String) uploadResult.get("secure_url");
 
                 MediaEntity media = MediaEntity.builder()
@@ -689,7 +700,7 @@ public class ThreadService {
                 mediaList.add(media);
 
             } catch (Exception e) {
-                log.error("Lỗi upload file thứ {}: {}", i, e.getMessage());
+                log.error("Lỗi xử lý file thứ {}: {}", i, e.getMessage());
             }
         }
         mediaRepository.saveAll(mediaList);
