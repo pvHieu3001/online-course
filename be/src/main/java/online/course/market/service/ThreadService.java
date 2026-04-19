@@ -494,18 +494,18 @@ public class ThreadService {
 
     public String generateRandomComment(String amzLink) {
         String[] templates = {
-                "Found that viral item everyone’s talking about. Quality is actually 10/10: %s 🔥",
-                "Just a little something to upgrade your daily routine. Link for those asking: %s 📌",
-                "I don't usually post deals, but this price is too good to ignore right now: %s 🚀",
-                "Lowest price I've seen. Don't miss out: %s 📉🔥",
-                "Price drop! Grab it before it bounces back: %s 💸⚡",
-                "Flash deal! These are selling fast: %s 🏃‍♂️💨",
-                "Almost gone. Get yours while it's in stock: %s 🛒⏳",
-                "Absolute steal at this price. Link here: %s 😱💎",
-                "This deal is too good to pass up: %s 🛑✨",
-                "Limited time offer. Check it out now: %s 🚀📌",
-                "Final call for this discount! Link: %s 📣🔥",
-                "Lowest price in 30 days. Buy it here: %s ⏳✨"
+                "Found the hype. It’s actually good. %s",
+                "Upgrade your routine. Details here. %s",
+                "Not a paid ad. Just a steal. %s",
+                "Lowest price yet. Don't wait. %s",
+                "Price dropped today. Grab it. %s",
+                "Flash deal. Selling fast. %s",
+                "Almost out of stock. Hurry. %s",
+                "Total steal. Linking it here. %s",
+                "Too good to pass up. %s",
+                "Limited offer. Check it out. %s",
+                "Final call for the discount. %s",
+                "Cheapest it's been all month. %s"
         };
 
         int randomIndex = new Random().nextInt(templates.length);
