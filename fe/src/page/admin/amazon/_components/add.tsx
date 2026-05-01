@@ -6,12 +6,14 @@ import { useDispatch } from 'react-redux'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { amazonActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
+import TextEditor from '../../components/TextEditor/QuillEditor'
 
 export default function AddAmazon() {
   const navigate = useNavigate()
   const [form] = Form.useForm()
   const [isDirty, setIsDirty] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [caption, setCaption] = useState('')
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -41,12 +43,14 @@ export default function AddAmazon() {
   const handleSubmit = async () => {
     const sourceUrl = form.getFieldValue('sourceUrl')
     const amzUrl = form.getFieldValue('amzUrl')
-    const caption = form.getFieldValue('caption')
     const formData = new FormData()
+
+    const captionWithNewlines = caption.replace(/<\/p>/g, '\n')
+    const finalCaption = captionWithNewlines.replace(/<[^>]*>/g, '').trim()
 
     formData.append('sourceUrl', sourceUrl)
     formData.append('amzUrl', amzUrl ?? '')
-    formData.append('caption', caption)
+    formData.append('caption', finalCaption)
 
     try {
       setIsLoading(true)
@@ -112,17 +116,23 @@ export default function AddAmazon() {
                         { whitespace: true, message: 'Link bài viết không được để trống!' }
                       ]}
                     >
-                      <Input size='large' placeholder='Nhập link thread...' />
+                      <Input size='large' placeholder='Nhập link thread...' allowClear />
                     </Form.Item>
                   </Col>
                   <Col span={24}>
                     <Form.Item name='amzUrl' label='Link Amazon' rules={[{ message: 'Vui lòng nhập link affiliate!' }]}>
-                      <Input size='large' placeholder='Nhập link afiliate...' />
+                      <Input size='large' placeholder='Nhập link afiliate...' allowClear />
                     </Form.Item>
                   </Col>
                   <Col span={24}>
-                    <Form.Item name='caption' label='Caption bài viết'>
-                      <Input size='large' placeholder='Nhập Caption...' />
+                    <Form.Item name='caption' className='m-0' label={'Nhập Caption...'}>
+                      <TextEditor
+                        content={caption ?? ''}
+                        onHandleChange={(value) => {
+                          setCaption(value)
+                        }}
+                        height={400}
+                      />
                     </Form.Item>
                   </Col>
                 </Row>

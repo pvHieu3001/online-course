@@ -10,11 +10,15 @@ import { IAmazon } from '@/common/types.interface'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal, Spin } from 'antd'
 import { RootState } from '@/app/store'
+import TextEditor from '../../components/TextEditor/QuillEditor'
 
 export default function EditAmazon() {
   const params = useParams()
   const dispatch = useDispatch()
   const amazonStore = useSelector((state: RootState) => state.amazon)
+  const [caption, setCaption] = useState('')
+  const [amzUrl, setAmzUrl] = useState('')
+
   useEffect(() => {
     dispatch(amazonActions.getAmazonById(params.id ?? '0') as unknown as AnyAction)
     dispatch(amazonActions.getAdminAmazons('', '', '', '', 0, 10) as unknown as AnyAction)
@@ -27,11 +31,19 @@ export default function EditAmazon() {
   useEffect(() => {
     if (amazonStore.data) {
       const data = amazonStore.data as IAmazon
-
+      setCaption(data.caption)
+      if (data?.amzUrl) {
+        setAmzUrl(data.amzUrl)
+      } else {
+        const linkRegex = /(https?:\/\/[^\s]+)/g
+        const match = data?.caption?.match(linkRegex)
+        const link = match?.[0] ?? ''
+        setAmzUrl(link)
+      }
       form.setFieldsValue({
         sourceUrl: data.sourceUrl,
         caption: data.caption,
-        amzUrl: data.amzUrl,
+        amzUrl: amzUrl,
         isPublished: data.isPublished
       })
     }
@@ -64,12 +76,14 @@ export default function EditAmazon() {
   const handleSubmit = async () => {
     const sourceUrl = form.getFieldValue('sourceUrl')
     const amzUrl = form.getFieldValue('amzUrl')
-    const caption = form.getFieldValue('caption')
     const formData = new FormData()
+
+    const captionWithNewlines = caption.replace(/<\/p>/g, '\n')
+    const finalCaption = captionWithNewlines.replace(/<[^>]*>/g, '').trim()
 
     formData.append('sourceUrl', sourceUrl)
     formData.append('amzUrl', amzUrl ?? '')
-    formData.append('caption', caption)
+    formData.append('caption', finalCaption)
 
     try {
       await dispatch(amazonActions.updateAmazon(params.id, formData) as unknown as AnyAction)
@@ -135,24 +149,30 @@ export default function EditAmazon() {
                           { whitespace: true, message: 'Link bài viết không được để trống!' }
                         ]}
                       >
-                        <Input disabled size='large' placeholder='Nhập tên link thread...' />
+                        <Input size='large' placeholder='Nhập tên link thread...' allowClear />
                       </Form.Item>
                     </Col>
                     <Col span={24}>
                       <Form.Item label='Link Amazon'>
                         <Space.Compact style={{ width: '100%' }}>
                           <Form.Item name='amzUrl' noStyle rules={[{ message: 'Vui lòng nhập link affiliate!' }]}>
-                            <Input size='large' placeholder='Nhập link affiliate...' />
+                            <Input size='large' placeholder='Nhập link affiliate...' allowClear />
                           </Form.Item>
-                          <Button size='large' type='primary' href={form.getFieldValue('amzUrl')} target='_blank'>
+                          <Button size='large' type='primary' href={amzUrl} target='_blank'>
                             Rút gọn
                           </Button>
                         </Space.Compact>
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <Form.Item name='caption' label='Caption bài viết'>
-                        <Input size='large' placeholder='Nhập Caption...' />
+                      <Form.Item name='caption' className='m-0' label={'Caption bài viết'}>
+                        <TextEditor
+                          content={caption ?? ''}
+                          onHandleChange={(value) => {
+                            setCaption(value)
+                          }}
+                          height={200}
+                        />
                       </Form.Item>
                     </Col>
                   </Row>

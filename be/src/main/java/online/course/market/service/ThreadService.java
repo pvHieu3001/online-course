@@ -734,7 +734,7 @@ public class ThreadService {
     }
     public static String cleanCaption(String text) {
         if (text == null) return "";
-        String regex = "(?i)(Amazon finds:?\\s*)?https?://\\S+[\\s\\S]*";
+        String regex = "(?i)(Product link:?\\s*)?https?://\\S+[\\s\\S]*";
 
         return text.replaceAll(regex, "").trim();
     }
