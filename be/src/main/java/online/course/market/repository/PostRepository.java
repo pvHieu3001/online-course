@@ -23,7 +23,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Long>{
             "AND (:isCaptionLink IS NULL OR p.is_caption_link = :isCaptionLink)" +
             "AND (:hasLink IS NULL OR p.has_link = :hasLink)",
             countQuery = "SELECT count(*) FROM posts p " +
-                    "WHERE (:search IS NULL OR :search = '' OR LOWER(p.caption) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+                    "WHERE (:search IS NULL OR :search = '' OR LOWER(p.caption) LIKE LOWER(CONCAT('%', :search, '%')) OR p.id LIKE LOWER(CONCAT('%', :search, '%'))) " +
                     "AND (:status IS NULL OR :status = '' OR p.status = :status) " +
                     "AND (:isCaptionLink IS NULL OR p.is_caption_link = :isCaptionLink)" +
                     "AND (:hasLink IS NULL OR p.has_link = :hasLink)",
