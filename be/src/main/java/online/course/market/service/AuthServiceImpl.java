@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException(e);
         }
 
-        revokeAllUserTokens(user);
+//        revokeAllUserTokens(user);
 		saveUserToken(user, token);
 		UserDto userDto = modelMapper.map(user, UserDto.class);
 		return AuthDto.builder()
