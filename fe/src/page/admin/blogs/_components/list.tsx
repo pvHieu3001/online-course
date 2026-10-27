@@ -88,7 +88,7 @@ export default function ListBlog() {
       fixed: 'right',
       render: (record) => (
         <Space size={'middle'}>
-          <Link to={`/bai-viet/${record.slug}`}>
+          <Link to={`/blog/${record.slug}`}>
             <Button icon={<EyeOutlined />} />
           </Link>
           <Link to={'' + record.id + `?status=${active}&isHot=${isHot}&search=${searchValue}`}>

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.amazon.AmazonPostRequest;
 import online.course.market.entity.dto.amazon.AmazonPutRequest;
+import online.course.market.entity.dto.amazon.MediaDto;
+import online.course.market.entity.dto.amazon.PostDto;
 import online.course.market.entity.model.MediaEntity;
 import online.course.market.entity.model.PostEntity;
 import online.course.market.entity.model.ThreadAccount;
@@ -110,13 +112,44 @@ public class ThreadService {
         }
     }
 
-    public Page<PostEntity> getPostsByUser(String search, String status, Boolean isCaptionLink, Boolean hasLink, Integer page, Integer size) {
+    public Page<PostDto> getPostsByUser(String search, String status, Boolean isCaptionLink, Boolean hasLink, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(
                 page,
                 size,
                 Sort.by("published_at").descending().and(Sort.by("id").descending())
         );
-        return postRepository.getPagePosts(search, status, isCaptionLink, hasLink, pageable);
+        Page<PostEntity> postPage = postRepository.getPagePosts(search, status, isCaptionLink, hasLink, pageable);
+
+        if (postPage.isEmpty()) {
+            return Page.empty(pageable);
+        }
+
+        List<Long> postIds = postPage.getContent().stream()
+                .map(PostEntity::getId)
+                .toList();
+
+        List<MediaEntity> mediaEntities = mediaRepository.findAllByPostIdIn(postIds);
+
+        Map<Long, List<MediaDto>> mediasByPostId = mediaEntities.stream()
+                .collect(Collectors.groupingBy(
+                        media -> media.getPost().getId(),
+                        Collectors.mapping(m -> MediaDto.builder()
+                                .id(m.getId())
+                                .cloudinaryUrl(m.getCloudinaryUrl())
+                                .mediaType(m.getMediaType())
+                                .build(), Collectors.toList())
+                ));
+
+        return postPage.map(post -> PostDto.builder()
+                .id(post.getId())
+                .caption(post.getCaption())
+                .status(post.getStatus())
+                .isCaptionLink(post.getIsCaptionLink())
+                .hasLink(post.getHasLink())
+                .amzUrl(post.getAmzUrl())
+                .productName(post.getProductName())
+                .medias(mediasByPostId.getOrDefault(post.getId(), Collections.emptyList()))
+                .build());
     }
 
     public PostEntity getPostById(Long id) {
@@ -129,6 +162,7 @@ public class ThreadService {
                 .orElseThrow(() -> new RuntimeException("Bài viết không tồn tại"));
         post.setCaption(request.getCaption());
         post.setAmzUrl(request.getAmzUrl());
+        post.setProductName(request.getProductName());
         return postRepository.save(post);
     }
 

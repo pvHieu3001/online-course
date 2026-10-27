@@ -1,6 +1,6 @@
 import type { TableProps } from 'antd'
-import { EditOutlined, DeleteOutlined, SendOutlined, ReloadOutlined } from '@ant-design/icons'
-import { Button, Input, Popconfirm, Select, Space, Table, Tag, Tooltip, Typography, message } from 'antd'
+import { EditOutlined, DeleteOutlined, SendOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/icons'
+import { Button, Grid, Input, Modal, Popconfirm, Select, Space, Table, Tooltip, Typography, message, Image } from 'antd'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
@@ -12,11 +12,14 @@ import { IAmazon, IThreadAccount } from '@/common/types.interface'
 import { RootState } from '@/app/store'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import Paragraph from 'antd/es/typography/Paragraph'
+import { PictureOutlined, VideoCameraOutlined } from '@ant-design/icons'
 
 dayjs.extend(utc)
 
 export default function ListAmazon() {
   const dispatch = useDispatch()
+  const screens = Grid.useBreakpoint()
   const [searchValue, setSearchValue] = useState('')
   const [status, setStatus] = useState('')
   const amazons = useSelector((state: RootState) => state.amazon)
@@ -27,8 +30,12 @@ export default function ListAmazon() {
   const [hasLink, setHasLink] = useState('')
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
-  const currentAccount = accounts.find(acc => acc.threadId === selectedAccount);
-  const isHighlight = currentAccount?.isCaptionLink === true;
+  const currentAccount = accounts.find((acc) => acc.threadId === selectedAccount)
+  const isHighlight = currentAccount?.isCaptionLink === true
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImages, setPreviewImages] = useState([])
+  const [videoModalOpen, setVideoModalOpen] = useState(false)
+  const [currentVideoUrl, setCurrentVideoUrl] = useState('')
 
   useEffect(() => {
     dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
@@ -48,7 +55,9 @@ export default function ListAmazon() {
   const handlerDistableAmazon = async (id: string) => {
     try {
       dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
+      dispatch(
+        amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction
+      )
       message.success('Vô hiệu hoá danh mục thành công!')
     } catch (error) {
       message.error('Vô hiệu hoá danh mục thất bại!')
@@ -63,7 +72,9 @@ export default function ListAmazon() {
     formData.append('isCaptionLink', isCaptionLink)
     try {
       dispatch(amazonActions.publishPost(formData) as unknown as AnyAction)
-      dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
+      dispatch(
+        amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction
+      )
       message.success('Đang đăng!')
     } catch (error) {
       message.error('Đăng bài thất bại!')
@@ -78,72 +89,43 @@ export default function ListAmazon() {
   }
 
   const handleReload = async () => {
-    await dispatch(amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction)
-};
+    await dispatch(
+      amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction
+    )
+  }
+
+  const downloadMedia = async (url, filename) => {
+    try {
+      const response = await fetch(url)
+      const blob = await response.blob()
+      const blobUrl = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = blobUrl
+      link.download = filename || 'download'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(blobUrl)
+    } catch (error) {
+      window.open(url, '_blank')
+    }
+  }
 
   const columns: TableProps<IAmazon>['columns'] = [
     {
       title: '#',
       dataIndex: 'key',
       key: 'key',
-      width: 30,
+      width: 50,
       align: 'center',
       fixed: 'left',
       responsive: ['sm']
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      width: 110,
-      align: 'center',
-      render: (status) => {
-        let color
-        let text
-
-        switch (status) {
-          case 'SUCCESS':
-            color = 'green'
-            text = 'SUCCESS'
-            break
-          case 'FAILED':
-            color = 'volcano'
-            text = 'FAILED'
-            break
-          case 'PROCESSING':
-            color = 'blue'
-            text = 'PROCESSING'
-            break
-          default:
-            color = 'default'
-            text = 'default'
-        }
-        return <Tag color={color}>{text.toUpperCase()}</Tag>
-      }
-    },
-    {
-      title: 'Published At',
-      dataIndex: 'publishedAt',
-      key: 'publishedAt',
-      width: 130,
-      ellipsis: true,
-      render: (text, record) => (
-        <span
-          className='line-clamp-2'
-          style={{
-            color: record.isCaptionLink ? '#ff4d4f' : 'inherit',
-            fontWeight: record.isCaptionLink ? '500' : 'normal'
-          }}
-        >
-          {text ? dayjs.utc(text).local().format('DD/MM/YY HH:mm') : '_'}
-        </span>
-      )
-    },
-    {
-      title: 'Account',
-      dataIndex: 'accountThread',
-      key: 'accountThread',
-      width: 100,
+      title: 'Product Name',
+      dataIndex: 'productName',
+      key: 'productName',
+      width: 180,
       ellipsis: true,
       render: (text, record) => {
         const getStyle = () => {
@@ -160,6 +142,134 @@ export default function ListAmazon() {
           <span className='line-clamp-2' style={style}>
             {text ?? '_'}
           </span>
+        )
+      }
+    },
+    {
+      title: 'Media',
+      key: 'mediaDownload',
+      width: 160,
+      align: 'center',
+      responsive: ['sm'],
+      render: (_, record) => {
+        const medias = record.medias || []
+        const imageMedias = medias.filter(
+          (m) => m.mediaType?.toLowerCase() === 'image' || /\.(jpg|jpeg|png|webp|gif)$/i.test(m.cloudinaryUrl)
+        )
+        const videoMedias = medias.filter(
+          (m) => m.mediaType?.toLowerCase() === 'video' || /\.(mp4|mov|avi|mkv)$/i.test(m.cloudinaryUrl)
+        )
+
+        const handleViewImages = () => {
+          if (imageMedias.length === 0) return
+          setPreviewImages(imageMedias.map((img) => img.cloudinaryUrl))
+          setPreviewOpen(true)
+        }
+
+        const handleViewVideos = () => {
+          if (videoMedias.length === 0) return
+          setCurrentVideoUrl(videoMedias[0].cloudinaryUrl)
+          setVideoModalOpen(true)
+        }
+
+        const handleDownloadImages = () => {
+          if (imageMedias.length === 0) {
+            message.warning('Không có ảnh để tải!')
+            return
+          }
+          imageMedias.forEach((img, idx) => {
+            downloadMedia(img.cloudinaryUrl, `image_${record.id || ''}_${idx + 1}`)
+          })
+        }
+
+        const handleDownloadVideos = () => {
+          if (videoMedias.length === 0) {
+            message.warning('Không có video để tải!')
+            return
+          }
+          videoMedias.forEach((vid, idx) => {
+            downloadMedia(vid.cloudinaryUrl, `video_${record.id || ''}_${idx + 1}`)
+          })
+        }
+
+        return (
+          <Space direction='vertical' size='small'>
+            {/* NHÓM ẢNH */}
+            <Space.Compact size='small'>
+              <Tooltip title={imageMedias.length > 0 ? `Xem ${imageMedias.length} ảnh` : 'Không có ảnh'}>
+                <Button
+                  type='default'
+                  icon={<PictureOutlined />}
+                  disabled={imageMedias.length === 0}
+                  onClick={handleViewImages}
+                >
+                  Ảnh
+                </Button>
+              </Tooltip>
+              <Tooltip title={imageMedias.length > 0 ? 'Tải ảnh' : ''}>
+                <Button
+                  type='primary'
+                  icon={<DownloadOutlined />}
+                  disabled={imageMedias.length === 0}
+                  onClick={handleDownloadImages}
+                />
+              </Tooltip>
+            </Space.Compact>
+
+            {/* NHÓM VIDEO */}
+            <Space.Compact size='small'>
+              <Tooltip title={videoMedias.length > 0 ? `Xem ${videoMedias.length} video` : 'Không có video'}>
+                <Button
+                  type='default'
+                  danger={videoMedias.length > 0}
+                  icon={<VideoCameraOutlined />}
+                  disabled={videoMedias.length === 0}
+                  onClick={handleViewVideos}
+                >
+                  Video
+                </Button>
+              </Tooltip>
+              <Tooltip title={videoMedias.length > 0 ? 'Tải video' : ''}>
+                <Button
+                  type='primary'
+                  danger={videoMedias.length > 0}
+                  icon={<DownloadOutlined />}
+                  disabled={videoMedias.length === 0}
+                  onClick={handleDownloadVideos}
+                />
+              </Tooltip>
+            </Space.Compact>
+          </Space>
+        )
+      }
+    },
+    {
+      title: 'Short Link',
+      dataIndex: 'amzUrl',
+      key: 'amzUrl',
+      width: 180,
+      ellipsis: true,
+      responsive: ['md'],
+      render: (text, record) => {
+        if (!text) return null
+
+        return (
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+            <a
+              href={text}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='line-clamp-2'
+              style={{
+                color: record.isCaptionLink ? '#ff4d4f' : '#1677ff',
+                fontWeight: record.isCaptionLink ? '500' : 'normal',
+                wordBreak: 'break-all'
+              }}
+            >
+              LINK
+            </a>
+            <Paragraph copyable={{ text }} style={{ margin: 0, flexShrink: 0 }} />
+          </div>
         )
       }
     },
@@ -167,8 +277,8 @@ export default function ListAmazon() {
       title: 'Caption',
       dataIndex: 'caption',
       key: 'caption',
-      width: 200,
-      ellipsis: true,
+      width: 260,
+      responsive: ['md'],
       render: (text, record) => {
         const getStyle = () => {
           if (record.hasLink === false) {
@@ -179,56 +289,23 @@ export default function ListAmazon() {
           }
           return { color: 'inherit', fontWeight: 'normal' }
         }
-        const style = getStyle()
-        return (
-          <span className='line-clamp-2' style={style}>
-            {text ?? '_'}
-          </span>
-        )
-      }
-    },
-    {
-      title: 'Link clone',
-      dataIndex: 'sourceUrl',
-      key: 'sourceUrl',
-      width: 100,
-      render: (text) => (
-        <a href={text} target='_blank' className='block w-40 truncate text-blue-600 hover:underline'>
-          link
-        </a>
-      )
-    },
-    {
-      title: 'Error',
-      dataIndex: 'lastError',
-      key: 'lastError',
-      width: 100,
-      render: (error) => {
-        if (!error) return <span style={{ color: '#bfbfbf' }}>-</span>
+
+        if (!text) return '_'
 
         return (
-          <Tooltip title={error}>
-            <span
-              style={{
-                color: '#ff4d4f',
-                display: 'block',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                cursor: 'pointer',
-                maxWidth: '240px'
-              }}
-            >
-              {error}
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+            <span className='line-clamp-2' style={{ ...getStyle(), flex: 1 }}>
+              {text}
             </span>
-          </Tooltip>
+            <Paragraph copyable={{ text }} style={{ margin: 0, flexShrink: 0 }} />
+          </div>
         )
       }
     },
     {
       title: 'Action',
       key: 'action',
-      width: 90,
+      width: 110,
       align: 'center',
       fixed: 'right',
       render: (record) => (
@@ -241,10 +318,10 @@ export default function ListAmazon() {
                 <div style={{ marginBottom: 4 }}>Tài khoản:</div>
                 <Select
                   placeholder='Chọn tài khoản'
-                  style={{ 
-                    width: '100%', 
+                  style={{
+                    width: '100%',
                     marginBottom: 12,
-                    border: isHighlight ? '1px solid #ff4d4f' : '', 
+                    border: isHighlight ? '1px solid #ff4d4f' : '',
                     borderRadius: isHighlight ? '6px' : ''
                   }}
                   className={isHighlight ? 'highlight-select' : ''}
@@ -388,7 +465,7 @@ export default function ListAmazon() {
             key: item.id || index
           }))}
           loading={amazons.isLoading}
-          scroll={{ x: 800 }}
+          scroll={{ x: screens.md ? 1300 : screens.sm ? 760 : 420 }}
           pagination={{
             size: 'small',
             showSizeChanger: false,
@@ -402,6 +479,41 @@ export default function ListAmazon() {
           }}
           className='responsive-table'
         />
+
+        <div style={{ display: 'none' }}>
+          <Image.PreviewGroup
+            preview={{
+              visible: previewOpen,
+              onVisibleChange: (value) => setPreviewOpen(value)
+            }}
+          >
+            {previewImages.map((url, index) => (
+              <Image key={index} src={url} />
+            ))}
+          </Image.PreviewGroup>
+        </div>
+
+        <Modal
+          title='Xem Video'
+          open={videoModalOpen}
+          onCancel={() => {
+            setVideoModalOpen(false)
+            setCurrentVideoUrl('')
+          }}
+          footer={null}
+          destroyOnClose
+          width={800}
+          centered
+        >
+          {currentVideoUrl && (
+            <video
+              src={currentVideoUrl}
+              controls
+              autoPlay
+              style={{ width: '100%', maxHeight: '70vh', borderRadius: '8px' }}
+            />
+          )}
+        </Modal>
       </div>
     </div>
   )

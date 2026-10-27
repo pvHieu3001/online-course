@@ -2,7 +2,7 @@ import { ComponentType } from 'react'
 
 export interface LocationStates {
   '/'?: object
-  '/chi-tiet-khoa-hoc'?: object
+  '/book-detail'?: object
   '/login'?: object
   '/signup'?: object
   '/forgot-pass'?: object

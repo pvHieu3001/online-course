@@ -35,7 +35,7 @@ function BlogDetailPage() {
   }, [dispatch, setIsShowRecommendCourses, slug])
 
   const handleDetail = (slug: string) => {
-    navigate(`/bai-viet/${slug}`)
+    navigate(`/blog/${slug}`)
   }
 
   if (isLoading || !blogData) {
@@ -45,11 +45,11 @@ function BlogDetailPage() {
   const breadcrumbs = [
     { name: 'Home', href: '/' },
     { name: getBlogInfoByType(blogData?.type).title, href: '/' + getBlogInfoByType(blogData?.type).path },
-    { name: blogData?.title, href: `/bai-viet/${slug}` }
+    { name: blogData?.title, href: `/blog/${slug}` }
   ]
 
   const handleSearch = (tag: string) => {
-    navigate(`/tim-kiem-bai-viet?tag=${encodeURIComponent(tag)}`)
+    navigate(`/search-blog?tag=${encodeURIComponent(tag)}`)
   }
 
   return (

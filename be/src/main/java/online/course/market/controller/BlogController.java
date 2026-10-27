@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import online.course.market.entity.dto.ApiResponse;
 import online.course.market.entity.dto.blog.BlogDto;
+import online.course.market.entity.dto.blog.BlogGetAllResponse;
 import online.course.market.entity.dto.blog.BlogGetBySlugResponse;
 import online.course.market.entity.dto.blog.BlogGetByTypeResponse;
 import online.course.market.entity.dto.user.UserDto;
@@ -56,14 +57,63 @@ public class BlogController {
 
     @Operation(description = "Get all endpoint for Blog", summary = "Get all Blog")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<BlogDto>>> getAll(
+    public ResponseEntity<ApiResponse<BlogGetAllResponse>> getAll(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String tag,
             HttpServletRequest request) {
         logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG, HttpMethod.GET.name());
-        List<BlogDto> dtos = blogService.filterBlog(null, true, search, null, tag)
-                .stream().map(this::toDto).collect(Collectors.toList());
-        return ResponseEntity.ok(ApiResponse.success(dtos));
+        BlogGetAllResponse response = new BlogGetAllResponse();
+
+        List<BlogDto> trendings = blogService.filterBlog(null, true, search, true, false, null)
+                .stream().map(this::toDto).toList();
+        List<BlogDto> news = blogService.filterBlog(null, true, search, false, true, null)
+                .stream().map(this::toDto).toList();
+        response.setNewBlogs(news);
+        response.setTrendingBlogs(trendings);
+
+        List<BlogDto> trendingTechnology = blogService.filterBlog("technology", true, search, true, false, null)
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newTechnology = blogService.filterBlog("technology", true, search, false, true, null)
+                .stream().map(this::toDto).toList();
+        response.setNewsTechnologyBlogs(newTechnology);
+        response.setTrendingTechnologyBlogs(trendingTechnology);
+
+        List<BlogDto> trendingLifestyle = blogService.filterBlog("lifestyle", true, search, true, false, null)
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newLifestyle = blogService.filterBlog("lifestyle", true, search, false, true, null)
+                .stream().map(this::toDto).toList();
+        response.setNewLifeStyleBlogs(newLifestyle);
+        response.setTrendingLifeStyleBlogs(trendingLifestyle);
+
+        List<BlogDto> trendingTravel = blogService.filterBlog("travel", true, search, true, false, null)
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newTravel = blogService.filterBlog("travel", true, search, false, true, null)
+                .stream().map(this::toDto).toList();
+        response.setNewTravelBlogs(newTravel);
+        response.setTrendingTravelBlogs(trendingTravel);
+
+        List<BlogDto> trendingWorld = blogService.filterBlog("world", true, search, true, false, null)
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newWorld = blogService.filterBlog("world", true, search, false, true, null)
+                .stream().map(this::toDto).toList();
+        response.setNewWorldBlogs(newWorld);
+        response.setTrendingWorldBlogs(trendingWorld);
+
+        List<BlogDto> trendingEducation = blogService.filterBlog("education", true, search, true, false, null)
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newEducation = blogService.filterBlog("education", true, search, false, true, null)
+                .stream().map(this::toDto).toList();
+        response.setNewEducationBlogs(newEducation);
+        response.setTrendingEducationBlogs(trendingEducation);
+
+        List<BlogDto> trendingScience = blogService.filterBlog("science", true, search, true, false, null)
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newScience = blogService.filterBlog("science", true, search, false, true, null)
+                .stream().map(this::toDto).toList();
+        response.setNewScienceBlogs(newScience);
+        response.setTrendingScienceBlogs(trendingScience);
+
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by slug")
@@ -88,7 +138,7 @@ public class BlogController {
     @GetMapping("/type/{type}")
     public ResponseEntity<ApiResponse<BlogGetByTypeResponse>> filterBlog(@PathVariable String type, @RequestParam(required = false) String search, HttpServletRequest request) {
         logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG, HttpMethod.GET.name());
-        List<BlogDto> blogList = blogService.filterBlog(type, true, search, null, null).stream().map((blog)->{
+        List<BlogDto> blogList = blogService.filterBlog(type, true, search, null, null, null).stream().map((blog)->{
             BlogDto blogDto = modelMapper.map(blog, BlogDto.class);
             if(blog.getUpdatedBy()!= null){
                 UserDto userDto = modelMapper.map(blog.getUpdatedBy(), UserDto.class);
@@ -97,10 +147,10 @@ public class BlogController {
             return blogDto;
         }).collect(Collectors.toList());
         BlogGetByTypeResponse blogGetByTypeResponse = new BlogGetByTypeResponse();
-        blogGetByTypeResponse.setBlogList(blogList);
+        blogGetByTypeResponse.setTrendingBlogs(blogList);
 
         List<BlogDto> blogRecommendList = blogService.getRecommendBlog(type).stream().map(this::toDto).toList();
-        blogGetByTypeResponse.setBlogRecommendList(blogRecommendList);
+        blogGetByTypeResponse.setNewsBlogs(blogRecommendList);
 
         return ResponseEntity.ok(ApiResponse.success(blogGetByTypeResponse));
     }

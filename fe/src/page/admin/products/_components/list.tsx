@@ -148,7 +148,7 @@ export default function ListProduct() {
       fixed: 'right',
       render: (record: IProduct) => (
         <Space size={'middle'}>
-          <Link to={`/chi-tiet-khoa-hoc/${record.slug}`}>
+          <Link to={`/book-detail/${record.slug}`}>
             <Button icon={<EyeOutlined />} />
           </Link>
           <Link to={'' + record.id + `?status=${active}&isHot=${isHot}&search=${searchValue}&page=${currentPage - 1}`}>

@@ -23,7 +23,7 @@ function PageHome() {
   }, [dispatch])
 
   const handleDetail = (slug: string) => {
-    navigate(`/chi-tiet-khoa-hoc/${slug}`)
+    navigate(`/book-detail/${slug}`)
   }
 
   const posts = Array(5).fill({
@@ -41,7 +41,10 @@ function PageHome() {
     },
     {
       name: 'Lifestyle',
-      mainPost: { title: 'Major Cities Grapple with Unprecedented Heatwaves', img: 'https://picsum.photos/400/250?life' },
+      mainPost: {
+        title: 'Major Cities Grapple with Unprecedented Heatwaves',
+        img: 'https://picsum.photos/400/250?life'
+      },
       subPosts: ['The Hidden Costs of Modern Dating Revealed', 'Viral Video Sparks Debate on Work-Life Balance']
     },
     {
@@ -50,7 +53,10 @@ function PageHome() {
         title: 'New Regulations Aim to Protect Vulnerable Tourist Hotspots',
         img: 'https://picsum.photos/400/250?travel'
       },
-      subPosts: ['Averting the Holiday Booking Chaos: Tips & Tricks', 'Famous Water Festivals Return with Record Crowds']
+      subPosts: [
+        'Averting the Holiday Booking Chaos: Tips & Tricks',
+        'Famous Water Festivals Return with Record Crowds'
+      ]
     },
     {
       name: 'World',
@@ -62,12 +68,21 @@ function PageHome() {
     },
     {
       name: 'Education',
-      mainPost: { title: 'Top 50 Universities Announce Sweeping Tuition Changes', img: 'https://picsum.photos/400/250?edu' },
-      subPosts: ['Leading AI Researcher Leaves Ivy League for Startup', 'Education Board Introduces Flexible Learning Hours']
+      mainPost: {
+        title: 'Top 50 Universities Announce Sweeping Tuition Changes',
+        img: 'https://picsum.photos/400/250?edu'
+      },
+      subPosts: [
+        'Leading AI Researcher Leaves Ivy League for Startup',
+        'Education Board Introduces Flexible Learning Hours'
+      ]
     },
     {
       name: 'Science',
-      mainPost: { title: 'Recent Space Probe Discovers Water on Distant Exoplanet', img: 'https://picsum.photos/400/250?science' },
+      mainPost: {
+        title: 'Recent Space Probe Discovers Water on Distant Exoplanet',
+        img: 'https://picsum.photos/400/250?science'
+      },
       subPosts: ['Breakthrough in Renewable Energy Storage', 'Climate Scientists Warn of Tipping Points']
     }
   ]
@@ -85,24 +100,9 @@ function PageHome() {
         <main className='flex flex-col gap-6 max-w-[1300px] mx-auto'>
           <div className='bg-white p-4'>
             <div className='flex flex-wrap gap-2 ml-2 mt-4 mb-4'>
-              <Tag color='error' className='rounded-full p-1'>
+              {/* <Tag color='error' className='rounded-full p-1'>
                 # Middle East Tensions
-              </Tag>
-              <Tag color='default' className='rounded-full p-1'>
-                # Global Economic Summit
-              </Tag>
-              <Tag color='default' className='rounded-full p-1'>
-                # Global Economic Summit
-              </Tag>
-              <Tag color='default' className='rounded-full p-1'>
-                # Global Economic Summit
-              </Tag>
-              <Tag color='default' className='rounded-full p-1'>
-                # Global Economic Summit
-              </Tag>
-              <Tag color='default' className='rounded-full p-1'>
-                # Global Economic Summit
-              </Tag>
+              </Tag> */}
             </div>
 
             <Row gutter={[24, 24]}>
@@ -198,7 +198,7 @@ function PageHome() {
                 BOOKS
               </Title>
 
-              <div 
+              <div
                 className='flex overflow-x-auto gap-4 pb-4 snap-x [&::-webkit-scrollbar]:hidden'
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
@@ -233,12 +233,6 @@ function PageHome() {
                     <Title level={3} className='border-l-4 border-purple-600 pl-3 mb-6'>
                       BUSINESS
                     </Title>
-                    <div className='hidden sm:flex gap-4 text-gray-500 text-xs font-medium uppercase'>
-                      <span>Entrepreneurs</span>
-                      <span>Real Estate</span>
-                      <span>Finance & Stocks</span>
-                      <span>Markets</span>
-                    </div>
                   </div>
                   <Row gutter={[24, 24]} className='mb-8'>
                     <Col xs={24} md={10}>
@@ -246,7 +240,9 @@ function PageHome() {
                         Major Banks Slash Interest Rates Following Central Bank Mandate
                       </Title>
                       <Text className='text-gray-500 leading-relaxed'>
-                        Immediately following the urgent policy meeting on April 9th, several commercial banks have reduced their deposit and lending rates, with top-tier financial institutions pioneering the deployment just hours later.
+                        Immediately following the urgent policy meeting on April 9th, several commercial banks have
+                        reduced their deposit and lending rates, with top-tier financial institutions pioneering the
+                        deployment just hours later.
                       </Text>
                     </Col>
                     <Col xs={24} md={14}>
@@ -284,100 +280,6 @@ function PageHome() {
                   </Row>
 
                   <Divider type='horizontal' className='h-1 hidden md:block' />
-
-                  <Row gutter={[32, 16]} align='middle'>
-                    <Col xs={24} md={6}>
-                      <div className='flex flex-col'>
-                        <Text className='text-[10px] text-blue-600 font-bold tracking-wider uppercase mb-2'>
-                          GOLD PRICES
-                        </Text>
-                        <div className='flex gap-8'>
-                          <div>
-                            <div className='text-gray-500 text-[11px]'>BUY</div>
-                            <div className='font-bold text-sm'>$2,450.00</div>
-                          </div>
-                          <div>
-                            <div className='text-gray-500 text-[11px]'>SELL</div>
-                            <div className='font-bold text-sm'>$2,465.00</div>
-                          </div>
-                        </div>
-                      </div>
-                    </Col>
-
-                    <Divider type='vertical' className='h-12 hidden md:block' />
-
-                    {/* Tỷ Giá */}
-                    <Col xs={24} md={6}>
-                      <div className='flex flex-col'>
-                        <Text className='text-[10px] text-blue-600 font-bold tracking-wider uppercase mb-2'>
-                          EXCHANGE RATES
-                        </Text>
-                        <div className='space-y-1'>
-                          <div className='flex justify-between max-w-[150px]'>
-                            <Text className='font-bold text-xs'>EUR/USD</Text>
-                            <Text className='text-gray-400 text-[10px]'>
-                              BUY <span className='text-black font-medium'>1.0850</span>
-                            </Text>
-                            <Text className='text-gray-400 text-[10px]'>
-                              SELL <span className='text-black font-medium'>1.0855</span>
-                            </Text>
-                          </div>
-                          <div className='flex justify-between max-w-[150px]'>
-                            <Text className='font-bold text-xs'>GBP/USD</Text>
-                            <Text className='text-gray-400 text-[10px]'>
-                              BUY <span className='text-black font-medium'>1.2640</span>
-                            </Text>
-                            <Text className='text-gray-400 text-[10px]'>
-                              SELL <span className='text-black font-medium'>1.2645</span>
-                            </Text>
-                          </div>
-                        </div>
-                      </div>
-                    </Col>
-
-                    <Divider type='vertical' className='h-12 hidden md:block' />
-
-                    {/* Chứng Khoán */}
-                    <Col xs={24} md={10}>
-                      <div className='flex flex-col'>
-                        <Text className='text-[10px] text-blue-600 font-bold tracking-wider uppercase mb-2'>
-                          STOCK MARKET
-                        </Text>
-                        <div className='flex flex-wrap gap-8'>
-                          <div className='flex flex-col'>
-                            <div className='flex items-center gap-1'>
-                              <span className='font-bold text-sm'>S&P 500</span>
-                              <span className='text-green-500 text-xs'>▲</span>
-                            </div>
-                            <div className='flex items-center gap-2'>
-                              <span className='font-bold text-sm'>5,240.21</span>
-                              <span className='text-green-500 text-[11px]'>0.77%</span>
-                            </div>
-                          </div>
-
-                          <div className='flex flex-col'>
-                            <div className='flex items-center gap-1'>
-                              <span className='font-bold text-sm'>NASDAQ</span>
-                              <span className='text-green-500 text-xs'>▲</span>
-                            </div>
-                            <div className='flex items-center gap-2'>
-                              <span className='font-bold text-sm'>16,832.92</span>
-                              <span className='text-green-500 text-[11px]'>0.37%</span>
-                            </div>
-                          </div>
-
-                          <div className='flex flex-col'>
-                            <div className='flex items-center gap-1'>
-                              <span className='font-bold text-sm'>DOW JONES</span>
-                            </div>
-                            <div className='flex items-center gap-2'>
-                              <span className='font-bold text-sm'>39,127.30</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
                 </Col>
 
                 {/* CỘT PHẢI: CHIẾM 6/24 (Banner Quảng cáo / Podcast) */}

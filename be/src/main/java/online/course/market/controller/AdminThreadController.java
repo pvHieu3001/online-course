@@ -51,8 +51,7 @@ public class AdminThreadController {
             @RequestParam(required = false) Boolean hasLink,
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "10") Integer size) {
-        Page<PostDto> data = service.getPostsByUser(search, status, isCaptionLink, hasLink, page, size)
-                .map(this::toDto);
+        Page<PostDto> data = service.getPostsByUser(search, status, isCaptionLink, hasLink, page, size);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 

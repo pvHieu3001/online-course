@@ -51,7 +51,7 @@ public class BlogServiceImpl implements BlogService {
         blogDB.setType(blog.getType());
         blogDB.setSlug(blog.getSlug());
         blogDB.setStatus(blog.getStatus());
-        blogDB.setIsDisplayHot(blog.getIsDisplayHot());
+        blogDB.setIsTrending(blog.getIsTrending());
         blogDB.setImage(blog.getImage());
         blogDB.setTags(new HashSet<>(blog.getTags()));
         return blogRepository.save(blogDB);
@@ -70,8 +70,8 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Blog> filterBlog(String type, Boolean status, String search, Boolean isDisplayHot, String tag) {
-        return blogRepository.filterBlog(type, status, search, isDisplayHot, tag);
+    public List<Blog> filterBlog(String type, Boolean status, String search, Boolean isTrending, Boolean isNew, String tag) {
+        return blogRepository.filterBlog(type, status, search, isTrending, isNew, tag);
     }
 
     @Override

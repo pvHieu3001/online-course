@@ -38,30 +38,19 @@ function TabCategory() {
   const handleCategoryDetail = (slug: string) => {
     const category = categories.dataList.find((c: ICategory) => c.slug === slug)
     if (!category) return
-    navigate(`/khoa-hoc-theo-chu-de/${slug}`)
+    navigate(`/book-category/${slug}`)
   }
 
   const handleSearch = (e: React.FormEvent) => {
     if (e) e.preventDefault()
-    router(`/tim-kiem?search=${encodeURIComponent(keyword)}`)
+    router(`/search?search=${encodeURIComponent(keyword)}`)
   }
 
   return (
     <aside className='w-full lg:w-[100%] bg-white p-6 rounded-lg shadow-md space-y-8 sticky top-4' role='complementary'>
-      {affiliateStore?.dataRandom && (
-        <ShopeeAffiliateBanner
-          link={affiliateStore.dataRandom?.targetUrl || 'https://shopee.vn/'}
-          imageUrl={affiliateStore.dataRandom?.image || 'https://cf.shopee.vn/file/sg-11134201-22100-2p0q3k3l1e4d6e'}
-          price={affiliateStore.dataRandom?.price}
-          originalPrice={affiliateStore.dataRandom?.originalPrice}
-          alt='Buy now on Shopee'
-          width='100%'
-        />
-      )}
-
       {/* Tìm kiếm */}
       <div>
-        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Search courses</h2>
+        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Search books</h2>
         <form
           onSubmit={handleSearch}
           className='flex rounded-md overflow-hidden border border-gray-300 focus-within:ring-2 focus-within:ring-blue-500'
@@ -85,7 +74,7 @@ function TabCategory() {
 
       {/* Loại khóa học */}
       <div>
-        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Course Categories</h2>
+        <h2 className='text-lg font-semibold text-gray-800 mb-3'>Book Categories</h2>
         <ul className='space-y-2' role='list'>
           {categories?.dataList?.map((category: ICategory, index: number) => (
             <li

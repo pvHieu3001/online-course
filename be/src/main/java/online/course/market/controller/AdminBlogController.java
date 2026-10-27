@@ -72,16 +72,16 @@ public class AdminBlogController {
     public ResponseEntity<ApiResponse<List<BlogDto>>> getAll(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) String isDisplayHot) {
+            @RequestParam(required = false) String isTrending) {
         Boolean displayHot =
-                isDisplayHot == null || isDisplayHot.isBlank() ? null :
-                        "1".equals(isDisplayHot) ? Boolean.TRUE :
-                                "0".equals(isDisplayHot) ? Boolean.FALSE : null;
+                isTrending == null || isTrending.isBlank() ? null :
+                        "1".equals(isTrending) ? Boolean.TRUE :
+                                "0".equals(isTrending) ? Boolean.FALSE : null;
         List<BlogDto> dtos = blogService.filterBlog(
                 null,
                 !String.valueOf(status).isEmpty() ? DataUtils.convertStatus(status) : null,
                 !String.valueOf(search).isEmpty() ? search : null,
-                displayHot, null
+                displayHot, null, null
         ).stream()
                 .filter(blog -> search == null || search.isEmpty() || blog.getTitle().toLowerCase().contains(search.toLowerCase()))
                 .map(this::toDto).collect(Collectors.toList());

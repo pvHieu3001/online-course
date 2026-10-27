@@ -30,7 +30,7 @@ function PageBlogSearch() {
   const handleDetail = (slug: string) => {
     const course = dataList.find((c: IBlog) => c.slug === slug)
     if (course) {
-      navigate(`/bai-viet/${slug}`, { state: course })
+      navigate(`/blog/${slug}`, { state: course })
     }
   }
 

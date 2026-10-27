@@ -31,7 +31,8 @@ public class Blog extends BaseEntity {
     private String slug;
     private Boolean status;
     private String type;
-    private Boolean isDisplayHot;
+    private Boolean isTrending;
+    private Boolean isNew;
 
     @ManyToMany
     @JoinTable(

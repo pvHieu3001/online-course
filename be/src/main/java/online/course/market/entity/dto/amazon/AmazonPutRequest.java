@@ -9,4 +9,5 @@ public class AmazonPutRequest {
     private String sourceUrl;
     private String amzUrl;
     private String caption;
+    private String productName;
 }

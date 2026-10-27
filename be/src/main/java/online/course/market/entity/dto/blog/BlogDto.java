@@ -21,7 +21,8 @@ public class BlogDto {
     private String slug;
     private Boolean status;
     private String type;
-    private Boolean isDisplayHot;
+    private Boolean isTrending;
+    private Boolean isNew;
     private UserDto updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

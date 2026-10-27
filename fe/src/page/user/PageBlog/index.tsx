@@ -78,7 +78,7 @@ function PageBlog() {
   }, [location.pathname, dispatch])
 
   const handleDetail = (slug: string) => {
-    navigate(`/bai-viet/${slug}`)
+    navigate(`/blog/${slug}`)
   }
 
   const subNews = [
@@ -93,11 +93,7 @@ function PageBlog() {
   ]
 
   const menuItems = [
-    { key: '1', label: 'TIN TỨC XUẤT BẢN' },
-    { key: '2', label: 'NGHIÊN CỨU XUẤT BẢN' },
-    { key: '3', label: 'TÁC GIẢ' },
-    { key: '4', label: 'CUỐN SÁCH TÔI ĐỌC' },
-    { key: '5', label: 'HÀNH TRÌNH TỪ TRÁI TIM' }
+    { key: '1', label: 'Trending Content' },
   ]
 
   const newsList = [
@@ -144,7 +140,7 @@ function PageBlog() {
         <div className='bg-gray-100 min-h-screen pb-16'>
           <Layout className='min-h-screen bg-white'>
             <Header className='bg-white h-auto py-8 text-center border-none'>
-              <h1 className='text-5xl font-black tracking-[0.2em] uppercase m-0 text-black'>XUẤT BẢN</h1>
+              <h1 className='text-5xl font-black tracking-[0.2em] uppercase m-0 text-black'>Blogs</h1>
             </Header>
             <div className='max-w-[1200px] mx-auto w-full border-t border-b border-gray-200'>
               <Menu
@@ -168,13 +164,12 @@ function PageBlog() {
                     </div>
                     <Title
                       level={2}
-                      className='!text-sky-800 !text-3xl !mb-4 group-hover:!text-sky-600 transition-colors'
+                      className='!text-sky-800 !text-2xl !mb-4 group-hover:!text-sky-600 transition-colors'
                     >
-                      Cách đơn giản để vơi bớt nỗi đau sau chia tay
+                      Quy luật đào thải trong cuộc chiến sinh tồn
                     </Title>
                     <Paragraph className='text-gray-600 text-base leading-relaxed'>
-                      Sau chia tay, hãy tập trung chăm sóc tốt cho bản thân để vơi bớt nỗi buồn, lấy lại sự tự tin sau
-                      những đổ vỡ về tình cảm. Nâng cao giá trị bản thân là cách để bạn thấy tự tin hơn.
+                      Khi hai loài cạnh tranh cùng nguồn tài nguyên, loài có lợi thế hơn có thể lấn át đối thủ. Tuy nhiên, nhiều sinh vật vẫn chung sống nhờ phân chia tài nguyên.
                     </Paragraph>
                   </div>
                 </Col>

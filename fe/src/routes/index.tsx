@@ -14,7 +14,7 @@ import ProductManagement from '@/page/admin/products'
 import AddProduct from '@/page/admin/products/_components/add'
 import EditProduct from '@/page/admin/products/_components/edit'
 import GuardPage from '@/middleware/GuardPage'
-import ProductDetailPage from '../page/user/ProductDetailPage/index'
+import BookDetailPage from '../page/user/PageBook/detail/index'
 import CategoryDetailPage from '../page/user/CategoryDetailPage/index'
 import PageBlog from '../page/user/PageBlog'
 import ProductOrdersManagement from '@/page/admin/orders'
@@ -26,7 +26,6 @@ import EditBlog from '@/page/admin/blogs/_components/edit'
 import PageSearch from '@/page/user/PageSearch'
 import NetworkErrorPage from '@/page/error/NetworkErrorPage'
 import NotFoundPage from '@/page/error/NotFoundPage'
-import PageCourse from '@/page/user/PageCourse'
 import BlogDetailPage from '@/page/user/BlogDetailPage'
 import AffiliateManagement from '@/page/admin/affiliate'
 import AddAffiliate from '@/page/admin/affiliate/_components/add'
@@ -47,19 +46,13 @@ export default function Router() {
           <Route path='signup' element={<SignUp />} />
           <Route path='' element={<Base />}>
             <Route index element={<PageHome />} />
-            <Route path='tim-kiem' element={<PageSearch />} />
-            <Route path='tim-kiem-bai-viet' element={<PageBlogSearch />} />
+            <Route path='search' element={<PageSearch />} />
+            <Route path='search-blog' element={<PageBlogSearch />} />
             <Route path='books' element={<PageBook />} />
-            <Route path='tat-ca-khoa-hoc' element={<PageCourse />} />
-            <Route path='chi-tiet-khoa-hoc/:slug' element={<ProductDetailPage />} />
-            <Route path='khoa-hoc-theo-chu-de/:slug' element={<CategoryDetailPage />} />
-            <Route path='game' element={<PageBlog />} />
-            <Route path='san-pham-cong-nghe' element={<PageBlog />} />
-            <Route path='crypto' element={<PageBlog />} />
-            <Route path='chung-khoan' element={<PageBlog />} />
-            <Route path='thu-thuat-huu-ich' element={<PageBlog />} />
-            <Route path='suu-tam' element={<PageBlog />} />
-            <Route path='bai-viet/:slug' element={<BlogDetailPage />} />
+            <Route path='book-detail/:slug' element={<BookDetailPage />} />
+            <Route path='book-category/:slug' element={<CategoryDetailPage />} />
+            <Route path='blogs' element={<PageBlog />} />
+            <Route path='blog/:slug' element={<BlogDetailPage />} />
           </Route>
           <Route element={<GuardPage />}>
             <Route path='admin' element={<Manager />}>
@@ -71,17 +64,17 @@ export default function Router() {
                 <Route path=':id' element={<EditUser />} />
               </Route>
 
-              <Route path='products' element={<ProductManagement />}>
+              <Route path='books' element={<ProductManagement />}>
                 <Route path='add' element={<AddProduct />} />
-                <Route path=':flug' element={<EditProduct />} />
+                <Route path=':slug' element={<EditProduct />} />
               </Route>
 
               <Route path='orders' element={<ProductOrdersManagement />}>
                 <Route path='add' element={<AddProduct />} />
-                <Route path=':flug' element={<EditProduct />} />
+                <Route path=':slug' element={<EditProduct />} />
               </Route>
 
-              <Route path='categories' element={<CategoryManagement />}>
+              <Route path='book-categories' element={<CategoryManagement />}>
                 <Route path='add' element={<AddCategory />} />
                 <Route path=':id' element={<EditCategory />} />
               </Route>
@@ -91,7 +84,7 @@ export default function Router() {
                 <Route path=':id' element={<EditBlog />} />
               </Route>
 
-              <Route path='affiliate' element={<AffiliateManagement />}>
+              <Route path='shopee' element={<AffiliateManagement />}>
                 <Route path='add' element={<AddAffiliate />} />
                 <Route path=':id' element={<EditAffiliate />} />
               </Route>

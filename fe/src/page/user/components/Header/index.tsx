@@ -27,7 +27,7 @@ const Header = (props: Props) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
-  
+
   const courses = useSelector((state: RootState) => state.course)
   const navigate = useNavigate()
   const menuRef = useRef<HTMLDivElement>(null)
@@ -69,22 +69,8 @@ const Header = (props: Props) => {
   const menuItems = [
     { label: 'Home', href: '/' },
     { label: 'Books', href: '/books' },
-    { label: 'Business', href: '/chung-khoan' },
-    { label: 'Health', href: '/crypto' },
-    { label: 'Sport', href: '/thu-thuat-huu-ich' },
-    { label: 'Life', href: '/suu-tam' },
-    { label: 'Technology', href: '/tech' },
-    { label: 'Entertainment', href: '/entertainment' },
-    { label: 'Lifestyle', href: '/lifestyle' },
-    { label: 'Car', href: '/car' },
-    { label: 'Law', href: '/law' },
-    { label: 'Education', href: '/education' },
-    { label: 'Tourism', href: '/tourism' }
+    { label: 'BLogs', href: '/blogs' }
   ]
-
-  const handleDetail = (course: IProduct) => {
-    navigate(`/chi-tiet-khoa-hoc/${course.slug}`)
-  }
 
   const handleSearch = (keyword: string) => {
     navigate(`?search=${encodeURIComponent(keyword)}`)
@@ -100,7 +86,7 @@ const Header = (props: Props) => {
   return (
     <>
       {/* KHỐI HEADER CỐ ĐỊNH */}
-      <div 
+      <div
         className={`fixed top-0 left-0 w-full z-[1000] transition-transform duration-300 shadow-xl ${
           isVisible ? 'translate-y-0' : '-translate-y-full'
         }`}

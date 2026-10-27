@@ -29,7 +29,7 @@ function PageSearch() {
   const handleDetail = (slug: string) => {
     const course = dataList.find((c: IProduct) => c.slug === slug)
     if (course) {
-      navigate(`/chi-tiet-khoa-hoc/${slug}`, { state: course })
+      navigate(`/book-detail/${slug}`, { state: course })
     }
   }
 

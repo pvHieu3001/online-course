@@ -9,7 +9,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BlogGetByTypeResponse {
-    private List<BlogDto> blogList;
-    private List<BlogDto> blogRecommendList;
-
+    private List<BlogDto> trendingBlogs;
+    private List<BlogDto> newsBlogs;
 } 

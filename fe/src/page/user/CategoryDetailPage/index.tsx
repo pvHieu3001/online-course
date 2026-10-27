@@ -40,7 +40,7 @@ function CategoryDetailPage() {
   }, [category, dispatch])
 
   const handleCourseClick = (course: IProduct) => {
-    navigate(`/chi-tiet-khoa-hoc/${course.slug}`)
+    navigate(`/book-detail/${course.slug}`)
   }
 
   const indexOfLastCourse = currentPage * coursesPerPage

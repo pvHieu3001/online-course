@@ -31,7 +31,7 @@
 - ✅ Trang chủ (`PageHome`)
 - ✅ Trang About (`PageAbout`)
 - ✅ Trang Contact (`PageContact`)
-- ✅ Trang Product Detail (`ProductDetailPage2`)
+- ✅ Trang Product Detail (`BookDetailPage2`)
 
 ## Cần Thực Hiện Tiếp
 

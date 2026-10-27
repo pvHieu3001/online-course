@@ -22,6 +22,8 @@ export default function EditAmazon() {
   useEffect(() => {
     dispatch(amazonActions.getAmazonById(params.id ?? '0') as unknown as AnyAction)
     dispatch(amazonActions.getAdminAmazons('', '', '', '', 0, 10) as unknown as AnyAction)
+    setCaption('')
+    setAmzUrl('')
   }, [dispatch, params.id])
 
   const navigate = useNavigate()
@@ -41,6 +43,7 @@ export default function EditAmazon() {
         setAmzUrl(link)
       }
       form.setFieldsValue({
+        productName: data.productName,
         sourceUrl: data.sourceUrl,
         caption: data.caption,
         amzUrl: amzUrl,
@@ -76,6 +79,7 @@ export default function EditAmazon() {
   const handleSubmit = async () => {
     const sourceUrl = form.getFieldValue('sourceUrl')
     const amzUrl = form.getFieldValue('amzUrl')
+    const productName = form.getFieldValue('productName')
     const formData = new FormData()
 
     const captionWithNewlines = caption.replace(/<\/p>/g, '\n')
@@ -84,6 +88,7 @@ export default function EditAmazon() {
     formData.append('sourceUrl', sourceUrl)
     formData.append('amzUrl', amzUrl ?? '')
     formData.append('caption', finalCaption)
+    formData.append('productName', productName)
 
     try {
       await dispatch(amazonActions.updateAmazon(params.id, formData) as unknown as AnyAction)
@@ -140,6 +145,18 @@ export default function EditAmazon() {
                 >
                   <h2 className='mb-5 font-bold text-[16px]'>Nội dung bài viết</h2>
                   <Row gutter={[16, 16]}>
+                    <Col xs={24}>
+                      <Form.Item
+                        name='productName'
+                        label='Tên sản phẩm'
+                        rules={[
+                          { required: true, message: 'Vui lòng nhập tên sản phẩm!' },
+                          { whitespace: true, message: 'Tên sản phẩm không được để trống!' }
+                        ]}
+                      >
+                        <Input size='large' placeholder='Nhập tên sản phẩm...' allowClear />
+                      </Form.Item>
+                    </Col>
                     <Col xs={24}>
                       <Form.Item
                         name='sourceUrl'

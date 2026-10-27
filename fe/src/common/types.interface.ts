@@ -140,6 +140,7 @@ export interface IAffiliate {
 
 export interface IAmazon {
   id: number
+  productName: string
   sourceUrl: string
   caption: string
   amzUrl: string
@@ -151,6 +152,13 @@ export interface IAmazon {
   accountThread: string
   isCaptionLink: boolean
   hasLink: boolean
+  medias: IMedia[]
+}
+
+export interface IMedia {
+  id: number
+  cloudinaryUrl: string
+  mediaType: string
 }
 
 export interface IThreadAccount {

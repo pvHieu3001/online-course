@@ -34,7 +34,7 @@ function PageBook() {
 
   // Handle course item click
   const handleCourseClick = (course: IProduct) => {
-    navigate(`/chi-tiet-khoa-hoc/${course.slug}`)
+    navigate(`/book-detail/${course.slug}`)
   }
 
   const handlePageChange = (pageNumber: number) => {
@@ -46,10 +46,10 @@ function PageBook() {
     <HandleLoading isLoading={coursesLoading} error_message={error_message}>
       <div className='bg-gray-100 min-h-screen pb-16'>
         <Helmet>
-          <title>Global Times || All Courses</title>
+          <title>Global Times || All Books</title>
           <meta
             name='description'
-            content='Discover all free courses and informative resources on Global Times — learn programming, design, marketing, and more, completely free.'
+            content='Discover all free books and informative resources on Global Times — explore programming, design, marketing, and more, completely free.'
           />
         </Helmet>
 
@@ -59,7 +59,7 @@ function PageBook() {
             <div className='flex-1'>
               {coursesLoading ? (
                 <div className='flex justify-center items-center h-64 text-gray-500'>
-                  <div className='animate-pulse'>Loading courses...</div>
+                  <div className='animate-pulse'>Loading books...</div>
                 </div>
               ) : courses && courses.length > 0 ? (
                 /* Grid/Flex Container for Cards */
@@ -93,7 +93,7 @@ function PageBook() {
                 </div>
               ) : (
                 <div className='flex flex-col items-center justify-center h-64 text-gray-400'>
-                  <p>No courses found in this category</p>
+                  <p>No books found in this category</p>
                 </div>
               )}
             </div>

@@ -25,7 +25,7 @@ function Sidenav() {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
             <ReadOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Khóa Học</span>
+            <span className='label font-bold text-[#344767]'>Sách</span>
           </Flex>
         ),
         link: '/admin/books'
@@ -33,20 +33,11 @@ function Sidenav() {
       {
         label: (
           <Flex align='center' gap={10} justify='center' className='children-menu'>
-            <ReadOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Khóa Học</span>
-          </Flex>
-        ),
-        link: '/admin/products'
-      },
-      {
-        label: (
-          <Flex align='center' gap={10} justify='center' className='children-menu'>
             <TagsOutlined className='text-[18px] text-[#344767]' />
-            <span className='label font-bold text-[#344767]'>Danh Mục</span>
+            <span className='label font-bold text-[#344767]'>Loại sách</span>
           </Flex>
         ),
-        link: '/admin/categories'
+        link: '/admin/book-categories'
       },
 
       {
@@ -65,7 +56,7 @@ function Sidenav() {
             <span className='label font-bold text-[#344767]'>Shopee</span>
           </Flex>
         ),
-        link: '/admin/affiliate'
+        link: '/admin/shopee'
       },
       {
         label: (

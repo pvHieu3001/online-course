@@ -19,6 +19,7 @@ public class PostEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String productName;
 
     @Column(name = "source_url", unique = true, length = 500)
     private String sourceUrl;

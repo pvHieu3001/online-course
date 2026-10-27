@@ -18,7 +18,7 @@ public class BlogPostRequest {
     private MultipartFile imageFile;
     private String slug;
     private Boolean status;
-    private Boolean isDisplayHot;
+    private Boolean isTrending;
     private String type;
     private String tagStr;
 } 

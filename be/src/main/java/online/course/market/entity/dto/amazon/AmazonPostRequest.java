@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AmazonPostRequest {
+    private String productName;
     private String sourceUrl;
     private String amzUrl;
     private String caption;

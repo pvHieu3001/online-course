@@ -66,7 +66,11 @@ public class AffiliateController {
     public ResponseEntity<ApiResponse<AffiliateLinkDto>> getRandomAffiliateLink(@RequestParam(required = false) String search, HttpServletRequest request) {
         logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG, HttpMethod.GET.name());
         AffiliateLink randomAffiliateLink = affiliateService.getRandomAffiliateLink();
-        return ResponseEntity.ok(ApiResponse.success(toDto(randomAffiliateLink)));
+        AffiliateLinkDto response = new AffiliateLinkDto();
+        if(randomAffiliateLink != null){
+            response = toDto(randomAffiliateLink);
+        }
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @Operation(description = "Get pageable endpoint for Blog", summary = "Get pageable Blog")

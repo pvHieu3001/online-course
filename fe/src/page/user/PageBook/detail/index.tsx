@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import TabCategory from '../components/TabCategory'
+import TabCategory from '../../components/TabCategory'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { courseActions } from '@/app/actions'
@@ -8,9 +8,9 @@ import { RootState } from '@/app/store'
 import { IProduct } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
-import HandleLoading from '../components/util/HandleLoading'
+import HandleLoading from '../../components/util/HandleLoading'
 
-function ProductDetailPage() {
+function BookDetailPage() {
   const { slug } = useParams()
   const dispatch = useDispatch()
   const {
@@ -35,17 +35,17 @@ function ProductDetailPage() {
   }, [course, dispatch])
 
   const handleDetail = (courseRelate: IProduct) => {
-    navigate(`/chi-tiet-khoa-hoc/${courseRelate.slug}`)
+    navigate(`/book-detail/${courseRelate.slug}`)
   }
 
   const breadcrumbs = [
     { name: 'Home', href: '/' },
-    { name: 'Courses', href: '/tat-ca-khoa-hoc' },
-    { name: course?.name, href: `/chi-tiet-khoa-hoc/${slug}` }
+    { name: 'Books', href: '/books' },
+    { name: course?.name, href: `/book-detail/${slug}` }
   ]
 
   const handleSearch = (tag: string) => {
-    navigate(`/tim-kiem?tag=${encodeURIComponent(tag)}`)
+    navigate(`/search?tag=${encodeURIComponent(tag)}`)
   }
 
   return (
@@ -208,4 +208,4 @@ function ProductDetailPage() {
   )
 }
 
-export default ProductDetailPage
+export default BookDetailPage
