@@ -13,7 +13,6 @@ function TabCategory() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const categories = useSelector((state: RootState) => state.category)
-  const affiliateStore = useSelector((state: RootState) => state.affiliate)
   const hasLoaded = useRef(false)
   const [keyword, setKeyword] = useState('')
   const router = useNavigate()

@@ -93,7 +93,7 @@ function PageBook() {
                 </div>
               ) : (
                 <div className='flex flex-col items-center justify-center h-64 text-gray-400'>
-                  <p>No books found in this category</p>
+                  <p>No books found</p>
                 </div>
               )}
             </div>

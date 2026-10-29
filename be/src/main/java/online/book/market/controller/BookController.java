@@ -61,7 +61,6 @@ public class BookController {
         }
     }
 
-    // Helper: map Book sang GetBookDto
     private BookDto toDto(Book book) {
         return modelMapper.map(book, BookDto.class);
     }

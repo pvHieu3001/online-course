@@ -185,7 +185,7 @@ function CategoryDetailPage() {
                   )}
                 </div>
               ) : (
-                <div className='text-center text-gray-500'>No books found in this category</div>
+                <div className='text-center text-gray-500'>No books found</div>
               )}
             </div>
 

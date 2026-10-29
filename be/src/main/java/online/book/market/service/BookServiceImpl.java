@@ -126,19 +126,22 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = true)
     public Book getById(Integer id) {
-        return bookRepository.findById(id).orElseThrow();
+        return bookRepository.findById(id)
+            .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "Book not found"));
     }
 
     @Override
     @Transactional(readOnly = true)
     public Book getBySlug(String slug) {
-        return bookRepository.findBySlug(slug).orElse(null);
+        return bookRepository.findBySlug(slug)
+            .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "Book not found"));
     }
 
     @Override
     @Transactional
     public Book getBookBySlug(String slug) {
-        return bookRepository.findBySlug(slug).orElse(null);
+        return bookRepository.findBySlug(slug)
+            .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "Book not found"));
     }
 
     @Override
