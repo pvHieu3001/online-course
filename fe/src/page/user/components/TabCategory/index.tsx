@@ -59,7 +59,7 @@ function TabCategory() {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             placeholder='Enter keyword...'
-            aria-label='Search for courses'
+            aria-label='Search for books'
             suffix={
               <SearchOutlined
                 onClick={handleSearch}
@@ -92,7 +92,7 @@ function TabCategory() {
             >
               <span className='text-gray-700 font-medium text-base'>{category.name}</span>
               <span className='text-sm text-gray-500 bg-white px-2 py-0.5 rounded-full border'>
-                {category.numberCourse}
+                {category.numberBook}
               </span>
             </li>
           ))}

@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Pagination } from 'antd'
 import TabCategory from '../components/TabCategory'
-import { courseActions } from '@/app/actions'
+import { bookActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
-import { ContextType, IProduct } from '@/common/types.interface'
+import { ContextType, IBook } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
 import HandleLoading from '../components/util/HandleLoading'
@@ -15,26 +15,26 @@ function PageBook() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [currentPage, setCurrentPage] = useState(0)
-  const [coursesPerPage] = useState(15)
+  const [booksPerPage] = useState(15)
   const {
-    dataList: courses,
-    isLoading: coursesLoading,
+    dataList: books,
+    isLoading: booksLoading,
     totalElements,
     error_message
-  } = useSelector((state: RootState) => state.course)
-  const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
+  } = useSelector((state: RootState) => state.book)
+  const { setIsShowRecommendBooks } = useOutletContext<ContextType>()
 
   useEffect(() => {
-    setIsShowRecommendCourses(true)
-  }, [setIsShowRecommendCourses])
+    setIsShowRecommendBooks(true)
+  }, [setIsShowRecommendBooks])
 
   useEffect(() => {
-    dispatch(courseActions.getCourses('active', '', '', currentPage - 1, coursesPerPage, '') as unknown as AnyAction)
-  }, [dispatch, currentPage, coursesPerPage])
+    dispatch(bookActions.getBooks('active', '', '', currentPage - 1, booksPerPage, '') as unknown as AnyAction)
+  }, [dispatch, currentPage, booksPerPage])
 
-  // Handle course item click
-  const handleCourseClick = (course: IProduct) => {
-    navigate(`/book-detail/${course.slug}`)
+  // Handle book item click
+  const handleBookClick = (book: IBook) => {
+    navigate(`/book-detail/${book.slug}`)
   }
 
   const handlePageChange = (pageNumber: number) => {
@@ -43,7 +43,7 @@ function PageBook() {
   }
 
   return (
-    <HandleLoading isLoading={coursesLoading} error_message={error_message}>
+    <HandleLoading isLoading={booksLoading} error_message={error_message}>
       <div className='bg-gray-100 min-h-screen pb-16'>
         <Helmet>
           <title>Global Times || All Books</title>
@@ -57,24 +57,24 @@ function PageBook() {
           {/* Main Content Area */}
           <div className='min-h-[80vh] w-full lg:w-[80%] bg-white rounded-lg shadow-md p-6 flex flex-col'>
             <div className='flex-1'>
-              {coursesLoading ? (
+              {booksLoading ? (
                 <div className='flex justify-center items-center h-64 text-gray-500'>
                   <div className='animate-pulse'>Loading books...</div>
                 </div>
-              ) : courses && courses.length > 0 ? (
+              ) : books && books.length > 0 ? (
                 /* Grid/Flex Container for Cards */
                 <div className='flex flex-wrap gap-6 mb-8 justify-center md:justify-start'>
-                  {courses.map((course) => (
+                  {books.map((book) => (
                     <div
-                      key={course.id}
-                      onClick={() => handleCourseClick(course)}
+                      key={book.id}
+                      onClick={() => handleBookClick(book)}
                       className='group cursor-pointer flex flex-col items-center w-[140px] flex-shrink-0'
                     >
                       {/* Image Frame */}
                       <div className='relative w-full h-[180px] mb-3 overflow-hidden rounded-md shadow-sm group-hover:shadow-lg transition-shadow duration-300'>
                         <img
-                          src={getImageUrl(course.imageUrl)}
-                          alt={course.name}
+                          src={getImageUrl(book.imageUrl)}
+                          alt={book.name}
                           className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
                         />
                       </div>
@@ -82,10 +82,10 @@ function PageBook() {
                       {/* Info Section */}
                       <div className='text-center w-full'>
                         <div className='text-[10px] text-indigo-500 font-medium uppercase tracking-wider mb-1 truncate'>
-                          {course.category?.name || 'General'}
+                          {book.category?.name || 'General'}
                         </div>
                         <div className='text-[13px] font-medium text-gray-700 line-clamp-2 leading-snug group-hover:text-indigo-600 transition-colors h-[36px]'>
-                          {course.name}
+                          {book.name}
                         </div>
                       </div>
                     </div>
@@ -99,11 +99,11 @@ function PageBook() {
             </div>
 
             {/* Pagination Section - Always at the bottom */}
-            {courses && courses.length > 0 && !coursesLoading && (
+            {books && books.length > 0 && !booksLoading && (
               <div className='flex justify-center pt-8 border-t border-gray-100 mt-auto'>
                 <Pagination
                   current={currentPage}
-                  pageSize={coursesPerPage}
+                  pageSize={booksPerPage}
                   total={totalElements}
                   onChange={handlePageChange}
                   showSizeChanger={false}

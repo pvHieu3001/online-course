@@ -1,24 +1,22 @@
-import { Col, Flex, Row, Button, Form, Input, Drawer, InputNumber, Card, Select, Switch } from 'antd'
+import { Col, Flex, Row, Button, Form, Input, Drawer, Card, Select, Switch } from 'antd'
 import { useEffect, useState } from 'react'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { useDispatch, useSelector } from 'react-redux'
-import { courseActions } from '@/app/actions/course.actions'
+import { bookActions } from '@/app/actions/book.actions'
 import { categoryActions } from '@/app/actions/category.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { useNavigate } from 'react-router-dom'
 import { RootState } from '@/app/store'
-import { ICategory, IUrl } from '@/common/types.interface'
+import { ICategory } from '@/common/types.interface'
 import { useQuery } from '@/utils/useQuery'
 import { tagActions } from '@/app/actions'
-import { ReactSortable } from 'react-sortablejs'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 
 function AddProduct() {
   const query = useQuery()
   const dispatch = useDispatch()
   const categoryStore = useSelector((state: RootState) => state.category)
-  const courseStore = useSelector((state: RootState) => state.course)
+  const bookStore = useSelector((state: RootState) => state.book)
   const tagStore = useSelector((state: RootState) => state.tag)
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
@@ -35,39 +33,26 @@ function AddProduct() {
   const onFinish = async () => {
     const name = form.getFieldValue('name')
     const categoryId = form.getFieldValue('categoryId')
-    const language = form.getFieldValue('language')
-    const level = form.getFieldValue('level')
-    const price = form.getFieldValue('price')
+    const amzUrl = form.getFieldValue('amzUrl')
     const status = form.getFieldValue('status')
     const isDisplayHot = form.getFieldValue('isDisplayHot')
-    const urlForms = form.getFieldValue('urls') || []
-    const urls = urlForms
-      .map((item: IUrl, index: number) => ({
-        id: item.id || null,
-        link: item.link || '',
-        seqNo: index + 1
-      }))
-      .filter((item: IUrl) => item.link && item.link.trim() !== '')
 
     const formdata = new FormData()
     formdata.append('name', name)
     formdata.append('categoryId', categoryId)
+    formdata.append('amzUrl', amzUrl ?? '')
     formdata.append('content', content)
-    formdata.append('language', language)
-    formdata.append('level', level)
-    formdata.append('price', price ?? 0)
     formdata.append('status', status ? 'active' : 'inactive')
     formdata.append('isDisplayHot', isDisplayHot ?? false)
     formdata.append('tagStr', selectedTags ?? null)
-    formdata.append('urlsJson', JSON.stringify(urls))
     if (imageUrl) {
       formdata.append('imageFile', imageUrl as Blob)
     }
 
     try {
-      await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)
+      await dispatch(bookActions.createBook(formdata) as unknown as AnyAction)
       await dispatch(
-        courseActions.getAdminCourses(
+        bookActions.getAdminBooks(
           query.get('status') ?? '',
           query.get('search') ?? '',
           query.get('isHot') ?? '',
@@ -75,17 +60,17 @@ function AddProduct() {
           10
         ) as unknown as AnyAction
       )
-      popupSuccess('Thêm khóa học thành công')
+      popupSuccess('Thêm sách thành công')
       navigate('..')
     } catch (error) {
-      popupError('Thêm khóa học thất bại')
+      popupError('Thêm sách thất bại')
     }
   }
 
   const handleCancel = async () => {
-    dispatch(courseActions.resetCourse() as unknown as AnyAction)
+    dispatch(bookActions.resetBook() as unknown as AnyAction)
     await dispatch(
-      courseActions.getAdminCourses(
+      bookActions.getAdminBooks(
         query.get('status') ?? '',
         query.get('search') ?? '',
         query.get('isHot') ?? '',
@@ -118,7 +103,7 @@ function AddProduct() {
     <>
       <Drawer
         open={true}
-        title={<h2 className=' font-bold text-[24px]'>Tạo khóa học mới</h2>}
+        title={<h2 className=' font-bold text-[24px]'>Tạo sách mới</h2>}
         width={'85%'}
         styles={{
           header: { height: 60 },
@@ -136,18 +121,18 @@ function AddProduct() {
           }}
           className='p-10 relative'
         >
-          <Card title='Thông tin khoá học' size='small' style={{ marginBottom: 24 }}>
+          <Card title='Thông tin sách' size='small' style={{ marginBottom: 24 }}>
             <Row gutter={[16, 16]}>
-              {/* Cột trái */}
-              <Col xs={24} md={12}>
+              <Col span={24}>
                 <Form.Item
                   name='name'
-                  label='Tên khoá học'
-                  rules={[{ required: true, message: 'Vui lòng nhập tên khoá học!' }]}
+                  label='Tên sách'
+                  rules={[{ required: true, message: 'Vui lòng nhập tên sách!' }]}
                 >
-                  <Input placeholder='Nhập tên khoá học' size='large' />
+                  <Input placeholder='Nhập tên sách' size='large' />
                 </Form.Item>
-
+              </Col>
+              <Col xs={24} md={8}>
                 <Form.Item
                   name='categoryId'
                   label='Danh mục'
@@ -168,7 +153,8 @@ function AddProduct() {
                     ))}
                   </Select>
                 </Form.Item>
-
+              </Col>
+              <Col xs={24} md={8}>
                 <Form.Item name='tagStr' label='Tags'>
                   <Select
                     mode='tags'
@@ -182,110 +168,26 @@ function AddProduct() {
                     onChange={(value) => setSelectedTags(value)}
                   />
                 </Form.Item>
-
-                <Row gutter={[16, 16]}>
-                  <Col xs={24} sm={12} md={8}>
-                    <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
-                      <Switch className='w-full sm:w-20' checkedChildren='Active' unCheckedChildren='Inactive' />
-                    </Form.Item>
-                  </Col>
-
-                  <Col xs={24} sm={12} md={8}>
-                    <Form.Item name='isDisplayHot' label='Khóa học nổi bật' valuePropName='checked'>
-                      <Switch className='w-full sm:w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
-                    </Form.Item>
-                  </Col>
-                </Row>
               </Col>
-
-              {/* Cột phải */}
-              <Col xs={24} md={12}>
-                <Form.Item name='language' label='Ngôn ngữ'>
-                  <Select placeholder='Chọn ngôn ngữ' size='large'>
-                    <Select.Option value='vi'>Tiếng Việt</Select.Option>
-                    <Select.Option value='en'>English</Select.Option>
-                    <Select.Option value='jp'>日本語</Select.Option>
-                  </Select>
+              <Col xs={12} md={4}>
+                <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
+                  <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                 </Form.Item>
-
-                <Form.Item name='level' label='Trình độ'>
-                  <Select placeholder='Chọn trình độ' size='large'>
-                    <Select.Option value='beginner'>Dễ</Select.Option>
-                    <Select.Option value='intermediate'>Trung Bình</Select.Option>
-                    <Select.Option value='advanced'>Khó</Select.Option>
-                  </Select>
+              </Col>
+              <Col xs={12} md={4}>
+                <Form.Item name='isDisplayHot' label='Sách nổi bật' valuePropName='checked'>
+                  <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                 </Form.Item>
-
-                <Form.Item name='price' label='Giá'>
-                  <InputNumber className='w-full' min={0} placeholder='Nhập giá' size='large' />
+              </Col>
+              <Col span={24}>
+                <Form.Item name='amzUrl' label='URL affiliate'>
+                  <Input size='large' placeholder='Nhập URL affiliate' />
                 </Form.Item>
               </Col>
             </Row>
           </Card>
           <Card size='small' style={{ marginBottom: 24 }}>
-            <Form.Item label='Nguồn tài liệu'>
-              <Form.List name='urls'>
-                {(fields, { add, remove, move }) => (
-                  <>
-                    <ReactSortable
-                      list={fields}
-                      setList={() => {}}
-                      onEnd={(evt) => {
-                        if (evt.oldIndex !== undefined && evt.newIndex !== undefined) {
-                          move(evt.oldIndex, evt.newIndex)
-                        }
-                      }}
-                      animation={200}
-                    >
-                      {fields.map((field, index) => (
-                        <Row
-                          key={field.key}
-                          gutter={[8, 8]}
-                          justify='center'
-                          align='middle'
-                          style={{ marginBottom: 8, cursor: 'grab' }}
-                        >
-                          <Col xs={24} sm={4} style={{ textAlign: 'center' }}>
-                            <span>Phần {index + 1}</span>
-                          </Col>
-
-                          <Col xs={24} sm={18} style={{ textAlign: 'center' }}>
-                            <Form.Item
-                              {...field}
-                              name={[field.name, 'link']}
-                              fieldKey={[field.fieldKey, 'link']}
-                              rules={[{ required: true, message: 'Vui lòng nhập URL' }]}
-                              noStyle
-                            >
-                              <Input size='large' placeholder={`URL phần ${index + 1}`} />
-                            </Form.Item>
-                            <Form.Item {...field} name={[field.name, 'id']} noStyle hidden>
-                              <Input />
-                            </Form.Item>
-                          </Col>
-
-                          <Col xs={24} sm={2} style={{ textAlign: 'center' }}>
-                            <MinusCircleOutlined
-                              onClick={() => remove(field.name)}
-                              style={{ fontSize: 20, color: '#ff4d4f', cursor: 'pointer' }}
-                            />
-                          </Col>
-                        </Row>
-                      ))}
-                    </ReactSortable>
-
-                    <Form.Item>
-                      <Button type='dashed' onClick={() => add({ id: '', link: '' })} icon={<PlusOutlined />} block>
-                        Thêm URL
-                      </Button>
-                    </Form.Item>
-                  </>
-                )}
-              </Form.List>
-            </Form.Item>
-          </Card>
-          <Card size='small' style={{ marginBottom: 24 }}>
-            <Form.Item name='content' className='m-0' label={'Nội dung khoá học'}>
+            <Form.Item name='content' className='m-0' label={'Nội dung sách'}>
               <TextEditor
                 content={content}
                 onHandleChange={(value) => {
@@ -300,7 +202,7 @@ function AddProduct() {
               name='imageFile'
               className='p-[30px] sm:rounded-lg border-[#F1F1F4] m-0'
               style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 1rem' }}
-              rules={[{ required: true, message: 'Vui lòng chọn ảnh khóa học!' }]}
+              rules={[{ required: true, message: 'Vui lòng chọn ảnh sách!' }]}
             >
               <Flex vertical gap={20}>
                 <h2 className='font-bold text-[16px]'>Ảnh đại diện</h2>
@@ -361,7 +263,7 @@ function AddProduct() {
           </Card>
           {/* Nếu muốn giữ gallery, có thể thêm lại logic gallery ở dưới */}
           <Flex className='fixed z-[10000000] top-[15px] right-10' gap={20}>
-            <Button loading={courseStore.isLoading} disabled={courseStore.isLoading} htmlType='submit' type='primary'>
+            <Button loading={bookStore.isLoading} disabled={bookStore.isLoading} htmlType='submit' type='primary'>
               Tạo
             </Button>
           </Flex>

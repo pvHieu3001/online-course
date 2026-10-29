@@ -11,10 +11,9 @@ import HandleLoading from '../components/util/HandleLoading'
 import LoadingPage from '../components/util/LoadingPage'
 import { Helmet } from 'react-helmet-async'
 import { getBlogInfoByType } from '@/utils/getBlogInfo'
-import TabBlogCategory from '../components/TabBlogCategory'
 
 function BlogDetailPage() {
-  const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
+  const { setIsShowRecommendBooks } = useOutletContext<ContextType>()
   const { slug } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -31,8 +30,8 @@ function BlogDetailPage() {
       dispatch(blogActions.resetBlog() as unknown as AnyAction)
       dispatch(blogActions.getBlogBySlug(slug) as unknown as AnyAction)
     }
-    setIsShowRecommendCourses(false)
-  }, [dispatch, setIsShowRecommendCourses, slug])
+    setIsShowRecommendBooks(false)
+  }, [dispatch, setIsShowRecommendBooks, slug])
 
   const handleDetail = (slug: string) => {
     navigate(`/blog/${slug}`)
@@ -59,46 +58,18 @@ function BlogDetailPage() {
         <meta
           key='description'
           name='description'
-          content={blogData.description || `Read the article ${blogData.title} at Global Times.`} // Ưu tiên dùng description
+          content={blogData.description || `Read the article ${blogData.title} at Global Times.`}
         />
       </Helmet>
-      {Array.isArray(recommendList) && recommendList.length > 0 && (
-        <div className='bg-gray-100 w-full flex justify-center items-center'>
-          <section
-            className='max-w-[1300px] w-full flex items-center gap-2 px-5 overflow-x-auto'
-            role='region'
-            aria-label='Featured courses'
-          >
-            {recommendList?.map((recommend, i) => (
-              <div
-                key={i}
-                onClick={() => handleDetail(recommend.slug)}
-                role='button'
-                tabIndex={0}
-                className='flex items-center gap-3 max-w-[220px] flex-shrink-0 cursor-pointer p-2 rounded-lg hover:bg-gray-200 transition-colors'
-              >
-                <img
-                  src={getImageUrl(recommend.image)}
-                  alt={`${recommend.title} thumbnail`}
-                  className='w-14 h-14 rounded-full object-cover border-2 border-white shadow-md'
-                />
-                <span className='text-sm font-medium text-gray-700 group-hover:text-black line-clamp-3'>
-                  {recommend.title}
-                </span>
-              </div>
-            ))}
-          </section>
-        </div>
-      )}
-      <div className='min-h-screen max-w-7xl mx-auto px-4 flex flex-col lg:flex-row gap-8'>
+      <div className='min-h-screen max-w-7xl mx-auto px-4 flex flex-col lg:flex-row lg:justify-center gap-8'>
         <div className='lg:w-[80%] w-full'>
           <nav aria-label='Breadcrumb' className='mt-6 max-w-[1300px] w-full mx-auto px-4'>
-            <ol className='flex items-center space-x-2 text-sm text-gray-500'>
+            <ol className='text-sm text-gray-900 font-bold leading-relaxed'>
               {breadcrumbs.map((crumb, index) => (
-                <li key={index} className='flex items-center'>
+                <li key={index} className='inline'>
                   {index > 0 && (
                     <svg
-                      className='h-5 w-5 flex-shrink-0 text-gray-300'
+                      className='mx-0.5 inline-block h-3 w-3 align-[-0.15em] text-gray-700'
                       xmlns='http://www.w3.org/2000/svg'
                       fill='currentColor'
                       viewBox='0 0 20 20'
@@ -108,11 +79,14 @@ function BlogDetailPage() {
                     </svg>
                   )}
                   {index < breadcrumbs.length - 1 ? (
-                    <a href={crumb.href} className='hover:text-gray-700 hover:underline'>
+                    <a
+                      href={crumb.href}
+                      className='break-words [overflow-wrap:anywhere] font-bold text-gray-900 hover:text-black hover:underline'
+                    >
                       {crumb.name}
                     </a>
                   ) : (
-                    <span className='ml-2 font-semibold text-gray-700'>{crumb.name}</span>
+                    <span className='break-words [overflow-wrap:anywhere] font-bold text-gray-900'>{crumb.name}</span>
                   )}
                 </li>
               ))}
@@ -120,8 +94,8 @@ function BlogDetailPage() {
           </nav>
           <div className='bg-white text-gray-800 font-sans leading-relaxed'>
             <main className='max-w-[1300px] w-full mx-auto px-4 py-5'>
-              <h1 className='text-2xl text-[#464646] font-bold mt-2'>{blogData.title}</h1>
-              <div className='mb-2 mt-1 flex flex-wrap items-center gap-2'>
+              <h1 className='text-4xl text-[#464646] font-bold mt-2'>{blogData.title}</h1>
+              <div className='mb-1 mt-1 flex flex-wrap items-center gap-2'>
                 {blogData.tags?.map((tag) => (
                   <span
                     key={tag.id}
@@ -134,35 +108,41 @@ function BlogDetailPage() {
                   </span>
                 ))}
               </div>
-              <h3 className='text-xl mb-4'>{blogData.description}</h3>
-              <div className='text-sm text-gray-500 mb-6'>
+              <div className='mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-500'>
                 <span>
-                  Posted by &nbsp;
+                  Posted by{' '}
                   <strong className='text-gray-700'>
                     {getFullName(blogData.updatedBy?.firstname, blogData.updatedBy?.lastname)}
                   </strong>
-                </span>{' '}
-                ·<span>{formatDateTimeString(blogData.updatedAt) || 'Not updated yet'}</span>
+                </span>
+                <span className='flex items-center gap-2'>
+                  <span aria-hidden='true'>·</span>
+                  <span>{formatDateTimeString(blogData.updatedAt) || 'Not updated yet'}</span>
+                </span>
               </div>
+              <p className='mb-6 text-lg leading-relaxed text-gray-600'>{blogData.description}</p>
 
               <img src={getImageUrl(blogData.image)} alt={blogData.title} className='w-full rounded-lg mb-8 shadow' />
 
               <article
                 className='prose prose-lg max-w-none font-arial
                 [&_p]:mb-4 
-                [&_p]:text-base
+                [&_p]:text-[17px]
                 [&_h1]:text-3xl 
                 [&_h2]:text-2xl 
                 [&_h3]:text-xl 
                 [&_ul]:list-disc 
                 [&_ul]:pl-6 
-                [&_a]:text-blue-600 [&_a:hover]:underline text-base'
+                [&_img]:mx-auto [&_img]:block
+                [&_video]:mx-auto [&_video]:block
+                [&_iframe]:mx-auto [&_iframe]:block
+                [&_a]:text-blue-600 [&_a:hover]:underline text-[17px]'
                 dangerouslySetInnerHTML={{ __html: blogData.content || '' }}
               ></article>
 
               {/* Bài viết liên quan */}
               <section className='mt-16 border-t pt-10'>
-                <h3 className='text-xl font-semibold mb-6'>Related blogs</h3>
+                <h3 className='text-xl font-semibold mb-6'>You may also be interested in</h3>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
                   {relatedDatas &&
                     relatedDatas.length > 0 &&
@@ -188,9 +168,6 @@ function BlogDetailPage() {
             </main>
           </div>
         </div>
-        <aside className='w-full lg:w-[20%] sticky top-4' role='complementary'>
-          <TabBlogCategory />
-        </aside>
       </div>
     </HandleLoading>
   )

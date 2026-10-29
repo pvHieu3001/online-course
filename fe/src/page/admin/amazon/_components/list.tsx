@@ -116,7 +116,7 @@ export default function ListAmazon() {
       title: '#',
       dataIndex: 'key',
       key: 'key',
-      width: 50,
+      width: 40,
       align: 'center',
       fixed: 'left',
       responsive: ['sm']
@@ -125,7 +125,7 @@ export default function ListAmazon() {
       title: 'Product Name',
       dataIndex: 'productName',
       key: 'productName',
-      width: 180,
+      width: 50,
       ellipsis: true,
       render: (text, record) => {
         const getStyle = () => {
@@ -148,7 +148,7 @@ export default function ListAmazon() {
     {
       title: 'Media',
       key: 'mediaDownload',
-      width: 160,
+      width: 140,
       align: 'center',
       responsive: ['sm'],
       render: (_, record) => {
@@ -247,7 +247,7 @@ export default function ListAmazon() {
       title: 'Short Link',
       dataIndex: 'amzUrl',
       key: 'amzUrl',
-      width: 180,
+      width: 60,
       ellipsis: true,
       responsive: ['md'],
       render: (text, record) => {
@@ -277,7 +277,7 @@ export default function ListAmazon() {
       title: 'Caption',
       dataIndex: 'caption',
       key: 'caption',
-      width: 260,
+      width: 300,
       responsive: ['md'],
       render: (text, record) => {
         const getStyle = () => {
@@ -294,7 +294,7 @@ export default function ListAmazon() {
 
         return (
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
-            <span className='line-clamp-2' style={{ ...getStyle(), flex: 1 }}>
+            <span className='line-clamp-2' style={{ ...getStyle(), flex: 1, minWidth: 0, overflowWrap: 'anywhere' }}>
               {text}
             </span>
             <Paragraph copyable={{ text }} style={{ margin: 0, flexShrink: 0 }} />
@@ -307,7 +307,6 @@ export default function ListAmazon() {
       key: 'action',
       width: 110,
       align: 'center',
-      fixed: 'right',
       render: (record) => (
         <Space size={0}>
           <Popconfirm
@@ -465,7 +464,7 @@ export default function ListAmazon() {
             key: item.id || index
           }))}
           loading={amazons.isLoading}
-          scroll={{ x: screens.md ? 1300 : screens.sm ? 760 : 420 }}
+          scroll={{ x: screens.xl ? 1200 : screens.md ? 1000 : screens.sm ? 560 : 420 }}
           pagination={{
             size: 'small',
             showSizeChanger: false,

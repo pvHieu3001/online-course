@@ -2,11 +2,11 @@ import { useEffect } from 'react'
 import styles from './styles.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
-import { courseActions } from '@/app/actions/course.actions'
+import { bookActions } from '@/app/actions/book.actions'
 import { useNavigate } from 'react-router-dom'
 import TabCategory from '../components/TabCategory'
 import { RootState } from '@/app/store'
-import { IProduct } from '@/common/types.interface'
+import { IBook } from '@/common/types.interface'
 import { useQuery } from '@/utils/useQuery'
 import Link from 'antd/es/typography/Link'
 import { getImageUrl } from '@/utils/getImageUrl'
@@ -20,16 +20,16 @@ function PageSearch() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { dataList, isLoading, error_message } = useSelector((state: RootState) => state.course)
+  const { dataList, isLoading, error_message } = useSelector((state: RootState) => state.book)
 
   useEffect(() => {
-    dispatch(courseActions.getCourses('active', search, '', undefined, undefined, tag) as unknown as AnyAction)
+    dispatch(bookActions.getBooks('active', search, '', undefined, undefined, tag) as unknown as AnyAction)
   }, [dispatch, search, tag])
 
   const handleDetail = (slug: string) => {
-    const course = dataList.find((c: IProduct) => c.slug === slug)
-    if (course) {
-      navigate(`/book-detail/${slug}`, { state: course })
+    const book = dataList.find((c: IBook) => c.slug === slug)
+    if (book) {
+      navigate(`/book-detail/${slug}`, { state: book })
     }
   }
 
@@ -44,28 +44,28 @@ function PageSearch() {
           />
         </Helmet>
         <main className={styles.mainContent} role='main'>
-          <section className={styles.coursesWrapper} aria-label='Course listings'>
-            <h2 className={styles.courseListTitle}>Search Results</h2>
-            <div className={styles.courses}>
-              {isLoading && <p>Loading courses...</p>}
+          <section className={styles.booksWrapper} aria-label='Book listings'>
+            <h2 className={styles.bookListTitle}>Search Results</h2>
+            <div className={styles.books}>
+              {isLoading && <p>Loading books...</p>}
               {!isLoading && error_message && (
-                <p className={styles.error}>Error loading courses. Please try again later.</p>
+                <p className={styles.error}>Error loading books. Please try again later.</p>
               )}
-              {!isLoading && !error_message && dataList?.length === 0 && <p>No matching courses found.</p>}
+              {!isLoading && !error_message && dataList?.length === 0 && <p>No matching books found.</p>}
               {!isLoading &&
                 !error_message &&
-                dataList?.map((course: IProduct) => (
+                dataList?.map((book: IBook) => (
                   <article
-                    className={styles.courseCard}
-                    key={course.id}
+                    className={styles.bookCard}
+                    key={book.id}
                     role='button'
                     tabIndex={0}
-                    onClick={() => handleDetail(course.slug)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleDetail(course.slug)}
+                    onClick={() => handleDetail(book.slug)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleDetail(book.slug)}
                   >
-                    <img src={getImageUrl(course.imageUrl)} alt={`${course.name} course image`} loading='lazy' />
-                    <Link className={styles.courseCat}>{course.category?.name}</Link>
-                    <h3 className={styles.courseTitle}>{course.name}</h3>
+                    <img src={getImageUrl(book.imageUrl)} alt={`${book.name} book image`} loading='lazy' />
+                    <Link className={styles.bookCat}>{book.category?.name}</Link>
+                    <h3 className={styles.bookTitle}>{book.name}</h3>
                   </article>
                 ))}
             </div>

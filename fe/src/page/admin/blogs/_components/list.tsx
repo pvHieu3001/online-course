@@ -17,16 +17,23 @@ export default function ListBlog() {
   const [searchValue, setSearchValue] = useState('')
   const [active, setActive] = useState('')
   const [isHot, setIsHot] = useState('')
-  const blogs = useSelector((state: RootState) => state.blog)
+  const [page, setPage] = useState(0)
+  const [size, setSize] = useState(10)
+  const {
+    dataList: blogs,
+    pagination,
+    message: error_message,
+    isLoading
+  } = useSelector((state: RootState) => state.blog)
 
   useEffect(() => {
-    dispatch(blogActions.getAdminBlogs(active, searchValue, isHot) as unknown as AnyAction)
-  }, [active, dispatch, isHot, searchValue])
+    dispatch(blogActions.getAdminBlogs(active, searchValue, isHot, page, size) as unknown as AnyAction)
+  }, [active, dispatch, isHot, searchValue, page, size])
 
   const handlerDistableBlog = async (id: string) => {
     try {
       await dispatch(blogActions.deleteBlog(id) as unknown as AnyAction)
-      dispatch(blogActions.getAdminBlogs(active, searchValue, isHot) as unknown as AnyAction)
+      dispatch(blogActions.getAdminBlogs(active, searchValue, isHot, page, size) as unknown as AnyAction)
       message.success('Vô hiệu hoá bài viết thành công!')
     } catch (error) {
       message.error('Vô hiệu hoá bài viết thất bại!')
@@ -111,8 +118,8 @@ export default function ListBlog() {
     }
   ]
 
-  if (blogs.error_message) {
-    return <ErrorLoad />
+  if (error_message) {
+    return <ErrorLoad error_message={error_message} />
   }
 
   return (
@@ -188,11 +195,22 @@ export default function ListBlog() {
           columns={columns}
           sticky={{ offsetHeader: 0 }}
           scroll={{ x: 1200 }}
-          dataSource={blogs?.dataList?.map((Blog: IBlog, index: number) => ({
+          dataSource={blogs?.map((Blog: IBlog, index: number) => ({
             ...Blog,
             key: index + 1
           }))}
-          loading={blogs.isLoading}
+          pagination={{
+            size: 'small',
+            showSizeChanger: false,
+            current: (pagination?.pageNumber || 0) + 1,
+            pageSize: pagination?.pageSize || 10,
+            total: pagination?.totalElements || 0,
+            onChange: (page, pageSize) => {
+              setPage(page - 1)
+              setSize(pageSize)
+            }
+          }}
+          loading={isLoading}
         />
       </div>
     </>

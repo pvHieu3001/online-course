@@ -1,0 +1,90 @@
+package online.book.market.service;
+
+import lombok.AllArgsConstructor;
+import online.book.market.entity.model.Blog;
+import online.book.market.framework.exception.CJNotFoundException;
+import online.book.market.repository.BlogRepository;
+import online.book.market.utils.CustomCodeException;
+import org.hibernate.query.spi.Limit;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.List;
+
+@Service
+@AllArgsConstructor
+public class BlogServiceImpl implements BlogService {
+    private final BlogRepository blogRepository;
+
+    @Override
+    @Transactional(readOnly = true)
+    public Blog getById(Integer id) {
+        return blogRepository.findById(id)
+                .orElseThrow(() -> new CJNotFoundException(CustomCodeException.CODE_400, "Danh mục không tồn tại"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Blog getBySlug(String slug) {
+        return blogRepository.findBySlugAndStatus(slug, true);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Blog> getAll() {
+        return blogRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public Blog save(Blog blog) {
+        return blogRepository.save(blog);
+    }
+
+    @Override
+    @Transactional
+    public Blog update(Blog blog, Integer id) {
+        Blog blogDB = getById(id);
+        blogDB.setContent(blog.getContent());
+        blogDB.setTitle(blog.getTitle());
+        blogDB.setDescription(blog.getDescription());
+        blogDB.setType(blog.getType());
+        blogDB.setSlug(blog.getSlug());
+        blogDB.setStatus(blog.getStatus());
+        blogDB.setIsTrending(blog.getIsTrending());
+        blogDB.setIsTrendingNew(blog.getIsTrendingNew());
+        blogDB.setImage(blog.getImage());
+        blogDB.setTags(new HashSet<>(blog.getTags()));
+        return blogRepository.save(blogDB);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Integer id) {
+        Blog blog = getById(id);
+        blogRepository.delete(blog);
+    }
+
+    @Override
+    public List<Blog> getByType(String type) {
+        return blogRepository.findByTypeAndStatus(type, true);
+    }
+
+    @Override
+    public Page<Blog> filterBlog(String type, Boolean status, String search, Boolean isTrending, Boolean isTrendingNew, String tag, Pageable pageable) {
+        return blogRepository.filterBlog(type, status, search, isTrending, isTrendingNew, tag, pageable);
+    }
+
+    @Override
+    public List<Blog> getRecommendBlog(String type) {
+        return blogRepository.getRecommendBlog(type);
+    }
+
+    @Override
+    public Long count() {
+        return blogRepository.count();
+    }
+}

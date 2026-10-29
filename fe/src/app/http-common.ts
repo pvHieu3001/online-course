@@ -23,8 +23,8 @@ const onErrorInterceptorResponse = (error) => {
       console.log('Lỗi 403: Không có quyền truy cập')
       goToWorkspace()
     } else if (status === 404) {
-      console.log('Lỗi 404: Khoomg tìm thấy tài nguyên')
-      goToWorkspace()
+      console.log('Lỗi 404: Không tìm thấy tài nguyên')
+      window.location.href = `${DOMAIN_URL}`
     } else {
       console.log(`Lỗi HTTP ${status}:`, error.response.data)
     }

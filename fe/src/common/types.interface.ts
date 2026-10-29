@@ -1,4 +1,4 @@
-export interface IProduct {
+export interface IBook {
   isDisplayHot: string // blank: all, 0: false, 1: true
   id: string
   createdAt?: string
@@ -9,20 +9,13 @@ export interface IProduct {
   category: ICategory
   description: string
   content: string
-  courseBenefits: string
   imageUrl: string
-  language: string
-  level: string
+  amzUrl: string
   name: string
-  price: number
-  rating: number
   slug: string
   sourceUrl: string
   status: string
-  totalRating: number
-  totalStudents: number
   tags: ITag[]
-  urls: IUrl[]
 }
 
 export interface ICategory {
@@ -35,11 +28,11 @@ export interface ICategory {
   image: string
   status: boolean
   isQuickView: boolean
-  numberCourse: number
+  numberBook: number
 }
 
-export interface IQuickViewCourse {
-  listCourse: IProduct[]
+export interface IQuickViewBook {
+  listBook: IBook[]
   category: ICategory
 }
 
@@ -79,7 +72,7 @@ export interface IOrder {
 export interface ILog {
   id: number
   userId: number
-  courseId: number
+  bookId: number
   name: string
   action: string
   ipAddress: string
@@ -103,7 +96,8 @@ export interface IBlog {
   type: string
   updatedAt: string
   updatedBy: IUser
-  isDisplayHot: string // blank: all, 0: false, 1: true
+  isTrending: string
+  isTrendingNew: string
   tags: ITag[]
 }
 
@@ -119,7 +113,7 @@ export interface IUrl {
 }
 
 export interface IDashboard {
-  numberCourse: number
+  numberBook: number
   numberPost: string
   numberUser: number
   numberDownload: number
@@ -180,5 +174,5 @@ export interface IPagination {
 }
 
 export type ContextType = {
-  setIsShowRecommendCourses: (value: boolean) => void
+  setIsShowRecommendBooks: (value: boolean) => void
 }

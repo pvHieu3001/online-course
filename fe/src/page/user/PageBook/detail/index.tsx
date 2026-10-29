@@ -2,10 +2,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import TabCategory from '../../components/TabCategory'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { courseActions } from '@/app/actions'
+import { bookActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
-import { IProduct } from '@/common/types.interface'
+import { IBook } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
 import HandleLoading from '../../components/util/HandleLoading'
@@ -14,34 +14,34 @@ function BookDetailPage() {
   const { slug } = useParams()
   const dispatch = useDispatch()
   const {
-    dataList: relatedCourses,
-    data: course,
+    dataList: relatedBooks,
+    data: book,
     isLoading,
     error_message
-  } = useSelector((state: RootState) => state.course)
+  } = useSelector((state: RootState) => state.book)
   const navigate = useNavigate()
 
   useEffect(() => {
     if (slug) {
-      dispatch(courseActions.resetCourse() as unknown as AnyAction)
-      dispatch(courseActions.getCourseBySlug(slug) as unknown as AnyAction)
+      dispatch(bookActions.resetBook() as unknown as AnyAction)
+      dispatch(bookActions.getBookBySlug(slug) as unknown as AnyAction)
     }
   }, [dispatch, slug])
 
   useEffect(() => {
-    if (course && course.category?.id) {
-      dispatch(courseActions.getCoursesByCategory(course.category.id) as unknown as AnyAction)
+    if (book && book.category?.id) {
+      dispatch(bookActions.getBooksByCategory(book.category.id) as unknown as AnyAction)
     }
-  }, [course, dispatch])
+  }, [book, dispatch])
 
-  const handleDetail = (courseRelate: IProduct) => {
-    navigate(`/book-detail/${courseRelate.slug}`)
+  const handleDetail = (bookRelate: IBook) => {
+    navigate(`/book-detail/${bookRelate.slug}`)
   }
 
   const breadcrumbs = [
     { name: 'Home', href: '/' },
     { name: 'Books', href: '/books' },
-    { name: course?.name, href: `/book-detail/${slug}` }
+    { name: book?.name, href: `/book-detail/${slug}` }
   ]
 
   const handleSearch = (tag: string) => {
@@ -50,23 +50,23 @@ function BookDetailPage() {
 
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
-      <div className='min-h-screen max-w-7xl mx-auto px-4 flex flex-col lg:flex-row gap-8'>
+      <div className='min-h-screen max-w-7xl mx-auto px-4 flex flex-col lg:flex-row lg:justify-center gap-8'>
         <Helmet>
-          <title>Global Times || {course?.name ?? ''} </title>
+          <title>Global Times || {book?.name ?? ''} </title>
           <meta
             key='description'
             name='description'
-            content={`Read details about ${course?.name} at Global Times. Stay tuned for expert insights and knowledge.`}
+            content={`Read details about ${book?.name} at Global Times. Stay tuned for expert insights and knowledge.`}
           />
         </Helmet>
         <div className='lg:w-[80%] w-full'>
-          <nav aria-label='Breadcrumb' className='mt-6'>
-            <ol className='flex items-center space-x-2 text-sm text-gray-500'>
+          <nav aria-label='Breadcrumb' className='mt-6 max-w-[1300px] w-full mx-auto px-4'>
+            <ol className='text-sm text-gray-900 font-bold leading-relaxed'>
               {breadcrumbs.map((crumb, index) => (
-                <li key={index} className='flex items-center'>
+                <li key={index} className='inline'>
                   {index > 0 && (
                     <svg
-                      className='h-5 w-5 flex-shrink-0 text-gray-300'
+                      className='mx-0.5 inline-block h-3 w-3 align-[-0.15em] text-gray-700'
                       xmlns='http://www.w3.org/2000/svg'
                       fill='currentColor'
                       viewBox='0 0 20 20'
@@ -76,127 +76,110 @@ function BookDetailPage() {
                     </svg>
                   )}
                   {index < breadcrumbs.length - 1 ? (
-                    <a href={crumb.href} className='hover:text-gray-700 hover:underline'>
+                    <a
+                      href={crumb.href}
+                      className='break-words [overflow-wrap:anywhere] font-bold text-gray-900 hover:text-black hover:underline'
+                    >
                       {crumb.name}
                     </a>
                   ) : (
-                    <span className='ml-2 font-semibold text-gray-700'>{crumb.name}</span>
+                    <span className='break-words [overflow-wrap:anywhere] font-bold text-gray-900'>{crumb.name}</span>
                   )}
                 </li>
               ))}
             </ol>
           </nav>
-          {course ? (
+          {book ? (
             <>
-              <header className='mt-8'>
-                <p className='text-sm uppercase tracking-wide text-[#008000]'>
-                  {course.category?.name || 'Undefined category'}
-                </p>
-                <h1 className='text-2xl text-[#464646] font-bold mt-2'>{course.name || 'Course name unavailable'}</h1>
-              </header>
-              <div className='mt-4 flex flex-wrap items-center gap-2'>
-                {course.tags?.map((tag) => (
-                  <span
-                    key={tag.id}
-                    onClick={() => {
-                      handleSearch(tag.name)
-                    }}
-                    className='cursor-pointer rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-300'
-                  >
-                    {tag.name}
-                  </span>
-                ))}
-              </div>
-              <section className='mt-8'>
+              <main className='max-w-[1300px] w-full mx-auto px-4 py-5 text-gray-800 font-sans leading-relaxed'>
+                <header className='mt-2'>
+                  <p className='text-sm font-semibold text-gray-600'>{book.category?.name || 'Undefined category'}</p>
+                  <h1 className='text-4xl text-[#464646] font-bold mt-2'>{book.name || 'Book name unavailable'}</h1>
+                </header>
+                <div className='mb-1 mt-1 flex flex-wrap items-center gap-2'>
+                  {book.tags?.map((tag) => (
+                    <span
+                      key={tag.id}
+                      onClick={() => {
+                        handleSearch(tag.name)
+                      }}
+                      className='cursor-pointer rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-300'
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
                 <img
-                  src={getImageUrl(course.imageUrl)}
-                  alt={course.name || 'Course Image'}
-                  className='rounded-lg shadow-md w-full max-w-sm h-48 object-cover'
+                  src={getImageUrl(book.imageUrl)}
+                  alt={book.name || 'Book cover'}
+                  className='w-full rounded-lg mb-8 shadow'
                 />
-              </section>
 
-              <section className='mt-10'>
-                <h2 className='text-xl text-[#464646] font-arial mb-4'>Introduction</h2>
-                {course.content ? (
-                  <div
-                    className='text-xl leading-8 text-gray-800 font-arial
+                <section className='mt-10'>
+                  <h2 className='text-2xl text-[#464646] font-semibold mb-4'>Introduction</h2>
+                  {book.content ? (
+                    <div
+                      className='prose prose-lg max-w-none font-arial
                 [&_p]:mb-4 
-                [&_p]:text-base
+                [&_p]:text-[17px]
                 [&_h1]:text-3xl 
                 [&_h2]:text-2xl 
                 [&_h3]:text-xl 
                 [&_ul]:list-disc 
                 [&_ul]:pl-6 
-                [&_a]:text-blue-600 [&_a:hover]:underline text-base'
-                    dangerouslySetInnerHTML={{ __html: course.content }}
-                  />
-                ) : (
-                  <p className='text-gray-500 italic'>Content is being updated.</p>
-                )}
-              </section>
-
-              <section className='mt-10 text-center'>
-                <h2 className='text-xl text-[#464646] font-arial mb-4'>Download link</h2>
-                {course.urls && course.urls.length > 0 ? (
-                  <div className='flex flex-row justify-center items-center  gap-4'>
-                    {[...course.urls]
-                      .sort((a, b) => a.seqNo - b.seqNo)
-                      .map((urlItem, index) => (
-                        <a
-                          key={urlItem.id || index}
-                          href={urlItem.link}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className='inline-block bg-blue-600 text-white px-6 py-2 rounded-full text-lg font-arial hover:bg-blue-700 transition max-w-md'
-                        >
-                          Download Part {urlItem.seqNo || index + 1}
-                        </a>
-                      ))}
-                  </div>
-                ) : (
-                  <p className='text-gray-400 italic'>Document is not ready for download.</p>
-                )}
-              </section>
-
-              <section className='max-w-7xl mx-auto mt-16 px-4'>
-                <h2 className='text-lg font-semibold bg-gray-100 text-gray-800 inline-block px-4 py-2 rounded-t-md shadow'>
-                  You May Also Like
-                </h2>
-                <div className='border-t border-gray-300 mt-2 pt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-                  {relatedCourses && relatedCourses.length > 0 ? (
-                    relatedCourses.slice(0, 3).map((related, index) => (
-                      <div
-                        key={index}
-                        onClick={() => handleDetail(related)}
-                        className='relative group rounded-lg overflow-hidden shadow-md cursor-pointer transition-all duration-300 hover:shadow-xl'
-                        style={{
-                          backgroundImage: `url(${getImageUrl(related.imageUrl)})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                          height: '220px'
-                        }}
-                      >
-                        <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10' />
-                        <div className='absolute inset-0 z-20 flex flex-col justify-between p-4 text-white'>
-                          <span className='bg-sky-500 text-[10px] font-semibold px-2 py-1 rounded uppercase self-start'>
-                            {related.category?.name || 'Undefined'}
-                          </span>
-                          <h3 className='text-sm sm:text-base font-semibold leading-snug line-clamp-2'>
-                            {related.name || 'Course name not available'}
-                          </h3>
-                        </div>
-                      </div>
-                    ))
+                [&_img]:mx-auto [&_img]:block
+                [&_video]:mx-auto [&_video]:block
+                [&_iframe]:mx-auto [&_iframe]:block
+                [&_a]:text-blue-600 [&_a:hover]:underline text-[17px]'
+                      dangerouslySetInnerHTML={{ __html: book.content }}
+                    />
                   ) : (
-                    <p className='text-gray-500 col-span-full italic'>No related courses yet.</p>
+                    <p className='text-gray-500 italic'>Content is being updated.</p>
                   )}
-                </div>
-              </section>
+                </section>
 
-              <section className='max-w-4xl mx-auto mt-10 px-4 text-center'></section>
+                <section className='mt-16 border-t pt-10 text-center'>
+                  {book.amzUrl ? (
+                    <button
+                      type='button'
+                      onClick={() => window.open(book.amzUrl, '_blank', 'noopener,noreferrer')}
+                      className='inline-block bg-blue-600 text-white px-6 py-2 rounded-full text-lg font-arial hover:bg-blue-700 transition max-w-md'
+                    >
+                      Read This Book
+                    </button>
+                  ) : (
+                    <p className='text-gray-400 italic'>No book link is available yet.</p>
+                  )}
+                </section>
+
+                <section className='mt-16 border-t pt-10'>
+                  <h2 className='text-xl font-semibold mb-6'>You May Also Like</h2>
+                  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+                    {relatedBooks && relatedBooks.length > 0 ? (
+                      relatedBooks.slice(0, 3).map((related, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handleDetail(related)}
+                          className='border rounded p-4 hover:shadow transition-shadow h-full flex flex-col cursor-pointer'
+                        >
+                          <img
+                            src={getImageUrl(related.imageUrl)}
+                            alt={related.name || 'Related book'}
+                            className='w-full h-40 object-cover rounded mb-3'
+                          />
+                          <p className='text-sm text-gray-500 mb-1'>{related.category?.name || 'Undefined'}</p>
+                          <h3 className='text-lg font-medium'>{related.name || 'Book name not available'}</h3>
+                        </div>
+                      ))
+                    ) : (
+                      <p className='text-gray-500 col-span-full italic'>No related books yet.</p>
+                    )}
+                  </div>
+                </section>
+              </main>
             </>
           ) : (
-            <div className='text-center py-12 text-gray-500'>Course information not found.</div>
+            <div className='text-center py-12 text-gray-500'>Book information not found.</div>
           )}
         </div>
 

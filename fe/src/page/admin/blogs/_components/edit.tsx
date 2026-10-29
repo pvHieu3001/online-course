@@ -42,7 +42,8 @@ export default function EditBlog() {
         title: data.title,
         type: data.type,
         content: data.content,
-        isDisplayHot: data.isDisplayHot,
+        isTrending: data.isTrending,
+        isTrendingNew: data.isTrendingNew,
         tagStr: data.tags?.flatMap((item) => item.id)
       })
       setSelectedTags(data?.tags?.map((tag) => tag.id).join(',') || '')
@@ -70,7 +71,7 @@ export default function EditBlog() {
       })
     } else {
       dispatch(blogActions.resetBlog() as unknown as AnyAction)
-      await dispatch(blogActions.getAdminBlogs('', '', '') as unknown as AnyAction)
+      await dispatch(blogActions.getAdminBlogs('', '', '', 0, 10) as unknown as AnyAction)
       navigate('..')
     }
   }
@@ -83,7 +84,8 @@ export default function EditBlog() {
     formData.append('status', form.getFieldValue('status'))
     formData.append('content', form.getFieldValue('content'))
     formData.append('type', form.getFieldValue('type'))
-    formData.append('isDisplayHot', form.getFieldValue('isDisplayHot') || false)
+    formData.append('isTrending', form.getFieldValue('isTrending') || false)
+    formData.append('isTrendingNew', form.getFieldValue('isTrendingNew') || false)
     formData.append('tagStr', selectedTags)
     if (imageUrl) {
       formData.append('imageFile', imageUrl)
@@ -91,7 +93,7 @@ export default function EditBlog() {
 
     try {
       await dispatch(blogActions.updateBlog(params.id, formData) as unknown as AnyAction)
-      await dispatch(blogActions.getAdminBlogs('', '', '') as unknown as AnyAction)
+      await dispatch(blogActions.getAdminBlogs('', '', '', 0, 10) as unknown as AnyAction)
       popupSuccess('Cập nhật bài viết thành công')
       setIsDirty(false)
       navigate('..')
@@ -198,12 +200,13 @@ export default function EditBlog() {
                 </Form.Item>
                 <div className='bg-white rounded-md shadow-sm p-4 space-y-4'>
                   <h2 className='text-lg font-semibold text-gray-700'>Cài đặt hiển thị</h2>
-                  <Form.Item label='Kích hoạt' name='status' valuePropName='checked'>
+                  <Form.Item label='Hiển thị' name='status' valuePropName='checked'>
                     <Switch />
                   </Form.Item>
-                  <p className='text-xs text-gray-500'>Bật để bài viết này hiển thị trên website.</p>
-
-                  <Form.Item name='isDisplayHot' label='Bài viết nổi bật' valuePropName='checked'>
+                  <Form.Item name='isTrending' label='Bài viết nổi bật theo thể loại' valuePropName='checked'>
+                    <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                  </Form.Item>
+                  <Form.Item name='isTrendingNew' label='Bài viết nổi bật theo thời gian' valuePropName='checked'>
                     <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                   </Form.Item>
                 </div>

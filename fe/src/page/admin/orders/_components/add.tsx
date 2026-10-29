@@ -19,7 +19,7 @@ import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ReactQuill from 'react-quill'
 import { useDispatch, useSelector } from 'react-redux'
-import { courseActions } from '@/app/actions/course.actions'
+import { bookActions } from '@/app/actions/book.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 
@@ -32,7 +32,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 function AddProduct() {
   const dispatch = useDispatch()
-  const courseStore = useSelector((state: RootState) => state.course)
+  const bookStore = useSelector((state: RootState) => state.book)
   const [form] = Form.useForm()
   const [gallery, setGallery] = useState<Array<gallery>>([])
   const navigate = useNavigate()
@@ -70,7 +70,7 @@ function AddProduct() {
     formdata.append('total_students', String(total_students))
 
     try {
-      await dispatch(courseActions.createCourse(formdata) as unknown as AnyAction)
+      await dispatch(bookActions.createBook(formdata) as unknown as AnyAction)
       popupSuccess('Thêm khóa học thành công')
       navigate('..')
     } catch (error) {
@@ -314,8 +314,8 @@ function AddProduct() {
           </Card>
           <Flex className='fixed z-[10000000] top-[15px] right-10' gap={20}>
             <Button
-              loading={courseStore.isLoading}
-              disabled={courseStore.isLoading}
+              loading={bookStore.isLoading}
+              disabled={bookStore.isLoading}
               htmlType='submit'
               type='primary'
               className=' '

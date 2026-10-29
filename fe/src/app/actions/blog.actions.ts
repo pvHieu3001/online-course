@@ -4,6 +4,8 @@ import {
   fetchedDone,
   getBlogSuccessFully,
   getBlogSuccessFailure,
+  getAdminBlogSuccessFully,
+  getAdminBlogSuccessFailure,
   isFetching,
   reset,
   createFailure,
@@ -36,17 +38,17 @@ export const getBlogs = (searchValue: string, tag: string) => (dispatch: Dispatc
     .finally(() => dispatch(fetchedDone()))
 }
 
-export const getAdminBlogs = (status: string, search: string, isDisplayHot: string) => (dispatch: Dispatch) => {
+export const getAdminBlogs = (status: string, search: string, isDisplayHot: string, page: number, size: number) => (dispatch: Dispatch) => {
   dispatch(isFetching())
 
   return blogServices
-    .getAdminBlogs(status, search, isDisplayHot)
+    .getAdminBlogs(status, search, isDisplayHot, page, size)
     .then((res) => {
-      dispatch(getBlogSuccessFully(res.data))
+      dispatch(getAdminBlogSuccessFully(res.data))
       return res
     })
     .catch((error) => {
-      dispatch(getBlogSuccessFailure(error.toString()))
+      dispatch(getAdminBlogSuccessFailure(error.toString()))
       throw error
     })
     .finally(() => dispatch(fetchedDone()))

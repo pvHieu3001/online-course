@@ -1,0 +1,158 @@
+package online.book.market.controller;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import online.book.market.entity.dto.ApiResponse;
+import online.book.market.entity.dto.blog.BlogDto;
+import online.book.market.entity.dto.blog.BlogGetAllResponse;
+import online.book.market.entity.dto.blog.BlogGetBySlugResponse;
+import online.book.market.entity.dto.blog.BlogGetByTypeResponse;
+import online.book.market.entity.dto.user.UserDto;
+import online.book.market.entity.model.Blog;
+import online.book.market.service.BlogService;
+import online.book.market.service.LogService;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static online.book.market.utils.Constant.*;
+
+@Slf4j
+@RestController
+@RequestMapping("api/v1/user/blog")
+@Tag(name = "Blog", description = "Blog controller")
+public class BlogController {
+    private final BlogService blogService;
+    private final ModelMapper modelMapper;
+    private final LogService logService;
+    private final String env;
+
+    public BlogController(BlogService blogService, ModelMapper modelMapper, LogService logService, String env) {
+        this.blogService = blogService;
+        this.modelMapper = modelMapper;
+        this.logService = logService;
+        this.env = env;
+    }
+
+    private BlogDto toDto(Blog Blog) {
+        return modelMapper.map(Blog, BlogDto.class);
+    }
+
+    @Operation(description = "Get pageable endpoint for Blog", summary = "Get pageable Blog")
+    @GetMapping("/pageable")
+    public ResponseEntity<ApiResponse<Page<BlogDto>>> getPageable(Pageable pageable) {
+        Page<Blog> page = blogService.getAll() instanceof Page ? (Page<Blog>) blogService.getAll() : Page.empty();
+        Page<BlogDto> pageDto = page.map(this::toDto);
+        return ResponseEntity.ok(ApiResponse.success(pageDto));
+    }
+
+    @Operation(description = "Get all endpoint for Blog", summary = "Get all Blog")
+    @GetMapping
+    public ResponseEntity<ApiResponse<BlogGetAllResponse>> getAll(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String tag,
+            HttpServletRequest request) {
+        logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG, HttpMethod.GET.name());
+        BlogGetAllResponse response = new BlogGetAllResponse();
+
+        List<BlogDto> trendings = blogService.filterBlog(null, true, search, true, null, null, PageRequest.of(0, 3))
+                .stream().map(this::toDto).toList();
+        List<BlogDto> news = blogService.filterBlog(null, true, search, null, true, null, PageRequest.of(0, 5))
+                .stream().map(this::toDto).toList();
+        response.setNewBlogs(news);
+        response.setTrendingBlogs(trendings);
+
+        List<BlogDto> trendingTechnology = blogService.filterBlog("technology", true, search, true, false, null, PageRequest.of(0, 5))
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newTechnology = blogService.filterBlog("technology", true, search, false, true, null, PageRequest.of(0, 3))
+                .stream().map(this::toDto).toList();
+        response.setNewTechnologyBlogs(newTechnology);
+        response.setTrendingTechnologyBlogs(trendingTechnology);
+
+        List<BlogDto> trendingLifestyle = blogService.filterBlog("lifestyle", true, search, true, false, null, PageRequest.of(0, 5))
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newLifestyle = blogService.filterBlog("lifestyle", true, search, false, true, null, PageRequest.of(0, 3))
+                .stream().map(this::toDto).toList();
+        response.setNewLifeStyleBlogs(newLifestyle);
+        response.setTrendingLifeStyleBlogs(trendingLifestyle);
+
+        List<BlogDto> trendingTravel = blogService.filterBlog("travel", true, search, true, false, null, PageRequest.of(0, 5))
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newTravel = blogService.filterBlog("travel", true, search, false, true, null, PageRequest.of(0, 3))
+                .stream().map(this::toDto).toList();
+        response.setNewTravelBlogs(newTravel);
+        response.setTrendingTravelBlogs(trendingTravel);
+
+        List<BlogDto> trendingWorld = blogService.filterBlog("world", true, search, true, false, null, PageRequest.of(0, 5))
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newWorld = blogService.filterBlog("world", true, search, false, true, null, PageRequest.of(0, 3))
+                .stream().map(this::toDto).toList();
+        response.setNewWorldBlogs(newWorld);
+        response.setTrendingWorldBlogs(trendingWorld);
+
+        List<BlogDto> trendingEducation = blogService.filterBlog("education", true, search, true, false, null, PageRequest.of(0, 5))
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newEducation = blogService.filterBlog("education", true, search, false, true, null, PageRequest.of(0, 3))
+                .stream().map(this::toDto).toList();
+        response.setNewEducationBlogs(newEducation);
+        response.setTrendingEducationBlogs(trendingEducation);
+
+        List<BlogDto> trendingScience = blogService.filterBlog("science", true, search, true, false, null, PageRequest.of(0, 5))
+                .stream().map(this::toDto).toList();
+        List<BlogDto> newScience = blogService.filterBlog("science", true, search, false, true, null, PageRequest.of(0, 3))
+                .stream().map(this::toDto).toList();
+        response.setNewScienceBlogs(newScience);
+        response.setTrendingScienceBlogs(trendingScience);
+
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by slug")
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<ApiResponse<BlogGetBySlugResponse>> getBySlug(@PathVariable String slug, HttpServletRequest request) {
+        logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_DETAIL_BLOG, HttpMethod.GET.name());
+        BlogGetBySlugResponse response = new BlogGetBySlugResponse();
+        Blog blog = blogService.getBySlug(slug);
+        if (blog == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Bài viết không tồn tại"));
+        }
+
+        List<BlogDto> blogs = blogService.getByType(blog.getType()).stream().filter(b -> !b.getSlug().equals(slug)).map(this::toDto).toList();
+        List<BlogDto> blogRecommendList = blogService.getRecommendBlog(blog.getType()).stream().map(this::toDto).toList();
+        response.setBlog(modelMapper.map(blog, BlogDto.class));
+        response.setRelatedBlogs(blogs);
+        response.setBlogRecommendList(blogRecommendList);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by type")
+    @GetMapping("/type/{type}")
+    public ResponseEntity<ApiResponse<BlogGetByTypeResponse>> filterBlog(@PathVariable String type, @RequestParam(required = false) String search, HttpServletRequest request) {
+        logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_ALL_BLOG, HttpMethod.GET.name());
+        List<BlogDto> blogList = blogService.filterBlog(type, true, search, null, null, null, PageRequest.of(0, 10)).stream().map((blog)->{
+            BlogDto blogDto = modelMapper.map(blog, BlogDto.class);
+            if(blog.getUpdatedBy()!= null){
+                UserDto userDto = modelMapper.map(blog.getUpdatedBy(), UserDto.class);
+                blogDto.setUpdatedBy(userDto);
+            }
+            return blogDto;
+        }).collect(Collectors.toList());
+        BlogGetByTypeResponse blogGetByTypeResponse = new BlogGetByTypeResponse();
+        blogGetByTypeResponse.setTrendingBlogs(blogList);
+
+        List<BlogDto> blogRecommendList = blogService.getRecommendBlog(type).stream().map(this::toDto).toList();
+        blogGetByTypeResponse.setNewsBlogs(blogRecommendList);
+
+        return ResponseEntity.ok(ApiResponse.success(blogGetByTypeResponse));
+    }
+} 

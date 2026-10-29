@@ -20,7 +20,7 @@ import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons'
 import { popupError, popupSuccess } from '@/page/shared/Toast'
 import ReactQuill from 'react-quill'
 import { useDispatch, useSelector } from 'react-redux'
-import { courseActions } from '@/app/actions/course.actions'
+import { bookActions } from '@/app/actions/book.actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
@@ -35,7 +35,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 function EditProduct() {
   const { flug } = useParams()
   const dispatch = useDispatch()
-  const courseStore = useSelector((state: RootState) => state.course)
+  const bookStore = useSelector((state: RootState) => state.book)
   const [form] = Form.useForm()
   const [gallery, setGallery] = useState<Array<gallery>>([])
   const navigate = useNavigate()
@@ -44,22 +44,22 @@ function EditProduct() {
 
   useEffect(() => {
     if (flug) {
-      dispatch(courseActions.getCourseById(flug) as unknown as AnyAction)
+      dispatch(bookActions.getBookById(flug) as unknown as AnyAction)
     }
   }, [flug])
 
   useEffect(() => {
-    if (courseStore.data && courseStore.data.gallery) {
-      const initDataGalleries = courseStore.data.gallery.map((item: any) => ({
+    if (bookStore.data && bookStore.data.gallery) {
+      const initDataGalleries = bookStore.data.gallery.map((item: any) => ({
         image: '',
         displayPic: item.image
       }))
       setGallery(initDataGalleries)
     }
-  }, [courseStore.data])
+  }, [bookStore.data])
 
   const onFinish = async () => {
-    const id = courseStore.data?.id
+    const id = bookStore.data?.id
     const name = form.getFieldValue('name')
     const category_id = form.getFieldValue('category_id')
     const description = form.getFieldValue('description')
@@ -91,7 +91,7 @@ function EditProduct() {
     formdata.append('total_students', String(total_students))
 
     try {
-      await dispatch(courseActions.updateCourse(id, formdata) as unknown as AnyAction)
+      await dispatch(bookActions.updateBook(id, formdata) as unknown as AnyAction)
       popupSuccess('Cập nhật khóa học thành công')
       navigate('..')
     } catch (error) {
@@ -151,7 +151,7 @@ function EditProduct() {
 
   return (
     <>
-      {courseStore.data && !courseStore.isLoading && (
+      {bookStore.data && !bookStore.isLoading && (
         <Drawer
           open={true}
           title={
@@ -177,24 +177,24 @@ function EditProduct() {
             onFinish={onFinish}
             className='p-10 relative'
             initialValues={{
-              id: courseStore.data?.id,
-              created_at: courseStore.data?.created_at,
-              created_by: courseStore.data?.created_by,
-              updated_at: courseStore.data?.updated_at,
-              updated_by: courseStore.data?.updated_by,
-              category_id: courseStore.data?.category_id,
-              description: courseStore.data?.description,
-              image_url: courseStore.data?.image_url,
-              language: courseStore.data?.language,
-              level: courseStore.data?.level,
-              name: courseStore.data?.name,
-              price: courseStore.data?.price,
-              rating: courseStore.data?.rating,
-              slug: courseStore.data?.slug,
-              source_url: courseStore.data?.source_url,
-              status: courseStore.data?.status,
-              total_rating: courseStore.data?.total_rating,
-              total_students: courseStore.data?.total_students
+              id: bookStore.data?.id,
+              created_at: bookStore.data?.created_at,
+              created_by: bookStore.data?.created_by,
+              updated_at: bookStore.data?.updated_at,
+              updated_by: bookStore.data?.updated_by,
+              category_id: bookStore.data?.category_id,
+              description: bookStore.data?.description,
+              image_url: bookStore.data?.image_url,
+              language: bookStore.data?.language,
+              level: bookStore.data?.level,
+              name: bookStore.data?.name,
+              price: bookStore.data?.price,
+              rating: bookStore.data?.rating,
+              slug: bookStore.data?.slug,
+              source_url: bookStore.data?.source_url,
+              status: bookStore.data?.status,
+              total_rating: bookStore.data?.total_rating,
+              total_students: bookStore.data?.total_students
             }}
           >
             <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
@@ -287,7 +287,7 @@ function EditProduct() {
             <Divider orientation='left'>Nội dung chi tiết</Divider>
             <Card size='small' style={{ marginBottom: 24 }}>
               <Form.Item name='content' label='Nội dung'>
-                <TextEditor content={courseStore.data?.content ?? ''} onHandleChange={() => {}} />
+                <TextEditor content={bookStore.data?.content ?? ''} onHandleChange={() => {}} />
               </Form.Item>
               <Form.Item name='detail' label='Mô tả chi tiết'>
                 <ReactQuill modules={modules} formats={formats} theme='snow' className='h-[200px]' />
@@ -384,8 +384,8 @@ function EditProduct() {
             </Card>
             <Flex className='fixed z-[10000000] top-[15px] right-10' gap={20}>
               <Button
-                loading={courseStore.isLoading}
-                disabled={courseStore.isLoading}
+                loading={bookStore.isLoading}
+                disabled={bookStore.isLoading}
                 htmlType='submit'
                 type='primary'
                 className=' '

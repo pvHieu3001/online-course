@@ -14,12 +14,12 @@ const TOKEN = {
 }
 
 const typeOptions = [
-  { value: 'technology', label: 'Công Nghệ' },
-  { value: 'lifestyle', label: 'Lối Sống' },
-  { value: 'travel', label: 'Du Lịch' },
-  { value: 'world', label: 'Thế Giới' },
-  { value: 'education', label: 'Giáo Dục' },
-  { value: 'science', label: 'Khoa Học' }
+  { value: 'technology', label: 'Technology' },
+  { value: 'lifestyle', label: 'Lifestyle' },
+  { value: 'travel', label: 'Travel' },
+  { value: 'world', label: 'World' },
+  { value: 'education', label: 'Education' },
+  { value: 'science', label: 'Science' }
 ]
 
 const roleOptions = [

@@ -2,10 +2,10 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import TabCategory from '../components/TabCategory'
-import { courseActions, categoryActions } from '@/app/actions'
+import { bookActions, categoryActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
-import { IProduct } from '@/common/types.interface'
+import { IBook } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
 import HandleLoading from '../components/util/HandleLoading'
@@ -17,13 +17,13 @@ function CategoryDetailPage() {
   const dispatch = useDispatch()
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [coursesPerPage] = useState(15)
+  const [booksPerPage] = useState(15)
 
   const {
-    dataList: courses,
-    isLoading: coursesLoading,
-    error_message: courseError
-  } = useSelector((state: RootState) => state.course)
+    dataList: books,
+    isLoading: booksLoading,
+    error_message: bookError
+  } = useSelector((state: RootState) => state.book)
   const { data: category, isLoading: categoryLoading } = useSelector((state: RootState) => state.category)
 
   useEffect(() => {
@@ -35,18 +35,18 @@ function CategoryDetailPage() {
 
   useEffect(() => {
     if (category && category.id) {
-      dispatch(courseActions.getCoursesByCategory(category.id) as unknown as AnyAction)
+      dispatch(bookActions.getBooksByCategory(category.id) as unknown as AnyAction)
     }
   }, [category, dispatch])
 
-  const handleCourseClick = (course: IProduct) => {
-    navigate(`/book-detail/${course.slug}`)
+  const handleBookClick = (book: IBook) => {
+    navigate(`/book-detail/${book.slug}`)
   }
 
-  const indexOfLastCourse = currentPage * coursesPerPage
-  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage
-  const currentCourses = courses ? courses.slice(indexOfFirstCourse, indexOfLastCourse) : []
-  const totalPages = courses ? Math.ceil(courses.length / coursesPerPage) : 0
+  const indexOfLastBook = currentPage * booksPerPage
+  const indexOfFirstBook = indexOfLastBook - booksPerPage
+  const currentBooks = books ? books.slice(indexOfFirstBook, indexOfLastBook) : []
+  const totalPages = books ? Math.ceil(books.length / booksPerPage) : 0
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
@@ -92,7 +92,7 @@ function CategoryDetailPage() {
   }
 
   return (
-    <HandleLoading isLoading={coursesLoading} error_message={courseError}>
+    <HandleLoading isLoading={booksLoading} error_message={bookError}>
       <div className='bg-gray-100 py-8 min-h-screen px-4'>
         <Helmet>
           <title>Global Times || {category.name}</title>
@@ -105,35 +105,35 @@ function CategoryDetailPage() {
           <div className='flex flex-col lg:flex-row gap-8'>
             <div className='flex-1 bg-white rounded-lg shadow-md p-6'>
               <div>
-                <div className='text-xl font-semibold text-indigo-600 mb-2'>Courses - {category.name}</div>
+                <div className='text-xl font-semibold text-indigo-600 mb-2'>Books - {category.name}</div>
                 <p className='text-gray-700 mb-6 text-base'>{category.description}</p>
               </div>
 
-              {currentCourses && currentCourses.length > 0 ? (
+              {currentBooks && currentBooks.length > 0 ? (
                 <div>
                   <div className='flex flex-col gap-6 mb-6'>
-                    {currentCourses.map((course) => {
+                    {currentBooks.map((book) => {
                       const stripHtml = (html: string) => {
                         const tmp = document.createElement('div')
                         tmp.innerHTML = html
                         return tmp.textContent || tmp.innerText || ''
                       }
 
-                      const shortDescription = course.description ? stripHtml(course.description).slice(0, 200) : ''
+                      const shortDescription = book.description ? stripHtml(book.description).slice(0, 200) : ''
                       return (
                         <div
-                          key={course.id}
-                          onClick={() => handleCourseClick(course)}
+                          key={book.id}
+                          onClick={() => handleBookClick(book)}
                           className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4'
                         >
                           <img
-                            src={getImageUrl(course.imageUrl)}
-                            alt={course.name}
+                            src={getImageUrl(book.imageUrl)}
+                            alt={book.name}
                             className='w-100 h-40 object-cover rounded-md flex-shrink-0'
                           />
                           <div className='w-full'>
                             <div className='text-sm text-indigo-500 font-medium'>{category.name}</div>
-                            <div className='text-lg font-semibold text-gray-800'>{course.name}</div>
+                            <div className='text-lg font-semibold text-gray-800'>{book.name}</div>
                             <div
                               dangerouslySetInnerHTML={{ __html: shortDescription }}
                               className='text-gray-600 text-base mt-1 [&_p]:mb-4 
@@ -185,7 +185,7 @@ function CategoryDetailPage() {
                   )}
                 </div>
               ) : (
-                <div className='text-center text-gray-500'>No courses found in this category</div>
+                <div className='text-center text-gray-500'>No books found in this category</div>
               )}
             </div>
 

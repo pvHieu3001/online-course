@@ -53,6 +53,7 @@ export default function Router() {
             <Route path='book-category/:slug' element={<CategoryDetailPage />} />
             <Route path='blogs' element={<PageBlog />} />
             <Route path='blog/:slug' element={<BlogDetailPage />} />
+            <Route path='blogs/:slug' element={<CategoryDetailPage />} />
           </Route>
           <Route element={<GuardPage />}>
             <Route path='admin' element={<Manager />}>

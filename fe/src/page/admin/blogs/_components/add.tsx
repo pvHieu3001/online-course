@@ -56,7 +56,8 @@ export default function AddBlog() {
     formData.append('description', form.getFieldValue('description'))
     formData.append('type', form.getFieldValue('type'))
     formData.append('status', form.getFieldValue('status').toString())
-    formData.append('isDisplayHot', form.getFieldValue('isDisplayHot') || false)
+    formData.append('isTrending', form.getFieldValue('isTrending') || false)
+    formData.append('isTrendingNew', form.getFieldValue('isTrendingNew') || false)
     formData.append('content', content)
     formData.append('tagStr', selectedTags ?? null)
     if (imageUrl) {
@@ -66,7 +67,7 @@ export default function AddBlog() {
     try {
       setIsLoading(true)
       await dispatch(blogActions.createBlog(formData) as unknown as AnyAction)
-      await dispatch(blogActions.getAdminBlogs('', '', '') as unknown as AnyAction)
+      await dispatch(blogActions.getAdminBlogs('', '', '', 0, 10) as unknown as AnyAction)
       popupSuccess('Thêm bài viết thành công')
       setIsDirty(false)
       navigate('..')
@@ -158,11 +159,13 @@ export default function AddBlog() {
               </Form.Item>
               <div className='bg-white rounded-md shadow-sm p-4 space-y-4'>
                 <h2 className='text-lg font-semibold text-gray-700'>Cài đặt hiển thị</h2>
-                <p className='text-xs text-gray-500'>Bật để bài viết hiển thị trên website.</p>
-                <Form.Item label='Kích hoạt' name='status' valuePropName='checked'>
+                <Form.Item label='Hiển thị' name='status' valuePropName='checked'>
                   <Switch />
                 </Form.Item>
-                <Form.Item name='isDisplayHot' label='Bài viết nổi bật' valuePropName='checked'>
+                <Form.Item name='isTrending' label='Bài viết nổi bật theo thể loại' valuePropName='checked'>
+                  <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                </Form.Item>
+                <Form.Item name='isTrendingNew' label='Bài viết nổi bật theo thời gian' valuePropName='checked'>
                   <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
                 </Form.Item>
               </div>

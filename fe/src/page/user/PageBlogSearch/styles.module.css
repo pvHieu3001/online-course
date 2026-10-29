@@ -12,11 +12,11 @@
   padding: 20px 20px;
   background-color: #fff;
 }
-.coursesWrapper{
+.booksWrapper{
   width: 85%;
 }
 
-.courseListTitle {
+.bookListTitle {
   font-size: 22px;
   font-weight: 700;
   color: #1a1a1a;
@@ -37,7 +37,7 @@
   height: fit-content;
 }
 
-.courseCard {
+.bookCard {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 12px #e0e0e0;
@@ -50,25 +50,25 @@
   max-height: 330px;
 }
 
-.courseCard:focus-visible,
+.bookCard:focus-visible,
 .categoriesList li:focus-visible {
   outline: 2px dashed var(--primary);
   outline-offset: 4px;
 }
 
-.courseCard:hover {
+.bookCard:hover {
   box-shadow: 0 6px 20px rgba(23, 147, 230, 0.3);
   transform: translateY(-2px);
 }
 
-.courseCard img {
+.bookCard img {
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
   display: block;
 }
 
-.courseCat {
+.bookCat {
   color: #1793e6;
   font-size: 13px;
   font-weight: 600;
@@ -77,12 +77,12 @@
   display: inline-block;
 }
 
-.courseCat:hover {
+.bookCat:hover {
   color: #2d71ca !important;
   border-bottom: 1px solid #1793e6 !important;
 }
 
-.courseTitle {
+.bookTitle {
   font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
@@ -92,7 +92,7 @@
   cursor: pointer;
 }
 
-.courseTitle:hover {
+.bookTitle:hover {
   color: #1793e6;
 }
 
@@ -236,15 +236,15 @@
     gap: 16px;
   }
 
-  .courseCard {
+  .bookCard {
     padding: 12px;
   }
 
-  .courseCard img {
+  .bookCard img {
     height: 160px;
   }
 
-  .courseTitle {
+  .bookTitle {
     font-size: 15px;
   }
 
@@ -293,19 +293,19 @@
     gap: 12px;
   }
 
-  .courseCard {
+  .bookCard {
     padding: 10px;
   }
 
-  .courseCard img {
+  .bookCard img {
     height: 160px;
   }
 
-  .courseTitle {
+  .bookTitle {
     font-size: 14px;
   }
 
-  .courseCat {
+  .bookCat {
     font-size: 11px;
   }
 

@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { Button, Flex, Input, Popconfirm, Select, Space, Table, TableProps, Tag, Typography, message } from 'antd'
 import { Link } from 'react-router-dom'
 import { AnyAction } from '@reduxjs/toolkit'
-import { courseActions } from '@/app/actions/course.actions'
+import { bookActions } from '@/app/actions/book.actions'
 import { useDispatch, useSelector } from 'react-redux'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { RootState } from '@/app/store'
-import { IProduct } from '@/common/types.interface'
+import { IBook } from '@/common/types.interface'
 import { EyeOutlined, UnorderedListOutlined, StarOutlined } from '@ant-design/icons'
 
 export default function ListProduct() {
@@ -14,23 +14,23 @@ export default function ListProduct() {
   const [searchValue, setSearchValue] = useState('')
   const [active, setActive] = useState('')
   const [isHot, setIsHot] = useState('') // blank: all, 0: false, 1: true
-  const [dataTable, setDataTable] = useState<(IProduct & { key: number })[]>([])
+  const [dataTable, setDataTable] = useState<(IBook & { key: number })[]>([])
   const [currentPage, setCurrentPage] = useState(1)
-  const [coursesPerPage] = useState(10)
+  const [booksPerPage] = useState(10)
 
-  const courses = useSelector((state: RootState) => state.course)
+  const books = useSelector((state: RootState) => state.book)
 
   useEffect(() => {
     dispatch(
-      courseActions.getAdminCourses(active, searchValue, isHot, currentPage - 1, coursesPerPage) as unknown as AnyAction
+      bookActions.getAdminBooks(active, searchValue, isHot, currentPage - 1, booksPerPage) as unknown as AnyAction
     )
-  }, [searchValue, active, isHot, dispatch, currentPage, coursesPerPage])
+  }, [searchValue, active, isHot, dispatch, currentPage, booksPerPage])
 
   useEffect(() => {
     setDataTable(
-      courses.dataList?.map((item: IProduct, index: number) => ({ ...item, key: index + (currentPage - 1) * 10 + 1 }))
+      books.dataList?.map((item: IBook, index: number) => ({ ...item, key: index + (currentPage - 1) * 10 + 1 }))
     )
-  }, [courses, currentPage])
+  }, [books, currentPage])
 
   useEffect(() => {
     console.log(dataTable)
@@ -45,23 +45,23 @@ export default function ListProduct() {
 
   const handlerDeleteProduct = async (id: string) => {
     try {
-      await dispatch(courseActions.deleteCourse(id) as unknown as AnyAction)
+      await dispatch(bookActions.deleteBook(id) as unknown as AnyAction)
       await dispatch(
-        courseActions.getAdminCourses(
+        bookActions.getAdminBooks(
           active,
           searchValue,
           isHot,
           currentPage - 1,
-          coursesPerPage
+          booksPerPage
         ) as unknown as AnyAction
       )
-      message.success('Xoá khóa học thành công!')
+      message.success('Xóa sách thành công!')
     } catch (error) {
-      message.error('Xoá khóa học thất bại!')
+      message.error('Xóa sách thất bại!')
     }
   }
 
-  const columns: TableProps<IProduct>['columns'] = [
+  const columns: TableProps<IBook>['columns'] = [
     {
       title: '#',
       dataIndex: 'key',
@@ -70,7 +70,7 @@ export default function ListProduct() {
       align: 'center'
     },
     {
-      title: 'Tên khóa học',
+      title: 'Tên sách',
       dataIndex: 'name',
       key: 'name',
       align: 'center',
@@ -82,12 +82,12 @@ export default function ListProduct() {
       )
     },
     {
-      title: 'Loại khóa học',
+      title: 'Danh mục sách',
       dataIndex: 'category',
       key: 'category',
       align: 'center',
       width: 180,
-      render: (_text: string, record: IProduct) => (
+      render: (_text: string, record: IBook) => (
         <span
           className={`px-3 py-1 rounded-full text-sm font-medium ${
             record.category?.name ? 'text-gray-800' : 'text-purple-800'
@@ -98,27 +98,31 @@ export default function ListProduct() {
       )
     },
     {
-      title: 'Độ khó',
+      title: 'Difficulty',
       dataIndex: 'level',
       key: 'level',
       align: 'center',
       width: 250,
       render: (level: string) => {
         let color = ''
+        let label = level
         switch (level?.toLowerCase()) {
           case 'beginner':
             color = 'green'
+            label = 'Cơ bản'
             break
           case 'intermediate':
             color = 'orange'
+            label = 'Trung cấp'
             break
           case 'advanced':
             color = 'red'
+            label = 'Nâng cao'
             break
           default:
             color = 'blue'
         }
-        return <Tag color={color}>{level}</Tag>
+        return <Tag color={color}>{label}</Tag>
       }
     },
     {
@@ -141,12 +145,12 @@ export default function ListProduct() {
       }
     },
     {
-      title: 'Hành động',
+      title: 'Thao tác',
       key: 'action',
       width: 150,
       align: 'center',
       fixed: 'right',
-      render: (record: IProduct) => (
+      render: (record: IBook) => (
         <Space size={'middle'}>
           <Link to={`/book-detail/${record.slug}`}>
             <Button icon={<EyeOutlined />} />
@@ -156,14 +160,14 @@ export default function ListProduct() {
           </Link>
           <Popconfirm
             placement='topRight'
-            title={'Bạn có chắc muốn xoá khóa học này?'}
+            title={'Bạn có chắc chắn muốn xóa sách này không?'}
             onConfirm={() => handlerDeleteProduct(record.id)}
             onCancel={() => {}}
             okText='Đồng ý'
-            cancelText='Huỷ bỏ'
+            cancelText='Hủy'
           >
             <Button type='primary' danger>
-              Xoá
+              Xóa
             </Button>
           </Popconfirm>
         </Space>
@@ -179,7 +183,7 @@ export default function ListProduct() {
     <>
       <div className='flex items-center justify-between my-2'>
         <Typography.Title level={2} style={{ margin: 0 }}>
-          Danh sách khóa học
+          Quản lý sách
         </Typography.Title>
       </div>
       <Flex wrap='wrap' gap='small' className='my-5' align='center' justify='space-between'>
@@ -196,27 +200,27 @@ export default function ListProduct() {
             allowClear
             onChange={handleChangeSearch}
             size='small'
-            placeholder={'Tìm kiếm'}
+            placeholder='Tìm kiếm'
             style={{ borderRadius: '2rem' }}
           />
           <Select className='ml-2 w-40' onChange={(value) => setActive(value)} value={active} size='large'>
-            <Select.Option value=''>Trạng Thái</Select.Option>
-            <Select.Option value='active'>Hoạt Động</Select.Option>
-            <Select.Option value='inactive'>Không Hoạt Động</Select.Option>
+            <Select.Option value=''>Trạng thái</Select.Option>
+            <Select.Option value='active'>Hoạt động</Select.Option>
+            <Select.Option value='inactive'>Không hoạt động</Select.Option>
           </Select>
           <Button
             size='large'
             type='default'
             className={`ml-2 ${
               isHot == '1'
-                ? 'bg-yellow-400 text-white hover:bg-yellow-500' // khi bật (true)
-                : 'text-gray-700 hover:bg-gray-300' // khi tắt (false)
+                ? 'bg-yellow-400 text-white hover:bg-yellow-500' // đã bật
+                : 'text-gray-700 hover:bg-gray-300' // đã tắt
             }`}
             onClick={() => {
               setIsHot(isHot == '' || isHot == '0' ? '1' : '0')
             }}
           >
-            <StarOutlined /> Được yêu thích
+            <StarOutlined /> Nổi bật
           </Button>
           <Button
             size='large'
@@ -228,12 +232,12 @@ export default function ListProduct() {
               setIsHot('')
             }}
           >
-            <UnorderedListOutlined /> Tất Cả
+            <UnorderedListOutlined /> Tất cả
           </Button>
         </div>
 
         <Link to={`add?status=${active}&isHot=${isHot}&search=${searchValue}&page=${currentPage - 1}`}>
-          <Button type='primary'>Thêm khóa học</Button>
+          <Button type='primary'>Thêm sách</Button>
         </Link>
       </Flex>
       <Table
@@ -247,11 +251,11 @@ export default function ListProduct() {
         sticky={{ offsetHeader: 0 }}
         scroll={{ x: 1200 }}
         dataSource={dataTable}
-        loading={courses.isLoading}
+        loading={books.isLoading}
         pagination={{
           current: currentPage,
-          pageSize: coursesPerPage,
-          total: courses.totalElements || 0,
+          pageSize: booksPerPage,
+          total: books.totalElements || 0,
           showSizeChanger: false
         }}
         onChange={handleTableChange}

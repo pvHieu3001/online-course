@@ -27,10 +27,10 @@ function PageBlog() {
     error_message
   } = useSelector((state: RootState) => state.blog)
 
-  const { setIsShowRecommendCourses } = useOutletContext<ContextType>()
+  const { setIsShowRecommendBooks } = useOutletContext<ContextType>()
   useEffect(() => {
-    setIsShowRecommendCourses(false)
-  }, [setIsShowRecommendCourses])
+    setIsShowRecommendBooks(false)
+  }, [setIsShowRecommendBooks])
 
   useEffect(() => {
     const path = location.pathname.replace(/^\/|\/$/g, '')

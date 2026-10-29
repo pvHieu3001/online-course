@@ -8,15 +8,15 @@ import Footer from './components/Footer'
 import { useState } from 'react'
 
 function Base() {
-  const [isShowRecommendCourses, setIsShowRecommendCourses] = useState(true)
+  const [isShowRecommendBooks, setIsShowRecommendBooks] = useState(true)
   return (
     <>
       <div className={styles.modules}>
         <Toaster />
         <ScrollToTop />
-        <Header isShowRecommendCourses={isShowRecommendCourses} />
+        <Header isShowRecommendBooks={isShowRecommendBooks} />
         <main className={styles.container}>
-          <Outlet context={{ setIsShowRecommendCourses }} />
+          <Outlet context={{ setIsShowRecommendBooks }} />
         </main>
         <Footer />
       </div>

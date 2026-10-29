@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { MenuOutlined, CloseOutlined, SearchOutlined } from '@ant-design/icons'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { courseActions } from '@/app/actions'
+import { bookActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
-import { IProduct } from '@/common/types.interface'
+import { IBook } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 
 type Props = {
-  isShowRecommendCourses: boolean
+  isShowRecommendBooks: boolean
 }
 
 const Header = (props: Props) => {
@@ -28,7 +28,7 @@ const Header = (props: Props) => {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
 
-  const courses = useSelector((state: RootState) => state.course)
+  const books = useSelector((state: RootState) => state.book)
   const navigate = useNavigate()
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -49,7 +49,7 @@ const Header = (props: Props) => {
   }, [lastScrollY])
 
   useEffect(() => {
-    dispatch(courseActions.getRecommendCourses() as unknown as AnyAction)
+    dispatch(bookActions.getRecommendBooks() as unknown as AnyAction)
   }, [dispatch])
 
   useEffect(() => {

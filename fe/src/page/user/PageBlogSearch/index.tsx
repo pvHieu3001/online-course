@@ -28,9 +28,9 @@ function PageBlogSearch() {
   }, [dispatch, search, tag])
 
   const handleDetail = (slug: string) => {
-    const course = dataList.find((c: IBlog) => c.slug === slug)
-    if (course) {
-      navigate(`/blog/${slug}`, { state: course })
+    const book = dataList.find((c: IBlog) => c.slug === slug)
+    if (book) {
+      navigate(`/blog/${slug}`, { state: book })
     }
   }
 
@@ -45,9 +45,9 @@ function PageBlogSearch() {
           />
         </Helmet>
         <main className={styles.mainContent} role='main'>
-          <section className={styles.coursesWrapper} aria-label='Course listings'>
-            <h2 className={styles.courseListTitle}>Search Results</h2>
-            <div className={styles.courses}>
+          <section className={styles.booksWrapper} aria-label='Book listings'>
+            <h2 className={styles.bookListTitle}>Search Results</h2>
+            <div className={styles.books}>
               {isLoading && <p>Loading blogs...</p>}
               {!isLoading && error_message && (
                 <p className={styles.error}>Error loading blogs. Please try again later.</p>
@@ -57,16 +57,16 @@ function PageBlogSearch() {
                 !error_message &&
                 dataList?.map((blog: IBlog) => (
                   <article
-                    className={styles.courseCard}
+                    className={styles.bookCard}
                     key={blog.id}
                     role='button'
                     tabIndex={0}
                     onClick={() => handleDetail(blog.slug)}
                     onKeyDown={(e) => e.key === 'Enter' && handleDetail(blog.slug)}
                   >
-                    <img src={getImageUrl(blog.image)} alt={`${blog.title} course image`} loading='lazy' />
-                    <Link className={styles.courseCat}>{getBlogInfoByType(blog.type).title}</Link>
-                    <h3 className={styles.courseTitle}>{blog.title}</h3>
+                    <img src={getImageUrl(blog.image)} alt={`${blog.title} book image`} loading='lazy' />
+                    <Link className={styles.bookCat}>{getBlogInfoByType(blog.type).title}</Link>
+                    <h3 className={styles.bookTitle}>{blog.title}</h3>
                   </article>
                 ))}
             </div>

@@ -3,8 +3,8 @@ import http from '../http-common'
 function getBlogs(search: string, tag: string) {
   return http.get('/api/v1/user/blog?search=' + search + '&tag=' + tag)
 }
-function getAdminBlogs(status: string, search: string, isDisplayHot: string) {
-  return http.get('/api/v1/admin/blog?status=' + status + '&search=' + search + '&isDisplayHot=' + isDisplayHot)
+function getAdminBlogs(status: string, search: string, isDisplayHot: string, page: number, size: number) {
+  return http.get('/api/v1/admin/blog?status=' + status + '&search=' + search + '&isDisplayHot=' + isDisplayHot + '&page=' + page + '&size=' + size)
 }
 function getBlogById(id: string) {
   return http.get(`/api/v1/admin/blog/${id}`)

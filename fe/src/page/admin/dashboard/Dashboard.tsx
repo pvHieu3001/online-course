@@ -26,7 +26,7 @@ export default function Dashboard() {
   const count = [
     {
       today: 'Tổng Số Khóa Học',
-      title: `${dashboard.data?.numberCourse || 0}`,
+      title: `${dashboard.data?.numberBook || 0}`,
       persent: '',
       icon: dollor,
       bnb: 'bnb2'
