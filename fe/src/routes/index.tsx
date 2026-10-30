@@ -45,10 +45,12 @@ export default function Router() {
     <>
       <Routes>
         <Route path='/' element={<Layout />}>
-          <Route path='login' element={<Login />} />
-          <Route path='signup' element={<SignUp />} />
+
+
           <Route path='' element={<Base />}>
             <Route index element={<PageHome />} />
+            <Route path='login' element={<Login />} />
+            <Route path='signup' element={<SignUp />} />
             <Route path='search' element={<PageSearch />} />
             <Route path='search-blog' element={<PageBlogSearch />} />
             <Route path='books' element={<PageBook />} />
