@@ -26,7 +26,7 @@ import EditBlog from '@/page/admin/blogs/_components/edit'
 import PageSearch from '@/page/user/PageSearch'
 import NetworkErrorPage from '@/page/error/NetworkErrorPage'
 import NotFoundPage from '@/page/error/NotFoundPage'
-import BlogDetailPage from '@/page/user/BlogDetailPage'
+import BlogDetailPage from '@/page/user/PageBlog/detail'
 import AffiliateManagement from '@/page/admin/affiliate'
 import AddAffiliate from '@/page/admin/affiliate/_components/add'
 import EditAffiliate from '@/page/admin/affiliate/_components/edit'
@@ -36,6 +36,9 @@ import AmazonManagement from '@/page/admin/amazon'
 import AddAmazon from '@/page/admin/amazon/_components/add'
 import EditAmazon from '@/page/admin/amazon/_components/edit'
 import PageBook from '@/page/user/PageBook'
+import PagePrivacyPolicy from '@/page/user/PagePrivacyPolicy'
+import PageTermsConditions from '@/page/user/PageTermsConditions'
+import PageContactUs from '@/page/user/PageContactUs'
 
 export default function Router() {
   return (
@@ -54,6 +57,9 @@ export default function Router() {
             <Route path='blogs' element={<PageBlog />} />
             <Route path='blog/:slug' element={<BlogDetailPage />} />
             <Route path='blogs/:slug' element={<CategoryDetailPage />} />
+            <Route path='privacy-policy' element={<PagePrivacyPolicy />} />
+            <Route path='terms-and-conditions' element={<PageTermsConditions />} />
+            <Route path='contact-us' element={<PageContactUs />} />
           </Route>
           <Route element={<GuardPage />}>
             <Route path='admin' element={<Manager />}>

@@ -54,28 +54,28 @@ const userSlice = createSlice({
     },
     createSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Tạo Người Dùng Thành Công'
+      state.message = 'User Created Successfully'
       state.isLoading = false
     },
     createFailure: (state) => {
-      state.error_message = 'Tạo Người Dùng Thất Bại'
+      state.error_message = 'Failed to Create User'
       state.isLoading = false
     },
     updateSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Cập Nhật Người Dùng Thành Công'
+      state.message = 'User Updated Successfully'
       state.isLoading = false
     },
     updateFailure: (state) => {
-      state.error_message = 'Cập Nhật Người Dùng Thất Bại'
+      state.error_message = 'Failed to Update User'
       state.isLoading = false
     },
     deleteSuccessfully: (state) => {
-      state.message = 'Xóa Người Dùng Thành Công'
+      state.message = 'User Deleted Successfully'
       state.isLoading = false
     },
     deleteFailure: (state) => {
-      state.error_message = 'Xóa Người Dùng Thất Bại'
+      state.error_message = 'Failed to Delete User'
       state.isLoading = false
     }
   }

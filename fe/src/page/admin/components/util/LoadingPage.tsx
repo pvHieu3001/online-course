@@ -6,8 +6,8 @@ export default function LoadingPage() {
       <div className='flex flex-col items-center space-y-4 rounded-lg p-8 '>
         <Spin size='large' />
         <div className='text-center'>
-          <h3 className='text-lg font-semibold text-gray-700'>Đang tải dữ liệu...</h3>
-          <p className='mt-1 text-sm text-gray-500'>Vui lòng chờ trong giây lát.</p>
+          <h3 className='text-lg font-semibold text-gray-700'>Loading data...</h3>
+          <p className='mt-1 text-sm text-gray-500'>Please wait a moment.</p>
         </div>
       </div>
     </div>

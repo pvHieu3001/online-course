@@ -58,7 +58,7 @@ export default function TextEditor({ content, onHandleChange, height }: TextEdit
 
       editor.insertEmbed(range.index, 'image', getImageUrl(imageUrl))
     } catch (error) {
-      console.error('Lỗi khi upload ảnh:', error)
+      console.error('Error uploading image:', error)
     }
   }
 
@@ -90,7 +90,7 @@ export default function TextEditor({ content, onHandleChange, height }: TextEdit
             await uploadAndInsertImage(file)
           }, 0)
         }
-        return delta.slice(delta.length()) // Trả về delta rỗng để loại bỏ ảnh base64
+        return delta.slice(delta.length()) // Return empty delta to remove base64 image
       }
       return delta
     })

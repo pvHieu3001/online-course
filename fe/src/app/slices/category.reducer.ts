@@ -38,28 +38,28 @@ const categorySlice = createSlice({
     },
     createSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Tạo Loai Khóa Học Thành Công'
+      state.message = 'Category Created Successfully'
       state.isLoading = false
     },
     createFailure: (state) => {
-      state.error_message = 'Tạo Loai Khóa Học Thất Bại'
+      state.error_message = 'Failed to Create Category'
       state.isLoading = false
     },
     updateSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Cập Nhật Loai Khóa Học Thành Công'
+      state.message = 'Category Updated Successfully'
       state.isLoading = false
     },
     updateFailure: (state) => {
-      state.error_message = 'Cập Nhật Loai Khóa Học Thất Bại'
+      state.error_message = 'Failed to Update Category'
       state.isLoading = false
     },
     deleteSuccessfully: (state) => {
-      state.message = 'Xóa Loai Khóa Học Thành Công'
+      state.message = 'Category Deleted Successfully'
       state.isLoading = false
     },
     deleteFailure: (state) => {
-      state.error_message = 'Xóa Loai Khóa Học Thất Bại'
+      state.error_message = 'Failed to Delete Category'
       state.isLoading = false
     },
     reset: (state) => {

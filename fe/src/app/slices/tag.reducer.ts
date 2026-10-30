@@ -38,28 +38,28 @@ const tagSlice = createSlice({
     },
     createSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Tạo Tag Thành Công'
+      state.message = 'Tag Created Successfully'
       state.isLoading = false
     },
     createFailure: (state) => {
-      state.error_message = 'Tạo Tag Thất Bại'
+      state.error_message = 'Failed to Create Tag'
       state.isLoading = false
     },
     updateSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Cập Nhật Tag Thành Công'
+      state.message = 'Tag Updated Successfully'
       state.isLoading = false
     },
     updateFailure: (state) => {
-      state.error_message = 'Cập Nhật Tag Thất Bại'
+      state.error_message = 'Failed to Update Tag'
       state.isLoading = false
     },
     deleteSuccessfully: (state) => {
-      state.message = 'Xóa Tag Thành Công'
+      state.message = 'Tag Deleted Successfully'
       state.isLoading = false
     },
     deleteFailure: (state) => {
-      state.error_message = 'Xóa Tag Thất Bại'
+      state.error_message = 'Failed to Delete Tag'
       state.isLoading = false
     }
   }

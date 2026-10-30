@@ -17,23 +17,23 @@ const onErrorInterceptorResponse = (error) => {
   if (error.response) {
     const status = error.response.status
     if (status === 401) {
-      console.log('Lỗi 401: Không xác thực')
+      console.log('Error 401: Unauthorized')
       goToWorkspace()
     } else if (status === 403) {
-      console.log('Lỗi 403: Không có quyền truy cập')
+      console.log('Error 403: Forbidden')
       goToWorkspace()
     } else if (status === 404) {
-      console.log('Lỗi 404: Không tìm thấy tài nguyên')
+      console.log('Error 404: Not Found')
       window.location.href = `${DOMAIN_URL}`
     } else {
-      console.log(`Lỗi HTTP ${status}:`, error.response.data)
+      console.log(`HTTP Error ${status}:`, error.response.data)
     }
   } else if (error.request) {
-    console.log('Lỗi mạng hoặc server không phản hồi:', error.message)
-    console.log('Chi tiết request:', error.request)
+    console.log('Network error or server not responding:', error.message)
+    console.log('Request details:', error.request)
     // window.location.href = `${DOMAIN_URL}network-error`
   } else {
-    console.log('Lỗi không xác định:', error.message)
+    console.log('Unknown error:', error.message)
   }
   return Promise.reject(error)
 }

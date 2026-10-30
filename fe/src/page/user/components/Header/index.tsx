@@ -32,14 +32,14 @@ const Header = (props: Props) => {
   const navigate = useNavigate()
   const menuRef = useRef<HTMLDivElement>(null)
 
-  // Xử lý ẩn/hiện Header khi cuộn
+  // Handle show/hide header on scroll
   useEffect(() => {
     const controlNavbar = () => {
       if (typeof window !== 'undefined') {
         if (window.scrollY > lastScrollY && window.scrollY > 150) {
-          setIsVisible(false) // Cuộn xuống thì ẩn
+          setIsVisible(false) // Scroll down: hide
         } else {
-          setIsVisible(true) // Cuộn lên thì hiện
+          setIsVisible(true) // Scroll up: show
         }
         setLastScrollY(window.scrollY)
       }
@@ -85,7 +85,7 @@ const Header = (props: Props) => {
 
   return (
     <>
-      {/* KHỐI HEADER CỐ ĐỊNH */}
+      {/* FIXED HEADER BLOCK */}
       <div
         className={`fixed top-0 left-0 w-full z-[1000] transition-transform duration-300 shadow-xl ${
           isVisible ? 'translate-y-0' : '-translate-y-full'
@@ -151,7 +151,7 @@ const Header = (props: Props) => {
           </header>
         </div>
 
-        {/* 3. Main Navigation Menu (Cố định ở đây) */}
+        {/* 3. Main Navigation Menu */}
         <div className='w-full bg-slate-900 border-b border-white/5 flex justify-center'>
           <nav className='max-w-[1300px] w-full hidden sm:flex items-center gap-1 h-12 px-4 overflow-x-auto whitespace-nowrap scrollbar-hide'>
             {menuItems.map((item) => {
@@ -175,7 +175,7 @@ const Header = (props: Props) => {
         </div>
       </div>
 
-      {/* 4. Sidebar Mobile (Giữ nguyên) */}
+      {/* 4. Sidebar Mobile */}
       {menuOpen && (
         <>
           <div className='fixed inset-0 bg-black/60 z-[2000] backdrop-blur-sm' onClick={() => setMenuOpen(false)}></div>
@@ -192,7 +192,7 @@ const Header = (props: Props) => {
                 <CloseOutlined style={{ fontSize: 18, color: '#fff' }} />
               </button>
             </div>
-            {/* ... Phần search ... */}
+            {/* Search section */}
             <div className='relative w-full'>
               <span className='absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400'>
                 <SearchOutlined />
@@ -223,7 +223,7 @@ const Header = (props: Props) => {
         </>
       )}
 
-      {/* 5. Placeholder - Bù chiều cao để nội dung không bị Header đè lên */}
+      {/* 5. Placeholder height compensation */}
       <div className='h-[110px] sm:h-[155px]'></div>
     </>
   )

@@ -9,7 +9,7 @@ export default function GuardPage() {
 
   useEffect(() => {
     if (!token) {
-      popupError('Vui lòng đăng nhập trước!')
+      popupError('Please log in first!')
       setShowError(true)
     }
   }, [token])

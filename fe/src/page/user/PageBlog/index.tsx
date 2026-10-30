@@ -82,14 +82,14 @@ function PageBlog() {
   }
 
   const subNews = [
-    { id: 1, title: 'Động lực để giảm giá dầu', img: 'https://picsum.photos/seed/oil/400/250' },
+    { id: 1, title: 'Catalysts Driving the Decline in Global Oil Prices', img: 'https://picsum.photos/seed/oil/400/250' },
     {
       id: 2,
-      title: 'Thời kỳ thịnh vượng của những quán cà phê ở London?',
+      title: 'The Golden Era of London Coffee Houses Returns',
       img: 'https://picsum.photos/seed/coffee/400/250'
     },
-    { id: 3, title: '5 nhiệm vụ nâng cao chất lượng phát thanh', img: 'https://picsum.photos/seed/radio/400/250' },
-    { id: 4, title: 'Khơi dậy động lực phát triển của ngành xuất bản', img: 'https://picsum.photos/seed/book/400/250' }
+    { id: 3, title: '5 Strategic Milestones for Public Broadcast Quality', img: 'https://picsum.photos/seed/radio/400/250' },
+    { id: 4, title: 'Igniting Innovation Across Contemporary Publishing', img: 'https://picsum.photos/seed/book/400/250' }
   ]
 
   const menuItems = [
@@ -99,30 +99,30 @@ function PageBlog() {
   const newsList = [
     {
       id: 1,
-      title: 'Tại sao việc luyện tập mang lại hiệu quả cho não?',
+      title: 'Why Daily Physical Exercise Sharpens Cognitive Performance',
       time: '23:51 11/4/2026',
-      desc: 'Ở cấp độ phân tử, những người tham gia các cuộc thi ăn có thể giải thích điều này.',
+      desc: 'At the molecular level, cognitive researchers uncover how mental exertion and physical vitality converge.',
       image: 'https://picsum.photos/seed/brain/300/200'
     },
     {
       id: 2,
-      title: 'Khi AI trở thành kỹ năng sống và làm việc trong thời đại mới',
+      title: 'When Artificial Intelligence Becomes an Essential Life Skill',
       time: '23:08 11/4/2026',
-      desc: 'Trí tuệ nhân tạo không còn là câu chuyện xa vời hay đặc quyền của giới công nghệ mà đã hiện diện sâu rộng trong từng quyết định...',
+      desc: 'AI is no longer a distant theoretical vision; it is actively transforming everyday workflows, decisions, and creative endeavors...',
       image: 'https://picsum.photos/seed/ai-skill/300/200'
     },
     {
       id: 3,
-      title: 'Giữ mạch nguồn văn tự Chăm Pa',
+      title: 'Preserving Ancient Inscriptions and Epigraphic Heritage',
       time: '22:58 11/4/2026',
-      desc: 'Trong dòng chảy hối hả của thời đại số, khi những giá trị cổ xưa dễ dàng bị lãng quên dưới lớp bụi thời gian...',
+      desc: 'In an era of relentless digital acceleration, dedicated archivists rescue invaluable cultural manuscripts from obscurity...',
       image: 'https://picsum.photos/seed/champa/300/200'
     },
     {
       id: 4,
-      title: 'Người ngoại tình sẽ mất đi quyền lực trong hôn nhân',
+      title: 'Navigating Power Dynamics and Rebuilding Trust in Modern Relationships',
       time: '14:12 11/4/2026',
-      desc: 'Khi ngoại tình, nếu vẫn muốn chung sống, rất có thể bạn sẽ bị đối phương dày vò và trách móc...',
+      desc: 'Clinical psychologists unpack the emotional consequences, negotiations, and therapeutic paths following infidelity...',
       image: 'https://picsum.photos/seed/marriage/300/200'
     }
   ]
@@ -166,10 +166,10 @@ function PageBlog() {
                       level={2}
                       className='!text-sky-800 !text-2xl !mb-4 group-hover:!text-sky-600 transition-colors'
                     >
-                      Quy luật đào thải trong cuộc chiến sinh tồn
+                      The Natural Laws of Survival and Resource Partitioning
                     </Title>
                     <Paragraph className='text-gray-600 text-base leading-relaxed'>
-                      Khi hai loài cạnh tranh cùng nguồn tài nguyên, loài có lợi thế hơn có thể lấn át đối thủ. Tuy nhiên, nhiều sinh vật vẫn chung sống nhờ phân chia tài nguyên.
+                      When species compete for the same scarce resources, subtle evolutionary adaptations enable unexpected coexistence.
                     </Paragraph>
                   </div>
                 </Col>
@@ -182,7 +182,7 @@ function PageBlog() {
                         alt='Industry'
                       />
                       <h3 className='text-lg font-bold leading-tight group-hover:text-sky-800'>
-                        Cuộc bùng nổ ngành công nghiệp khủng khiếp nhất trong lịch sử
+                        The Most Disruptive Industrial Revolution in Modern History
                       </h3>
                     </div>
 
@@ -195,7 +195,7 @@ function PageBlog() {
                         alt='History'
                       />
                       <h3 className='text-lg font-bold leading-tight group-hover:text-sky-800'>
-                        Sau bị xâm hại gần một năm, ngai vua triều Nguyễn chưa được phục chế
+                        Historic Artifact Restoration Projects Enter Next Phase of Conservation
                       </h3>
                     </div>
                   </div>
@@ -220,11 +220,11 @@ function PageBlog() {
             </Content>
             <div className='max-w-[1200px] mx-auto p-4 bg-white'>
               <Row gutter={[32, 0]}>
-                {/* --- CỘT BÊN TRÁI: TIN MỚI --- */}
+                {/* --- LEFT COLUMN: LATEST NEWS --- */}
                 <Col xs={24} lg={16}>
                   <div className='flex items-center gap-2 mb-4'>
                     <div className='w-1.5 h-6 bg-purple-600'></div>
-                    <h2 className='text-xl font-bold uppercase m-0'>Tin mới</h2>
+                    <h2 className='text-xl font-bold uppercase m-0'>Latest News</h2>
                   </div>
                   <Divider className='mt-2 mb-6' />
 
@@ -233,7 +233,7 @@ function PageBlog() {
                     dataSource={newsList}
                     renderItem={(item) => (
                       <div className='flex flex-col sm:flex-row gap-4 mb-8 group cursor-pointer'>
-                        {/* Ảnh tin tức */}
+                        {/* News Image */}
                         <div className='w-full sm:w-1/3 flex-shrink-0 overflow-hidden rounded-sm'>
                           <img
                             src={item.image}
@@ -241,7 +241,7 @@ function PageBlog() {
                             className='w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105'
                           />
                         </div>
-                        {/* Nội dung tin tức */}
+                        {/* News Content */}
                         <div className='flex-1'>
                           <h3 className='text-lg font-bold leading-tight mb-1 group-hover:text-blue-700 transition-colors'>
                             {item.title}
@@ -254,29 +254,29 @@ function PageBlog() {
                   />
                 </Col>
 
-                {/* --- CỘT BÊN PHẢI: TIÊU ĐIỂM --- */}
+                {/* --- RIGHT COLUMN: SPOTLIGHT --- */}
                 <Col xs={24} lg={8}>
                   <div className='bg-sky-50 p-6 rounded-sm relative overflow-hidden'>
-                    {/* Chữ "TIÊU ĐIỂM" xoay dọc làm nền ẩn (Watermark style) */}
+                    {/* "SPOTLIGHT" Watermark background */}
                     <div className='absolute right-[-20px] top-1/2 -translate-y-1/2 rotate-90 text-6xl font-black text-sky-100 pointer-events-none select-none'>
-                      TIÊU ĐIỂM
+                      SPOTLIGHT
                     </div>
 
                     <div className='relative z-10'>
                       <div className='border-l-2 border-blue-500 pl-3 mb-4'>
                         <Text className='text-xs text-gray-500 uppercase block leading-tight'>
-                          Tủ sách 50 năm giải phóng miền Nam, thống nhất đất nước
+                          Special Retrospective: Five Decades of Cultural Archive
                         </Text>
                       </div>
 
                       <Title level={3} className='!text-xl !font-bold !leading-tight !mb-4'>
-                        Di sản Sài Gòn - Thành phố Hồ Chí Minh qua hơn 300 ảnh tư liệu quý
+                        Architectural Heritage Captured Through Rare Archival Imagery
                       </Title>
 
                       <div className='mb-6 shadow-md'>
                         <img
                           src='https://picsum.photos/seed/saigon/400/300'
-                          alt='Sách di sản'
+                          alt='Heritage Book'
                           className='w-full h-auto block'
                         />
                       </div>
@@ -285,14 +285,14 @@ function PageBlog() {
                         <li className='flex gap-3 items-start group cursor-pointer'>
                           <span className='text-blue-500 text-xl font-bold mt-[-4px]'>•</span>
                           <Text className='font-semibold text-[15px] group-hover:text-blue-600 transition-colors'>
-                            Nửa thế kỷ trong ngành xuất bản của nhà phát hành lớn nhất Việt Nam
+                            Five Decades of Independent Publishing and Literary Curation
                           </Text>
                         </li>
                         <Divider className='my-2' />
                         <li className='flex gap-3 items-start group cursor-pointer'>
                           <span className='text-blue-500 text-xl font-bold mt-[-4px]'>•</span>
                           <Text className='font-semibold text-[15px] group-hover:text-blue-600 transition-colors'>
-                            Những khoảnh khắc đổi thay của Thành phố Hồ Chí Minh 50 năm qua
+                            Visualizing Decades of Urban Transformation and Economic Growth
                           </Text>
                         </li>
                       </ul>

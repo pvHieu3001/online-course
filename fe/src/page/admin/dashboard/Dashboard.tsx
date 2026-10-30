@@ -25,28 +25,28 @@ export default function Dashboard() {
 
   const count = [
     {
-      today: 'Tổng Số Khóa Học',
+      today: 'Total Books',
       title: `${dashboard.data?.numberBook || 0}`,
       persent: '',
       icon: dollor,
       bnb: 'bnb2'
     },
     {
-      today: 'Tổng Số Bài Viết',
+      today: 'Total Articles',
       title: `${dashboard.data?.numberPost || 0}`,
       persent: '',
       icon: heart,
       bnb: 'bnb2'
     },
     {
-      today: 'Tổng Số Người Dùng',
+      today: 'Total Users',
       title: `${dashboard.data?.numberUser || 0}`,
       persent: '',
       icon: profile,
       bnb: 'redtext'
     },
     {
-      today: 'Lượt Tải Xuống',
+      today: 'Total Downloads',
       title: `${dashboard.data?.numberDownload || 0}`,
       persent: '',
       icon: cart,

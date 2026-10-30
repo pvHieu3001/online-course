@@ -7,8 +7,8 @@ import { RootState } from '@/app/store'
 import { ContextType } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { formatDateTimeString, getFullName } from '@/utils/formatDate'
-import HandleLoading from '../components/util/HandleLoading'
-import LoadingPage from '../components/util/LoadingPage'
+import HandleLoading from '../../components/util/HandleLoading'
+import LoadingPage from '../../components/util/LoadingPage'
 import { Helmet } from 'react-helmet-async'
 import { getBlogInfoByType } from '@/utils/getBlogInfo'
 
@@ -140,7 +140,7 @@ function BlogDetailPage() {
                 dangerouslySetInnerHTML={{ __html: blogData.content || '' }}
               ></article>
 
-              {/* Bài viết liên quan */}
+              {/* Related Articles */}
               <section className='mt-16 border-t pt-10'>
                 <h3 className='text-xl font-semibold mb-6'>You may also be interested in</h3>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>

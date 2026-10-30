@@ -66,9 +66,9 @@ export default function EditAmazon() {
   const handleCancel = () => {
     if (isDirty) {
       Modal.confirm({
-        title: 'Bạn có chắc muốn rời khỏi trang?',
+        title: 'Are you sure you want to leave?',
         icon: <ExclamationCircleOutlined />,
-        content: 'Các thay đổi chưa được lưu sẽ bị mất.',
+        content: 'Unsaved changes will be lost.',
         onOk: () => navigate('..')
       })
     } else {
@@ -93,16 +93,16 @@ export default function EditAmazon() {
     try {
       await dispatch(amazonActions.updateAmazon(params.id, formData) as unknown as AnyAction)
       await dispatch(amazonActions.getAdminAmazons('', '', '', '', 0, 10) as unknown as AnyAction)
-      popupSuccess('Cập nhật link afiliate thành công')
+      popupSuccess('Affiliate link updated successfully')
       setIsDirty(false)
       navigate('..')
     } catch (error) {
       console.error('Error updating afiliate:', error)
-      popupError('Cập nhật link afiliate thất bại')
+      popupError('Failed to update affiliate link')
     }
   }
 
-  // Đánh dấu form đã thay đổi
+  // Mark form changed
   const onValuesChange = () => setIsDirty(true)
 
   if (amazonStore.error_message) {
@@ -111,22 +111,22 @@ export default function EditAmazon() {
   return (
     <Drawer
       width='100%'
-      title={<span className='font-bold text-xl'>Chỉnh sửa viết thread</span>}
+      title={<span className='font-bold text-xl'>Edit Thread Post</span>}
       onClose={handleCancel}
       open={true}
       bodyStyle={{ padding: 24, maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}
       footer={
         <div style={{ textAlign: 'right' }}>
           <Button onClick={handleCancel} style={{ marginRight: 8 }}>
-            Hủy
+            Cancel
           </Button>
           <Button type='primary' htmlType='submit' form='Amazon-form' loading={amazonStore.isLoading}>
-            Cập nhật
+            Update
           </Button>
         </div>
       }
     >
-      <Spin spinning={amazonStore.isLoading} tip='Đang tải...'>
+      <Spin spinning={amazonStore.isLoading} tip='Loading...'>
         {amazonStore.data && (
           <Form
             id='Amazon-form'
@@ -143,46 +143,46 @@ export default function EditAmazon() {
                   className='border p-6 rounded-md bg-[#fafbfc]'
                   style={{ boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.03)' }}
                 >
-                  <h2 className='mb-5 font-bold text-[16px]'>Nội dung bài viết</h2>
+                  <h2 className='mb-5 font-bold text-[16px]'>Post Content</h2>
                   <Row gutter={[16, 16]}>
                     <Col xs={24}>
                       <Form.Item
                         name='productName'
-                        label='Tên sản phẩm'
+                        label='Product Name'
                         rules={[
-                          { required: true, message: 'Vui lòng nhập tên sản phẩm!' },
-                          { whitespace: true, message: 'Tên sản phẩm không được để trống!' }
+                          { required: true, message: 'Please enter product name!' },
+                          { whitespace: true, message: 'Product name cannot be empty!' }
                         ]}
                       >
-                        <Input size='large' placeholder='Nhập tên sản phẩm...' allowClear />
+                        <Input size='large' placeholder='Enter product name...' allowClear />
                       </Form.Item>
                     </Col>
                     <Col xs={24}>
                       <Form.Item
                         name='sourceUrl'
-                        label='Link bài viết thread'
+                        label='Thread Post URL'
                         rules={[
-                          { required: true, message: 'Vui lòng nhập link thread!' },
-                          { whitespace: true, message: 'Link bài viết không được để trống!' }
+                          { required: true, message: 'Please enter thread link!' },
+                          { whitespace: true, message: 'Thread post link cannot be empty!' }
                         ]}
                       >
-                        <Input size='large' placeholder='Nhập tên link thread...' allowClear />
+                        <Input size='large' placeholder='Enter thread link...' allowClear />
                       </Form.Item>
                     </Col>
                     <Col span={24}>
                       <Form.Item label='Link Amazon'>
                         <Space.Compact style={{ width: '100%' }}>
-                          <Form.Item name='amzUrl' noStyle rules={[{ message: 'Vui lòng nhập link affiliate!' }]}>
-                            <Input size='large' placeholder='Nhập link affiliate...' allowClear />
+                          <Form.Item name='amzUrl' noStyle rules={[{ message: 'Please enter affiliate link!' }]}>
+                            <Input size='large' placeholder='Enter affiliate link...' allowClear />
                           </Form.Item>
                           <Button size='large' type='primary' href={amzUrl} target='_blank'>
-                            Rút gọn
+                            Shorten
                           </Button>
                         </Space.Compact>
                       </Form.Item>
                     </Col>
                     <Col span={24}>
-                      <Form.Item name='caption' className='m-0' label={'Caption bài viết'}>
+                      <Form.Item name='caption' className='m-0' label={'Post Caption'}>
                         <TextEditor
                           content={caption ?? ''}
                           onHandleChange={(value) => {

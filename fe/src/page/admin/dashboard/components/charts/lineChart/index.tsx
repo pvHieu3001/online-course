@@ -96,7 +96,7 @@ export default function LineChart({color}: {color: string}) {
         },
       },
       fill: {
-        type: 'gradient', // Sử dụng gradient color
+        type: 'gradient', // Use gradient color
         gradient: {
           shadeIntensity: 1,
           opacityFrom: 0.4,

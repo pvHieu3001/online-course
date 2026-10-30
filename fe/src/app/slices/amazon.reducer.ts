@@ -57,45 +57,45 @@ const amazonSlice = createSlice({
     },
     createSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Tạo Link Amazon Thành Công'
+      state.message = 'Amazon Link Created Successfully'
       state.isLoading = false
     },
     createFailure: (state) => {
-      state.error_message = 'Tạo Link Amazon Thất Bại'
+      state.error_message = 'Failed to Create Amazon Link'
       state.isLoading = false
     },
     updateSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Cập Nhật Link Amazon Thành Công'
+      state.message = 'Amazon Link Updated Successfully'
       state.isLoading = false
     },
     updateFailure: (state) => {
-      state.error_message = 'Cập Nhật Link Amazon Thất Bại'
+      state.error_message = 'Failed to Update Amazon Link'
       state.isLoading = false
     },
     deleteSuccessfully: (state) => {
-      state.message = 'Xóa Link Amazon Thành Công'
+      state.message = 'Amazon Link Deleted Successfully'
       state.isLoading = false
     },
     deleteFailure: (state) => {
-      state.error_message = 'Xóa Link Amazon Thất Bại'
+      state.error_message = 'Failed to Delete Amazon Link'
       state.isLoading = false
     },
     publishSuccessfully: (state) => {
-      state.message = 'Publish Thành Công'
+      state.message = 'Published Successfully'
       state.isLoading = false
     },
     publishFailure: (state) => {
-      state.error_message = 'Publish Thất Bại'
+      state.error_message = 'Publish Failed'
       state.isLoading = false
     },
     getAccountThreadSuccessfully: (state, { payload }) => {
       state.dataThreadAccount = payload.data
-      state.message = 'Lấy account thread Thành Công'
+      state.message = 'Thread Account Retrieved Successfully'
       state.isLoading = false
     },
     getAccountThreadFailure: (state) => {
-      state.error_message = 'Lấy account thread Thất Bại'
+      state.error_message = 'Failed to Retrieve Thread Account'
       state.isLoading = false
     }
   }

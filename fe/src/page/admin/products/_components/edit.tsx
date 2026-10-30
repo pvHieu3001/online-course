@@ -90,10 +90,10 @@ function EditProduct() {
           10
         ) as unknown as AnyAction
       )
-      popupSuccess('Cập nhật sách thành công')
+      popupSuccess('Book updated successfully')
       navigator('..')
     } catch (error) {
-      popupError('Cập nhật sách thất bại')
+      popupError('Failed to update book')
     }
   }
 
@@ -119,7 +119,7 @@ function EditProduct() {
           open={true}
           title={
             <>
-              <h2 className=' font-bold text-[24px]'>Cập nhật sách</h2>
+              <h2 className=' font-bold text-[24px]'>Update Book</h2>
             </>
           }
           width={'85%'}
@@ -143,45 +143,45 @@ function EditProduct() {
               id: bookStore.data?.id
             }}
           >
-            <Card title='Thông tin hệ thống' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
+            <Card title='System Information' size='small' style={{ marginBottom: 24, background: '#fafafa' }}>
               <Row gutter={[16, 16]}>
                 <Col xs={24} sm={12} md={8}>
                   <Form.Item name='slug' label='Slug'>
-                    <Input disabled placeholder='Nhập slug' />
+                    <Input disabled placeholder='Enter slug' />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12} md={8}>
-                  <Form.Item name='createdAt' label='Ngày tạo'>
+                  <Form.Item name='createdAt' label='Created At'>
                     <Input disabled />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12} md={8}>
-                  <Form.Item name='updatedAt' label='Ngày cập nhật'>
+                  <Form.Item name='updatedAt' label='Updated At'>
                     <Input disabled />
                   </Form.Item>
                 </Col>
               </Row>
             </Card>
-            <Card title='Thông tin sách' size='small' style={{ marginBottom: 24 }}>
+            <Card title='Book Information' size='small' style={{ marginBottom: 24 }}>
               <Row gutter={[16, 16]}>
                 <Col span={24}>
                   <Form.Item
                     name='name'
-                    label='Tên sách'
-                    rules={[{ required: true, message: 'Vui lòng nhập tên sách!' }]}
+                    label='Book Title'
+                    rules={[{ required: true, message: 'Please enter book title!' }]}
                   >
-                    <Input placeholder='Nhập tên sách' size='large' />
+                    <Input placeholder='Enter book title' size='large' />
                   </Form.Item>
                 </Col>
                 {categoryStore.dataList?.length > 0 && (
                   <Col xs={24} md={8}>
                     <Form.Item
                       name='categoryId'
-                      label='Danh mục'
-                      rules={[{ required: true, message: 'Vui lòng nhập danh mục!' }]}
+                      label='Category'
+                      rules={[{ required: true, message: 'Please select category!' }]}
                     >
                       <Select
-                        placeholder='Chọn danh mục'
+                        placeholder='Select category'
                         loading={categoryStore.isLoading}
                         allowClear
                         showSearch
@@ -198,9 +198,9 @@ function EditProduct() {
                   </Col>
                 )}
                 <Col xs={24} md={8}>
-                  <Form.Item name='description' label='Mô tả ngắn'>
+                  <Form.Item name='description' label='Short Description'>
                     <Input.TextArea
-                      placeholder='Nhập mô tả ngắn về sách'
+                      placeholder='Enter short description'
                       maxLength={500}
                       showCount
                       autoSize={{ minRows: 2, maxRows: 4 }}
@@ -208,24 +208,24 @@ function EditProduct() {
                   </Form.Item>
                 </Col>
                 <Col xs={12} md={4}>
-                  <Form.Item name='status' label='Trạng thái' valuePropName='checked'>
-                    <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                  <Form.Item name='status' label='Status' valuePropName='checked'>
+                    <Switch className='w-20' checkedChildren='Yes' unCheckedChildren='No' />
                   </Form.Item>
                 </Col>
                 <Col xs={12} md={4}>
-                  <Form.Item name='isDisplayHot' label='Sách nổi bật' valuePropName='checked'>
-                    <Switch className='w-20' checkedChildren='Hiện' unCheckedChildren='Ẩn' />
+                  <Form.Item name='isDisplayHot' label='Featured Book' valuePropName='checked'>
+                    <Switch className='w-20' checkedChildren='Yes' unCheckedChildren='No' />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
                   <Form.Item name='amzUrl' label='URL affiliate'>
-                    <Input size='large' placeholder='Nhập URL affiliate' />
+                    <Input size='large' placeholder='Enter affiliate URL' />
                   </Form.Item>
                 </Col>
               </Row>
             </Card>
             <Card size='small' style={{ marginBottom: 24 }}>
-              <Form.Item name='content' className='m-0' label={'Nội dung sách'}>
+              <Form.Item name='content' className='m-0' label={'Book Details'}>
                 <TextEditor
                   content={content ?? ''}
                   onHandleChange={(value) => {
@@ -241,7 +241,7 @@ function EditProduct() {
                 style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 1rem' }}
               >
                 <Flex vertical gap={20}>
-                  <h2 className='font-bold text-[16px]'>Ảnh Đại diện</h2>
+                  <h2 className='font-bold text-[16px]'>Cover Image</h2>
                   <div
                     style={{
                       flex: 5,
@@ -262,17 +262,17 @@ function EditProduct() {
                         htmlFor='image-upload'
                         className='flex flex-col items-center justify-center w-[120px] h-[100px] border rounded-md cursor-pointer bg-white hover:bg-gray-100'
                       >
-                        {/* Hiển thị ảnh hiện tại từ DB nếu chưa chọn ảnh mới */}
+                        {/* Display current image from DB */}
                         {!imageUrl && displayPic && (
                           <div className='h-[100px] w-[120px] rounded-lg overflow-hidden relative'>
                             <img
                               src={displayPic}
-                              alt='Ảnh hiện tại'
+                              alt='Current Cover'
                               className='object-cover h-full w-full object-center rounded-lg border border-gray-300 bg-white'
                             />
                           </div>
                         )}
-                        {/* Nếu đã chọn ảnh mới thì hiển thị preview ảnh mới */}
+                        {/* Display preview of newly selected image */}
                         {imageUrl ? (
                           <div className='h-[100px] w-[120px] rounded-lg overflow-hidden relative'>
                             <img
@@ -287,7 +287,7 @@ function EditProduct() {
                               style={{ position: 'absolute', top: 4, right: 4, zIndex: 2 }}
                               onClick={() => setImageUrl(undefined)}
                             >
-                              Xóa
+                              Remove
                             </Button>
                           </div>
                         ) : (
@@ -302,7 +302,7 @@ function EditProduct() {
                               if (!e.target.files || e.target.files.length === 0) return
                               const file = e.target.files[0]
                               if (file.size > 2 * 1024 * 1024) {
-                                popupError('Ảnh phải nhỏ hơn 2MB')
+                                popupError('Image must be less than 2MB')
                                 return
                               }
                               setImageUrl(file)
@@ -323,7 +323,7 @@ function EditProduct() {
                 type='primary'
                 className=' '
               >
-                Cập nhật
+                Update
               </Button>
             </Flex>
           </Form>

@@ -47,7 +47,7 @@ function TabCategory() {
 
   return (
     <aside className='w-full lg:w-[100%] bg-white p-6 rounded-lg shadow-md space-y-8 sticky top-4' role='complementary'>
-      {/* Tìm kiếm */}
+      {/* Search */}
       <div>
         <h2 className='text-lg font-semibold text-gray-800 mb-3'>Search books</h2>
         <form
@@ -71,7 +71,7 @@ function TabCategory() {
         </form>
       </div>
 
-      {/* Loại khóa học */}
+      {/* Course / Book category */}
       <div>
         <h2 className='text-lg font-semibold text-gray-800 mb-3'>Book Categories</h2>
         <ul className='space-y-2' role='list'>

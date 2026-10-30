@@ -32,7 +32,7 @@ export default function ListOrders() {
       align: 'center'
     },
     {
-      title: 'Tổng số lượng',
+      title: 'Total Quantity',
       dataIndex: 'subTotal',
       key: 'subTotal',
       align: 'center',
@@ -40,7 +40,7 @@ export default function ListOrders() {
       render: (text: string) => <span>{text}</span>
     },
     {
-      title: 'Mã giảm giá ',
+      title: 'Coupon Code',
       dataIndex: 'discountAmount',
       key: 'discountAmount',
       align: 'center',
@@ -48,7 +48,7 @@ export default function ListOrders() {
       render: (text: string) => <span>{text}</span>
     },
     {
-      title: 'Tổng số lượng',
+      title: 'Total Quantity',
       dataIndex: 'totalAmount',
       key: 'totalAmount',
       align: 'center',
@@ -56,7 +56,7 @@ export default function ListOrders() {
       render: (text: string) => <span>{text}</span>
     },
     {
-      title: 'ID phiếu giảm giá',
+      title: 'Coupon ID',
       dataIndex: 'couponId',
       key: 'couponId',
       align: 'center',
@@ -69,7 +69,7 @@ export default function ListOrders() {
     <>
       <div className='flex items-center justify-between my-2'>
         <Typography.Title level={2} style={{ margin: 0 }}>
-          Danh sách khóa học
+          Course & Order List
         </Typography.Title>
       </div>
       <Flex wrap='wrap' gap='small' className='my-5' align='center' justify='space-between'>
@@ -85,7 +85,7 @@ export default function ListOrders() {
           allowClear
           onChange={handleChangeSearch}
           size='small'
-          placeholder={'Tìm kiếm'}
+          placeholder={'Search...'}
           style={{ borderRadius: '2rem' }}
         />
       </Flex>

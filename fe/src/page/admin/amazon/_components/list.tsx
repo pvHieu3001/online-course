@@ -58,9 +58,9 @@ export default function ListAmazon() {
       dispatch(
         amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction
       )
-      message.success('Vô hiệu hoá danh mục thành công!')
+      message.success('Post disabled successfully!')
     } catch (error) {
-      message.error('Vô hiệu hoá danh mục thất bại!')
+      message.error('Failed to disable post!')
     }
   }
 
@@ -75,9 +75,9 @@ export default function ListAmazon() {
       dispatch(
         amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction
       )
-      message.success('Đang đăng!')
+      message.success('Publishing post...')
     } catch (error) {
-      message.error('Đăng bài thất bại!')
+      message.error('Failed to publish post!')
     }
   }
 
@@ -174,7 +174,7 @@ export default function ListAmazon() {
 
         const handleDownloadImages = () => {
           if (imageMedias.length === 0) {
-            message.warning('Không có ảnh để tải!')
+            message.warning('No images to download!')
             return
           }
           imageMedias.forEach((img, idx) => {
@@ -184,7 +184,7 @@ export default function ListAmazon() {
 
         const handleDownloadVideos = () => {
           if (videoMedias.length === 0) {
-            message.warning('Không có video để tải!')
+            message.warning('No videos to download!')
             return
           }
           videoMedias.forEach((vid, idx) => {
@@ -194,19 +194,19 @@ export default function ListAmazon() {
 
         return (
           <Space direction='vertical' size='small'>
-            {/* NHÓM ẢNH */}
+            {/* IMAGES GROUP */}
             <Space.Compact size='small'>
-              <Tooltip title={imageMedias.length > 0 ? `Xem ${imageMedias.length} ảnh` : 'Không có ảnh'}>
+              <Tooltip title={imageMedias.length > 0 ? `View ${imageMedias.length} images` : 'No images'}>
                 <Button
                   type='default'
                   icon={<PictureOutlined />}
                   disabled={imageMedias.length === 0}
                   onClick={handleViewImages}
                 >
-                  Ảnh
+                  Photos
                 </Button>
               </Tooltip>
-              <Tooltip title={imageMedias.length > 0 ? 'Tải ảnh' : ''}>
+              <Tooltip title={imageMedias.length > 0 ? 'Download images' : ''}>
                 <Button
                   type='primary'
                   icon={<DownloadOutlined />}
@@ -216,9 +216,9 @@ export default function ListAmazon() {
               </Tooltip>
             </Space.Compact>
 
-            {/* NHÓM VIDEO */}
+            {/* VIDEOS GROUP */}
             <Space.Compact size='small'>
-              <Tooltip title={videoMedias.length > 0 ? `Xem ${videoMedias.length} video` : 'Không có video'}>
+              <Tooltip title={videoMedias.length > 0 ? `View ${videoMedias.length} videos` : 'No videos'}>
                 <Button
                   type='default'
                   danger={videoMedias.length > 0}
@@ -229,7 +229,7 @@ export default function ListAmazon() {
                   Video
                 </Button>
               </Tooltip>
-              <Tooltip title={videoMedias.length > 0 ? 'Tải video' : ''}>
+              <Tooltip title={videoMedias.length > 0 ? 'Download video' : ''}>
                 <Button
                   type='primary'
                   danger={videoMedias.length > 0}
@@ -313,10 +313,10 @@ export default function ListAmazon() {
             placement='topRight'
             title={
               <div style={{ width: 220 }}>
-                <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Cấu hình đăng bài:</div>
-                <div style={{ marginBottom: 4 }}>Tài khoản:</div>
+                <div style={{ marginBottom: 8, fontWeight: 'bold' }}>Publish Settings:</div>
+                <div style={{ marginBottom: 4 }}>Account:</div>
                 <Select
-                  placeholder='Chọn tài khoản'
+                  placeholder='Select account'
                   style={{
                     width: '100%',
                     marginBottom: 12,
@@ -329,21 +329,21 @@ export default function ListAmazon() {
                   value={selectedAccount}
                 />
 
-                <div style={{ marginBottom: 4 }}>Nơi gắn link:</div>
+                <div style={{ marginBottom: 4 }}>Link placement:</div>
                 <Select
                   value={record.isCaptionLink ? 'true' : 'false'}
                   style={{ width: '100%' }}
                   onChange={(val: string) => setIsCaptionLink(val)}
                   options={[
-                    { label: 'Gắn ở Comment', value: 'false' },
-                    { label: 'Gắn ở Caption', value: 'true' }
+                    { label: 'In Comments', value: 'false' },
+                    { label: 'In Caption', value: 'true' }
                   ]}
                 />
               </div>
             }
             onConfirm={() => {
               if (!selectedAccount) {
-                return message.warning('Vui lòng chọn tài khoản trước!')
+                return message.warning('Please select an account first!')
               }
               handlePublish(record.id, selectedAccount, isCaptionLink)
               setIsCaptionLink('false')
@@ -356,8 +356,8 @@ export default function ListAmazon() {
             onCancel={() => {
               setIsCaptionLink('false')
             }}
-            okText='Đăng ngay'
-            cancelText='Hủy'
+            okText='Publish Now'
+            cancelText='Cancel'
           >
             <Button type='text' size='small' icon={<SendOutlined style={{ color: '#52c41a', fontSize: '16px' }} />} />
           </Popconfirm>
@@ -366,10 +366,10 @@ export default function ListAmazon() {
           </Link>
           <Popconfirm
             placement='topRight'
-            title='Xác nhận xóa?'
+            title='Confirm deletion?'
             onConfirm={() => handlerDistableAmazon(record.id)}
-            okText='Có'
-            cancelText='Không'
+            okText='Yes'
+            cancelText='No'
           >
             <Button type='text' danger size='small' icon={<DeleteOutlined style={{ fontSize: '16px' }} />} />
           </Popconfirm>
@@ -386,11 +386,11 @@ export default function ListAmazon() {
     <div className='p-2 sm:p-4'>
       <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-4'>
         <Typography.Title level={3} style={{ margin: 0 }}>
-          Danh sách bài viết
+          Thread Post List
         </Typography.Title>
         <Link to='add' className='w-full sm:w-auto'>
           <Button type='primary' block>
-            Thêm bài viết
+            Add Post
           </Button>
         </Link>
       </div>
@@ -403,7 +403,7 @@ export default function ListAmazon() {
             value={searchValue}
             allowClear
             onChange={handleChangeSearch}
-            placeholder='Tìm kiếm bài viết...'
+            placeholder='Search posts...'
             style={{ borderRadius: '0.75rem' }}
           />
 
@@ -411,11 +411,11 @@ export default function ListAmazon() {
             className='w-full sm:w-44'
             onChange={(value) => setStatus(value)}
             value={status}
-            placeholder='Trạng thái'
+            placeholder='Status'
             size='large'
             style={{ borderRadius: '0.75rem' }}
           >
-            <Select.Option value=''>Tất cả trạng thái</Select.Option>
+            <Select.Option value=''>All Statuses</Select.Option>
             <Select.Option value='DEFAULT'>DEFAULT</Select.Option>
             <Select.Option value='SUCCESS'>SUCCESS</Select.Option>
             <Select.Option value='PROCESSING'>PROCESSING</Select.Option>
@@ -426,11 +426,11 @@ export default function ListAmazon() {
             className='w-full sm:w-44'
             onChange={(value) => setIsCapLink(value)}
             value={isCapLink}
-            placeholder='Loại bài đăng'
+            placeholder='Post Type'
             size='large'
             style={{ borderRadius: '0.75rem' }}
           >
-            <Select.Option value=''>Chọn tất cả</Select.Option>
+            <Select.Option value=''>All</Select.Option>
             <Select.Option value='1'>CapLink</Select.Option>
             <Select.Option value='0'>CommentLink</Select.Option>
           </Select>
@@ -438,11 +438,11 @@ export default function ListAmazon() {
             className='w-full sm:w-44'
             onChange={(value) => setHasLink(value)}
             value={hasLink}
-            placeholder='Bài đăng có link'
+            placeholder='Link Filter'
             size='large'
             style={{ borderRadius: '0.75rem' }}
           >
-            <Select.Option value=''>Chọn tất cả</Select.Option>
+            <Select.Option value=''>All</Select.Option>
             <Select.Option value='1'>HasLink</Select.Option>
             <Select.Option value='0'>NoLink</Select.Option>
           </Select>

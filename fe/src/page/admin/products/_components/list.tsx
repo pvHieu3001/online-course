@@ -55,9 +55,9 @@ export default function ListProduct() {
           booksPerPage
         ) as unknown as AnyAction
       )
-      message.success('Xóa sách thành công!')
+      message.success('Book deleted successfully!')
     } catch (error) {
-      message.error('Xóa sách thất bại!')
+      message.error('Failed to delete book!')
     }
   }
 
@@ -70,7 +70,7 @@ export default function ListProduct() {
       align: 'center'
     },
     {
-      title: 'Tên sách',
+      title: 'Book Title',
       dataIndex: 'name',
       key: 'name',
       align: 'center',
@@ -82,7 +82,7 @@ export default function ListProduct() {
       )
     },
     {
-      title: 'Danh mục sách',
+      title: 'Category',
       dataIndex: 'category',
       key: 'category',
       align: 'center',
@@ -109,15 +109,15 @@ export default function ListProduct() {
         switch (level?.toLowerCase()) {
           case 'beginner':
             color = 'green'
-            label = 'Cơ bản'
+            label = 'Beginner'
             break
           case 'intermediate':
             color = 'orange'
-            label = 'Trung cấp'
+            label = 'Intermediate'
             break
           case 'advanced':
             color = 'red'
-            label = 'Nâng cao'
+            label = 'Advanced'
             break
           default:
             color = 'blue'
@@ -126,7 +126,7 @@ export default function ListProduct() {
       }
     },
     {
-      title: 'Trạng thái',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       align: 'center',
@@ -139,13 +139,13 @@ export default function ListProduct() {
 
         return (
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusClass}`}>
-            {status == 'active' ? 'Hoạt động' : 'Không hoạt động'}
+            {status == 'active' ? 'Active' : 'Inactive'}
           </span>
         )
       }
     },
     {
-      title: 'Thao tác',
+      title: 'Actions',
       key: 'action',
       width: 150,
       align: 'center',
@@ -156,18 +156,18 @@ export default function ListProduct() {
             <Button icon={<EyeOutlined />} />
           </Link>
           <Link to={'' + record.id + `?status=${active}&isHot=${isHot}&search=${searchValue}&page=${currentPage - 1}`}>
-            <Button type='primary'>Sửa</Button>
+            <Button type='primary'>Edit</Button>
           </Link>
           <Popconfirm
             placement='topRight'
-            title={'Bạn có chắc chắn muốn xóa sách này không?'}
+            title={'Are you sure you want to delete this book?'}
             onConfirm={() => handlerDeleteProduct(record.id)}
             onCancel={() => {}}
-            okText='Đồng ý'
-            cancelText='Hủy'
+            okText='Yes'
+            cancelText='Cancel'
           >
             <Button type='primary' danger>
-              Xóa
+              Delete
             </Button>
           </Popconfirm>
         </Space>
@@ -183,7 +183,7 @@ export default function ListProduct() {
     <>
       <div className='flex items-center justify-between my-2'>
         <Typography.Title level={2} style={{ margin: 0 }}>
-          Quản lý sách
+          Book Management
         </Typography.Title>
       </div>
       <Flex wrap='wrap' gap='small' className='my-5' align='center' justify='space-between'>
@@ -200,27 +200,27 @@ export default function ListProduct() {
             allowClear
             onChange={handleChangeSearch}
             size='small'
-            placeholder='Tìm kiếm'
+            placeholder='Search...'
             style={{ borderRadius: '2rem' }}
           />
           <Select className='ml-2 w-40' onChange={(value) => setActive(value)} value={active} size='large'>
-            <Select.Option value=''>Trạng thái</Select.Option>
-            <Select.Option value='active'>Hoạt động</Select.Option>
-            <Select.Option value='inactive'>Không hoạt động</Select.Option>
+            <Select.Option value=''>Status</Select.Option>
+            <Select.Option value='active'>Active</Select.Option>
+            <Select.Option value='inactive'>Inactive</Select.Option>
           </Select>
           <Button
             size='large'
             type='default'
             className={`ml-2 ${
               isHot == '1'
-                ? 'bg-yellow-400 text-white hover:bg-yellow-500' // đã bật
-                : 'text-gray-700 hover:bg-gray-300' // đã tắt
+                ? 'bg-yellow-400 text-white hover:bg-yellow-500' // active
+                : 'text-gray-700 hover:bg-gray-300' // inactive
             }`}
             onClick={() => {
               setIsHot(isHot == '' || isHot == '0' ? '1' : '0')
             }}
           >
-            <StarOutlined /> Nổi bật
+            <StarOutlined /> Featured
           </Button>
           <Button
             size='large'
@@ -232,12 +232,12 @@ export default function ListProduct() {
               setIsHot('')
             }}
           >
-            <UnorderedListOutlined /> Tất cả
+            <UnorderedListOutlined /> All
           </Button>
         </div>
 
         <Link to={`add?status=${active}&isHot=${isHot}&search=${searchValue}&page=${currentPage - 1}`}>
-          <Button type='primary'>Thêm sách</Button>
+          <Button type='primary'>Add Book</Button>
         </Link>
       </Flex>
       <Table

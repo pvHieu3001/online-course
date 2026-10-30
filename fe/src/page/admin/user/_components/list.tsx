@@ -59,7 +59,7 @@ export default function ListUser() {
       fixed: 'left'
     },
     {
-      title: 'Tên người dùng',
+      title: 'Username',
       dataIndex: 'username',
       key: 'username',
       minWidth: 150,
@@ -73,7 +73,7 @@ export default function ListUser() {
               fontWeight: isMe ? 'bold' : 'normal'
             }}
           >
-            {text} {isMe && '(Bạn)'}
+            {text} {isMe && '(You)'}
           </a>
         )
       }
@@ -93,29 +93,29 @@ export default function ListUser() {
       fixed: 'right',
       render: (data: IUser) => (
         <Space size='small' wrap>
-          <Tooltip title='Nhập vai'>
+          <Tooltip title='Impersonate'>
             <Button
               size='small'
-              type='text' // Dùng loại text để bỏ khung cho đỡ rối
+              type='text' // Use text type for clean UI
               icon={<SwapOutlined style={{ color: '#1890ff' }} />}
               onClick={() => handleSwitchUser(data.username)}
             />
           </Tooltip>
 
           <Link to={String(data?.id)}>
-            <Tooltip title='Sửa'>
+            <Tooltip title='Edit'>
               <Button size='small' type='text' icon={<EditOutlined style={{ color: '#52c41a' }} />} />
             </Tooltip>
           </Link>
 
           <Popconfirm
-            title='Xóa người dùng'
-            description={`Xóa "${data.username}"?`}
+            title='Delete User'
+            description={`Delete "${data.username}"?`}
             onConfirm={() => confirm(String(data.id))}
-            okText='Đồng ý'
-            cancelText='Hủy'
+            okText='Yes'
+            cancelText='Cancel'
           >
-            <Tooltip title='Xóa'>
+            <Tooltip title='Delete'>
               <Button
                 size='small'
                 type='text'
@@ -134,12 +134,12 @@ export default function ListUser() {
     <div className='p-2 md:p-4'>
       <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-2'>
         <Typography.Title level={2} style={{ margin: 0, fontSize: 'clamp(1.2rem, 5vw, 1.8rem)' }}>
-          Danh sách người dùng
+          User List
         </Typography.Title>
 
         <Link to='add' className='w-full sm:w-auto'>
           <Button type='primary' className='w-full'>
-            Thêm người dùng
+            Add User
           </Button>
         </Link>
       </div>
@@ -156,8 +156,8 @@ export default function ListUser() {
           spellCheck={false}
           allowClear
           onChange={handleChangeSearch}
-          size='middle' // Tăng size cho dễ chạm trên mobile
-          placeholder={'Tìm kiếm'}
+          size='middle' // Larger size for easier tap on mobile
+          placeholder={'Search...'}
           style={{ borderRadius: '2rem' }}
         />
       </Flex>

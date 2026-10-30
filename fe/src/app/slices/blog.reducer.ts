@@ -123,28 +123,28 @@ const blogSlice = createSlice({
     },
     createSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Tạo Bài Viết Thành Công'
+      state.message = 'Article Created Successfully'
       state.isLoading = false
     },
     createFailure: (state) => {
-      state.error_message = 'Tạo Bài Viết Thất Bại'
+      state.error_message = 'Failed to Create Article'
       state.isLoading = false
     },
     updateSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Cập Nhật Bài Viết Thành Công'
+      state.message = 'Article Updated Successfully'
       state.isLoading = false
     },
     updateFailure: (state) => {
-      state.error_message = 'Cập Nhật Bài Viết Thất Bại'
+      state.error_message = 'Failed to Update Article'
       state.isLoading = false
     },
     deleteSuccessfully: (state) => {
-      state.message = 'Xóa Bài Viết Thành Công'
+      state.message = 'Article Deleted Successfully'
       state.isLoading = false
     },
     deleteFailure: (state) => {
-      state.error_message = 'Xóa Bài Viết Thất Bại'
+      state.error_message = 'Failed to Delete Article'
       state.isLoading = false
     }
   }

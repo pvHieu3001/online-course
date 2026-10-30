@@ -34,9 +34,9 @@ export default function ListBlog() {
     try {
       await dispatch(blogActions.deleteBlog(id) as unknown as AnyAction)
       dispatch(blogActions.getAdminBlogs(active, searchValue, isHot, page, size) as unknown as AnyAction)
-      message.success('Vô hiệu hoá bài viết thành công!')
+      message.success('Article disabled successfully!')
     } catch (error) {
-      message.error('Vô hiệu hoá bài viết thất bại!')
+      message.error('Failed to disable article!')
     }
   }
 
@@ -56,7 +56,7 @@ export default function ListBlog() {
       align: 'center'
     },
     {
-      title: 'Tên bài viết',
+      title: 'Title',
       dataIndex: 'title',
       key: 'title',
       align: 'center',
@@ -64,31 +64,31 @@ export default function ListBlog() {
       render: (text) => <a title={text}>{text.length > 30 ? `${text.slice(0, 30)}...` : text}</a>
     },
     {
-      title: 'Loại bài viết',
+      title: 'Category',
       dataIndex: 'type',
       key: 'type',
       align: 'center',
       width: 120,
       render: (text) => {
         const matched = typeOptions.find((opt) => opt.value === text)
-        return <>{matched ? matched.label : 'Không có'}</>
+        return <>{matched ? matched.label : 'None'}</>
       }
     },
     {
-      title: 'Trạng thái',
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
       align: 'center',
       width: 100,
       render: (status) => {
         const color = !status ? 'volcano' : 'green'
-        const text = !status ? 'Không Hoạt động' : 'Đang hoạt động'
+        const text = !status ? 'Inactive' : 'Active'
 
         return <Tag color={color}>{text.toUpperCase()}</Tag>
       }
     },
     {
-      title: 'Hành động',
+      title: 'Action',
       key: 'action',
       width: 150,
       align: 'center',
@@ -99,18 +99,18 @@ export default function ListBlog() {
             <Button icon={<EyeOutlined />} />
           </Link>
           <Link to={'' + record.id + `?status=${active}&isHot=${isHot}&search=${searchValue}`}>
-            <Button type='primary'>Sửa </Button>
+            <Button type='primary'>Edit</Button>
           </Link>
           <Popconfirm
             placement='topRight'
             title={record.active == 1 ? 'Are you sure distable this Blog?' : 'Are you sure enable this Blog?'}
             onConfirm={() => handlerDistableBlog(record.id)}
             onCancel={() => {}}
-            okText='Đồng ý'
-            cancelText='Hủy bỏ'
+            okText='Yes'
+            cancelText='Cancel'
           >
             <Button type='primary' danger>
-              Xóa
+              Delete
             </Button>
           </Popconfirm>
         </Space>
@@ -126,7 +126,7 @@ export default function ListBlog() {
     <>
       <div className='flex items-center justify-between my-2'>
         <Typography.Title level={2} style={{ margin: 0 }}>
-          Danh sách bài viết
+          Article List
         </Typography.Title>
       </div>
       <div className=''>
@@ -144,29 +144,29 @@ export default function ListBlog() {
               allowClear
               onChange={handleChangeSearch}
               size='small'
-              placeholder={'Tìm kiếm'}
+              placeholder={'Search...'}
               style={{
                 borderRadius: '2rem'
               }}
             />
             <Select className='ml-2 w-40' onChange={(value) => setActive(value)} value={active} size='large'>
-              <Select.Option value=''>Trạng Thái</Select.Option>
-              <Select.Option value='active'>Hoạt Động</Select.Option>
-              <Select.Option value='inactive'>Không Hoạt Động</Select.Option>
+              <Select.Option value=''>Status</Select.Option>
+              <Select.Option value='active'>Active</Select.Option>
+              <Select.Option value='inactive'>Inactive</Select.Option>
             </Select>
             <Button
               size='large'
               type='default'
               className={`ml-2 ${
                 isHot == '1'
-                  ? 'bg-yellow-400 text-white hover:bg-yellow-500' // khi bật (true)
-                  : 'text-gray-700 hover:bg-gray-300' // khi tắt (false)
+                  ? 'bg-yellow-400 text-white hover:bg-yellow-500' // when active
+                  : 'text-gray-700 hover:bg-gray-300' // when inactive
               }`}
               onClick={() => {
                 setIsHot(isHot == '' || isHot == '0' ? '1' : '0')
               }}
             >
-              <StarOutlined /> Bài viết mới nhất
+              <StarOutlined /> Latest Articles
             </Button>
             <Button
               size='large'
@@ -178,11 +178,11 @@ export default function ListBlog() {
                 setIsHot('')
               }}
             >
-              <UnorderedListOutlined /> Tất Cả
+              <UnorderedListOutlined /> All
             </Button>
           </div>
           <Link to='add'>
-            <Button type='primary'>Thêm bài viết</Button>
+            <Button type='primary'>Add Article</Button>
           </Link>
         </Flex>
         <Table

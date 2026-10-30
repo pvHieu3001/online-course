@@ -68,28 +68,28 @@ const bookSlice = createSlice({
     },
     createSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Tạo sách thành công'
+      state.message = 'Book Created Successfully'
       state.isLoading = false
     },
     createFailure: (state) => {
-      state.error_message = 'Tạo sách thất bại'
+      state.error_message = 'Failed to Create Book'
       state.isLoading = false
     },
     updateSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Cập nhật sách thành công'
+      state.message = 'Book Updated Successfully'
       state.isLoading = false
     },
     updateFailure: (state) => {
-      state.error_message = 'Cập nhật sách thất bại'
+      state.error_message = 'Failed to Update Book'
       state.isLoading = false
     },
     deleteSuccessfully: (state) => {
-      state.message = 'Xóa sách thành công'
+      state.message = 'Book Deleted Successfully'
       state.isLoading = false
     },
     deleteFailure: (state) => {
-      state.error_message = 'Xóa sách thất bại'
+      state.error_message = 'Failed to Delete Book'
       state.isLoading = false
     },
     getBooksByCategorySuccessFully: (state, { payload }) => {

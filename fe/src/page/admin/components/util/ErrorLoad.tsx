@@ -12,11 +12,11 @@ export default function ErrorLoad(props: Props) {
   return (
     <div className='flex justify-center items-center my-8'>
       <Alert
-        message={<span className='font-semibold text-base'>Đã Có Lỗi Xảy Ra</span>}
+        message={<span className='font-semibold text-base'>An Error Occurred</span>}
         description={
           <div>
-            <p>Không thể tải dữ liệu từ máy chủ. Vui lòng kiểm tra lại kết nối mạng của bạn.</p>
-            <p>Nếu sự cố vẫn tiếp diễn, hãy thử lại sau ít phút.</p>
+            <p>Unable to load data from the server. Please check your network connection.</p>
+            <p>If the problem persists, please try again in a few moments.</p>
             <p>{props.error_message}</p>
           </div>
         }
@@ -25,7 +25,7 @@ export default function ErrorLoad(props: Props) {
         className='w-full max-w-2xl'
         action={
           <Button size='small' danger icon={<ReloadOutlined />} onClick={handleRetry}>
-            Thử lại
+            Try Again
           </Button>
         }
       />

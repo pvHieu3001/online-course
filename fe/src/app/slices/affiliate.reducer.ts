@@ -47,28 +47,28 @@ const affiliateSlice = createSlice({
     },
     createSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Tạo Link Affiliate Thành Công'
+      state.message = 'Affiliate Link Created Successfully'
       state.isLoading = false
     },
     createFailure: (state) => {
-      state.error_message = 'Tạo Link Affiliate Thất Bại'
+      state.error_message = 'Failed to Create Affiliate Link'
       state.isLoading = false
     },
     updateSuccessfully: (state, { payload }) => {
       state.data = payload.data
-      state.message = 'Cập Nhật Link Affiliate Thành Công'
+      state.message = 'Affiliate Link Updated Successfully'
       state.isLoading = false
     },
     updateFailure: (state) => {
-      state.error_message = 'Cập Nhật Link Affiliate Thất Bại'
+      state.error_message = 'Failed to Update Affiliate Link'
       state.isLoading = false
     },
     deleteSuccessfully: (state) => {
-      state.message = 'Xóa Link Affiliate Thành Công'
+      state.message = 'Affiliate Link Deleted Successfully'
       state.isLoading = false
     },
     deleteFailure: (state) => {
-      state.error_message = 'Xóa Link Affiliate Thất Bại'
+      state.error_message = 'Failed to Delete Affiliate Link'
       state.isLoading = false
     }
   }
