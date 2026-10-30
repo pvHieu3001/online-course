@@ -29,7 +29,7 @@ function PageBook() {
   }, [setIsShowRecommendBooks])
 
   useEffect(() => {
-    dispatch(bookActions.getBooks('active', '', '', currentPage - 1, booksPerPage, '') as unknown as AnyAction)
+    dispatch(bookActions.getBooks('active', '', '', currentPage - 1, booksPerPage) as unknown as AnyAction)
   }, [dispatch, currentPage, booksPerPage])
 
   // Handle book item click

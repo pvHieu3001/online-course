@@ -2,9 +2,9 @@
 RENAME TABLE books TO legacy_books;
 RENAME TABLE courses TO books;
 
--- Preserve course-tag associations under the new book naming.
-RENAME TABLE course_tag TO book_tags;
-ALTER TABLE book_tags RENAME COLUMN course_id TO book_id;
+-- Preserve the old catalog-tag join data; Books now store a short description instead.
+RENAME TABLE course_tag TO legacy_book_tags;
+ALTER TABLE legacy_book_tags RENAME COLUMN course_id TO book_id;
 
 -- Rename catalog references used by category counts, carts, and orders.
 ALTER TABLE categories RENAME COLUMN number_course TO number_book;

@@ -7,13 +7,10 @@ import online.book.market.entity.dto.book.BookPutRequest;
 import online.book.market.entity.dto.book.QuickViewBookGetResponse;
 import online.book.market.entity.model.Category;
 import online.book.market.entity.model.Book;
-import online.book.market.entity.model.Tag;
 import online.book.market.framework.exception.CJNotFoundException;
 import online.book.market.repository.CategoryRepository;
 import online.book.market.repository.BookRepository;
-import online.book.market.repository.TagRepository;
 import online.book.market.utils.CustomCodeException;
-import online.book.market.utils.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -34,7 +30,6 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
-    private final TagRepository tagRepository;
     private final ModelMapper modelMapper;
 
     private BookDto toDto(Book book) {
@@ -67,27 +62,13 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Book update(BookPutRequest dto, Integer id) {
-        List<Tag> resolvedTags = new ArrayList<>();
-        List<String> tagArray = List.of(dto.getTagStr().split(","));
-        tagArray.forEach((tagValue)->{
-            if (DataUtils.isNumeric(tagValue)) {
-                tagRepository.findById(Integer.parseInt(tagValue)).ifPresent(resolvedTags::add);
-            } else if (tagValue != null) {
-                Tag tag = tagRepository.findByName(tagValue).orElseGet(() -> {
-                    Tag newTag = new Tag();
-                    newTag.setName(tagValue);
-                    return tagRepository.save(newTag);
-                });
-                resolvedTags.add(tag);
-            }
-        });
-
         Book bookDB = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Khóa học không tồn tại"));;
         Category oldCat = bookDB.getCategory();
 
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Danh mục không tồn tại"));
         bookDB.setName(dto.getName());
+        bookDB.setDescription(dto.getDescription());
         bookDB.setContent(dto.getContent());
         bookDB.setSlug(dto.getSlug());
         bookDB.setStatus(dto.getStatus());
@@ -95,7 +76,6 @@ public class BookServiceImpl implements BookService {
         bookDB.setImageUrl(dto.getImageUrl() != null && !dto.getImageUrl().isEmpty() ? dto.getImageUrl() : bookDB.getImageUrl());
         bookDB.setAmzUrl(dto.getAmzUrl());
         bookDB.setIsDisplayHot(dto.getIsDisplayHot());
-        bookDB.setTags(new HashSet<>(resolvedTags));
         Book newBook = bookRepository.save(bookDB);
 
 
@@ -146,8 +126,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Book> filterBook(String status, String search, String tag, Boolean isDisplayHot, Pageable pageable) {
-        return bookRepository.filterBook(status, search, tag, isDisplayHot, pageable);
+    public Page<Book> filterBook(String status, String search, Boolean isDisplayHot, Pageable pageable) {
+        return bookRepository.filterBook(status, search, isDisplayHot, pageable);
     }
 
     @Override

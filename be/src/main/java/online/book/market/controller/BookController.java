@@ -79,7 +79,6 @@ public class BookController {
             @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) String tag,
             @RequestParam(required = false) String isDisplayHot,
             HttpServletRequest request) {
         logService.save(env, request, LOG_VIEW_BOOK, LOG_ACTION_GET_ALL_BOOK, HttpMethod.GET.name());
@@ -90,7 +89,6 @@ public class BookController {
         Page<BookDto> bookDtos = bookService.filterBook(
                 (status != null && !status.isBlank()) ? status : null,
                 (search != null && !search.isBlank()) ? search : null,
-                (tag != null && !tag.isBlank()) ? tag : null,
                 displayHot,
                 pageable
         ).map(book -> {

@@ -13,12 +13,7 @@ import HandleLoading from '../../components/util/HandleLoading'
 function BookDetailPage() {
   const { slug } = useParams()
   const dispatch = useDispatch()
-  const {
-    dataList: relatedBooks,
-    data: book,
-    isLoading,
-    error_message
-  } = useSelector((state: RootState) => state.book)
+  const { dataList: relatedBooks, data: book, isLoading, error_message } = useSelector((state: RootState) => state.book)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -44,10 +39,6 @@ function BookDetailPage() {
     { name: book?.name, href: `/book-detail/${slug}` }
   ]
 
-  const handleSearch = (tag: string) => {
-    navigate(`/search?tag=${encodeURIComponent(tag)}`)
-  }
-
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <div className='min-h-screen max-w-7xl mx-auto px-4 flex flex-col lg:flex-row lg:justify-center gap-8'>
@@ -56,7 +47,7 @@ function BookDetailPage() {
           <meta
             key='description'
             name='description'
-            content={`Read details about ${book?.name} at Global Times. Stay tuned for expert insights and knowledge.`}
+            content={book?.description || `Read details about ${book?.name} at Global Times.`}
           />
         </Helmet>
         <div className='lg:w-[80%] w-full'>
@@ -92,28 +83,20 @@ function BookDetailPage() {
           {book ? (
             <>
               <main className='max-w-[1300px] w-full mx-auto px-4 py-5 text-gray-800 font-sans leading-relaxed'>
-                <header className='mt-2'>
-                  <p className='text-sm font-semibold text-gray-600'>{book.category?.name || 'Undefined category'}</p>
-                  <h1 className='text-4xl text-[#464646] font-bold mt-2'>{book.name || 'Book name unavailable'}</h1>
+                <header className='mt-2 grid grid-cols-1 items-center gap-6 md:grid-cols-[220px_minmax(0,1fr)] md:gap-8'>
+                  <img
+                    src={getImageUrl(book.imageUrl)}
+                    alt={book.name || 'Book cover'}
+                    className='mx-auto aspect-[2/3] w-full max-w-[220px] rounded-lg object-cover shadow md:mx-0'
+                  />
+                  <div className='min-w-0'>
+                    <p className='text-sm font-semibold text-gray-600'>{book.category?.name || 'Undefined category'}</p>
+                    <h1 className='mt-2 text-3xl font-bold text-[#464646]'>{book.name || 'Book name unavailable'}</h1>
+                    {book.description && (
+                      <p className='mt-3 max-w-3xl text-lg leading-relaxed text-gray-600'>{book.description}</p>
+                    )}
+                  </div>
                 </header>
-                <div className='mb-1 mt-1 flex flex-wrap items-center gap-2'>
-                  {book.tags?.map((tag) => (
-                    <span
-                      key={tag.id}
-                      onClick={() => {
-                        handleSearch(tag.name)
-                      }}
-                      className='cursor-pointer rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-300'
-                    >
-                      {tag.name}
-                    </span>
-                  ))}
-                </div>
-                <img
-                  src={getImageUrl(book.imageUrl)}
-                  alt={book.name || 'Book cover'}
-                  className='w-full rounded-lg mb-8 shadow'
-                />
 
                 <section className='mt-10'>
                   <h2 className='text-2xl text-[#464646] font-semibold mb-4'>Introduction</h2>

@@ -15,7 +15,6 @@ export interface IBook {
   slug: string
   sourceUrl: string
   status: string
-  tags: ITag[]
 }
 
 export interface ICategory {

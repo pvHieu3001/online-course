@@ -15,16 +15,15 @@ import HandleLoading from '../components/util/HandleLoading'
 
 function PageSearch() {
   const query = useQuery()
-  const search = query.get('search') || ''
-  const tag = query.get('tag') || ''
+  const search = query.get('search') || query.get('tag') || ''
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const { dataList, isLoading, error_message } = useSelector((state: RootState) => state.book)
 
   useEffect(() => {
-    dispatch(bookActions.getBooks('active', search, '', undefined, undefined, tag) as unknown as AnyAction)
-  }, [dispatch, search, tag])
+    dispatch(bookActions.getBooks('active', search) as unknown as AnyAction)
+  }, [dispatch, search])
 
   const handleDetail = (slug: string) => {
     const book = dataList.find((c: IBook) => c.slug === slug)

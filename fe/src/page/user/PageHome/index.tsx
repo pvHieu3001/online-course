@@ -175,17 +175,17 @@ function PageHome() {
                       className='h-full'
                       bodyStyle={{ padding: '12px' }}
                       cover={
-                        <div className='h-48 md:h-56 overflow-hidden rounded-t-lg border-b border-gray-100'>
+                        <div className='h-48 md:h-56 overflow-hidden rounded-t-lg border-b border-gray-100 bg-gray-50 flex items-center justify-center'>
                           <img
                             src={item.imageUrl}
-                            className='w-full h-full object-cover transition-transform duration-300 hover:scale-105'
+                            className='w-full h-full object-contain transition-transform duration-300 hover:scale-105'
                             alt='book cover'
                           />
                         </div>
                       }
                     >
-                      <Text strong className='line-clamp-2' style={{ fontSize: '0.85rem' }}>
-                        {item.description}
+                      <Text strong className='line-clamp-2 text-center block w-full' style={{ fontSize: '0.85rem' }}>
+                        {item.name || 'Book name not available'}
                       </Text>
                     </Card>
                   </div>

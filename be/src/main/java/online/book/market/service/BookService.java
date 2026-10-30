@@ -19,7 +19,7 @@ public interface BookService {
 	List<Book> getByCategoryId(Integer categoryId);
     Book getBySlug(String slug);
 	Book getBookBySlug(String slug);
-	Page<Book> filterBook(String status, String search, String tag, Boolean isDisplayHot, Pageable pageable);
+	Page<Book> filterBook(String status, String search, Boolean isDisplayHot, Pageable pageable);
 	List<QuickViewBookGetResponse> getQuickViewBooks();
 	Long count();
 }

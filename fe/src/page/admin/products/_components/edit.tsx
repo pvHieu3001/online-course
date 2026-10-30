@@ -13,7 +13,6 @@ import { RootState } from '@/app/store'
 import { ICategory } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { useQuery } from '@/utils/useQuery'
-import { tagActions } from '@/app/actions'
 
 function EditProduct() {
   const navigator = useNavigate()
@@ -22,12 +21,9 @@ function EditProduct() {
   const dispatch = useDispatch()
   const bookStore = useSelector((state: RootState) => state.book)
   const categoryStore = useSelector((state: RootState) => state.category)
-  const tagStore = useSelector((state: RootState) => state.tag)
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
-  const [description, setDescription] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  const [selectedTags, setSelectedTags] = useState<string>('')
   const [displayPic, setDisplayPic] = useState<string>()
 
   useEffect(() => {
@@ -35,7 +31,6 @@ function EditProduct() {
       dispatch(bookActions.getBookById(slug) as unknown as AnyAction)
     }
     dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
-    dispatch(tagActions.getTags() as unknown as AnyAction)
   }, [dispatch, slug])
 
   useEffect(() => {
@@ -53,12 +48,9 @@ function EditProduct() {
         slug: bookStore.data.slug,
         amzUrl: bookStore.data.amzUrl,
         status: bookStore.data.status === 'active',
-        isDisplayHot: bookStore.data.isDisplayHot ?? false,
-        tagStr: bookStore.data.tags?.flatMap((item) => item.id)
+        isDisplayHot: bookStore.data.isDisplayHot ?? false
       })
-      setDescription(bookStore.data.description ?? '')
       setContent(bookStore.data.content ?? '')
-      setSelectedTags(bookStore.data?.tags?.map((tag) => tag.id).join(',') || '')
       if (bookStore.data?.imageUrl) {
         setDisplayPic(getImageUrl(bookStore.data.imageUrl))
       }
@@ -69,6 +61,7 @@ function EditProduct() {
     const id = bookStore.data?.id
     const name = form.getFieldValue('name')
     const categoryId = form.getFieldValue('categoryId')
+    const description = form.getFieldValue('description')
     const amzUrl = form.getFieldValue('amzUrl')
     const status = form.getFieldValue('status')
     const isDisplayHot = form.getFieldValue('isDisplayHot')
@@ -78,14 +71,13 @@ function EditProduct() {
     formdata.append('name', name)
     formdata.append('categoryId', categoryId)
     formdata.append('content', content)
-    formdata.append('description', description)
+    formdata.append('description', description ?? '')
     if (imageUrl) {
       formdata.append('imageFile', imageUrl as Blob)
     }
     formdata.append('amzUrl', amzUrl ?? '')
     formdata.append('status', status ? 'active' : 'inactive')
     formdata.append('isDisplayHot', isDisplayHot ?? false)
-    formdata.append('tagStr', selectedTags)
 
     try {
       await dispatch(bookActions.updateBook(id as string, formdata) as unknown as AnyAction)
@@ -206,17 +198,12 @@ function EditProduct() {
                   </Col>
                 )}
                 <Col xs={24} md={8}>
-                  <Form.Item name='tagStr' label='Tags'>
-                    <Select
-                      mode='tags'
-                      placeholder='Nhập hoặc chọn tag'
-                      size='large'
-                      className='w-full'
-                      options={tagStore.dataList?.map((tag) => ({
-                        value: tag.id,
-                        label: tag.name
-                      }))}
-                      onChange={(value) => setSelectedTags(value)}
+                  <Form.Item name='description' label='Mô tả ngắn'>
+                    <Input.TextArea
+                      placeholder='Nhập mô tả ngắn về sách'
+                      maxLength={500}
+                      showCount
+                      autoSize={{ minRows: 2, maxRows: 4 }}
                     />
                   </Form.Item>
                 </Col>

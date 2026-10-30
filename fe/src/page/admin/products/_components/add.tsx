@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom'
 import { RootState } from '@/app/store'
 import { ICategory } from '@/common/types.interface'
 import { useQuery } from '@/utils/useQuery'
-import { tagActions } from '@/app/actions'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 
 function AddProduct() {
@@ -17,17 +16,14 @@ function AddProduct() {
   const dispatch = useDispatch()
   const categoryStore = useSelector((state: RootState) => state.category)
   const bookStore = useSelector((state: RootState) => state.book)
-  const tagStore = useSelector((state: RootState) => state.tag)
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<Blob>()
   const [displayPic, setDisplayPic] = useState<string>()
   const [content, setContent] = useState<string>('')
-  const [selectedTags, setSelectedTags] = useState<string>('')
   const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
-    dispatch(tagActions.getTags() as unknown as AnyAction)
   }, [dispatch])
 
   const onFinish = async () => {
@@ -41,10 +37,10 @@ function AddProduct() {
     formdata.append('name', name)
     formdata.append('categoryId', categoryId)
     formdata.append('amzUrl', amzUrl ?? '')
+    formdata.append('description', form.getFieldValue('description') ?? '')
     formdata.append('content', content)
     formdata.append('status', status ? 'active' : 'inactive')
     formdata.append('isDisplayHot', isDisplayHot ?? false)
-    formdata.append('tagStr', selectedTags ?? null)
     if (imageUrl) {
       formdata.append('imageFile', imageUrl as Blob)
     }
@@ -146,26 +142,21 @@ function AddProduct() {
                     optionFilterProp='children'
                     size='large'
                   >
-                    {categoryStore.dataList?.map((cat: ICategory) => (
-                      <Select.Option key={cat.id} value={cat.id}>
-                        {cat.name}
+                    {categoryStore.dataList?.map((category: ICategory) => (
+                      <Select.Option key={category.id} value={category.id}>
+                        {category.name}
                       </Select.Option>
                     ))}
                   </Select>
                 </Form.Item>
               </Col>
               <Col xs={24} md={8}>
-                <Form.Item name='tagStr' label='Tags'>
-                  <Select
-                    mode='tags'
-                    placeholder='Nhập hoặc chọn tag'
-                    size='large'
-                    className='w-full'
-                    options={tagStore.dataList?.map((tag) => ({
-                      value: tag.id,
-                      label: tag.name
-                    }))}
-                    onChange={(value) => setSelectedTags(value)}
+                <Form.Item name='description' label='Mô tả ngắn'>
+                  <Input.TextArea
+                    placeholder='Nhập mô tả ngắn về sách'
+                    maxLength={500}
+                    showCount
+                    autoSize={{ minRows: 2, maxRows: 4 }}
                   />
                 </Form.Item>
               </Col>

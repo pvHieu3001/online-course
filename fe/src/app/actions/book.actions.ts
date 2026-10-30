@@ -21,19 +21,12 @@ import {
 } from '../slices/book.reducer'
 
 export const getBooks =
-  (
-    status?: string,
-    search?: string,
-    isDisplayHot?: string,
-    currentPage?: number,
-    booksPerPage?: number,
-    tag?: string
-  ) =>
+  (status?: string, search?: string, isDisplayHot?: string, currentPage?: number, booksPerPage?: number) =>
   (dispatch: Dispatch) => {
     dispatch(isFetching())
 
     return bookServices
-      .getBooks(status, search, isDisplayHot, currentPage, booksPerPage, tag)
+      .getBooks(status, search, isDisplayHot, currentPage, booksPerPage)
       .then((res) => {
         dispatch(getBooksSuccessFully(res.data))
         return res

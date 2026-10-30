@@ -9,14 +9,11 @@ import online.book.market.entity.dto.category.CategoryDto;
 import online.book.market.entity.dto.book.BookDto;
 import online.book.market.entity.dto.book.BookPostRequest;
 import online.book.market.entity.dto.book.BookPutRequest;
-import online.book.market.entity.dto.tag.TagDto;
 import online.book.market.entity.model.Category;
 import online.book.market.entity.model.Book;
-import online.book.market.entity.model.Tag;
 import online.book.market.service.CategoryService;
 import online.book.market.service.BookService;
 import online.book.market.service.LogService;
-import online.book.market.service.TagService;
 import online.book.market.utils.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,17 +41,15 @@ public class AdminBookController {
     private final LogService logService;
     private final BookService bookService;
     private final CategoryService categoryService;
-    private final TagService tagService;
     private final ModelMapper modelMapper;
     private final Cloudinary cloudinary;
     private final String env;
 
-    public AdminBookController(LogService logService, BookService bookService, CategoryService categoryService, TagService tagService, ModelMapper modelMapper,
+    public AdminBookController(LogService logService, BookService bookService, CategoryService categoryService, ModelMapper modelMapper,
                                  Cloudinary cloudinary, @Qualifier("env") String environment) {
         this.logService = logService;
         this.bookService = bookService;
         this.categoryService = categoryService;
-        this.tagService = tagService;
         this.modelMapper = modelMapper;
         this.cloudinary = cloudinary;
         this.env = environment;
@@ -74,13 +69,6 @@ public class AdminBookController {
         BookDto bookDto = modelMapper.map(book, BookDto.class);
         Optional.ofNullable(book.getCategory())
                 .ifPresent(category -> bookDto.setCategory(modelMapper.map(category, CategoryDto.class)));
-        Optional.ofNullable(book.getTags())
-                .ifPresent(tags -> {
-                    List<TagDto> tagDtos = tags.stream()
-                            .map(tag -> modelMapper.map(tag, TagDto.class))
-                            .toList();
-                    bookDto.setTags(new HashSet<>(tagDtos));
-                });
         return bookDto;
     }
 
@@ -100,7 +88,7 @@ public class AdminBookController {
         Page<BookDto> getBookDtos = bookService.filterBook(
                         !String.valueOf(status).isEmpty() ? status : null,
                         !String.valueOf(search).isEmpty() ? search : null,
-                        null, displayHot, pageable
+                        displayHot, pageable
                 ).map(this::toDto);
 
 
@@ -131,25 +119,6 @@ public class AdminBookController {
             Book book = modelMapper.map(dto, Book.class);
             Category category = categoryService.getById(dto.getCategoryId());
             book.setCategory(category);
-
-            if(dto.getTagStr()!=null && !dto.getTagStr().isEmpty()) {
-                List<Tag> resolvedTags = new ArrayList<>();
-                List<String> tagArray = List.of(dto.getTagStr().split(","));
-                tagArray.forEach((tagValue) -> {
-                    if (DataUtils.isNumeric(tagValue)) {
-                        tagService.findById(Integer.parseInt(tagValue)).ifPresent(resolvedTags::add);
-                    } else if (tagValue != null) {
-                        Tag tag = tagService.findByName(tagValue).orElseGet(() -> {
-                            Tag newTag = new Tag();
-                            newTag.setName(tagValue);
-                            return tagService.save(newTag);
-                        });
-                        resolvedTags.add(tag);
-                    }
-                });
-                book.setTags(new HashSet<>(resolvedTags));
-            }
-
 
             Book bookDb = bookService.save(book);
             logService.save(env, request, LOG_CREATE_BOOK, LOG_ACTION_CREATE_NEW_BOOK, HttpMethod.POST.name());

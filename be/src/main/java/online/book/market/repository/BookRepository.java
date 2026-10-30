@@ -20,12 +20,11 @@ public interface BookRepository extends JpaRepository<Book, Integer>{
 
     @Query("SELECT c FROM Book c " +
             "WHERE (:status IS NULL OR c.status = :status) " +
-            "AND (:search IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%'))) " +
-            "AND (:isDisplayHot IS NULL OR c.isDisplayHot = :isDisplayHot) "+
-            "AND (:tag IS NULL OR EXISTS (SELECT t FROM c.tags t WHERE t.name = :tag))")
+            "AND (:search IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR LOWER(COALESCE(c.description, '')) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+            "AND (:isDisplayHot IS NULL OR c.isDisplayHot = :isDisplayHot)")
     Page<Book> filterBook(@Param("status") String status,
                               @Param("search") String search,
-                              @Param("tag") String tag,
                               @Param("isDisplayHot") Boolean isDisplayHot,
                               Pageable pageable);
 

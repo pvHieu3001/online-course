@@ -28,10 +28,6 @@ public class Tag {
     @ManyToMany(mappedBy = "tags")
     private Set<Blog> blogs= new HashSet<>();
 
-    @JsonIgnoreProperties("books")
-    @ManyToMany(mappedBy = "tags")
-    private Set<Book> books = new HashSet<>();
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

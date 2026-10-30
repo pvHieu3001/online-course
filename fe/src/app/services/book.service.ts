@@ -5,8 +5,7 @@ function getBooks(
   search?: string,
   isDisplayHot?: string,
   currentPage?: number,
-  booksPerPage?: number,
-  tag?: string
+  booksPerPage?: number
 ) {
   currentPage = currentPage ?? 0
   booksPerPage = booksPerPage ?? 15
@@ -15,8 +14,6 @@ function getBooks(
       status +
       '&search=' +
       search +
-      '&tag=' +
-      tag +
       '&isDisplayHot=' +
       isDisplayHot +
       '&page=' +
