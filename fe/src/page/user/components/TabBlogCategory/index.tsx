@@ -16,10 +16,12 @@ function TabBlogCategory() {
   const router = useNavigate()
 
   const categories = [
-    { name: 'Finance', href: '/chung-khoan' },
-    { name: 'Crypto', href: '/crypto' },
-    { name: 'Utilities', href: `/thu-thuat-huu-ich` },
-    { name: 'Collections', href: `/suu-tam` }
+    { name: 'Technology', href: '/blogs/technology' },
+    { name: 'Lifestyle', href: '/blogs/lifestyle' },
+    { name: 'Travel', href: '/blogs/travel' },
+    { name: 'World', href: '/blogs/world' },
+    { name: 'Education', href: '/blogs/education' },
+    { name: 'Science', href: '/blogs/science' }
   ]
 
   useEffect(() => {

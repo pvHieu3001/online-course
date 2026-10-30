@@ -69,12 +69,19 @@ const Header = (props: Props) => {
   const menuItems = [
     { label: 'Home', href: '/' },
     { label: 'Books', href: '/books' },
-    { label: 'BLogs', href: '/blogs' }
+    { label: 'Blogs', href: '/blogs' }
   ]
 
   const handleSearch = (keyword: string) => {
     navigate(`?search=${encodeURIComponent(keyword)}`)
   }
+
+  const isItemActive = (href: string) => {
+    if (href === '/') return currentPath === '/';
+    if (href === '/blogs') return currentPath.startsWith('/blogs') || currentPath.startsWith('/blog');
+    if (href === '/books') return currentPath.startsWith('/books') || currentPath.startsWith('/book');
+    return currentPath === href;
+  };
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -155,7 +162,7 @@ const Header = (props: Props) => {
         <div className='w-full bg-slate-900 border-b border-white/5 flex justify-center'>
           <nav className='max-w-[1300px] w-full hidden sm:flex items-center gap-1 h-12 px-4 overflow-x-auto whitespace-nowrap scrollbar-hide'>
             {menuItems.map((item) => {
-              const isActive = currentPath === item.href || (currentPath === '/' && item.href === '/')
+              const isActive = isItemActive(item.href)
               return (
                 <Link
                   key={item.label}
@@ -211,7 +218,7 @@ const Header = (props: Props) => {
                   key={i}
                   to={item.href}
                   className={`block py-3 px-4 text-base font-semibold rounded-xl transition-all mb-2 ${
-                    currentPath === item.href ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'
+                    isItemActive(item.href) ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'
                   }`}
                   onClick={() => setMenuOpen(false)}
                 >

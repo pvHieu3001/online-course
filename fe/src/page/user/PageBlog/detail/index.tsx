@@ -43,7 +43,7 @@ function BlogDetailPage() {
 
   const breadcrumbs = [
     { name: 'Home', href: '/' },
-    { name: getBlogInfoByType(blogData?.type).title, href: '/' + getBlogInfoByType(blogData?.type).path },
+    { name: getBlogInfoByType(blogData?.type).title, href: '/blogs/' + getBlogInfoByType(blogData?.type).path },
     { name: blogData?.title, href: `/blog/${slug}` }
   ]
 

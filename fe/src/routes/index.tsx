@@ -57,8 +57,14 @@ export default function Router() {
             <Route path='book-detail/:slug' element={<BookDetailPage />} />
             <Route path='book-category/:slug' element={<CategoryDetailPage />} />
             <Route path='blogs' element={<PageBlog />} />
+            <Route path='blogs/:slug' element={<PageBlog />} />
             <Route path='blog/:slug' element={<BlogDetailPage />} />
-            <Route path='blogs/:slug' element={<CategoryDetailPage />} />
+            <Route path='technology' element={<Navigate to='/blogs/technology' replace />} />
+            <Route path='lifestyle' element={<Navigate to='/blogs/lifestyle' replace />} />
+            <Route path='travel' element={<Navigate to='/blogs/travel' replace />} />
+            <Route path='world' element={<Navigate to='/blogs/world' replace />} />
+            <Route path='education' element={<Navigate to='/blogs/education' replace />} />
+            <Route path='science' element={<Navigate to='/blogs/science' replace />} />
             <Route path='privacy-policy' element={<PagePrivacyPolicy />} />
             <Route path='terms-and-conditions' element={<PageTermsConditions />} />
             <Route path='contact-us' element={<PageContactUs />} />

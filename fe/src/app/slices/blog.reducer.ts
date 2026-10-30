@@ -8,6 +8,7 @@ const initialState = {
   error_message: '',
   data: <IBlog>(<unknown>null),
   dataList: <IBlog[]>(<unknown>null),
+  recommendList: <IBlog[]>(<unknown>null),
   trendingBlogs: <IBlog[]>(<unknown>null),
   newBlogs: <IBlog[]>(<unknown>null),
   trendingTechnologyBlogs: <IBlog[]>(<unknown>null),
@@ -39,6 +40,7 @@ const blogSlice = createSlice({
       state.error_message = ''
       state.data = null as unknown as IBlog
       state.dataList = []
+      state.recommendList = []
       state.trendingBlogs = []
       state.newBlogs = []
       state.trendingTechnologyBlogs = []
@@ -113,8 +115,8 @@ const blogSlice = createSlice({
       state.isLoading = false
     },
     getByTypeSuccessFully: (state, { payload }) => {
-      state.recommendList = payload.data.blogRecommendList
-      state.dataList = payload.data.blogList
+      state.recommendList = payload.data?.blogRecommendList || payload.data?.newsBlogs || []
+      state.dataList = payload.data?.blogList || payload.data?.trendingBlogs || []
       state.isLoading = false
     },
     getByTypeSuccessFailure: (state, { payload }) => {

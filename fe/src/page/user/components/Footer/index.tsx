@@ -53,11 +53,11 @@ const Footer = () => {
                Categories
             </h3>
             <ul className="space-y-3.5 text-sm">
-              <li><Link to="/chung-khoan" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Business & Finance</Link></li>
-              <li><Link to="/crypto" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Technology & Crypto</Link></li>
-              <li><Link to="/thu-thuat-huu-ich" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Life & Health</Link></li>
-              <li><Link to="/bang-gia-chung-khoan" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Market Data</Link></li>
-              <li><Link to="/tat-ca-khoa-hoc" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Books & Education</Link></li>
+              <li><Link to="/blogs/technology" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Technology</Link></li>
+              <li><Link to="/blogs/lifestyle" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Life & Health</Link></li>
+              <li><Link to="/blogs/travel" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Travel & Culture</Link></li>
+              <li><Link to="/blogs/world" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">World News</Link></li>
+              <li><Link to="/books" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Books & Education</Link></li>
             </ul>
           </div>
 
