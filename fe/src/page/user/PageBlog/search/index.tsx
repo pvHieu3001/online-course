@@ -2,33 +2,35 @@ import { useEffect } from 'react'
 import styles from './styles.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
-import { bookActions } from '@/app/actions/book.actions'
 import { useNavigate } from 'react-router-dom'
-import TabCategory from '../components/TabCategory'
 import { RootState } from '@/app/store'
-import { IBook } from '@/common/types.interface'
+import { IBlog } from '@/common/types.interface'
 import { useQuery } from '@/utils/useQuery'
 import Link from 'antd/es/typography/Link'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
-import HandleLoading from '../components/util/HandleLoading'
+import TabBlogCategory from '../../components/TabBlogCategory'
+import { blogActions } from '@/app/actions'
+import { getBlogInfoByType } from '@/utils/getBlogInfo'
+import HandleLoading from '../../components/util/HandleLoading'
 
-function PageSearch() {
+function PageBlogSearch() {
   const query = useQuery()
-  const search = query.get('search') || query.get('tag') || ''
+  const search = query.get('search') || ''
+  const tag = query.get('tag') || ''
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { dataList, isLoading, error_message } = useSelector((state: RootState) => state.book)
+  const { dataList, isLoading, error_message } = useSelector((state: RootState) => state.blog)
 
   useEffect(() => {
-    dispatch(bookActions.getBooks('active', search) as unknown as AnyAction)
-  }, [dispatch, search])
+    dispatch(blogActions.getBlogs(search, tag) as unknown as AnyAction)
+  }, [dispatch, search, tag])
 
   const handleDetail = (slug: string) => {
-    const book = dataList.find((c: IBook) => c.slug === slug)
+    const book = dataList.find((c: IBlog) => c.slug === slug)
     if (book) {
-      navigate(`/book-detail/${slug}`, { state: book })
+      navigate(`/blog/${slug}`, { state: book })
     }
   }
 
@@ -39,39 +41,39 @@ function PageSearch() {
           <title>Global Times || Search</title>
           <meta
             name='description'
-            content='Global Times search page. Search for high-quality news, informative articles, and learning materials.'
+            content='Global Times search page. Search for high quality news, blogs, and profound insights on multiple topics.'
           />
         </Helmet>
         <main className={styles.mainContent} role='main'>
           <section className={styles.booksWrapper} aria-label='Book listings'>
             <h2 className={styles.bookListTitle}>Search Results</h2>
             <div className={styles.books}>
-              {isLoading && <p>Loading books...</p>}
+              {isLoading && <p>Loading blogs...</p>}
               {!isLoading && error_message && (
-                <p className={styles.error}>Error loading books. Please try again later.</p>
+                <p className={styles.error}>Error loading blogs. Please try again later.</p>
               )}
-              {!isLoading && !error_message && dataList?.length === 0 && <p>No matching books found.</p>}
+              {!isLoading && !error_message && dataList?.length === 0 && <p>No matching blogs found.</p>}
               {!isLoading &&
                 !error_message &&
-                dataList?.map((book: IBook) => (
+                dataList?.map((blog: IBlog) => (
                   <article
                     className={styles.bookCard}
-                    key={book.id}
+                    key={blog.id}
                     role='button'
                     tabIndex={0}
-                    onClick={() => handleDetail(book.slug)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleDetail(book.slug)}
+                    onClick={() => handleDetail(blog.slug)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleDetail(blog.slug)}
                   >
-                    <img src={getImageUrl(book.imageUrl)} alt={`${book.name} book image`} loading='lazy' />
-                    <Link className={styles.bookCat}>{book.category?.name}</Link>
-                    <h3 className={styles.bookTitle}>{book.name}</h3>
+                    <img src={getImageUrl(blog.image)} alt={`${blog.title} book image`} loading='lazy' />
+                    <Link className={styles.bookCat}>{getBlogInfoByType(blog.type).title}</Link>
+                    <h3 className={styles.bookTitle}>{blog.title}</h3>
                   </article>
                 ))}
             </div>
             <div className={styles.breaker}></div>
           </section>
           <aside className='w-full lg:w-[20%] sticky top-4' role='complementary'>
-            <TabCategory />
+            <TabBlogCategory />
           </aside>
         </main>
       </div>
@@ -79,4 +81,4 @@ function PageSearch() {
   )
 }
 
-export default PageSearch
+export default PageBlogSearch

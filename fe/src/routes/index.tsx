@@ -15,7 +15,7 @@ import AddProduct from '@/page/admin/products/_components/add'
 import EditProduct from '@/page/admin/products/_components/edit'
 import GuardPage from '@/middleware/GuardPage'
 import BookDetailPage from '../page/user/PageBook/detail/index'
-import CategoryDetailPage from '../page/user/CategoryDetailPage/index'
+import CategoryDetailPage from '../page/user/PageBook/category/index'
 import PageBlog from '../page/user/PageBlog'
 import ProductOrdersManagement from '@/page/admin/orders'
 import SignUp from '@/page/auth/signup'
@@ -23,7 +23,7 @@ import Login from '@/page/auth/login'
 import BlogManagement from '@/page/admin/blogs'
 import AddBlog from '@/page/admin/blogs/_components/add'
 import EditBlog from '@/page/admin/blogs/_components/edit'
-import PageSearch from '@/page/user/PageSearch'
+import PageSearch from '@/page/user/PageBook/search'
 import NetworkErrorPage from '@/page/error/NetworkErrorPage'
 import NotFoundPage from '@/page/error/NotFoundPage'
 import BlogDetailPage from '@/page/user/PageBlog/detail'
@@ -31,7 +31,7 @@ import AffiliateManagement from '@/page/admin/affiliate'
 import AddAffiliate from '@/page/admin/affiliate/_components/add'
 import EditAffiliate from '@/page/admin/affiliate/_components/edit'
 import AccountManagement from '@/page/admin/account'
-import PageBlogSearch from '@/page/user/PageBlogSearch'
+import PageBlogSearch from '@/page/user/PageBlog/search'
 import AmazonManagement from '@/page/admin/amazon'
 import AddAmazon from '@/page/admin/amazon/_components/add'
 import EditAmazon from '@/page/admin/amazon/_components/edit'
@@ -45,8 +45,6 @@ export default function Router() {
     <>
       <Routes>
         <Route path='/' element={<Layout />}>
-
-
           <Route path='' element={<Base />}>
             <Route index element={<PageHome />} />
             <Route path='login' element={<Login />} />

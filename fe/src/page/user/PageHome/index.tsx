@@ -154,16 +154,17 @@ function PageHome() {
             </Row>
 
             <div className='mt-12'>
-              <Title
-                onClick={() => {
-                  navigate(`/books`)
-                }}
-                level={3}
-                className='border-l-4 border-purple-600 pl-3 mb-6 cursor-pointer'
-              >
-                BOOKS
-              </Title>
-
+              <div className='flex items-center gap-4 mb-4 border-b border-gray-100 pb-2 flex-wrap'>
+                <Title
+                  onClick={() => {
+                    navigate(`/books`)
+                  }}
+                  level={3}
+                  className='border-l-4 border-purple-600 pl-3 mb-6 cursor-pointer'
+                >
+                  BOOKS
+                </Title>
+              </div>
               <div
                 className='flex overflow-x-auto gap-4 pb-4 snap-x [&::-webkit-scrollbar]:hidden'
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}

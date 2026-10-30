@@ -1,15 +1,15 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import TabCategory from '../components/TabCategory'
+import TabCategory from '../../components/TabCategory'
 import { bookActions, categoryActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { IBook } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
-import HandleLoading from '../components/util/HandleLoading'
-import LoadingPage from '../components/util/LoadingPage'
+import HandleLoading from '../../components/util/HandleLoading'
+import LoadingPage from '../../components/util/LoadingPage'
 
 function CategoryDetailPage() {
   const { slug } = useParams()
