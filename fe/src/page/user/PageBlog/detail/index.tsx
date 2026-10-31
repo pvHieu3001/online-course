@@ -8,6 +8,7 @@ import { ContextType } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { formatDateTimeString, getFullName } from '@/utils/formatDate'
 import HandleLoading from '../../components/util/HandleLoading'
+import HtmlContent from '@/page/shared/HtmlContent'
 import LoadingPage from '../../components/util/LoadingPage'
 import { Helmet } from 'react-helmet-async'
 import { getBlogInfoByType } from '@/utils/getBlogInfo'
@@ -124,21 +125,7 @@ function BlogDetailPage() {
 
               <img src={getImageUrl(blogData.image)} alt={blogData.title} className='w-full rounded-lg mb-8 shadow' />
 
-              <article
-                className='prose prose-lg max-w-none font-arial
-                [&_p]:mb-4 
-                [&_p]:text-[17px]
-                [&_h1]:text-3xl 
-                [&_h2]:text-2xl 
-                [&_h3]:text-xl 
-                [&_ul]:list-disc 
-                [&_ul]:pl-6 
-                [&_img]:mx-auto [&_img]:block
-                [&_video]:mx-auto [&_video]:block
-                [&_iframe]:mx-auto [&_iframe]:block
-                [&_a]:text-blue-600 [&_a:hover]:underline text-[17px]'
-                dangerouslySetInnerHTML={{ __html: blogData.content || '' }}
-              ></article>
+              <HtmlContent as='article' content={blogData.content} />
 
               {/* Related Articles */}
               <section className='mt-16 border-t pt-10'>

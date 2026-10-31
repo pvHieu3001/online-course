@@ -218,8 +218,18 @@ function PageBlog() {
   const mainBlog = activeBlogs[0]
   const secondBlog = activeBlogs[1]
   const thirdBlog = activeBlogs[2]
-  const gridBlogs = activeBlogs.length > 3 ? activeBlogs.slice(3, 7) : []
-  const latestList = activeBlogs.length > 7 ? activeBlogs.slice(7) : (activeRecommends.length > 0 ? activeRecommends : [])
+
+  const seenSlugs = new Set([mainBlog?.slug, secondBlog?.slug, thirdBlog?.slug].filter(Boolean))
+  const remainingBlogs: IBlog[] = []
+
+  for (const b of [...(activeBlogs.length > 3 ? activeBlogs.slice(3) : []), ...activeRecommends]) {
+    if (b && b.slug && !seenSlugs.has(b.slug)) {
+      seenSlugs.add(b.slug)
+      remainingBlogs.push(b)
+    }
+  }
+
+  const displayList = remainingBlogs.length > 0 ? remainingBlogs : fallbackLatestNews
 
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
@@ -310,41 +320,41 @@ function PageBlog() {
                 {/* Secondary Cards */}
                 <Col xs={24} md={8}>
                   <div
-                    className='flex flex-col justify-between gap-4'
+                    className='flex flex-row md:flex-col justify-between gap-3 sm:gap-4'
                     style={heroImageHeight ? { height: `${heroImageHeight}px` } : undefined}
                   >
                     {/* Secondary Article 1 */}
                     <div
-                      className='flex-1 flex flex-col min-h-0 group cursor-pointer'
+                      className='flex-1 flex flex-col min-h-0 min-w-0 group cursor-pointer'
                       onClick={() => handleDetail(secondBlog?.slug || fallbackSecondary[0].slug)}
                     >
-                      <div className='aspect-[16/10] md:aspect-auto flex-1 overflow-hidden rounded-md mb-2 bg-gray-100 shadow-sm min-h-0'>
+                      <div className='aspect-[16/10] md:aspect-auto md:flex-1 overflow-hidden rounded-md mb-2 bg-gray-100 shadow-sm min-h-0'>
                         <img
                           src={secondBlog?.image ? getImageUrl(secondBlog.image) : fallbackSecondary[0].image}
                           alt={secondBlog?.title || fallbackSecondary[0].title}
                           className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105'
                         />
                       </div>
-                      <h3 className='text-sm sm:text-[15px] font-bold leading-snug group-hover:text-blue-700 transition-colors line-clamp-2 mb-0 flex-shrink-0'>
+                      <h3 className='text-xs sm:text-sm md:text-[15px] font-bold leading-snug group-hover:text-blue-700 transition-colors line-clamp-2 mb-0 flex-shrink-0'>
                         {secondBlog?.title || fallbackSecondary[0].title}
                       </h3>
                     </div>
 
-                    <Divider className='my-0' />
+                    <Divider className='hidden md:block my-0' />
 
                     {/* Secondary Article 2 */}
                     <div
-                      className='flex-1 flex flex-col min-h-0 group cursor-pointer'
+                      className='flex-1 flex flex-col min-h-0 min-w-0 group cursor-pointer'
                       onClick={() => handleDetail(thirdBlog?.slug || fallbackSecondary[1].slug)}
                     >
-                      <div className='aspect-[16/10] md:aspect-auto flex-1 overflow-hidden rounded-md mb-2 bg-gray-100 shadow-sm min-h-0'>
+                      <div className='aspect-[16/10] md:aspect-auto md:flex-1 overflow-hidden rounded-md mb-2 bg-gray-100 shadow-sm min-h-0'>
                         <img
                           src={thirdBlog?.image ? getImageUrl(thirdBlog.image) : fallbackSecondary[1].image}
                           alt={thirdBlog?.title || fallbackSecondary[1].title}
                           className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105'
                         />
                       </div>
-                      <h3 className='text-sm sm:text-[15px] font-bold leading-snug group-hover:text-blue-700 transition-colors line-clamp-2 mb-0 flex-shrink-0'>
+                      <h3 className='text-xs sm:text-sm md:text-[15px] font-bold leading-snug group-hover:text-blue-700 transition-colors line-clamp-2 mb-0 flex-shrink-0'>
                         {thirdBlog?.title || fallbackSecondary[1].title}
                       </h3>
                     </div>
@@ -352,190 +362,62 @@ function PageBlog() {
                 </Col>
               </Row>
 
-              {/* 4-Item Grid */}
-              <div className='mb-12'>
-                <Row gutter={[24, 24]}>
-                  {gridBlogs.length > 0
-                    ? gridBlogs.map((item) => (
-                        <Col xs={24} sm={12} lg={6} key={item.id}>
-                          <div className='group cursor-pointer' onClick={() => handleDetail(item.slug)}>
-                            <div className='overflow-hidden rounded-md mb-3 aspect-[16/10] bg-gray-100 shadow-sm'>
-                              <img
-                                src={item.image ? getImageUrl(item.image) : 'https://picsum.photos/seed/' + item.slug + '/400/250'}
-                                alt={item.title}
-                                className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
-                              />
-                            </div>
-                            <h4 className='text-[15px] font-bold leading-snug group-hover:text-blue-700 transition-colors line-clamp-2'>
-                              {item.title}
-                            </h4>
+              {/* Two Column Layout: Latest Articles vs Spotlight */}
+              <div className='w-full mt-10'>
+                <div className='flex items-center gap-2 mb-4'>
+                  <div className='w-1.5 h-6 bg-blue-600 rounded-sm'></div>
+                  <h2 className='text-xl sm:text-2xl font-bold uppercase tracking-wide m-0 text-slate-900'>Latest News</h2>
+                </div>
+                <Divider className='mt-2 mb-6' />
+
+                <Row gutter={[24, 32]}>
+                  {displayList.map((item: any, idx: number) => {
+                    const isRealBlog = Boolean(item.slug)
+                    const title = item.title
+                    const desc = item.description || item.desc || ''
+                    const imgUrl = item.image
+                      ? (isRealBlog ? getImageUrl(item.image) : item.image)
+                      : `https://picsum.photos/seed/${item.slug || idx}/400/250`
+                    const dateStr = item.updatedAt
+                      ? new Date(item.updatedAt).toLocaleDateString()
+                      : (item.time || 'Published Recently')
+                    const badge = item.type || categoryTitle
+
+                    return (
+                      <Col xs={24} sm={12} lg={6} key={item.id || idx}>
+                        <div
+                          className='flex flex-col group cursor-pointer h-full bg-transparent'
+                          onClick={() => handleDetail(item.slug || '')}
+                        >
+                          <div className='w-full aspect-[16/10] overflow-hidden rounded-md bg-gray-100 mb-2.5'>
+                            <img
+                              src={imgUrl}
+                              alt={title}
+                              className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
+                            />
                           </div>
-                        </Col>
-                      ))
-                    : fallbackSubNews.map((item) => (
-                        <Col xs={24} sm={12} lg={6} key={item.id}>
-                          <div className='group cursor-pointer'>
-                            <div className='overflow-hidden rounded-md mb-3 aspect-[16/10] bg-gray-100 shadow-sm'>
-                              <img
-                                src={item.img}
-                                alt={item.title}
-                                className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
-                              />
+                          <div className='flex flex-col flex-1 min-w-0'>
+                            <div className='flex items-center gap-2 mb-1.5'>
+                              <span className='px-1.5 py-0.5 bg-blue-50 text-blue-700 text-[11px] font-bold uppercase rounded'>
+                                {badge}
+                              </span>
+                              <span className='text-gray-400 text-xs'>
+                                {dateStr}
+                              </span>
                             </div>
-                            <h4 className='text-[15px] font-bold leading-snug group-hover:text-blue-700 transition-colors line-clamp-2'>
-                              {item.title}
-                            </h4>
+                            <h3 className='text-[15px] font-bold leading-snug mb-1 group-hover:text-blue-700 transition-colors line-clamp-2'>
+                              {title}
+                            </h3>
+                            <Paragraph className='text-gray-500 text-xs sm:text-sm line-clamp-2 mb-0 mt-1'>
+                              {desc}
+                            </Paragraph>
                           </div>
-                        </Col>
-                      ))}
+                        </div>
+                      </Col>
+                    )
+                  })}
                 </Row>
               </div>
-
-              {/* Two Column Layout: Latest Articles vs Spotlight */}
-              <Row gutter={[32, 32]}>
-                {/* Left Column: Latest News List */}
-                <Col xs={24} lg={16}>
-                  <div className='flex items-center gap-2 mb-4'>
-                    <div className='w-1.5 h-6 bg-blue-600 rounded-sm'></div>
-                    <h2 className='text-xl font-bold uppercase tracking-wide m-0 text-slate-900'>Latest News</h2>
-                  </div>
-                  <Divider className='mt-2 mb-6' />
-
-                  {latestList.length > 0 ? (
-                    <List
-                      itemLayout='horizontal'
-                      dataSource={latestList}
-                      renderItem={(item) => (
-                        <div
-                          key={item.id}
-                          className='flex flex-col sm:flex-row gap-4 mb-8 group cursor-pointer border-b border-gray-100 pb-6'
-                          onClick={() => handleDetail(item.slug)}
-                        >
-                          <div className='w-full sm:w-1/3 flex-shrink-0 overflow-hidden rounded-md aspect-[16/10] bg-gray-100 shadow-sm'>
-                            <img
-                              src={item.image ? getImageUrl(item.image) : 'https://picsum.photos/seed/' + item.slug + '/300/200'}
-                              alt={item.title}
-                              className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
-                            />
-                          </div>
-                          <div className='flex-1'>
-                            <div className='flex items-center gap-2 mb-1'>
-                              <span className='px-1.5 py-0.5 bg-gray-100 text-gray-700 text-[11px] font-bold uppercase rounded'>
-                                {item.type || categoryTitle}
-                              </span>
-                              {item.updatedAt && (
-                                <span className='text-gray-400 text-xs'>
-                                  {new Date(item.updatedAt).toLocaleDateString()}
-                                </span>
-                              )}
-                            </div>
-                            <h3 className='text-lg font-bold leading-snug mb-1 group-hover:text-blue-700 transition-colors line-clamp-2'>
-                              {item.title}
-                            </h3>
-                            <Paragraph className='text-gray-500 text-sm line-clamp-2 mb-0'>
-                              {item.description}
-                            </Paragraph>
-                          </div>
-                        </div>
-                      )}
-                    />
-                  ) : (
-                    <List
-                      itemLayout='horizontal'
-                      dataSource={fallbackLatestNews}
-                      renderItem={(item) => (
-                        <div
-                          key={item.id}
-                          className='flex flex-col sm:flex-row gap-4 mb-8 group cursor-pointer border-b border-gray-100 pb-6'
-                        >
-                          <div className='w-full sm:w-1/3 flex-shrink-0 overflow-hidden rounded-md aspect-[16/10] bg-gray-100 shadow-sm'>
-                            <img
-                              src={item.image}
-                              alt={item.title}
-                              className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
-                            />
-                          </div>
-                          <div className='flex-1'>
-                            <div className='text-gray-400 text-xs mb-1'>{item.time}</div>
-                            <h3 className='text-lg font-bold leading-snug mb-1 group-hover:text-blue-700 transition-colors line-clamp-2'>
-                              {item.title}
-                            </h3>
-                            <Paragraph className='text-gray-500 text-sm line-clamp-2 mb-0'>
-                              {item.desc}
-                            </Paragraph>
-                          </div>
-                        </div>
-                      )}
-                    />
-                  )}
-                </Col>
-
-                {/* Right Column: Spotlight Box */}
-                <Col xs={24} lg={8}>
-                  <div className='bg-sky-50/70 p-6 rounded-lg border border-sky-100 relative overflow-hidden'>
-                    <div className='absolute right-[-20px] top-1/2 -translate-y-1/2 rotate-90 text-6xl font-black text-sky-100/60 pointer-events-none select-none'>
-                      SPOTLIGHT
-                    </div>
-
-                    <div className='relative z-10'>
-                      <div className='border-l-3 border-blue-600 pl-3 mb-4'>
-                        <Text className='text-xs font-bold text-blue-600 uppercase block tracking-wider'>
-                          Editor's Selection
-                        </Text>
-                      </div>
-
-                      <Title level={3} className='!text-xl !font-bold !leading-tight !mb-4 !text-slate-900'>
-                        In-Depth Explorations & Cultural Retrospectives
-                      </Title>
-
-                      <div className='mb-6 overflow-hidden rounded-md shadow-sm aspect-[16/10] bg-white'>
-                        <img
-                          src={
-                            activeRecommends[0]?.image
-                              ? getImageUrl(activeRecommends[0].image)
-                              : 'https://picsum.photos/seed/spotlight/400/250'
-                          }
-                          alt='Featured Spotlight'
-                          className='w-full h-full object-cover'
-                        />
-                      </div>
-
-                      <ul className='space-y-4 list-none p-0 m-0'>
-                        {activeRecommends.length > 0 ? (
-                          activeRecommends.slice(0, 4).map((rec) => (
-                            <li
-                              key={rec.id}
-                              className='flex gap-3 items-start group cursor-pointer'
-                              onClick={() => handleDetail(rec.slug)}
-                            >
-                              <span className='text-blue-600 text-lg font-bold leading-none mt-0.5'>•</span>
-                              <Text className='font-semibold text-[14px] group-hover:text-blue-600 transition-colors line-clamp-2'>
-                                {rec.title}
-                              </Text>
-                            </li>
-                          ))
-                        ) : (
-                          <>
-                            <li className='flex gap-3 items-start group cursor-pointer'>
-                              <span className='text-blue-600 text-lg font-bold leading-none mt-0.5'>•</span>
-                              <Text className='font-semibold text-[14px] group-hover:text-blue-600 transition-colors'>
-                                Five Decades of Independent Publishing and Literary Curation
-                              </Text>
-                            </li>
-                            <Divider className='my-2' />
-                            <li className='flex gap-3 items-start group cursor-pointer'>
-                              <span className='text-blue-600 text-lg font-bold leading-none mt-0.5'>•</span>
-                              <Text className='font-semibold text-[14px] group-hover:text-blue-600 transition-colors'>
-                                Visualizing Decades of Urban Transformation and Economic Growth
-                              </Text>
-                            </li>
-                          </>
-                        )}
-                      </ul>
-                    </div>
-                  </div>
-                </Col>
-              </Row>
             </Content>
           </Layout>
         </div>

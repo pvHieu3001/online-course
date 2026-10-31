@@ -1,19 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { MenuOutlined, CloseOutlined, SearchOutlined } from '@ant-design/icons'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { bookActions } from '@/app/actions'
-import { AnyAction } from '@reduxjs/toolkit'
-import { RootState } from '@/app/store'
-import { IBook } from '@/common/types.interface'
-import { getImageUrl } from '@/utils/getImageUrl'
 
 type Props = {
   isShowRecommendBooks: boolean
 }
 
 const Header = (props: Props) => {
-  const dispatch = useDispatch()
   const today = new Date()
   const dateStr = today.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -28,7 +21,6 @@ const Header = (props: Props) => {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
 
-  const books = useSelector((state: RootState) => state.book)
   const navigate = useNavigate()
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -47,10 +39,6 @@ const Header = (props: Props) => {
     window.addEventListener('scroll', controlNavbar)
     return () => window.removeEventListener('scroll', controlNavbar)
   }, [lastScrollY])
-
-  useEffect(() => {
-    dispatch(bookActions.getRecommendBooks() as unknown as AnyAction)
-  }, [dispatch])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -77,11 +65,11 @@ const Header = (props: Props) => {
   }
 
   const isItemActive = (href: string) => {
-    if (href === '/') return currentPath === '/';
-    if (href === '/blogs') return currentPath.startsWith('/blogs') || currentPath.startsWith('/blog');
-    if (href === '/books') return currentPath.startsWith('/books') || currentPath.startsWith('/book');
-    return currentPath === href;
-  };
+    if (href === '/') return currentPath === '/'
+    if (href === '/blogs') return currentPath.startsWith('/blogs') || currentPath.startsWith('/blog')
+    if (href === '/books') return currentPath.startsWith('/books') || currentPath.startsWith('/book')
+    return currentPath === href
+  }
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

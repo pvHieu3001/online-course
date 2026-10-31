@@ -70,7 +70,6 @@ const Footer = () => {
             <ul className="space-y-3.5 text-sm">
               <li><Link to="/contact-us" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Contact Us</Link></li>
               <li><a href="#" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Careers</a></li>
-              <li><a href="#" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Editorial Guidelines</a></li>
               <li><Link to="/privacy-policy" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Privacy Policy</Link></li>
               <li><Link to="/terms-and-conditions" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Terms and Conditions</Link></li>
             </ul>

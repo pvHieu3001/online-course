@@ -184,6 +184,7 @@ function PageHome() {
                           />
                         </div>
                       }
+                      onClick={() => navigate(`/book-detail/${item.slug}`)}
                     >
                       <Text strong className='line-clamp-2 text-center block w-full' style={{ fontSize: '0.85rem' }}>
                         {item.name || 'Book name not available'}

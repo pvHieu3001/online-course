@@ -25,12 +25,12 @@ export default function PageTermsConditions() {
   return (
     <>
       <Helmet>
-        <title>Terms and Conditions - BIC News</title>
+        <title>Terms and Conditions - Wise Owl</title>
         <meta
           name="description"
-          content="Review the Terms and Conditions for accessing and using BIC News (bicnews.com). Outlining user rights, editorial standards, and legal agreements."
+          content="Review the Terms and Conditions for accessing and using Wise Owl (wiseowl.com). Outlining user rights, editorial standards, and legal agreements."
         />
-        <link rel="canonical" href="https://bicnews.com/terms-and-conditions/" />
+        <link rel="canonical" href="https://wiseowl.com/terms-and-conditions/" />
       </Helmet>
 
       <div className="bg-slate-50 min-h-screen py-8 sm:py-12">
@@ -58,7 +58,7 @@ export default function PageTermsConditions() {
               Terms and Conditions
             </h1>
             <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
-              Welcome to <strong className="text-slate-800">Bicnews.com</strong>. By accessing, browsing, or using this website, you agree to be bound by these Terms and Conditions. 
+              Welcome to <strong className="text-slate-800">Wiseowl.com</strong>. By accessing, browsing, or using this website, you agree to be bound by these Terms and Conditions. 
               If you do not agree with any part of these terms, please stop using the website immediately.
             </p>
             <div className="mt-6 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs sm:text-sm text-slate-500 gap-4">
@@ -80,7 +80,7 @@ export default function PageTermsConditions() {
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Use of the Website</h2>
               </div>
               <p className="mb-4">
-                Bicnews.com provides daily news, feature articles, investigative reporting, editorial commentary, and general informational media.
+                Wiseowl.com provides daily news, feature articles, investigative reporting, editorial commentary, and general informational media.
               </p>
               <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl">
                 <p className="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
@@ -109,7 +109,7 @@ export default function PageTermsConditions() {
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Content Disclaimer</h2>
               </div>
               <p className="text-sm text-slate-600 mb-3">
-                The content published on Bicnews.com is delivered for general informational, educational, and editorial purposes only.
+                The content published on Wiseowl.com is delivered for general informational, educational, and editorial purposes only.
               </p>
               <p className="text-sm text-slate-600">
                 While our editorial staff strives for accuracy and timely updates, we make no warranties or representations of any kind—express or implied—regarding the completeness, accuracy, reliability, or timeliness of any published material. 
@@ -126,7 +126,7 @@ export default function PageTermsConditions() {
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Intellectual Property Rights</h2>
               </div>
               <p className="text-sm text-slate-600 mb-4">
-                All original materials featured on Bicnews.com—including text, editorial articles, graphics, logos, brand emblems, photographic layouts, and website styling—are the exclusive property of <strong>Bicnews.com</strong> or licensed third-party contributors, protected by copyright and intellectual property legislation.
+                All original materials featured on Wiseowl.com—including text, editorial articles, graphics, logos, brand emblems, photographic layouts, and website styling—are the exclusive property of <strong>Wiseowl.com</strong> or licensed third-party contributors, protected by copyright and intellectual property legislation.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                 <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl">
@@ -156,7 +156,7 @@ export default function PageTermsConditions() {
                   4. Third-Party Content &amp; Links
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Bicnews.com contains external hyperlinks, embedded media, and sponsored advertisements. 
+                  Wiseowl.com contains external hyperlinks, embedded media, and sponsored advertisements. 
                   We do not endorse and are not liable for the content, privacy standards, or transactions on third-party domains. Visiting external destinations is at your sole discretion.
                 </p>
               </section>
@@ -182,7 +182,7 @@ export default function PageTermsConditions() {
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Advertising &amp; Affiliate Disclosure</h2>
               </div>
               <p className="text-sm text-slate-600 mb-4">
-                Bicnews.com displays programmatic advertising from networks including Google AdSense. 
+                Wiseowl.com displays programmatic advertising from networks including Google AdSense. 
                 Certain articles may contain affiliate links or sponsored mentions. When you click on affiliate links, third parties may receive referral data, 
                 and we may earn a modest commission at no additional cost to you.
               </p>
@@ -208,7 +208,7 @@ export default function PageTermsConditions() {
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Limitation of Liability &amp; Availability</h2>
               </div>
               <p className="text-sm text-slate-600 mb-4">
-                To the fullest extent permissible by governing law, Bicnews.com, its directors, editors, writers, and affiliates shall not be liable for any direct, indirect, incidental, punitive, or consequential damages resulting from:
+                To the fullest extent permissible by governing law, Wiseowl.com, its directors, editors, writers, and affiliates shall not be liable for any direct, indirect, incidental, punitive, or consequential damages resulting from:
               </p>
               <ul className="list-disc pl-5 space-y-1.5 text-sm text-slate-600 mb-4">
                 <li>Your access to or inability to reach the website.</li>
@@ -241,7 +241,7 @@ export default function PageTermsConditions() {
                 <div>&bull; Physical or verified electronic signature of the copyright owner or authorized representative.</div>
               </div>
               <p className="text-xs text-slate-500 mt-2">
-                Send DMCA notifications directly to: <a href="mailto:copyright@bicnews.com" className="text-blue-600 hover:underline font-semibold">copyright@bicnews.com</a>.
+                Send DMCA notifications directly to: <a href="mailto:copyright@wiseowl.com" className="text-blue-600 hover:underline font-semibold">copyright@wiseowl.com</a>.
               </p>
             </section>
 
@@ -280,10 +280,10 @@ export default function PageTermsConditions() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 text-sm font-medium">
                 <a 
-                  href="mailto:contact@bicnews.com" 
+                  href="mailto:contact@wiseowl.com" 
                   className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-lg transition-colors"
                 >
-                  <Mail className="w-4 h-4" /> contact@bicnews.com
+                  <Mail className="w-4 h-4" /> contact@wiseowl.com
                 </a>
                 <Link 
                   to="/contact-us" 

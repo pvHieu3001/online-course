@@ -25,12 +25,12 @@ export default function PagePrivacyPolicy() {
   return (
     <>
       <Helmet>
-        <title>Privacy Policy - BIC News</title>
+        <title>Privacy Policy - Wise Owl</title>
         <meta
           name="description"
-          content="At BIC News, we value your privacy and are committed to protecting your personal information. Read our comprehensive Privacy Policy."
+          content="At Wise Owl, we value your privacy and are committed to protecting your personal information. Read our comprehensive Privacy Policy."
         />
-        <link rel="canonical" href="https://bicnews.com/privacy-policy/" />
+        <link rel="canonical" href="https://wiseowl.com/privacy-policy/" />
       </Helmet>
 
       <div className="bg-slate-50 min-h-screen py-8 sm:py-12">
@@ -58,8 +58,8 @@ export default function PagePrivacyPolicy() {
               Privacy Policy
             </h1>
             <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
-              Welcome to <strong className="text-slate-800">BIC News</strong> (&quot;BIC News,&quot; &quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). 
-              At BIC News, we value your privacy and are committed to protecting your personal information. 
+              Welcome to <strong className="text-slate-800">Wise Owl</strong> (&quot;Wise Owl,&quot; &quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). 
+              At Wise Owl, we value your privacy and are committed to protecting your personal information. 
               This Privacy Policy explains how we collect, use, store, and safeguard your information when you visit our website.
             </p>
             <div className="mt-6 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs sm:text-sm text-slate-500 gap-4">
@@ -73,7 +73,7 @@ export default function PagePrivacyPolicy() {
           {/* Main Content Body */}
           <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm space-y-10 text-slate-700 leading-relaxed">
             <div className="bg-blue-50/60 border-l-4 border-blue-600 p-4 rounded-r-lg text-sm text-blue-900">
-              By using <strong>Bicnews.com</strong>, you agree to the collection and use of information in accordance with this Privacy Policy.
+              By using <strong>Wiseowl.com</strong>, you agree to the collection and use of information in accordance with this Privacy Policy.
             </div>
 
             {/* Section 1 */}
@@ -170,7 +170,7 @@ export default function PagePrivacyPolicy() {
               </div>
               <p className="mb-3">We collect and process your information for the following legitimate purposes:</p>
               <ul className="list-disc pl-6 space-y-2 text-sm text-slate-700">
-                <li>Operate, maintain, and enhance the features of Bicnews.com.</li>
+                <li>Operate, maintain, and enhance the features of Wiseowl.com.</li>
                 <li>Improve editorial content, articles, and topic coverage according to reader trends.</li>
                 <li>Promptly respond to inquiries, news tips, feedback, and user support requests.</li>
                 <li>Deliver curated newsletters (strictly with your opt-in consent).</li>
@@ -210,7 +210,7 @@ export default function PagePrivacyPolicy() {
               <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
                 <h3 className="font-bold text-slate-900 text-base mb-2">Google AdSense & DoubleClick</h3>
                 <p className="text-sm text-slate-600 mb-3">
-                  Google uses cookies (including the DoubleClick cookie) to serve advertisements to visitors based upon their visit to Bicnews.com and other websites across the Internet.
+                  Google uses cookies (including the DoubleClick cookie) to serve advertisements to visitors based upon their visit to Wiseowl.com and other websites across the Internet.
                 </p>
                 <p className="text-sm text-slate-600">
                   Users can view and manage their Google Advertising personalization settings by visiting the official 
@@ -246,7 +246,7 @@ export default function PagePrivacyPolicy() {
                   8. Children&apos;s Privacy
                 </h2>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  Bicnews.com is intended for general audiences and is not directed at children under the age of 13. 
+                  Wiseowl.com is intended for general audiences and is not directed at children under the age of 13. 
                   We do not knowingly collect personal identifiable information from minors. 
                   If you believe a child has provided us with personal data, please contact us immediately for prompt deletion.
                 </p>
@@ -263,7 +263,7 @@ export default function PagePrivacyPolicy() {
               </div>
               <p className="text-sm text-slate-600">
                 Our articles and news stories frequently reference external sources, government documents, studies, or third-party websites. 
-                BIC News has no control over and assumes no responsibility for the content, privacy policies, or practices of any third-party websites. 
+                Wise Owl has no control over and assumes no responsibility for the content, privacy policies, or practices of any third-party websites. 
                 We encourage you to review the privacy statement of every external destination you visit.
               </p>
             </section>
@@ -307,7 +307,7 @@ export default function PagePrivacyPolicy() {
               </h2>
               <p className="text-sm text-slate-600 mb-6">
                 We reserve the right to revise or update this Privacy Policy at our discretion to reflect evolving legal requirements or site enhancements. 
-                Any modifications will be posted here with an updated Effective Date. Continued use of Bicnews.com after updates constitutes your agreement to the revised terms.
+                Any modifications will be posted here with an updated Effective Date. Continued use of Wiseowl.com after updates constitutes your agreement to the revised terms.
               </p>
 
               <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-xl p-6 sm:p-8">
@@ -320,10 +320,10 @@ export default function PagePrivacyPolicy() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 text-sm font-medium">
                   <a 
-                    href="mailto:contact@bicnews.com" 
+                    href="mailto:contact@wiseowl.com" 
                     className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-lg transition-colors"
                   >
-                    <Mail className="w-4 h-4" /> contact@bicnews.com
+                    <Mail className="w-4 h-4" /> contact@wiseowl.com
                   </a>
                   <Link 
                     to="/contact-us" 

@@ -9,6 +9,7 @@ import { IBook } from '@/common/types.interface'
 import { getImageUrl } from '@/utils/getImageUrl'
 import { Helmet } from 'react-helmet-async'
 import HandleLoading from '../../components/util/HandleLoading'
+import HtmlContent from '@/page/shared/HtmlContent'
 
 function BookDetailPage() {
   const { slug } = useParams()
@@ -38,6 +39,7 @@ function BookDetailPage() {
     { name: 'Books', href: '/books' },
     { name: book?.name, href: `/book-detail/${slug}` }
   ]
+
 
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
@@ -83,12 +85,25 @@ function BookDetailPage() {
           {book ? (
             <>
               <main className='max-w-[1300px] w-full mx-auto px-4 py-5 text-gray-800 font-sans leading-relaxed'>
-                <header className='mt-2 grid grid-cols-1 items-center gap-6 md:grid-cols-[220px_minmax(0,1fr)] md:gap-8'>
-                  <img
-                    src={getImageUrl(book.imageUrl)}
-                    alt={book.name || 'Book cover'}
-                    className='mx-auto aspect-[2/3] w-full max-w-[220px] rounded-lg object-cover shadow md:mx-0'
-                  />
+                <header className='mt-2 grid grid-cols-1 items-start gap-6 md:grid-cols-[220px_minmax(0,1fr)] md:gap-8'>
+                  <div className='flex flex-col items-center gap-3 w-full max-w-[220px] mx-auto md:mx-0'>
+                    <img
+                      src={getImageUrl(book.imageUrl)}
+                      alt={book.name || 'Book cover'}
+                      className='aspect-[2/3] w-full rounded-lg object-cover shadow'
+                    />
+                    {book.amzUrl ? (
+                      <button
+                        type='button'
+                        onClick={() => window.open(book.amzUrl, '_blank', 'noopener,noreferrer')}
+                        className='w-full bg-blue-600 text-white px-4 py-2.5 rounded-full text-base font-semibold hover:bg-blue-700 transition shadow-sm hover:shadow text-center cursor-pointer'
+                      >
+                        Read This Book
+                      </button>
+                    ) : (
+                      <p className='text-xs text-gray-400 italic text-center'>No book link is available yet.</p>
+                    )}
+                  </div>
                   <div className='min-w-0'>
                     <p className='text-sm font-semibold text-gray-600'>{book.category?.name || 'Undefined category'}</p>
                     <h1 className='mt-2 text-3xl font-bold text-[#464646]'>{book.name || 'Book name unavailable'}</h1>
@@ -101,57 +116,37 @@ function BookDetailPage() {
                 <section className='mt-10'>
                   <h2 className='text-2xl text-[#464646] font-semibold mb-4'>Introduction</h2>
                   {book.content ? (
-                    <div
-                      className='prose prose-lg max-w-none font-arial
-                [&_p]:mb-4 
-                [&_p]:text-[17px]
-                [&_h1]:text-3xl 
-                [&_h2]:text-2xl 
-                [&_h3]:text-xl 
-                [&_ul]:list-disc 
-                [&_ul]:pl-6 
-                [&_img]:mx-auto [&_img]:block
-                [&_video]:mx-auto [&_video]:block
-                [&_iframe]:mx-auto [&_iframe]:block
-                [&_a]:text-blue-600 [&_a:hover]:underline text-[17px]'
-                      dangerouslySetInnerHTML={{ __html: book.content }}
-                    />
+                    <HtmlContent content={book.content} />
                   ) : (
                     <p className='text-gray-500 italic'>Content is being updated.</p>
                   )}
                 </section>
 
-                <section className='mt-16 border-t pt-10 text-center'>
-                  {book.amzUrl ? (
-                    <button
-                      type='button'
-                      onClick={() => window.open(book.amzUrl, '_blank', 'noopener,noreferrer')}
-                      className='inline-block bg-blue-600 text-white px-6 py-2 rounded-full text-lg font-arial hover:bg-blue-700 transition max-w-md'
-                    >
-                      Read This Book
-                    </button>
-                  ) : (
-                    <p className='text-gray-400 italic'>No book link is available yet.</p>
-                  )}
-                </section>
-
                 <section className='mt-16 border-t pt-10'>
                   <h2 className='text-xl font-semibold mb-6'>You May Also Like</h2>
-                  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+                  <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'>
                     {relatedBooks && relatedBooks.length > 0 ? (
-                      relatedBooks.slice(0, 3).map((related, index) => (
+                      relatedBooks.slice(0, 4).map((related, index) => (
                         <div
                           key={index}
                           onClick={() => handleDetail(related)}
-                          className='border rounded p-4 hover:shadow transition-shadow h-full flex flex-col cursor-pointer'
+                          className='group border border-slate-200 rounded-xl p-3 sm:p-4 hover:shadow-md transition-all duration-200 h-full flex flex-col cursor-pointer bg-white'
                         >
-                          <img
-                            src={getImageUrl(related.imageUrl)}
-                            alt={related.name || 'Related book'}
-                            className='w-full h-40 object-cover rounded mb-3'
-                          />
-                          <p className='text-sm text-gray-500 mb-1'>{related.category?.name || 'Undefined'}</p>
-                          <h3 className='text-lg font-medium'>{related.name || 'Book name not available'}</h3>
+                          <div className='relative w-full aspect-[2/3] max-w-[160px] mx-auto mb-3 overflow-hidden rounded-lg shadow-sm bg-slate-50 flex items-center justify-center'>
+                            <img
+                              src={getImageUrl(related.imageUrl)}
+                              alt={related.name || 'Related book'}
+                              className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
+                            />
+                          </div>
+                          <div className='flex-1 flex flex-col'>
+                            <p className='text-xs font-semibold text-blue-600 mb-1 uppercase tracking-wide truncate'>
+                              {related.category?.name || 'Undefined'}
+                            </p>
+                            <h3 className='text-sm sm:text-base font-medium text-slate-800 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors'>
+                              {related.name || 'Book name not available'}
+                            </h3>
+                          </div>
                         </div>
                       ))
                     ) : (

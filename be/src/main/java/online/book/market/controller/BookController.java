@@ -48,19 +48,6 @@ public class BookController {
         this.env = environment;
     }
 
-    @PostConstruct
-    public void init() {
-        try {
-            Path uploadDir = Paths.get(resourceFolder);
-            // Create directory if it doesn't exist
-            if (!Files.exists(uploadDir)) {
-                Files.createDirectories(uploadDir);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to initialize upload directory: " + resourceFolder, e);
-        }
-    }
-
     private BookDto toDto(Book book) {
         return modelMapper.map(book, BookDto.class);
     }

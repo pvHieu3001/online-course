@@ -59,42 +59,42 @@ export default function PageContactUs() {
   const departments = [
     {
       title: 'General Inquiries',
-      email: 'contact@bicnews.com',
+      email: 'contact@wiseowl.com',
       desc: 'For general questions or comments about our publication and site features.',
       icon: <Mail className="w-5 h-5 text-blue-600" />,
       color: 'border-blue-200 bg-blue-50/50'
     },
     {
       title: 'News Tips & Breaking',
-      email: 'news@bicnews.com',
+      email: 'news@wiseowl.com',
       desc: 'Have a breaking news story or lead? We welcome credible suggestions and docs.',
       icon: <Flame className="w-5 h-5 text-amber-600" />,
       color: 'border-amber-200 bg-amber-50/50'
     },
     {
       title: 'Corrections & Editorial',
-      email: 'corrections@bicnews.com',
+      email: 'corrections@wiseowl.com',
       desc: 'Accuracy is paramount. Report factual errors with URLs and supporting proof.',
       icon: <PenTool className="w-5 h-5 text-emerald-600" />,
       color: 'border-emerald-200 bg-emerald-50/50'
     },
     {
       title: 'Advertising & Business',
-      email: 'business@bicnews.com',
+      email: 'business@wiseowl.com',
       desc: 'For media kits, sponsored campaigns, and strategic brand partnerships.',
       icon: <Megaphone className="w-5 h-5 text-purple-600" />,
       color: 'border-purple-200 bg-purple-50/50'
     },
     {
       title: 'Copyright Concerns (DMCA)',
-      email: 'copyright@bicnews.com',
+      email: 'copyright@wiseowl.com',
       desc: 'Send formal notices of intellectual property claims or takedown requests.',
       icon: <ShieldAlert className="w-5 h-5 text-rose-600" />,
       color: 'border-rose-200 bg-rose-50/50'
     },
     {
       title: 'Technical Support',
-      email: 'support@bicnews.com',
+      email: 'support@wiseowl.com',
       desc: 'Encountered broken links, display issues, or account access errors?',
       icon: <HelpCircle className="w-5 h-5 text-cyan-600" />,
       color: 'border-cyan-200 bg-cyan-50/50'
@@ -104,12 +104,12 @@ export default function PageContactUs() {
   return (
     <>
       <Helmet>
-        <title>Contact Us - BIC News</title>
+        <title>Contact Us - Wise Owl</title>
         <meta
           name="description"
-          content="Get in touch with the BIC News editorial staff, tip line, advertising desk, and reader support. We would love to hear from you."
+          content="Get in touch with the Wise Owl editorial staff, tip line, advertising desk, and reader support. We would love to hear from you."
         />
-        <link rel="canonical" href="https://bicnews.com/contact-us/" />
+        <link rel="canonical" href="https://wiseowl.com/contact-us/" />
       </Helmet>
 
       <div className="bg-slate-50 min-h-screen py-8 sm:py-12">
@@ -138,7 +138,7 @@ export default function PageContactUs() {
                 We&apos;d Love to Hear From You
               </h1>
               <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-                Whether you have a breaking news tip, feedback on an article, a business partnership proposal, or technical inquiries, the BIC News team is here to assist.
+                Whether you have a breaking news tip, feedback on an article, a business partnership proposal, or technical inquiries, the Wise Owl team is here to assist.
               </p>
             </div>
           </div>

@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
-import { affiliateActions, categoryActions } from '@/app/actions'
+import { categoryActions } from '@/app/actions'
 import { useNavigate } from 'react-router-dom'
 import { RootState } from '@/app/store'
 import { ICategory } from '@/common/types.interface'
 import { Input } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
-import ShopeeAffiliateBanner from '../ShopeeAffiliateBanner'
 
 function TabCategory() {
   const dispatch = useDispatch()
@@ -23,16 +22,6 @@ function TabCategory() {
       dispatch(categoryActions.getCategories('') as unknown as AnyAction)
     }
   }, [categories.dataList, categories.isLoading, dispatch])
-
-  useEffect(() => {
-    dispatch(affiliateActions.getRandomAffiliate() as unknown as AnyAction)
-    const intervalId = setInterval(() => {
-      dispatch(affiliateActions.getRandomAffiliate() as unknown as AnyAction)
-    }, 30000)
-    return () => {
-      clearInterval(intervalId)
-    }
-  }, [dispatch])
 
   const handleCategoryDetail = (slug: string) => {
     const category = categories.dataList.find((c: ICategory) => c.slug === slug)
