@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 import { bookActions } from '@/app/actions/book.actions'
@@ -7,15 +7,18 @@ import { RootState } from '@/app/store'
 import { ContextType } from '@/common/types.interface'
 import HandleLoading from '../components/util/HandleLoading'
 import { Helmet } from 'react-helmet-async'
-import { Card, Col, Divider, Row, Typography } from 'antd'
+import { Card, Carousel, Col, Divider, Row, Typography } from 'antd'
+import type { CarouselRef } from 'antd/es/carousel'
 import { blogActions } from '@/app/actions/blog.actions'
 import dayjs from 'dayjs'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 const { Text, Title } = Typography
 
 function PageHome() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { setIsShowRecommendBooks } = useOutletContext<ContextType>()
+  const booksCarouselRef = useRef<CarouselRef>(null)
   setIsShowRecommendBooks(true)
 
   const { recommends, isLoading, error_message } = useSelector((state: RootState) => state.book)
@@ -165,33 +168,61 @@ function PageHome() {
                   BOOKS
                 </Title>
               </div>
-              <div
-                className='flex overflow-x-auto gap-4 pb-4 snap-x [&::-webkit-scrollbar]:hidden'
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                {recommends?.map((item) => (
-                  <div key={item.id} className='w-[150px] md:w-[180px] lg:w-[200px] flex-shrink-0 snap-start'>
-                    <Card
-                      hoverable
-                      className='h-full'
-                      bodyStyle={{ padding: '12px' }}
-                      cover={
-                        <div className='h-48 md:h-56 overflow-hidden rounded-t-lg border-b border-gray-100 bg-gray-50 flex items-center justify-center'>
-                          <img
-                            src={item.imageUrl}
-                            className='w-full h-full object-contain transition-transform duration-300 hover:scale-105'
-                            alt='book cover'
-                          />
-                        </div>
-                      }
-                      onClick={() => navigate(`/book-detail/${item.slug}`)}
-                    >
-                      <Text strong className='line-clamp-2 text-center block w-full' style={{ fontSize: '0.85rem' }}>
-                        {item.name || 'Book name not available'}
-                      </Text>
-                    </Card>
-                  </div>
-                ))}
+              <div className='relative px-10'>
+                <button
+                  type='button'
+                  aria-label='Previous books'
+                  onClick={() => booksCarouselRef.current?.prev()}
+                  className='absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-blue-700 text-white shadow-md transition hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700'
+                >
+                  <ChevronLeft size={20} aria-hidden='true' />
+                </button>
+                <Carousel
+                  ref={booksCarouselRef}
+                  arrows={false}
+                  dots={false}
+                  draggable
+                  infinite={false}
+                  slidesToShow={5}
+                  slidesToScroll={1}
+                  responsive={[
+                    { breakpoint: 1200, settings: { slidesToShow: 4 } },
+                    { breakpoint: 992, settings: { slidesToShow: 3 } },
+                    { breakpoint: 768, settings: { slidesToShow: 2 } }
+                  ]}
+                >
+                  {recommends?.map((item) => (
+                    <div key={item.id} className='px-2'>
+                      <Card
+                        hoverable
+                        className='h-full'
+                        bodyStyle={{ padding: '12px' }}
+                        cover={
+                          <div className='h-48 md:h-56 overflow-hidden rounded-t-lg border-b border-gray-100 bg-gray-50 flex items-center justify-center'>
+                            <img
+                              src={item.imageUrl}
+                              className='w-full h-full object-contain transition-transform duration-300 hover:scale-105'
+                              alt='book cover'
+                            />
+                          </div>
+                        }
+                        onClick={() => navigate(`/book-detail/${item.slug}`)}
+                      >
+                        <Text strong className='line-clamp-2 text-center block w-full' style={{ fontSize: '0.85rem' }}>
+                          {item.name || 'Book name not available'}
+                        </Text>
+                      </Card>
+                    </div>
+                  ))}
+                </Carousel>
+                <button
+                  type='button'
+                  aria-label='Next books'
+                  onClick={() => booksCarouselRef.current?.next()}
+                  className='absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-blue-700 text-white shadow-md transition hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700'
+                >
+                  <ChevronRight size={20} aria-hidden='true' />
+                </button>
               </div>
             </div>
 

@@ -63,12 +63,12 @@ function PageBook() {
                 </div>
               ) : books && books.length > 0 ? (
                 /* Grid/Flex Container for Cards */
-                <div className='flex flex-wrap gap-6 mb-8 justify-center md:justify-start'>
+                <div className='grid grid-cols-2 justify-items-center gap-8 mb-8 sm:flex sm:flex-wrap sm:justify-center'>
                   {books.map((book) => (
                     <div
                       key={book.id}
                       onClick={() => handleBookClick(book)}
-                      className='group cursor-pointer flex flex-col items-center w-[140px] flex-shrink-0'
+                      className='group cursor-pointer flex w-full max-w-[140px] flex-col items-center'
                     >
                       {/* Image Frame */}
                       <div className='relative w-full h-[180px] mb-3 overflow-hidden rounded-md shadow-sm group-hover:shadow-lg transition-shadow duration-300'>

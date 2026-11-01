@@ -124,17 +124,19 @@ function CategoryDetailPage() {
                         <div
                           key={book.id}
                           onClick={() => handleBookClick(book)}
-                          className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4'
+                          className='cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-lg shadow-sm p-4 transition flex items-start gap-4 sm:items-center'
                         >
                           <img
                             src={getImageUrl(book.imageUrl)}
                             alt={book.name}
-                            className='w-100 h-40 object-cover rounded-md flex-shrink-0'
+                            className='h-28 w-20 flex-shrink-0 rounded-md object-cover sm:h-40 sm:w-32'
                           />
-                          <div className='w-full'>
+                          <div className='min-w-0 flex-1'>
                             <div className='text-sm text-indigo-500 font-medium'>{category.name}</div>
                             <div className='text-lg font-semibold text-gray-800'>{book.name}</div>
-                            <p className='text-gray-600 text-sm mt-1 line-clamp-3 leading-relaxed'>{shortDescription}</p>
+                            <p className='text-gray-600 text-sm mt-1 line-clamp-3 leading-relaxed'>
+                              {shortDescription}
+                            </p>
                           </div>
                         </div>
                       )

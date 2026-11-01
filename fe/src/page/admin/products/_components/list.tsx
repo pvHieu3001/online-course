@@ -98,34 +98,6 @@ export default function ListProduct() {
       )
     },
     {
-      title: 'Difficulty',
-      dataIndex: 'level',
-      key: 'level',
-      align: 'center',
-      width: 250,
-      render: (level: string) => {
-        let color = ''
-        let label = level
-        switch (level?.toLowerCase()) {
-          case 'beginner':
-            color = 'green'
-            label = 'Beginner'
-            break
-          case 'intermediate':
-            color = 'orange'
-            label = 'Intermediate'
-            break
-          case 'advanced':
-            color = 'red'
-            label = 'Advanced'
-            break
-          default:
-            color = 'blue'
-        }
-        return <Tag color={color}>{label}</Tag>
-      }
-    },
-    {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',

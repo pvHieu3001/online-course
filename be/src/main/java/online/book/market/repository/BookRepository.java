@@ -22,13 +22,14 @@ public interface BookRepository extends JpaRepository<Book, Integer>{
             "WHERE (:status IS NULL OR c.status = :status) " +
             "AND (:search IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
             "OR LOWER(COALESCE(c.description, '')) LIKE LOWER(CONCAT('%', :search, '%'))) " +
-            "AND (:isDisplayHot IS NULL OR c.isDisplayHot = :isDisplayHot)")
+            "AND (:isDisplayHot IS NULL OR c.isDisplayHot = :isDisplayHot) " +
+            "ORDER BY c.createdAt DESC")
     Page<Book> filterBook(@Param("status") String status,
                               @Param("search") String search,
                               @Param("isDisplayHot") Boolean isDisplayHot,
                               Pageable pageable);
 
-    @Query("SELECT c FROM Book c WHERE c.isDisplayHot = true")
+    @Query("SELECT c FROM Book c WHERE c.isDisplayHot = true ORDER BY c.createdAt DESC")
     List<Book> getRecommendedBooks();
 
 }

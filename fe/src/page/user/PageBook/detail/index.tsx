@@ -130,7 +130,7 @@ function BookDetailPage() {
                         <div
                           key={index}
                           onClick={() => handleDetail(related)}
-                          className='group border border-slate-200 rounded-xl p-3 sm:p-4 hover:shadow-md transition-all duration-200 h-full flex flex-col cursor-pointer bg-white'
+                          className='group border border-slate-200 rounded-xl p-3 sm:p-4 hover:shadow-md transition-all duration-200 h-full flex flex-col items-center text-center cursor-pointer bg-white'
                         >
                           <div className='relative w-full aspect-[2/3] max-w-[160px] mx-auto mb-3 overflow-hidden rounded-lg shadow-sm bg-slate-50 flex items-center justify-center'>
                             <img
@@ -139,8 +139,8 @@ function BookDetailPage() {
                               className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
                             />
                           </div>
-                          <div className='flex-1 flex flex-col'>
-                            <p className='text-xs font-semibold text-blue-600 mb-1 uppercase tracking-wide truncate'>
+                          <div className='flex-1 flex flex-col items-center text-center w-full'>
+                            <p className='text-xs font-semibold text-blue-600 mb-1 uppercase tracking-wide truncate w-full'>
                               {related.category?.name || 'Undefined'}
                             </p>
                             <h3 className='text-sm sm:text-base font-medium text-slate-800 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors'>
