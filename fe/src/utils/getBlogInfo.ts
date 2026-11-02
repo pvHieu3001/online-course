@@ -5,7 +5,9 @@ export const getBlogInfoByType = (type: string): { path: string; title: string }
     travel: { path: 'travel', title: 'Travel' },
     world: { path: 'world', title: 'World' },
     education: { path: 'education', title: 'Education' },
-    science: { path: 'science', title: 'Science' }
+    science: { path: 'science', title: 'Science' },
+    history: { path: 'history', title: 'History' },
+    celeb: { path: 'celeb', title: 'Celeb' }
   }
 
   return blogInfoByType[type] ?? blogInfoByType.technology

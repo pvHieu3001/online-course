@@ -63,6 +63,8 @@ export default function Router() {
             <Route path='world' element={<Navigate to='/blogs/world' replace />} />
             <Route path='education' element={<Navigate to='/blogs/education' replace />} />
             <Route path='science' element={<Navigate to='/blogs/science' replace />} />
+            <Route path='history' element={<Navigate to='/blogs/history' replace />} />
+            <Route path='celeb' element={<Navigate to='/blogs/celeb' replace />} />
             <Route path='privacy-policy' element={<PagePrivacyPolicy />} />
             <Route path='terms-and-conditions' element={<PageTermsConditions />} />
             <Route path='contact-us' element={<PageContactUs />} />

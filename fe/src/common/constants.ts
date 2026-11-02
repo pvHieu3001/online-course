@@ -19,7 +19,9 @@ const typeOptions = [
   { value: 'travel', label: 'Travel' },
   { value: 'world', label: 'World' },
   { value: 'education', label: 'Education' },
-  { value: 'science', label: 'Science' }
+  { value: 'science', label: 'Science' },
+  { value: 'history', label: 'History' },
+  { value: 'celeb', label: 'Celeb' }
 ]
 
 const roleOptions = [

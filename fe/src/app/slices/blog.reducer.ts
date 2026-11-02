@@ -90,10 +90,11 @@ const blogSlice = createSlice({
         isFirst: payload.data.first,
         isLast: payload.data.last
       }
+      state.error_message = ''
       state.isLoading = false
     },
     getAdminBlogSuccessFailure: (state, { payload }) => {
-      state.message = payload
+      state.error_message = payload
       state.isLoading = false
     },
     getByIdSuccessFully: (state, { payload }) => {

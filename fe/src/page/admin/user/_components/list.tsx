@@ -3,7 +3,7 @@ import type { TableProps } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { popupSuccess } from '@/page/shared/Toast'
+import { popupError, popupSuccess } from '@/page/shared/Toast'
 import { userActions } from '@/app/actions'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import { AnyAction } from '@reduxjs/toolkit'
@@ -31,9 +31,19 @@ export default function ListUser() {
 
   const confirm = async (id: number | string) => {
     setId(id)
-    await dispatch(userActions.deleteUser(String(id)) as unknown as AnyAction)
-    dispatch(userActions.getUsers() as unknown as AnyAction)
-    popupSuccess('Delete user success')
+    try {
+      await dispatch(userActions.deleteUser(String(id)) as unknown as AnyAction)
+    } catch (error) {
+      popupError('Failed to delete user')
+      return
+    }
+
+    try {
+      await dispatch(userActions.getUsers() as unknown as AnyAction)
+      popupSuccess('Delete user success')
+    } catch (error) {
+      popupError('User deleted, but the list could not be refreshed')
+    }
   }
 
   const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {

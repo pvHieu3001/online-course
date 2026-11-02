@@ -54,13 +54,19 @@ export default function ListAmazon() {
 
   const handlerDistableAmazon = async (id: string) => {
     try {
-      dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
-      dispatch(
+      await dispatch(amazonActions.deleteAmazon(id) as unknown as AnyAction)
+    } catch (error) {
+      message.error('Failed to delete post!')
+      return
+    }
+
+    try {
+      await dispatch(
         amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction
       )
-      message.success('Post disabled successfully!')
+      message.success('Post deleted successfully!')
     } catch (error) {
-      message.error('Failed to disable post!')
+      message.error('Post deleted, but the list could not be refreshed.')
     }
   }
 
@@ -71,13 +77,19 @@ export default function ListAmazon() {
     formData.append('threadId', selectedAccount)
     formData.append('isCaptionLink', isCaptionLink)
     try {
-      dispatch(amazonActions.publishPost(formData) as unknown as AnyAction)
-      dispatch(
-        amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction
-      )
-      message.success('Publishing post...')
+      await dispatch(amazonActions.publishPost(formData) as unknown as AnyAction)
     } catch (error) {
       message.error('Failed to publish post!')
+      return
+    }
+
+    try {
+      await dispatch(
+        amazonActions.getAdminAmazons(searchValue, status, isCapLink, hasLink, page, size) as unknown as AnyAction
+      )
+      message.success('Post published successfully!')
+    } catch (error) {
+      message.error('Post published, but the list could not be refreshed.')
     }
   }
 

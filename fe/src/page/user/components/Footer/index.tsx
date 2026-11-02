@@ -57,6 +57,8 @@ const Footer = () => {
               <li><Link to="/blogs/lifestyle" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Life & Health</Link></li>
               <li><Link to="/blogs/travel" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Travel & Culture</Link></li>
               <li><Link to="/blogs/world" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">World News</Link></li>
+              <li><Link to="/blogs/history" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">History</Link></li>
+              <li><Link to="/blogs/celeb" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Celeb</Link></li>
               <li><Link to="/books" className="text-slate-400 hover:text-blue-400 hover:pl-1 transition-all">Books & Education</Link></li>
             </ul>
           </div>

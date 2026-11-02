@@ -17,15 +17,21 @@ export default function ListCategory() {
 
   useEffect(() => {
     dispatch(categoryActions.getAdminCategories(searchValue) as unknown as AnyAction)
-  }, [searchValue])
+  }, [dispatch, searchValue])
 
   const handlerDistableCategory = async (id: string) => {
     try {
       await dispatch(categoryActions.deleteCategory(id) as unknown as AnyAction)
+    } catch (error) {
+      message.error('Failed to disable category!')
+      return
+    }
+
+    try {
       await dispatch(categoryActions.getAdminCategories(searchValue) as unknown as AnyAction)
       message.success('Category disabled successfully!')
     } catch (error) {
-      message.error('Failed to disable category!')
+      message.error('Category disabled, but the list could not be refreshed.')
     }
   }
 

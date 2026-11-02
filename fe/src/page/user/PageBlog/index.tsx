@@ -27,7 +27,9 @@ const CATEGORIES: CategoryItem[] = [
   { key: 'travel', label: 'Travel', path: '/blogs/travel', type: 'travel' },
   { key: 'world', label: 'World News', path: '/blogs/world', type: 'world' },
   { key: 'education', label: 'Education', path: '/blogs/education', type: 'education' },
-  { key: 'science', label: 'Science', path: '/blogs/science', type: 'science' }
+  { key: 'science', label: 'Science', path: '/blogs/science', type: 'science' },
+  { key: 'history', label: 'History', path: '/blogs/history', type: 'history' },
+  { key: 'celeb', label: 'Celeb', path: '/blogs/celeb', type: 'celeb' }
 ]
 
 const ALIAS_CATEGORY_MAP: Record<string, { type: string; title: string }> = {

@@ -22,7 +22,7 @@ export default function ListBlog() {
   const {
     dataList: blogs,
     pagination,
-    message: error_message,
+    error_message,
     isLoading
   } = useSelector((state: RootState) => state.blog)
 
@@ -33,10 +33,16 @@ export default function ListBlog() {
   const handlerDistableBlog = async (id: string) => {
     try {
       await dispatch(blogActions.deleteBlog(id) as unknown as AnyAction)
-      dispatch(blogActions.getAdminBlogs(active, searchValue, isHot, page, size) as unknown as AnyAction)
-      message.success('Article disabled successfully!')
     } catch (error) {
-      message.error('Failed to disable article!')
+      message.error('Failed to delete article!')
+      return
+    }
+
+    try {
+      await dispatch(blogActions.getAdminBlogs(active, searchValue, isHot, page, size) as unknown as AnyAction)
+      message.success('Article deleted successfully!')
+    } catch (error) {
+      message.error('Article deleted, but the list could not be refreshed.')
     }
   }
 

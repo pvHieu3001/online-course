@@ -21,7 +21,9 @@ function TabBlogCategory() {
     { name: 'Travel', href: '/blogs/travel' },
     { name: 'World', href: '/blogs/world' },
     { name: 'Education', href: '/blogs/education' },
-    { name: 'Science', href: '/blogs/science' }
+    { name: 'Science', href: '/blogs/science' },
+    { name: 'History', href: '/blogs/history' },
+    { name: 'Celeb', href: '/blogs/celeb' }
   ]
 
   useEffect(() => {

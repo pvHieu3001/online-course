@@ -46,6 +46,12 @@ export default function ListProduct() {
   const handlerDeleteProduct = async (id: string) => {
     try {
       await dispatch(bookActions.deleteBook(id) as unknown as AnyAction)
+    } catch (error) {
+      message.error('Failed to delete book!')
+      return
+    }
+
+    try {
       await dispatch(
         bookActions.getAdminBooks(
           active,
@@ -57,7 +63,7 @@ export default function ListProduct() {
       )
       message.success('Book deleted successfully!')
     } catch (error) {
-      message.error('Failed to delete book!')
+      message.error('Book deleted, but the list could not be refreshed.')
     }
   }
 

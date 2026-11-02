@@ -21,11 +21,17 @@ export default function ListAffiliate() {
 
   const handlerDistableAffiliate = async (id: string) => {
     try {
-      dispatch(affiliateActions.deleteAffiliate(id) as unknown as AnyAction)
-      dispatch(affiliateActions.getAdminAffiliates('') as unknown as AnyAction)
-      message.success('Affiliate item disabled successfully!')
+      await dispatch(affiliateActions.deleteAffiliate(id) as unknown as AnyAction)
     } catch (error) {
-      message.error('Failed to disable affiliate item!')
+      message.error('Failed to delete affiliate item!')
+      return
+    }
+
+    try {
+      await dispatch(affiliateActions.getAdminAffiliates(searchValue) as unknown as AnyAction)
+      message.success('Affiliate item deleted successfully!')
+    } catch (error) {
+      message.error('Affiliate item deleted, but the list could not be refreshed.')
     }
   }
 
