@@ -13,6 +13,7 @@ import { RootState } from '@/app/store'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 import { typeOptions } from '@/common/constants'
 import { getImageUrl } from '@/utils/getImageUrl'
+import HtmlContent from '@/page/shared/HtmlContent'
 
 export default function EditBlog() {
   const params = useParams()

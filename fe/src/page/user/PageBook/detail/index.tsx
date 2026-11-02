@@ -36,7 +36,7 @@ function BookDetailPage() {
 
   const breadcrumbs = [
     { name: 'Home', href: '/' },
-    { name: 'Books', href: '/books' },
+    { name: 'Book Reviews', href: '/books' },
     { name: book?.name, href: `/book-detail/${slug}` }
   ]
 
@@ -114,7 +114,7 @@ function BookDetailPage() {
                 </header>
 
                 <section className='mt-10'>
-                  <h2 className='text-2xl text-[#464646] font-semibold mb-4'>Introduction</h2>
+                  <h2 className='text-2xl text-[#464646] font-semibold mb-4'>Book Overview</h2>
                   {book.content ? (
                     <HtmlContent content={book.content} />
                   ) : (

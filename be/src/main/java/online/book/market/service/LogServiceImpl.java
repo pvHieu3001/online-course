@@ -8,11 +8,10 @@ import online.book.market.repository.LogRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static online.book.market.utils.Constant.DEVICE_ATTRIBUTE;
+import static online.book.market.utils.Constant.*;
 
 @Service
 @AllArgsConstructor
@@ -32,22 +31,31 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public void save(String env, HttpServletRequest request, String name, String action, String method) {
-        if(!env.equals("dev")){
-            String device = (String) request.getAttribute(DEVICE_ATTRIBUTE);
-            String ipAddress = request.getHeader("X-Forwarded-For");
-            if (ipAddress == null || ipAddress.isEmpty()) {
-                ipAddress = request.getRemoteAddr();
-            }
-            String userAgent = request.getHeader("User-Agent");
-            String referer = request.getHeader("Referer");
-            StringBuffer pageId = request.getRequestURL();
-            String queryString = request.getQueryString();
-            String url = queryString == null ? pageId.toString() : pageId.append('?').append(queryString).toString();
-
-            LogDto dto = new LogDto(pageId.toString(), name, action, ipAddress, userAgent, referer, device, url, method);
-            Log log = modelMapper.map(dto, Log.class);
-            logRepository.save(log);
+        if (!env.equals("dev")) {
+            saveLog(request, request.getRequestURL().toString(), name, action, method);
         }
+    }
+
+    @Override
+    public void saveDetailView(HttpServletRequest request, String pageId, String name, String action, String method) {
+        saveLog(request, pageId, name, action, method);
+    }
+
+    private void saveLog(HttpServletRequest request, String pageId, String name, String action, String method) {
+        String device = (String) request.getAttribute(DEVICE_ATTRIBUTE);
+        String ipAddress = request.getHeader("X-Forwarded-For");
+        if (ipAddress == null || ipAddress.isEmpty()) {
+            ipAddress = request.getRemoteAddr();
+        }
+        String userAgent = request.getHeader("User-Agent");
+        String referer = request.getHeader("Referer");
+        String requestUrl = request.getRequestURL().toString();
+        String queryString = request.getQueryString();
+        String url = queryString == null ? requestUrl : requestUrl + '?' + queryString;
+
+        LogDto dto = new LogDto(pageId, name, action, ipAddress, userAgent, referer, device, url, method);
+        Log log = modelMapper.map(dto, Log.class);
+        logRepository.save(log);
     }
 
     @Override
@@ -76,6 +84,17 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public List<Log> getByBookId(Integer bookId) {
-        return new ArrayList<>();
+        return logRepository.findByPageIdAndActionOrderByCreatedAtDesc(
+                bookId.toString(),
+                LOG_ACTION_GET_DETAIL_BOOK
+        );
     }
-} 
+
+    @Override
+    public List<Log> getByBlogId(Integer blogId) {
+        return logRepository.findByPageIdAndActionOrderByCreatedAtDesc(
+                blogId.toString(),
+                LOG_ACTION_GET_DETAIL_BLOG
+        );
+    }
+}

@@ -8,7 +8,9 @@ public interface LogService {
     Log getById(Integer id);
     List<Log> getAll();
     void save(String env, HttpServletRequest request, String name, String action, String method);
+    void saveDetailView(HttpServletRequest request, String pageId, String name, String action, String method);
     Log update(Log log, Integer id);
     void deleteById(Integer id);
     List<Log> getByBookId(Integer bookId);
-} 
+    List<Log> getByBlogId(Integer blogId);
+}

@@ -21,8 +21,8 @@ export default function ListCategory() {
 
   const handlerDistableCategory = async (id: string) => {
     try {
-      dispatch(categoryActions.deleteCategory(id) as unknown as AnyAction)
-      dispatch(categoryActions.getAdminCategories('') as unknown as AnyAction)
+      await dispatch(categoryActions.deleteCategory(id) as unknown as AnyAction)
+      await dispatch(categoryActions.getAdminCategories(searchValue) as unknown as AnyAction)
       message.success('Category disabled successfully!')
     } catch (error) {
       message.error('Failed to disable category!')

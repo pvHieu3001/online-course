@@ -41,4 +41,10 @@ public class LogController {
         List<LogGetResponse> dtos = logService.getByBookId(bookId).stream().map(this::toDto).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success(dtos));
     }
-} 
+
+    @GetMapping("/blog/{blogId}")
+    public ResponseEntity<ApiResponse<List<LogGetResponse>>> getByBlogId(@PathVariable Integer blogId) {
+        List<LogGetResponse> dtos = logService.getByBlogId(blogId).stream().map(this::toDto).collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.success(dtos));
+    }
+}

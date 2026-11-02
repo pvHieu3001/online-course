@@ -106,7 +106,15 @@ public class BookController {
     @GetMapping("/slug/{slug}")
     public ResponseEntity<ApiResponse<BookDto>> getById(@PathVariable String slug, HttpServletRequest request) {
         Book book = bookService.getBySlug(slug);
-        logService.save(env, request, LOG_DETAIL_BOOK, LOG_ACTION_GET_DETAIL_BOOK, HttpMethod.GET.name());
+        if (book != null) {
+            logService.saveDetailView(
+                    request,
+                    book.getId().toString(),
+                    book.getName(),
+                    LOG_ACTION_GET_DETAIL_BOOK,
+                    HttpMethod.GET.name()
+            );
+        }
         return ResponseEntity.ok(ApiResponse.success(toDto(book)));
     }
 

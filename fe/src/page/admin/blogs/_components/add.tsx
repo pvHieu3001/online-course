@@ -9,6 +9,7 @@ import { AnyAction } from '@reduxjs/toolkit'
 import { typeOptions } from '@/common/constants'
 import TextEditor from '../../components/TextEditor/QuillEditor'
 import { RootState } from '@/app/store'
+import HtmlContent from '@/page/shared/HtmlContent'
 
 export default function AddBlog() {
   const navigate = useNavigate()

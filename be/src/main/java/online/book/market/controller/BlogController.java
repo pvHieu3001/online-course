@@ -120,12 +120,18 @@ public class BlogController {
     @Operation(description = "Get by slug endpoint for Blog", summary = "Get Blog by slug")
     @GetMapping("/slug/{slug}")
     public ResponseEntity<ApiResponse<BlogGetBySlugResponse>> getBySlug(@PathVariable String slug, HttpServletRequest request) {
-        logService.save(env, request, LOG_VIEW_BLOG, LOG_ACTION_GET_DETAIL_BLOG, HttpMethod.GET.name());
         BlogGetBySlugResponse response = new BlogGetBySlugResponse();
         Blog blog = blogService.getBySlug(slug);
         if (blog == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(HttpStatus.NOT_FOUND.value(), "Bài viết không tồn tại"));
         }
+        logService.saveDetailView(
+                request,
+                blog.getId().toString(),
+                blog.getTitle(),
+                LOG_ACTION_GET_DETAIL_BLOG,
+                HttpMethod.GET.name()
+        );
 
         List<BlogDto> blogs = blogService.getByType(blog.getType()).stream().filter(b -> !b.getSlug().equals(slug)).map(this::toDto).toList();
         List<BlogDto> blogRecommendList = blogService.getRecommendBlog(blog.getType()).stream().map(this::toDto).toList();
