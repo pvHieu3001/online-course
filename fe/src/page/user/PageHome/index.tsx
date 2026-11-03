@@ -91,28 +91,40 @@ function PageHome() {
               </Col>
 
               <Col xs={{ span: 24, order: 1 }} lg={{ span: 12, order: 2 }}>
-                <div
-                  className='w-full h-full rounded-lg text-center overflow-hidden bg-white'
-                  onClick={() => handleBlogClick(trendingBlogs?.[0]?.slug || '')}
-                >
-                  <div className='w-full mb-1 mt-3'>
-                    <img
-                      className='w-full h-72 sm:h-96 object-cover block'
-                      src={trendingBlogs?.[0]?.image || 'https://picsum.photos/800/400?random=1'}
-                      alt='Thumbnail'
-                    />
-                  </div>
+                {trendingBlogs?.[0] && (
+                  <article
+                    className='group h-full w-full cursor-pointer overflow-hidden rounded-lg bg-white shadow-sm transition-shadow duration-300 hover:shadow-md'
+                    onClick={() => handleBlogClick(trendingBlogs[0].slug)}
+                  >
+                    <div className='h-48 w-full overflow-hidden bg-gray-100 sm:h-56 lg:h-64'>
+                      <img
+                        className='block h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
+                        src={trendingBlogs[0].image || 'https://picsum.photos/800/450?random=1'}
+                        alt={trendingBlogs[0].title || 'Featured article'}
+                      />
+                    </div>
 
-                  <div className='px-4 pb-6'>
-                    <Title level={3} className='!mb-3'>
-                      {trendingBlogs?.[0]?.description || 'Global Markets Rally as Tech Stocks Hit New Record Highs'}
-                    </Title>
-                    <Text className='text-gray-400 font-bold block'>
-                      {trendingBlogs?.[0]?.content ||
-                        'Analysts predict continued sustained growth into the next quarter of 2026.'}
-                    </Text>
-                  </div>
-                </div>
+                    <div className='px-4 py-3 text-left sm:px-5'>
+                      <div className='mb-1 flex items-center gap-2 text-[10px] font-medium uppercase tracking-wide text-gray-500'>
+                        {trendingBlogs[0].type && <span>{trendingBlogs[0].type}</span>}
+                        {trendingBlogs[0].updatedAt && (
+                          <span>{dayjs(trendingBlogs[0].updatedAt).format('MMMM D, YYYY')}</span>
+                        )}
+                      </div>
+                      <Title
+                        level={3}
+                        className='!mb-1 line-clamp-2 !text-lg transition-colors group-hover:!text-blue-600 sm:!text-xl'
+                      >
+                        {trendingBlogs[0].title}
+                      </Title>
+                      {trendingBlogs[0].description && (
+                        <Text className='line-clamp-2 block !text-sm !leading-snug !text-gray-600'>
+                          {trendingBlogs[0].description}
+                        </Text>
+                      )}
+                    </div>
+                  </article>
+                )}
               </Col>
 
               <Col xs={{ span: 24, order: 2 }} sm={{ order: 2 }} md={{ order: 3 }} lg={{ span: 6, order: 3 }}>

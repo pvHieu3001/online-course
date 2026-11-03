@@ -33,6 +33,7 @@ public class Blog extends BaseEntity {
     private String type;
     private Boolean isTrending;
     private Boolean isTrendingNew;
+    private Boolean showFeaturedImage = true;
 
     @ManyToMany
     @JoinTable(

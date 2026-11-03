@@ -52,6 +52,8 @@ function BlogDetailPage() {
     navigate(`/search-blog?tag=${encodeURIComponent(tag)}`)
   }
 
+  const publishedAt = blogData.createdAt || blogData.updatedAt
+
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <Helmet>
@@ -94,36 +96,56 @@ function BlogDetailPage() {
             </ol>
           </nav>
           <div className='bg-white text-gray-800 font-sans leading-relaxed'>
-            <main className='max-w-[1300px] w-full mx-auto px-4 py-5'>
-              <h1 className='text-4xl text-[#464646] font-bold mt-2'>{blogData.title}</h1>
-              <div className='mb-1 mt-1 flex flex-wrap items-center gap-2'>
-                {blogData.tags?.map((tag) => (
-                  <span
-                    key={tag.id}
-                    onClick={() => {
-                      handleSearch(tag.name)
-                    }}
-                    className='cursor-pointer rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-300'
-                  >
-                    {tag.name}
+            <main className='mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-10'>
+              <header className='mb-8 max-w-4xl'>
+                <p className='mb-3 text-sm font-bold uppercase tracking-[0.14em] text-blue-700'>
+                  {getBlogInfoByType(blogData.type).title}
+                </p>
+                <h1 className='mb-5 break-words text-3xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-4xl lg:text-5xl'>
+                  {blogData.title}
+                </h1>
+                {blogData.description && (
+                  <p className='text-lg leading-relaxed text-gray-600 sm:text-xl'>{blogData.description}</p>
+                )}
+                <div className='mb-5 flex flex-wrap items-center gap-2'>
+                  {blogData.tags?.map((tag) => (
+                    <span
+                      key={tag.id}
+                      onClick={() => {
+                        handleSearch(tag.name)
+                      }}
+                      className='cursor-pointer rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600 transition hover:bg-gray-200'
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+                <div className='flex flex-wrap items-center gap-x-3 gap-y-1 border-y border-gray-200 py-3 text-sm text-gray-500'>
+                  <span>
+                    By{' '}
+                    <strong className='font-semibold text-gray-800'>
+                      {getFullName(blogData.updatedBy?.firstname, blogData.updatedBy?.lastname)}
+                    </strong>
                   </span>
-                ))}
-              </div>
-              <div className='mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-500'>
-                <span>
-                  Posted by{' '}
-                  <strong className='text-gray-700'>
-                    {getFullName(blogData.updatedBy?.firstname, blogData.updatedBy?.lastname)}
-                  </strong>
-                </span>
-                <span className='flex items-center gap-2'>
-                  <span aria-hidden='true'>·</span>
-                  <span>{formatDateTimeString(blogData.updatedAt) || 'Not updated yet'}</span>
-                </span>
-              </div>
-              <p className='mb-6 text-lg leading-relaxed text-gray-600'>{blogData.description}</p>
+                  <span aria-hidden='true' className='text-gray-300'>
+                    |
+                  </span>
+                  <time dateTime={publishedAt} className='font-medium text-gray-600'>
+                    Published {publishedAt ? formatDateTimeString(publishedAt) : 'date unavailable'}
+                  </time>
+                </div>
+              </header>
 
-              <img src={getImageUrl(blogData.image)} alt={blogData.title} className='w-full rounded-lg mb-8 shadow' />
+              {blogData.showFeaturedImage !== false && (
+                <figure className='mb-10 overflow-hidden rounded-2xl bg-gray-100 shadow-lg'>
+                  <img
+                    src={getImageUrl(blogData.image)}
+                    alt={blogData.title}
+                    className='aspect-[4/3] w-full object-cover object-center sm:aspect-[16/9]'
+                    fetchPriority='high'
+                  />
+                </figure>
+              )}
 
               <HtmlContent as='article' content={blogData.content} />
 

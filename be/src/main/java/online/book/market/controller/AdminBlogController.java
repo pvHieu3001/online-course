@@ -111,6 +111,7 @@ public class AdminBlogController {
 
             dto.setSlug(DataUtils.toSlug(dto.getTitle()));
             Blog blog = modelMapper.map(dto, Blog.class);
+            blog.setShowFeaturedImage(dto.getShowFeaturedImage() != null ? dto.getShowFeaturedImage() : true);
 
             if(dto.getTagStr()!=null && !dto.getTagStr().isEmpty()) {
                 List<Tag> resolvedTags = new ArrayList<>();
@@ -167,6 +168,9 @@ public class AdminBlogController {
 
             dto.setSlug(DataUtils.toSlug(dto.getTitle()));
             Blog blog = modelMapper.map(dto, Blog.class);
+            blog.setShowFeaturedImage(dto.getShowFeaturedImage() != null
+                    ? dto.getShowFeaturedImage()
+                    : existingBlog.getShowFeaturedImage());
 
             List<Tag> resolvedTags = new ArrayList<>();
             List<String> tagArray = List.of(dto.getTagStr().split(","));

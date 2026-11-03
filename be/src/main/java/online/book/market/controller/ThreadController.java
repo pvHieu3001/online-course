@@ -1,6 +1,7 @@
 package online.book.market.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import online.book.market.entity.dto.amazon.AmazonPostRequest;
 import online.book.market.service.ThreadService;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api/v1/amazon")
 public class ThreadController {
     private final ThreadService service;
@@ -24,6 +26,7 @@ public class ThreadController {
             service.cleanData();
             return ResponseEntity.ok("Đã nhận " + posts.size() + " bài viết ");
         } catch (Exception e) {
+            log.error("Failed to collect and process Amazon posts", e);
             return ResponseEntity.status(500).body("Lỗi hệ thống: " + e.getMessage());
         }
     }

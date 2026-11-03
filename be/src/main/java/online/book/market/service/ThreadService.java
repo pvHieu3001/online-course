@@ -107,7 +107,7 @@ public class ThreadService {
 
                 log.info("Account {} đã xử lý bài bài ID {}.", threadAccount.getId(), post.getId());
             } catch (Exception e) {
-                log.error("Lỗi hệ thống khi xử lý bài ID {} cho Account {}: {}", post.getId(), threadAccount.getId(), e.getMessage());
+                log.error("Lỗi hệ thống khi xử lý bài ID {} cho Account {}", post.getId(), threadAccount.getId(), e);
             }
         }
     }
@@ -252,7 +252,7 @@ public class ThreadService {
             post.setStatus("FAILED");
             post.setRetryCount(post.getRetryCount() + 1);
             postRepository.save(post);
-            log.error("Thất bại khi đăng bài ID {}: {}", post.getId(), e.getMessage());
+            log.error("Thất bại khi đăng bài ID {}", post.getId(), e);
         }
     }
 
@@ -309,7 +309,7 @@ public class ThreadService {
                 Thread.sleep(retryDelay);
                 retryDelay += 5000;
             } catch (Exception e) {
-                log.error("💥 Lỗi không xác định khi Publish: {}", e.getMessage());
+                log.error("💥 Lỗi không xác định khi Publish", e);
                 throw e;
             }
         }
@@ -328,7 +328,7 @@ public class ThreadService {
             JsonNode response = restTemplate.postForObject(url, params, JsonNode.class);
             return response.get("id").asText();
         } catch (Exception e) {
-            log.error("Lỗi gọi API Threads tạo Multi Media Container: {}", e.getMessage());
+            log.error("Lỗi gọi API Threads tạo Multi Media Container", e);
             throw e;
         }
     }
@@ -366,7 +366,7 @@ public class ThreadService {
                 throw new RuntimeException("Lỗi tạo container: " + response.getBody());
             }
         } catch (Exception e) {
-            log.error("Lỗi gọi API Threads tạo Single Media Container: {}", e.getMessage());
+            log.error("Lỗi gọi API Threads tạo Single Media Container", e);
             throw e;
         }
     }
@@ -392,7 +392,7 @@ public class ThreadService {
                 throw new RuntimeException("Lỗi khi tạo Text Container: " + response.getBody());
             }
         } catch (Exception e) {
-            log.error("Không thể kết nối đến Threads API để tạo Text Container: {}", e.getMessage());
+            log.error("Không thể kết nối đến Threads API để tạo Text Container", e);
             throw e;
         }
     }
@@ -449,7 +449,7 @@ public class ThreadService {
                     log.info("⏳ ID {} vẫn đang xử lý (IN_PROGRESS)...", containerId);
                 }
             } catch (Exception e) {
-                log.warn("⚠️ Không thể kết nối API để check status ID {}. Có thể do nghẽn mạng.", containerId);
+                log.warn("⚠️ Không thể kết nối API để check status ID {}", containerId, e);
             }
 
             attempts++;
@@ -521,7 +521,7 @@ public class ThreadService {
             }
 
         } catch (Exception e) {
-            log.error("Lỗi khi thực hiện comment: {}", e.getMessage());
+            log.error("Lỗi khi thực hiện comment", e);
         }
 
     }
@@ -559,6 +559,7 @@ public class ThreadService {
             }
             return longUrl;
         } catch (Exception e) {
+            log.warn("Unable to resolve Amazon short link {}", shortUrl, e);
             return shortUrl;
         }
     }
@@ -612,7 +613,7 @@ public class ThreadService {
             }
 
         } catch (Exception e) {
-            System.err.println("Lỗi khi call API savethr: " + e.getMessage());
+            log.error("Lỗi khi call API savethr", e);
             throw new RuntimeException(e);
         }
     }
@@ -734,7 +735,7 @@ public class ThreadService {
                 mediaList.add(media);
 
             } catch (Exception e) {
-                log.error("Lỗi xử lý file thứ {}: {}", i, e.getMessage());
+                log.error("Lỗi xử lý file thứ {}", i, e);
             }
         }
         mediaRepository.saveAll(mediaList);

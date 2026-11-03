@@ -45,6 +45,7 @@ export default function EditBlog() {
         content: data.content,
         isTrending: data.isTrending,
         isTrendingNew: data.isTrendingNew,
+        showFeaturedImage: data.showFeaturedImage !== false,
         tagStr: data.tags?.flatMap((item) => item.id)
       })
       setSelectedTags(data?.tags?.map((tag) => tag.id).join(',') || '')
@@ -87,6 +88,7 @@ export default function EditBlog() {
     formData.append('type', form.getFieldValue('type'))
     formData.append('isTrending', form.getFieldValue('isTrending') || false)
     formData.append('isTrendingNew', form.getFieldValue('isTrendingNew') || false)
+    formData.append('showFeaturedImage', (form.getFieldValue('showFeaturedImage') ?? true).toString())
     formData.append('tagStr', selectedTags)
     if (imageUrl) {
       formData.append('imageFile', imageUrl)
@@ -210,6 +212,9 @@ export default function EditBlog() {
                   <Form.Item name='isTrendingNew' label='Featured by Date (Trending)' valuePropName='checked'>
                     <Switch className='w-20' checkedChildren='Yes' unCheckedChildren='No' />
                   </Form.Item>
+                  <Form.Item name='showFeaturedImage' label='Show featured image' valuePropName='checked'>
+                    <Switch checkedChildren='Yes' unCheckedChildren='No' />
+                  </Form.Item>
                 </div>
               </Col>
 
@@ -229,7 +234,11 @@ export default function EditBlog() {
                     <Input size='large' placeholder='Enter article title...' />
                   </Form.Item>
                   <Form.Item name='description' label='Article Description'>
-                    <Input size='large' placeholder='Enter article description...' />
+                    <Input.TextArea
+                      placeholder='Enter article description...'
+                      autoSize={{ minRows: 4, maxRows: 8 }}
+                      showCount
+                    />
                   </Form.Item>
 
                   <Form.Item name='type' label='Category'>

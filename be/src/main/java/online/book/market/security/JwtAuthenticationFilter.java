@@ -24,6 +24,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
@@ -32,6 +33,7 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeJson;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	final static String BEARER_SPACE = "Bearer ";
@@ -129,6 +131,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 			filterChain.doFilter(processedRequest, response);
 		} catch (Exception e) {
+			log.error("Unexpected error while processing {} {}", request.getMethod(), path, e);
 			sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi nội bộ server.", INTERNAL_SERVER_ERROR);
 		} finally {
 			if (isMultipart) {

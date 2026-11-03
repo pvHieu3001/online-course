@@ -93,10 +93,12 @@ export interface IBlog {
   slug: string
   status: boolean
   type: string
+  createdAt?: string
   updatedAt: string
   updatedBy: IUser
   isTrending: string
   isTrendingNew: string
+  showFeaturedImage?: boolean
   tags: ITag[]
 }
 

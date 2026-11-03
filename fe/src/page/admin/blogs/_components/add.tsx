@@ -59,6 +59,7 @@ export default function AddBlog() {
     formData.append('status', form.getFieldValue('status').toString())
     formData.append('isTrending', form.getFieldValue('isTrending') || false)
     formData.append('isTrendingNew', form.getFieldValue('isTrendingNew') || false)
+    formData.append('showFeaturedImage', (form.getFieldValue('showFeaturedImage') ?? true).toString())
     formData.append('content', content)
     formData.append('tagStr', selectedTags ?? null)
     if (imageUrl) {
@@ -106,7 +107,7 @@ export default function AddBlog() {
           layout='vertical'
           onFinish={handleSubmit}
           onValuesChange={onValuesChange}
-          initialValues={{ status: true }}
+          initialValues={{ status: true, showFeaturedImage: true }}
         >
           <Row gutter={[24, 24]}>
             {/* Settings */}
@@ -169,6 +170,9 @@ export default function AddBlog() {
                 <Form.Item name='isTrendingNew' label='Featured by Date (Trending)' valuePropName='checked'>
                   <Switch className='w-20' checkedChildren='Yes' unCheckedChildren='No' />
                 </Form.Item>
+                <Form.Item name='showFeaturedImage' label='Show featured image' valuePropName='checked'>
+                  <Switch checkedChildren='Yes' unCheckedChildren='No' />
+                </Form.Item>
               </div>
             </Col>
 
@@ -180,7 +184,11 @@ export default function AddBlog() {
                   <Input size='large' placeholder='Enter title...' />
                 </Form.Item>
                 <Form.Item name='description' label='Article Description'>
-                  <Input size='large' placeholder='Enter article description...' />
+                  <Input.TextArea
+                    placeholder='Enter article description...'
+                    autoSize={{ minRows: 4, maxRows: 8 }}
+                    showCount
+                  />
                 </Form.Item>
                 <Form.Item name='type' label='Category'>
                   <Select placeholder='Select category' options={typeOptions} />

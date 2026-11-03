@@ -20,6 +20,7 @@ public class BlogPutRequest {
     private Boolean status;
     private Boolean isTrending;
     private Boolean isTrendingNew;
+    private Boolean showFeaturedImage;
     private String type;
     private String tagStr;
 } 

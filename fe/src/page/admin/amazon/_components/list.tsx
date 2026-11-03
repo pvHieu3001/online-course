@@ -289,7 +289,7 @@ export default function ListAmazon() {
       title: 'Caption',
       dataIndex: 'caption',
       key: 'caption',
-      width: 300,
+      width: 100,
       responsive: ['md'],
       render: (text, record) => {
         const getStyle = () => {

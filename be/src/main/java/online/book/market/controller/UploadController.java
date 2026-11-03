@@ -3,6 +3,7 @@ package online.book.market.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import online.book.market.entity.dto.ApiResponse;
 import online.book.market.entity.dto.upload.FileUploadResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +23,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @RestController
+@Slf4j
 @RequestMapping("api/v1/admin/upload")
 @Tag(name = "Upload", description = "Upload controller")
 public class UploadController {
@@ -71,7 +73,7 @@ public class UploadController {
 
             return ResponseEntity.ok(ApiResponse.success(new FileUploadResponse(uniqueFileName)));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Failed to save uploaded file", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(),"Upload file error"));
         }
     }

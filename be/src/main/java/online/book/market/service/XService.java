@@ -28,13 +28,12 @@ public class XService {
             Tweet response = twitterClient.postTweet(content);
 
             if (response != null && response.getId() != null) {
-                System.out.println("Đăng bài thành công! ID bài viết: " + response.getId());
+                log.info("Đăng bài thành công! ID bài viết: {}", response.getId());
             } else {
-                System.err.println("Đăng bài thất bại, không nhận được ID phản hồi.");
+                log.error("Đăng bài thất bại, không nhận được ID phản hồi.");
             }
         } catch (Exception e) {
-            System.err.println("Lỗi khi kết nối với X API: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Lỗi khi kết nối với X API", e);
         }
     }
 

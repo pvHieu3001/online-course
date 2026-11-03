@@ -23,6 +23,7 @@ public class BlogDto {
     private String type;
     private Boolean isTrending;
     private Boolean isTrendingNew;
+    private Boolean showFeaturedImage;
     private UserDto updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -56,6 +56,7 @@ public class BlogServiceImpl implements BlogService {
         blogDB.setStatus(blog.getStatus());
         blogDB.setIsTrending(blog.getIsTrending());
         blogDB.setIsTrendingNew(blog.getIsTrendingNew());
+        blogDB.setShowFeaturedImage(blog.getShowFeaturedImage());
         blogDB.setImage(blog.getImage());
         blogDB.setTags(new HashSet<>(blog.getTags()));
         return blogRepository.save(blogDB);
