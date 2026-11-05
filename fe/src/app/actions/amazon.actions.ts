@@ -2,6 +2,7 @@ import { Dispatch } from '@reduxjs/toolkit'
 import { amazonServices } from '../services'
 import {
   fetchedDone,
+  clearAmazonData,
   getAmazonsSuccessFully,
   getAmazonsSuccessFailure,
   isFetching,
@@ -169,6 +170,7 @@ export const amazonActions = {
   getAmazons,
   getAdminAmazons,
   getAmazonById,
+  clearAmazonData,
   getRandomAmazon,
   createAmazon,
   updateAmazon,

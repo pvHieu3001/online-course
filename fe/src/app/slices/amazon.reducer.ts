@@ -23,6 +23,9 @@ const amazonSlice = createSlice({
     fetchedDone: (state) => {
       state.isLoading = false
     },
+    clearAmazonData: (state) => {
+      state.data = initialState.data
+    },
     getAmazonsSuccessFully: (state, { payload }) => {
       state.dataList = payload.data.content
       state.pagination = {
@@ -104,6 +107,7 @@ const amazonSlice = createSlice({
 export const {
   isFetching,
   fetchedDone,
+  clearAmazonData,
   getAmazonsSuccessFully,
   getAmazonsSuccessFailure,
   getByIdSuccessFailure,

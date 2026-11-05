@@ -6,7 +6,6 @@ import ErrorLoad from '../../components/util/ErrorLoad'
 import { useDispatch, useSelector } from 'react-redux'
 import { amazonActions } from '@/app/actions'
 import { AnyAction } from '@reduxjs/toolkit'
-import { IAmazon } from '@/common/types.interface'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { Modal, Spin } from 'antd'
 import { RootState } from '@/app/store'
@@ -18,39 +17,38 @@ export default function EditAmazon() {
   const amazonStore = useSelector((state: RootState) => state.amazon)
   const [caption, setCaption] = useState('')
   const [amzUrl, setAmzUrl] = useState('')
+  const [form] = Form.useForm()
 
   useEffect(() => {
+    dispatch(amazonActions.clearAmazonData())
     dispatch(amazonActions.getAmazonById(params.id ?? '0') as unknown as AnyAction)
     dispatch(amazonActions.getAdminAmazons('', '', '', '', 0, 10) as unknown as AnyAction)
     setCaption('')
     setAmzUrl('')
-  }, [dispatch, params.id])
+    form.resetFields()
+  }, [dispatch, form, params.id])
 
   const navigate = useNavigate()
-  const [form] = Form.useForm()
   const [isDirty, setIsDirty] = useState(false)
 
   useEffect(() => {
-    if (amazonStore.data) {
-      const data = amazonStore.data as IAmazon
-      setCaption(data.caption)
-      if (data?.amzUrl) {
-        setAmzUrl(data.amzUrl)
-      } else {
-        const linkRegex = /(https?:\/\/[^\s]+)/g
-        const match = data?.caption?.match(linkRegex)
-        const link = match?.[0] ?? ''
-        setAmzUrl(link)
-      }
-      form.setFieldsValue({
-        productName: data.productName,
-        sourceUrl: data.sourceUrl,
-        caption: data.caption,
-        amzUrl: amzUrl,
-        isPublished: data.isPublished
-      })
+    const data = amazonStore.data
+    if (!data || String(data.id) !== (params.id ?? '0')) {
+      return
     }
-  }, [amazonStore, form])
+
+    const linkRegex = /(https?:\/\/[^\s]+)/g
+    const link = data.amzUrl || data.caption?.match(linkRegex)?.[0] || ''
+    setCaption(data.caption ?? '')
+    setAmzUrl(link)
+    form.setFieldsValue({
+      productName: data.productName,
+      sourceUrl: data.sourceUrl,
+      caption: data.caption,
+      amzUrl: link,
+      isPublished: data.isPublished
+    })
+  }, [amazonStore.data, form, params.id])
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -127,7 +125,7 @@ export default function EditAmazon() {
       }
     >
       <Spin spinning={amazonStore.isLoading} tip='Loading...'>
-        {amazonStore.data && (
+        {amazonStore.data && String(amazonStore.data.id) === (params.id ?? '0') && (
           <Form
             id='Amazon-form'
             form={form}

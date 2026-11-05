@@ -30,6 +30,7 @@ export default function ListAmazon() {
   const [hasLink, setHasLink] = useState('')
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(10)
+  const [selectedAmazonId, setSelectedAmazonId] = useState<number | null>(null)
   const currentAccount = accounts.find((acc) => acc.threadId === selectedAccount)
   const isHighlight = currentAccount?.isCaptionLink === true
   const [previewOpen, setPreviewOpen] = useState(false)
@@ -489,6 +490,10 @@ export default function ListAmazon() {
             }
           }}
           className='responsive-table'
+          onRow={(record) => ({
+            onClick: () => setSelectedAmazonId(record.id)
+          })}
+          rowClassName={(record) => (record.id === selectedAmazonId ? 'amazon-row-selected' : '')}
         />
 
         <div style={{ display: 'none' }}>

@@ -1564,6 +1564,13 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav li.ant-menu-it
 .responsive-table .ant-table-thead > tr > th {
   padding: 12px 10px;
 }
+.responsive-table .ant-table-tbody > tr.amazon-row-selected > td,
+.responsive-table .ant-table-tbody > tr.amazon-row-selected:hover > td {
+  background-color: #e6f4ff;
+}
+.responsive-table .ant-table-tbody > tr {
+  cursor: pointer;
+}
 .tablespace {
   overflow: hidden;
 }
