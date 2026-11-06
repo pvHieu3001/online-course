@@ -157,7 +157,7 @@ export const BASE_HTML_CONTENT_CLASSES =
   '[&_iframe]:mx-auto [&_iframe]:block [&_iframe]:my-6 [&_iframe]:max-w-full ' +
   '[&_a]:text-blue-600 [&_a:hover]:underline'
 
-const COLLAPSED_CONTENT_HEIGHT = 320
+const COLLAPSED_CONTENT_HEIGHT = 1280
 
 export const HtmlContent: React.FC<HtmlContentProps> = ({
   content,
