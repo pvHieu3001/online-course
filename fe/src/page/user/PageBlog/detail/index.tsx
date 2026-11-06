@@ -57,11 +57,11 @@ function BlogDetailPage() {
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <Helmet>
-        <title>Global Times || {blogData.title}</title>
+        <title>Wise Owl News || {blogData.title}</title>
         <meta
           key='description'
           name='description'
-          content={blogData.description || `Read the article ${blogData.title} at Global Times.`}
+          content={blogData.description || `Read the article ${blogData.title} at Wise Owl News.`}
         />
       </Helmet>
       <div className='min-h-screen max-w-7xl mx-auto px-4 flex flex-col lg:flex-row lg:justify-center gap-8'>
@@ -147,7 +147,7 @@ function BlogDetailPage() {
                 </figure>
               )}
 
-              <HtmlContent as='article' content={blogData.content} />
+              <HtmlContent as='article' content={blogData.content} enableReadMore />
 
               {/* Related Articles */}
               <section className='mt-16 border-t pt-10'>

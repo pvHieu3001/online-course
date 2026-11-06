@@ -48,7 +48,7 @@ function PageHome() {
   return (
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <Helmet>
-        <title>Wise Owl - International News & Learning</title>
+        <title>Wise Owl News - International News & Learning</title>
         <meta
           name='description'
           content='Wise Owl News shares global news, profound insights, and learning materials across multiple fields — keeping you informed and educated.'

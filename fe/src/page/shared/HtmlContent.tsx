@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 export interface HtmlContentProps extends React.HTMLAttributes<HTMLElement> {
   content?: string | null
   className?: string
   enableQuoteHighlight?: boolean
+  enableReadMore?: boolean
   as?: 'div' | 'article' | 'section'
 }
 
@@ -156,27 +157,81 @@ export const BASE_HTML_CONTENT_CLASSES =
   '[&_iframe]:mx-auto [&_iframe]:block [&_iframe]:my-6 [&_iframe]:max-w-full ' +
   '[&_a]:text-blue-600 [&_a:hover]:underline'
 
+const COLLAPSED_CONTENT_HEIGHT = 320
+
 export const HtmlContent: React.FC<HtmlContentProps> = ({
   content,
   className = '',
   enableQuoteHighlight = true,
+  enableReadMore = false,
   as: Component = 'div',
   ...rest
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [hasOverflow, setHasOverflow] = useState(false)
+  const contentRef = useRef<HTMLDivElement>(null)
+
   const processedHtml = useMemo(() => {
     if (!content) return ''
     const html = renderImageLinks(content)
     return enableQuoteHighlight ? highlightQuotes(html) : html
   }, [content, enableQuoteHighlight])
 
+  useEffect(() => {
+    setIsExpanded(false)
+    const contentElement = contentRef.current
+    if (!enableReadMore || !contentElement) {
+      setHasOverflow(false)
+      return
+    }
+
+    const updateOverflow = () => setHasOverflow(contentElement.scrollHeight > COLLAPSED_CONTENT_HEIGHT)
+    updateOverflow()
+
+    const resizeObserver = new ResizeObserver(updateOverflow)
+    resizeObserver.observe(contentElement)
+    return () => resizeObserver.disconnect()
+  }, [enableReadMore, processedHtml])
+
   if (!content) return null
 
-  return (
+  const htmlContent = (
     <Component
       className={`${BASE_HTML_CONTENT_CLASSES} ${className}`.trim()}
       dangerouslySetInnerHTML={{ __html: processedHtml }}
       {...rest}
     />
+  )
+
+  if (!enableReadMore) return htmlContent
+
+  return (
+    <div>
+      <div
+        className='relative overflow-hidden'
+        style={{
+          maxHeight: hasOverflow && !isExpanded ? COLLAPSED_CONTENT_HEIGHT : undefined
+        }}
+      >
+        <div ref={contentRef}>{htmlContent}</div>
+        {hasOverflow && !isExpanded && (
+          <div
+            aria-hidden='true'
+            className='pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent'
+          />
+        )}
+      </div>
+      {hasOverflow && (
+        <button
+          type='button'
+          aria-expanded={isExpanded}
+          onClick={() => setIsExpanded((expanded) => !expanded)}
+          className='mt-2 font-semibold text-blue-600 hover:text-blue-700 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600'
+        >
+          {isExpanded ? 'Show less' : 'Read more'}
+        </button>
+      )}
+    </div>
   )
 }
 

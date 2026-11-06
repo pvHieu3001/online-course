@@ -31,7 +31,7 @@ import static online.book.market.utils.Constant.*;
 @RestController
 @RequestMapping("api/v1/user/blog")
 @Tag(name = "Blog", description = "Blog controller")
-public class BlogController {
+public class  BlogController {
     private final BlogService blogService;
     private final ModelMapper modelMapper;
     private final LogService logService;

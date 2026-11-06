@@ -1,7 +1,7 @@
 {
-  "name": "Học Free - Nền Tảng Khóa Học Trực Tuyến",
-  "short_name": "Học Free",
-  "description": "Nền tảng cung cấp các khóa học lập trình, marketing và kỹ năng mềm chất lượng cao, giúp bạn phát triển sự nghiệp.",
+  "name": "Wise Owl News",
+  "short_name": "Wise Owl",
+  "description": "Global news, profound insights, and lifelong learning.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -9,13 +9,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://hocfree.vn/logo.png",
+      "src": "https://wiseowlnews.com/logo.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://hocfree.vn/logo.png",
+      "src": "https://wiseowlnews.com/logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

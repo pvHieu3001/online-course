@@ -46,10 +46,10 @@ function PageBook() {
     <HandleLoading isLoading={booksLoading} error_message={error_message}>
       <div className='bg-gray-100 min-h-screen pb-16'>
         <Helmet>
-          <title>Global Times || All Books</title>
+          <title>Wise Owl News || All Books</title>
           <meta
             name='description'
-            content='Discover all free books and informative resources on Global Times — explore programming, design, marketing, and more, completely free.'
+            content='Discover all free books and informative resources on Wise Owl News — explore programming, design, marketing, and more, completely free.'
           />
         </Helmet>
 

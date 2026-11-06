@@ -106,7 +106,11 @@ const Footer = () => {
         <div className="mt-14 pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center">
             <p className="text-xs text-slate-500 font-medium tracking-wider uppercase">
-              &copy; {new Date().getFullYear()} Wise Owl News. All rights reserved.
+              &copy; {new Date().getFullYear()}{' '}
+              <a href='https://wiseowlnews.com' className='hover:text-white hover:underline'>
+                Wise Owl News
+              </a>
+              . All rights reserved.
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-6 text-xs text-slate-500 tracking-wider">

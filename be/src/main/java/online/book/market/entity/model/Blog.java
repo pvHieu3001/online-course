@@ -34,6 +34,8 @@ public class Blog extends BaseEntity {
     private Boolean isTrending;
     private Boolean isTrendingNew;
     private Boolean showFeaturedImage = true;
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private Long viewCount = 0L;
 
     @ManyToMany
     @JoinTable(

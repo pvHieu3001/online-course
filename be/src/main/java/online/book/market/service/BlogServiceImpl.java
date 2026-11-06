@@ -27,9 +27,14 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Blog getBySlug(String slug) {
-        return blogRepository.findBySlugAndStatus(slug, true);
+        Blog blog = blogRepository.findBySlugAndStatus(slug, true);
+        if (blog != null) {
+            blogRepository.incrementViewCount(blog.getId());
+            blog.setViewCount(blogRepository.findViewCountById(blog.getId()));
+        }
+        return blog;
     }
 
     @Override

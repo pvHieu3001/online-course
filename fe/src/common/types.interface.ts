@@ -99,6 +99,7 @@ export interface IBlog {
   isTrending: string
   isTrendingNew: string
   showFeaturedImage?: boolean
+  viewCount: number
   tags: ITag[]
 }
 

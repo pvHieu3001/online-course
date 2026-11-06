@@ -36,10 +36,10 @@ function PageSearch() {
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <div className={styles.bg}>
         <Helmet>
-          <title>Global Times || Search</title>
+          <title>Wise Owl News || Search</title>
           <meta
             name='description'
-            content='Global Times search page. Search for high-quality news, informative articles, and learning materials.'
+            content='Wise Owl News search page. Search for high-quality news, informative articles, and learning materials.'
           />
         </Helmet>
         <main className={styles.mainContent} role='main'>

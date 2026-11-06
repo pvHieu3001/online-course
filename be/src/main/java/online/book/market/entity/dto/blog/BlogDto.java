@@ -24,6 +24,7 @@ public class BlogDto {
     private Boolean isTrending;
     private Boolean isTrendingNew;
     private Boolean showFeaturedImage;
+    private Long viewCount;
     private UserDto updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

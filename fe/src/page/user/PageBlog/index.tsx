@@ -237,10 +237,10 @@ function PageBlog() {
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <div className='bg-gray-100 min-h-screen'>
         <Helmet>
-          <title>Global Times || {categoryTitle}</title>
+          <title>Wise Owl News || {categoryTitle}</title>
           <meta
             name='description'
-            content={`Read the latest coverage on ${categoryTitle} at Global Times to discover new insights.`}
+            content={`Read the latest coverage on ${categoryTitle} at Wise Owl News to discover new insights.`}
           />
         </Helmet>
         <div className='bg-gray-100 min-h-screen pb-16'>

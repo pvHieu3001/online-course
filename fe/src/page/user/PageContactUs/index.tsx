@@ -104,12 +104,12 @@ export default function PageContactUs() {
   return (
     <>
       <Helmet>
-        <title>Contact Us - Wise Owl</title>
+        <title>Contact Us - Wise Owl News</title>
         <meta
           name="description"
-          content="Get in touch with the Wise Owl editorial staff, tip line, advertising desk, and reader support. We would love to hear from you."
+          content="Get in touch with the Wise Owl News editorial staff, tip line, advertising desk, and reader support. We would love to hear from you."
         />
-        <link rel="canonical" href="https://wiseowl.com/contact-us/" />
+        <link rel="canonical" href="https://wiseowlnews.com/contact-us/" />
       </Helmet>
 
       <div className="bg-slate-50 min-h-screen py-8 sm:py-12">
@@ -138,7 +138,7 @@ export default function PageContactUs() {
                 We&apos;d Love to Hear From You
               </h1>
               <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-                Whether you have a breaking news tip, feedback on an article, a business partnership proposal, or technical inquiries, the Wise Owl team is here to assist.
+                Whether you have a breaking news tip, feedback on an article, a business partnership proposal, or technical inquiries, the <a href="https://wiseowlnews.com" className="font-semibold hover:underline">Wise Owl News</a> team is here to assist.
               </p>
             </div>
           </div>

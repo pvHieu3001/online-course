@@ -95,10 +95,10 @@ function CategoryDetailPage() {
     <HandleLoading isLoading={booksLoading} error_message={bookError}>
       <div className='bg-gray-100 py-8 min-h-screen px-4'>
         <Helmet>
-          <title>Global Times || {category.name}</title>
+          <title>Wise Owl News || {category.name}</title>
           <meta
             name='description'
-            content={`Discover informative resources about ${category.name} on Global Times — read from basic to advanced, suitable for all types of readers.`}
+            content={`Discover informative resources about ${category.name} on Wise Owl News — read from basic to advanced, suitable for all types of readers.`}
           />
         </Helmet>
         <div className='max-w-7xl mx-auto'>

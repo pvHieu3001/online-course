@@ -94,6 +94,14 @@ export default function ListBlog() {
       }
     },
     {
+      title: 'Views',
+      dataIndex: 'viewCount',
+      key: 'viewCount',
+      align: 'center',
+      width: 100,
+      render: (viewCount: number) => viewCount.toLocaleString()
+    },
+    {
       title: 'Action',
       key: 'action',
       width: 150,

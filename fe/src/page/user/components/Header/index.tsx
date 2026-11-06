@@ -132,7 +132,7 @@ const Header = (props: Props) => {
 
               <div className='flex flex-col'>
                 <span className='text-white text-[20px] sm:text-[26px] font-black tracking-widest uppercase leading-none mb-1'>
-                  Wise Owl
+                  Wise Owl News
                 </span>
                 <span className='text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-300 text-[9px] sm:text-[10px] font-bold tracking-[0.2em] uppercase'>
                   Global News & Insights

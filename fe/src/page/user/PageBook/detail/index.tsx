@@ -45,11 +45,11 @@ function BookDetailPage() {
     <HandleLoading isLoading={isLoading} error_message={error_message}>
       <div className='min-h-screen max-w-7xl mx-auto px-4 flex flex-col lg:flex-row lg:justify-center gap-8'>
         <Helmet>
-          <title>Global Times || {book?.name ?? ''} </title>
+          <title>Wise Owl News || {book?.name ?? ''} </title>
           <meta
             key='description'
             name='description'
-            content={book?.description || `Read details about ${book?.name} at Global Times.`}
+            content={book?.description || `Read details about ${book?.name} at Wise Owl News.`}
           />
         </Helmet>
         <div className='lg:w-[80%] w-full'>
@@ -116,7 +116,7 @@ function BookDetailPage() {
                 <section className='mt-10'>
                   <h2 className='text-2xl text-[#464646] font-semibold mb-4'>Book Overview</h2>
                   {book.content ? (
-                    <HtmlContent content={book.content} />
+                    <HtmlContent content={book.content} enableReadMore />
                   ) : (
                     <p className='text-gray-500 italic'>Content is being updated.</p>
                   )}

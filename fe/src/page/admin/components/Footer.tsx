@@ -7,8 +7,8 @@ function Footer() {
     <AntFooter style={{ background: '#fafafa', padding: '20px 0' }}>
       <div className='text-center text-gray-600 text-sm'>
         Copyright © {new Date().getFullYear()}. Created by &nbsp;
-        <a href='https://hocfree.vn' target='_blank' rel='noopener noreferrer' className='font-semibold'>
-          hocfree.vn
+        <a href='https://wiseowlnews.com' target='_blank' rel='noopener noreferrer' className='font-semibold'>
+          Wise Owl News
         </a>
         .
       </div>

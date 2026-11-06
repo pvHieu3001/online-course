@@ -5,6 +5,7 @@ import org.hibernate.query.spi.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,13 @@ import java.util.List;
 public interface BlogRepository extends JpaRepository<Blog, Integer> {
     Blog findBySlugAndStatus(String slug, Boolean status);
     List<Blog> findByTypeAndStatus(String type, Boolean status);
+    @Modifying
+    @Query("UPDATE Blog b SET b.viewCount = COALESCE(b.viewCount, 0) + 1 WHERE b.id = :id")
+    void incrementViewCount(@Param("id") Integer id);
+
+    @Query("SELECT COALESCE(b.viewCount, 0) FROM Blog b WHERE b.id = :id")
+    Long findViewCountById(@Param("id") Integer id);
+
     @Query("SELECT c FROM Blog c " +
             "WHERE (:status IS NULL OR c.status = :status) " +
             "AND (:search IS NULL OR LOWER(c.title) LIKE LOWER(CONCAT('%', :search, '%'))) " +
